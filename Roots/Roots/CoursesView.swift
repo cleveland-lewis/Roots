@@ -50,6 +50,32 @@ struct CoursesView: View {
                         .buttonStyle(.borderedProminent)
 
                         Menu {
+                            Section("Semester") {
+                                if coursesStore.semesters.isEmpty {
+                                    Button("Add Semester") {
+                                        let s = Semester(id: UUID(), name: "New Semester")
+                                        coursesStore.addSemester(s)
+                                        coursesStore.setCurrentSemester(s.id)
+                                    }
+                                } else {
+                                    ForEach(coursesStore.semesters) { sem in
+                                        Button(action: { coursesStore.setCurrentSemester(sem.id) }) {
+                                            if coursesStore.currentSemesterId == sem.id {
+                                                Label(sem.name, systemImage: "checkmark")
+                                            } else {
+                                                Text(sem.name)
+                                            }
+                                        }
+                                    }
+                                    Divider()
+                                    Button("Add Semester") {
+                                        let s = Semester(id: UUID(), name: "New Semester")
+                                        coursesStore.addSemester(s)
+                                        coursesStore.setCurrentSemester(s.id)
+                                    }
+                                }
+                            }
+
                             Section("Sort by") {
                                 Button("Name") { sortOption = .nameAscending }
                                 Button("Code") { sortOption = .codeAscending }
@@ -60,7 +86,7 @@ struct CoursesView: View {
                                 Toggle("Show Archived", isOn: $showArchived)
                             }
                         } label: {
-                            Image(systemName: "arrow.up.arrow.down")
+                            Image(systemName: "calendar")
                         }
                     }
                 }
