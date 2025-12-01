@@ -19,7 +19,7 @@ struct ContentView: View {
     @State private var triggerHaptic: Bool = false
     private let selectedSensoryFeedback: SensoryFeedback = .selection
 
-    @Environment(.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
 
     var body: some View {
