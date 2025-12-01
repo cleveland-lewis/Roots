@@ -1,6 +1,11 @@
 import SwiftUI
 
-struct AppCard {
+struct DesignCard<Content: View>: View {
+    var imageName: String
+    @Binding var material: Material
+    let content: () -> Content
+
+    init(imageName: String, material: Binding<Material>, @ViewBuilder content: @escaping () -> Content) {
         self.imageName = imageName
         self._material = material
         self.content = content
@@ -26,8 +31,10 @@ struct AppCard {
     }
 }
 
-struct AppCard { binding in
-            AppCard {
+struct DesignCard_Previews: PreviewProvider {
+    static var previews: some View {
+        StatefulPreviewWrapper(DesignMaterial.regular) { binding in
+            DesignCard(imageName: "Tahoe", material: .constant(binding.wrappedValue.material)) {
                 Image(systemName: "cube.fill")
                     .imageScale(.large)
                 Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
