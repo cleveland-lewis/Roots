@@ -1,3 +1,4 @@
+#if canImport(XCTest)
 import XCTest
 @testable import Roots
 
@@ -66,3 +67,5 @@ final class AISchedulerTests: XCTestCase {
         XCTAssertTrue(found)
     }
 }
+
+#endif

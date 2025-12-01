@@ -1,3 +1,4 @@
+#if canImport(XCTest)
 import XCTest
 @testable import Roots
 
@@ -56,3 +57,5 @@ final class AdaptiveSchedulerTests: XCTestCase {
         XCTAssertTrue(e9 > e21)
     }
 }
+
+#endif
