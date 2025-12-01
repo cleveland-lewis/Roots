@@ -115,6 +115,7 @@ struct ContentView: View {
                     HStack(spacing: 8) {
                         Image(systemName: page.systemImage)
                             .font(.system(size: 13, weight: .medium))
+                            .bounceOnTap()
                         Text(page.title)
                             .font(.system(size: 13, weight: selectedPage == page ? .semibold : .regular))
                     }
@@ -126,6 +127,7 @@ struct ContentView: View {
                             .fill(selectedPage == page ? Color.accentColor.opacity(0.15) : Color.clear)
                     )
                 }
+                .bounceOnTap()
                 .buttonStyle(.plain)
             }
         }
