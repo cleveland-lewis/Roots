@@ -48,7 +48,7 @@ struct RootDesignPreviewPage: View {
                             .imageScale(.large)
                         Text("Material preview")
                     }
-                    .frame(height: DesignSystem.Cards.defaultHeight)
+                    .frame(minHeight: DesignSystem.Cards.defaultHeight)
                 }
 
                 // Corners & spacing

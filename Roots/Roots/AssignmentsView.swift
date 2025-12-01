@@ -55,7 +55,7 @@ struct AssignmentsView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             ForEach(tasks, id: \.id) { t in
                                 AssignmentRow(task: t)
@@ -80,7 +80,7 @@ struct AssignmentsView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             ForEach(tasks, id: \.id) { t in
                                 AssignmentRow(task: t)
@@ -102,7 +102,7 @@ struct AssignmentsView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             ForEach(tasks, id: \.id) { t in
                                 AssignmentRow(task: t)
@@ -127,7 +127,7 @@ struct AssignmentsView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             ForEach(tasks, id: \.id) { t in
                                 AssignmentRow(task: t)

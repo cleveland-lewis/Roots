@@ -33,7 +33,7 @@ struct DesignShell<Content: View>: View {
                     .padding(DesignSystem.Spacing.small)
                 }
                 .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Corners.medium, style: .continuous))
-                .frame(height: DesignSystem.Cards.defaultHeight)
+                .frame(minHeight: DesignSystem.Cards.defaultHeight)
 
             Text("Updated: \(timestamp.formatted(.iso8601))")
                 .font(DesignSystem.Typography.caption)

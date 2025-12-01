@@ -28,7 +28,7 @@ struct AssignmentsView2: View {
                                     .font(DesignSystem.Typography.body)
                             }
                         }
-                        .frame(height: DesignSystem.Cards.defaultHeight)
+                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
                     } else {
                         ForEach(assignmentsStore.tasks, id: \.id) { t in
                             AssignmentRow(task: t)

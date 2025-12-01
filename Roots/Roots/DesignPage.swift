@@ -14,7 +14,7 @@ struct DesignPage: View {
                         .font(DesignSystem.Typography.body)
                         .foregroundStyle(.primary)
                 }
-                .frame(height: DesignSystem.Cards.defaultHeight)
+                .frame(minHeight: DesignSystem.Cards.defaultHeight)
 
                 Picker("Material", selection: $selectedMaterialToken) {
                     ForEach(DesignSystem.materials, id: \.name) { token in

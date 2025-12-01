@@ -29,6 +29,7 @@ struct PlannerView: View {
 
     @StateObject private var assignmentsStore = AssignmentsStore.shared
     @StateObject private var calendarManager = CalendarManager.shared
+    @EnvironmentObject var permissions: PermissionsManager
 
     var body: some View {
         ScrollView {
@@ -98,17 +99,44 @@ struct PlannerView: View {
                     // Today's Plan
                     Section(header: Text("Today's Plan").font(DesignSystem.Typography.body)) {
                         if todayTasks.isEmpty {
-                            DesignCard(imageName: "Tahoe", material: .constant(DesignSystem.materials.first?.material ?? Material.regularMaterial)) {
-                                VStack(spacing: DesignSystem.Spacing.small) {
-                                    Image(systemName: "checklist")
-                                        .imageScale(.large)
-                                    Text("Today's Plan")
-                                        .font(DesignSystem.Typography.title)
-                                    Text(DesignSystem.emptyStateMessage)
-                                        .font(DesignSystem.Typography.body)
+                            if permissions.remindersStatus == .denied || permissions.remindersStatus == .restricted {
+                                DesignCard(imageName: "Tahoe", material: .constant(DesignSystem.materials.first?.material ?? Material.regularMaterial)) {
+                                    VStack(spacing: DesignSystem.Spacing.small) {
+                                        Image(systemName: "calendar.badge.exclamationmark")
+                                            .imageScale(.large)
+                                        Text("Reminders access is turned off")
+                                            .font(DesignSystem.Typography.title)
+                                        Text("Enable Reminders access in System Settings → Privacy so Roots can show your tasks.")
+                                            .font(DesignSystem.Typography.body)
+                                        Button("Open System Settings") {
+                                            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Reminders") {
+                                                #if os(macOS)
+                                                NSWorkspace.shared.open(url)
+                                                #endif
+                                            }
+                                        }
+                                        .buttonStyle(.bordered)
+                                    }
                                 }
+                                .onAppear {
+                                    #if os(macOS)
+                                    HapticsManager.shared.play(.warning)
+                                    #endif
+                                }
+                                .frame(minHeight: DesignSystem.Cards.defaultHeight)
+                            } else {
+                                DesignCard(imageName: "Tahoe", material: .constant(DesignSystem.materials.first?.material ?? Material.regularMaterial)) {
+                                    VStack(spacing: DesignSystem.Spacing.small) {
+                                        Image(systemName: "checklist")
+                                            .imageScale(.large)
+                                        Text("Today's Plan")
+                                            .font(DesignSystem.Typography.title)
+                                        Text(DesignSystem.emptyStateMessage)
+                                            .font(DesignSystem.Typography.body)
+                                    }
+                                }
+                                .frame(minHeight: DesignSystem.Cards.defaultHeight)
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render today's tasks
                             Text("TODO: Today's tasks")
@@ -128,7 +156,7 @@ struct PlannerView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render week tasks
                             Text("TODO: Week tasks")
@@ -148,7 +176,7 @@ struct PlannerView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render unscheduled tasks
                             Text("TODO: Unscheduled tasks")
@@ -157,6 +185,10 @@ struct PlannerView: View {
                 }
             }
             .padding(DesignSystem.Spacing.large)
+        }
+        .onAppear {
+            permissions.requestCalendarIfNeeded()
+            permissions.requestRemindersIfNeeded()
         }
         .background(DesignSystem.background(for: .light))
         .sheet(isPresented: $showScheduleResult) {
@@ -217,7 +249,7 @@ private struct ScheduleResultView: View {
                             .foregroundStyle(.primary)
                     }
                 }
-                .frame(height: DesignSystem.Cards.defaultHeight)
+                .frame(minHeight: DesignSystem.Cards.defaultHeight)
             } else {
                 List {
                     ForEach(result.blocks, id: \.id) { b in

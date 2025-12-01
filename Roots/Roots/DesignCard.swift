@@ -12,25 +12,25 @@ struct DesignCard<Content: View>: View {
     }
 
     var body: some View {
-        GeometryReader { proxy in
+        ZStack {
             Image(imageName)
                 .resizable()
                 .scaledToFill()
-                .frame(width: proxy.size.width, height: proxy.size.height)
-                .overlay(alignment: .bottom) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: DesignSystem.Corners.medium, style: .continuous)
-                            .fill(material)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                        VStack(spacing: DesignSystem.Spacing.medium) {
-                            content()
-                        }
-                        .padding(DesignSystem.Spacing.medium)
-                    }
-                    .padding(DesignSystem.Spacing.small)
+            ZStack {
+                RoundedRectangle(cornerRadius: DesignSystem.Corners.medium, style: .continuous)
+                    .fill(material)
+
+                VStack(spacing: DesignSystem.Spacing.medium) {
+                    content()
                 }
-                .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Corners.medium, style: .continuous))
+                .padding(DesignSystem.Spacing.medium)
+            }
+            .padding(DesignSystem.Spacing.small)
         }
+        .frame(minHeight: DesignSystem.Cards.defaultHeight, maxHeight: .infinity)
+        .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Corners.medium, style: .continuous))
     }
 }
 

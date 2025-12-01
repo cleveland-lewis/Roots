@@ -39,7 +39,7 @@ struct DashboardView: View {
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .frame(height: DesignSystem.Cards.defaultHeight)
+                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
                     } else {
                         DesignCard(imageName: "Tahoe", material: .constant(DesignSystem.materials.first?.material ?? Material.regularMaterial)) {
                             VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
@@ -53,7 +53,7 @@ struct DashboardView: View {
                                 }
                             }
                         }
-                        .frame(height: DesignSystem.Cards.defaultHeight)
+                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
                     }
                 }
 
@@ -104,7 +104,7 @@ struct DashboardView: View {
                             .font(DesignSystem.Typography.body)
                     }
                 }
-                .frame(height: DesignSystem.Cards.defaultHeight)
+                .frame(minHeight: DesignSystem.Cards.defaultHeight)
             } else {
                 ForEach(insightsVM.insights) { insight in
                     DesignCard(imageName: "Tahoe", material: .constant(DesignSystem.materials.first?.material ?? Material.regularMaterial)) {
@@ -159,7 +159,7 @@ private struct SectionView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(height: DesignSystem.Cards.defaultHeight)
+                .frame(minHeight: DesignSystem.Cards.defaultHeight)
             } else {
                 // Render a card per item (structural only)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: DesignSystem.Spacing.medium)]) {
@@ -173,7 +173,7 @@ private struct SectionView: View {
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        .frame(height: DesignSystem.Cards.defaultHeight)
+                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
                     }
                 }
             }

@@ -10,6 +10,9 @@ import SwiftData
 
 @main
 struct RootsApp: App {
+    @StateObject private var permissionsManager = PermissionsManager.shared
+    @StateObject private var coursesStore = CoursesStore()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -27,6 +30,12 @@ struct RootsApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(AssignmentsStore.shared)
+                .environmentObject(permissionsManager)
+                .environmentObject(coursesStore)
+                .buttonStyle(GlassProminentButtonStyle())
+                .controlSize(.regular)
+                .buttonBorderShape(.automatic)
+                .tint(.accentColor)
                 .task {
                     // Run adaptation on launch
                     SchedulerAdaptationManager.shared.runAdaptiveSchedulerUpdateIfNeeded()

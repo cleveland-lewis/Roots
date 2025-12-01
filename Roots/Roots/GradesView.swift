@@ -27,7 +27,7 @@ struct GradesView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render grades summary
                             Text("TODO: Overall status")
@@ -47,7 +47,7 @@ struct GradesView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render course grades
                             Text("TODO: By course")
@@ -67,7 +67,7 @@ struct GradesView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render components
                             Text("TODO: Grade components")
@@ -87,7 +87,7 @@ struct GradesView: View {
                                         .font(DesignSystem.Typography.body)
                                 }
                             }
-                            .frame(height: DesignSystem.Cards.defaultHeight)
+                            .frame(minHeight: DesignSystem.Cards.defaultHeight)
                         } else {
                             // TODO: render analytics
                             Text("TODO: Trends & Analytics")
