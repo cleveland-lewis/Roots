@@ -2,7 +2,9 @@ import Foundation
 import Combine
 import EventKit
 
-final class CalendarManager: ObservableObject {
+final class CalendarManager: ObservableObject, LoadableViewModel {
+    @Published var isLoading: Bool = false
+    @Published var loadingMessage: String? = nil
     static let shared = CalendarManager()
     private let store = EKEventStore()
 
@@ -14,6 +16,11 @@ final class CalendarManager: ObservableObject {
 
     // Request access for both calendars and reminders
     func requestAccess(completion: @escaping (Bool) -> Void) {
+        DispatchQueue.main.async {
+            self.isLoading = true
+            self.loadingMessage = "Requesting calendar access…"
+        }
+
         store.requestAccess(to: .event) { grantedEvents, _ in
             self.store.requestAccess(to: .reminder) { grantedReminders, _ in
                 DispatchQueue.main.async {
@@ -21,6 +28,8 @@ final class CalendarManager: ObservableObject {
                         self.fetchCalendars()
                         self.fetchAllReminders()
                     }
+                    self.isLoading = false
+                    self.loadingMessage = nil
                     completion(grantedEvents || grantedReminders)
                 }
             }

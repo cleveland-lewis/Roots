@@ -204,7 +204,7 @@ struct PlannerView: View {
     // Run scheduler with current empty data (no sample tasks) — constructs constraints from UI
     private func runScheduler() {
         // Build tasks from AssignmentsStore
-        let tasks: [Task] = AssignmentsStore.shared.incompleteTasks()
+        let tasks: [AppTask] = AssignmentsStore.shared.incompleteTasks()
 
         // Build fixed events from CalendarManager's events (treat as locked)
         var fixed: [FixedEvent] = calendarManager.events.map { ev in

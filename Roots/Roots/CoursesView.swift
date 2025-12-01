@@ -1,175 +1,130 @@
 import SwiftUI
 
 struct CoursesView: View {
-    @EnvironmentObject var coursesStore: CoursesStore
+    @EnvironmentObject private var coursesStore: CoursesStore
 
-    @State private var isPresentingAddSheet = false
-    @State private var editingCourse: Course? = nil
-    @State private var sortOption: CourseSortOption = .nameAscending
-    @State private var showArchived = false
-
-    enum CourseSortOption {
-        case nameAscending
-        case codeAscending
-        case termAscending
-    }
-
-    private var visibleCourses: [Course] {
-        var list = coursesStore.courses
-        if !showArchived {
-            list = list.filter { !$0.isArchived }
-        }
-
-        switch sortOption {
-        case .nameAscending:
-            list.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        case .codeAscending:
-            list.sort { $0.code.localizedCaseInsensitiveCompare($1.code) == .orderedAscending }
-        case .termAscending:
-            list.sort { $0.term.localizedCaseInsensitiveCompare($1.term) == .orderedAscending }
-        }
-
-        return list
-    }
+    @State private var showingAddSemester = false
+    @State private var showingAddCourse = false
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
-                // Header
-                HStack(alignment: .center, spacing: DesignSystem.Spacing.medium) {
-                    Text("Courses")
-                        .font(DesignSystem.Typography.title)
+            VStack(alignment: .leading, spacing: 20) {
 
-                    Spacer()
+                // Title
+                Text("Courses")
+                    .font(.largeTitle.bold())
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
 
-                    // Toolbar area
-                    HStack(spacing: DesignSystem.Spacing.small) {
-                        Button(action: { isPresentingAddSheet = true }) {
-                            Label("Add Course", systemImage: "plus")
+                // Current semester selector
+                AppCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Current semester")
+                                .font(.headline)
+
+                            Spacer()
+
+                            Button {
+                                showingAddSemester = true
+                            } label: {
+                                Label("Add Semester", systemImage: "plus")
+                                    .labelStyle(.iconOnly)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.borderedProminent)
 
-                        Menu {
-                            Section("Semester") {
-                                if coursesStore.semesters.isEmpty {
-                                    Button("Add Semester") {
-                                        let s = Semester(id: UUID(), name: "New Semester")
-                                        coursesStore.addSemester(s)
-                                        coursesStore.setCurrentSemester(s.id)
-                                    }
-                                } else {
-                                    ForEach(coursesStore.semesters) { sem in
-                                        Button(action: { coursesStore.setCurrentSemester(sem.id) }) {
-                                            if coursesStore.currentSemesterId == sem.id {
-                                                Label(sem.name, systemImage: "checkmark")
-                                            } else {
-                                                Text(sem.name)
-                                            }
-                                        }
-                                    }
-                                    Divider()
-                                    Button("Add Semester") {
-                                        let s = Semester(id: UUID(), name: "New Semester")
-                                        coursesStore.addSemester(s)
-                                        coursesStore.setCurrentSemester(s.id)
+                        if coursesStore.semesters.isEmpty {
+                            Text("No semesters yet. Add one to begin organizing your courses.")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Picker("Semester", selection: Binding(
+                                get: { coursesStore.currentSemesterId ?? coursesStore.semesters.first?.id },
+                                set: { newId in
+                                    if let id = newId,
+                                       let sem = coursesStore.semesters.first(where: { $0.id == id }) {
+                                        coursesStore.setCurrentSemester(sem)
                                     }
                                 }
+                            )) {
+                                ForEach(coursesStore.semesters) { semester in
+                                    Text(semester.name).tag(Optional(semester.id))
+                                }
                             }
-
-                            Section("Sort by") {
-                                Button("Name") { sortOption = .nameAscending }
-                                Button("Code") { sortOption = .codeAscending }
-                                Button("Term") { sortOption = .termAscending }
-                            }
-
-                            Section {
-                                Toggle("Show Archived", isOn: $showArchived)
-                            }
-                        } label: {
-                            Image(systemName: "calendar")
+                            .pickerStyle(.segmented)
                         }
                     }
                 }
+                .padding(.horizontal, 20)
 
-                // Main area
-                if visibleCourses.isEmpty {
-                    AppCard {
-                        VStack(spacing: DesignSystem.Spacing.small) {
-                            Image(systemName: "book.closed")
-                                .imageScale(.large)
-                            Text("Courses")
-                                .font(DesignSystem.Typography.title)
-                            Text(DesignSystem.emptyStateMessage)
-                                .font(DesignSystem.Typography.body)
-                                .foregroundStyle(.primary)
+                // Courses for current semester
+                AppCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Courses in this semester")
+                                .font(.headline)
+
+                            Spacer()
+
+                            Button {
+                                showingAddCourse = true
+                            } label: {
+                                Label("Add Course", systemImage: "plus")
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
                         }
-                    }
-                    .frame(minHeight: DesignSystem.Cards.defaultHeight)
-                } else {
-                    CardGrid {
-                        ForEach(visibleCourses, id: \.id) { course in
-                            AppCard {
-                                VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-                                    HStack {
-                                        Circle()
-                                            .fill(course.color)
-                                            .frame(width: 14, height: 14)
-                                        Text(course.name)
-                                            .font(DesignSystem.Typography.body)
-                                            .bold()
-                                        Spacer()
-                                        Text(course.code)
-                                            .font(DesignSystem.Typography.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
 
-                                    Text(course.term)
-                                        .font(DesignSystem.Typography.caption)
-                                    Text(course.instructor)
-                                        .font(DesignSystem.Typography.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                .padding(DesignSystem.Spacing.small)
-                                .contextMenu {
-                                    Button("Edit Course") { editingCourse = course }
-                                    Button(course.isArchived ? "Unarchive" : "Archive") {
-                                        var updated = course
-                                        updated.isArchived.toggle()
-                                        coursesStore.update(updated)
-                                    }
-                                    Divider()
-                                    Button("Delete", role: .destructive) {
-                                        #if os(macOS)
-                                        HapticsManager.shared.play(.error)
-                                        #endif
-                                        coursesStore.delete(course)
-                                    }
+                        if let semester = coursesStore.currentSemester,
+                           !coursesStore.courses(in: semester).isEmpty {
+                            CardGrid {
+                                ForEach(coursesStore.courses(in: semester)) { course in
+                                    CourseCard(course: course, semester: semester)
                                 }
                             }
-                            .frame(minHeight: 120)
+                        } else {
+                            EmptyStateView(icon: "book.closed")
                         }
                     }
                 }
-            }
-            .padding(DesignSystem.Spacing.large)
-        }
-        .background(DesignSystem.background(for: .light))
-        .sheet(isPresented: $isPresentingAddSheet) {
-            AddEditCourseView(mode: .new) { newCourse in
-                coursesStore.add(newCourse)
+                .padding(.horizontal, 20)
+
+                Spacer(minLength: 20)
             }
         }
-        .sheet(item: $editingCourse) { course in
-            AddEditCourseView(mode: .edit(course)) { updated in
-                coursesStore.update(updated)
-            }
+        .sheet(isPresented: $showingAddSemester) {
+            AddSemesterSheet()
+                .environmentObject(coursesStore)
+        }
+        .sheet(isPresented: $showingAddCourse) {
+            AddCourseSheet()
+                .environmentObject(coursesStore)
         }
     }
 }
 
-struct CoursesView_Previews: PreviewProvider {
-    static var previews: some View {
-        CoursesView()
-            .environmentObject(CoursesStore())
+// Define the course card (uniform style)
+struct CourseCard: View {
+    let course: Course
+    let semester: Semester
+
+    var body: some View {
+        NavigationLink(destination: CourseDetailView(course: course, semester: semester)) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(course.code)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Text(course.title)
+                    .font(.headline)
+
+                Text(semester.name)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(.plain)
     }
 }

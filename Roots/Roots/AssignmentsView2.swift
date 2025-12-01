@@ -1,17 +1,21 @@
 import SwiftUI
 
 struct AssignmentsView2: View {
-    @State private var filter: AssignmentsView.Filter = .all
     @EnvironmentObject var assignmentsStore: AssignmentsStore
     @State private var showingAddSheet = false
 
     var body: some View {
-        ScrollView {
+        SwiftUI.ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
                 HStack {
                     Text("Assignments").font(DesignSystem.Typography.title)
                     Spacer()
-                    Button { showingAddSheet = true } label: { Label("Add Assignment", systemImage: "plus") }
+                    Button(action: { showingAddSheet = true }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "plus")
+                                Text("Add Assignment")
+                            }
+                        }
                         .buttonStyle(.borderedProminent)
                 }
 
@@ -28,7 +32,7 @@ struct AssignmentsView2: View {
                                     .font(DesignSystem.Typography.body)
                             }
                         }
-                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
+                        .frame(minHeight: DesignSystem.Cards.cardMinHeight)
                     } else {
                         ForEach(assignmentsStore.tasks, id: \.id) { t in
                             AssignmentRow(task: t)
@@ -40,9 +44,9 @@ struct AssignmentsView2: View {
         }
         .background(DesignSystem.background(for: .light))
         .sheet(isPresented: $showingAddSheet) {
-            AddAssignmentView { task in
+            AddAssignmentView(initialType: .reading, onSave: { task in
                 AssignmentsStore.shared.addTask(task)
-            }
+            })
         }
     }
 }

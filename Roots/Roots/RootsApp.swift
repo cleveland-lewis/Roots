@@ -13,6 +13,7 @@ struct RootsApp: App {
     @StateObject private var permissionsManager = PermissionsManager.shared
     @StateObject private var coursesStore = CoursesStore()
     @StateObject private var appSettings = AppSettings()
+    @StateObject private var appModel = AppModel()
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -34,6 +35,7 @@ struct RootsApp: App {
                 .environmentObject(permissionsManager)
                 .environmentObject(coursesStore)
                 .environmentObject(appSettings)
+                .environmentObject(appModel)
                 .buttonStyle(GlassProminentButtonStyle())
                 .controlSize(.regular)
                 .buttonBorderShape(.automatic)
@@ -42,6 +44,9 @@ struct RootsApp: App {
                     // Run adaptation on launch
                     SchedulerAdaptationManager.shared.runAdaptiveSchedulerUpdateIfNeeded()
                 }
+        }
+        .commands {
+            AppCommands()
         }
         .modelContainer(sharedModelContainer)
     }

@@ -7,20 +7,20 @@ struct SettingsRootView: View {
     var body: some View {
         NavigationSplitView {
             List(selection: $selection) {
-                Section(header: Text("General")) {
+                Section("General") {
                     SettingsRow(section: .appearance)
                     SettingsRow(section: .notifications)
                 }
 
-                Section(header: Text("Account")) {
+                Section("Account") {
                     SettingsRow(section: .profile)
                 }
 
-                Section(header: Text("Advanced")) {
+                Section("Advanced") {
                     SettingsRow(section: .developer)
                 }
 
-                Section(header: Text("Design")) {
+                Section("Design") {
                     SettingsRow(section: .design)
                 }
             }
@@ -83,7 +83,7 @@ struct AppearanceSettingsView: View {
     @EnvironmentObject var appSettings: AppSettings
 
     var body: some View {
-        VStack(spacing: 12) {
+        Form {
             Section("Appearance") {
                 Picker("Mode", selection: $appSettings.appearanceMode) {
                     ForEach(AppSettings.AppearanceMode.allCases) { mode in
@@ -101,9 +101,12 @@ struct NotificationSettingsView: View {
     @EnvironmentObject var appSettings: AppSettings
 
     var body: some View {
-        VStack(spacing: 12) {
-            Section(header: Text("Notifications"), footer: Text("Roots can remind you about upcoming assignments and exams.")) {
+        Form {
+            Section("Notifications") {
                 Toggle("Enable notifications", isOn: $appSettings.notificationsEnabled)
+            }
+            .footer {
+                Text("Roots can remind you about upcoming assignments and exams.")
             }
         }
         .navigationTitle("Notifications")

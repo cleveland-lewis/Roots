@@ -1,7 +1,9 @@
 import Foundation
 import Combine
 
-final class InsightsViewModel: ObservableObject {
+final class InsightsViewModel: LoadableViewModel {
+    @Published var isLoading: Bool = false
+    @Published var loadingMessage: String? = nil
     @Published var insights: [Insight] = []
 
     private let engine: InsightEngine
@@ -16,10 +18,17 @@ final class InsightsViewModel: ObservableObject {
     }
 
     func refresh(windowDays: Int = 14) {
-        let stats = UsageStatsBuilder.build(
-            from: historyStore,
-            window: .days(windowDays)
-        )
-        insights = engine.generateInsights(from: stats)
+        Task {
+            _ = try await withLoading(message: "Analyzing usage…") {
+                let stats = UsageStatsBuilder.build(
+                    from: historyStore,
+                    window: .days(windowDays)
+                )
+                await MainActor.run {
+                    insights = engine.generateInsights(from: stats)
+                }
+                return ()
+            }
+        }
     }
 }

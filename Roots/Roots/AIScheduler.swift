@@ -23,7 +23,7 @@ struct FixedEvent: Equatable {
     let source: EventSource
 }
 
-struct Task: Equatable {
+struct AppTask: Equatable {
     let id: UUID
     let title: String
     let courseId: UUID?
@@ -58,7 +58,7 @@ struct ScheduledBlock: Equatable {
 
 struct ScheduleResult {
     let blocks: [ScheduledBlock]
-    let unscheduledTasks: [Task]
+    let unscheduledTasks: [AppTask]
     var log: [String]
 }
 
@@ -80,6 +80,8 @@ private struct CandidateBlock: Equatable {
 
 struct AIScheduler {
     private static let calendar = Calendar.current
+    // Expose Task alias for tests that reference AIScheduler.Task
+    typealias Task = AppTask
 
     // Public entry
     static func generateSchedule(

@@ -5,10 +5,10 @@ final class AssignmentsStore: ObservableObject {
     static let shared = AssignmentsStore()
     private init() {}
 
-    @Published var tasks: [Task] = []
+    @Published var tasks: [AppTask] = []
 
     // No sample data - provided methods to add/remove tasks programmatically
-    func addTask(_ task: Task) {
+    func addTask(_ task: AppTask) {
         tasks.append(task)
     }
 
@@ -16,13 +16,13 @@ final class AssignmentsStore: ObservableObject {
         tasks.removeAll { $0.id == id }
     }
 
-    func updateTask(_ task: Task) {
+    func updateTask(_ task: AppTask) {
         if let idx = tasks.firstIndex(where: { $0.id == task.id }) {
             tasks[idx] = task
         }
     }
 
-    func incompleteTasks() -> [Task] {
+    func incompleteTasks() -> [AppTask] {
         // For now all tasks are considered active; in future, filter by completion state
         return tasks
     }

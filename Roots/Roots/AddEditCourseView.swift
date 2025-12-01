@@ -11,7 +11,7 @@ struct AddEditCourseView: View {
         case edit(Course)
     }
 
-    @State private var name: String = ""
+    @State private var title: String = ""
     @State private var code: String = ""
     @State private var instructor: String = ""
     @State private var term: String = ""
@@ -30,18 +30,13 @@ struct AddEditCourseView: View {
                 .font(.title2.bold())
 
             Form {
-                TextField("Course Name", text: $name)
+                TextField("Course Title", text: $title)
                 TextField("Course Code", text: $code)
-                TextField("Instructor", text: $instructor)
-                TextField("Term (e.g. Fall 2025)", text: $term)
-
-                Stepper(value: $credits, in: 1...8) {
-                    Text("Credits: \(credits)")
-                }
+                // Instructor/term/credits not used in new Course model — omit
 
                 ColorPicker("Color", selection: $color)
 
-                Toggle("Archived", isOn: $isArchived)
+                Toggle("Archived (placeholder)", isOn: $isArchived)
             }
             .formStyle(.grouped)
 
@@ -49,15 +44,15 @@ struct AddEditCourseView: View {
                 Button("Cancel") { dismiss() }
                 Spacer()
                 Button("Save") {
-                    let trimmed = name.trimmingCharacters(in: .whitespaces)
+                    let trimmed = title.trimmingCharacters(in: .whitespaces)
                     guard !trimmed.isEmpty else { return }
 
                     let course: Course
                     switch mode {
                     case .new:
-                        course = Course(id: UUID(), name: trimmed, code: code, instructor: instructor, term: term, color: color, credits: credits, isArchived: isArchived)
+                        course = Course(title: trimmed, code: code, semesterId: UUID())
                     case .edit(let existing):
-                        course = Course(id: existing.id, name: trimmed, code: code, instructor: instructor, term: term, color: color, credits: credits, isArchived: isArchived)
+                        course = Course(id: existing.id, title: trimmed, code: code, semesterId: existing.semesterId, colorHex: existing.colorHex)
                     }
 
                     onSave(course)
@@ -70,18 +65,15 @@ struct AddEditCourseView: View {
         .frame(minWidth: 420)
         .onAppear {
             if case .edit(let existing) = mode {
-                name = existing.name
+                title = existing.title
                 code = existing.code
-                instructor = existing.instructor
-                term = existing.term
-                credits = existing.credits
-                color = existing.color
-                isArchived = existing.isArchived
+                // colorHex -> Color mapping not implemented; keep color default
+                isArchived = false
             }
         }
     }
 
-    private var title: String {
+    private var titleText: String {
         switch mode {
         case .new: return "Add Course"
         case .edit: return "Edit Course"

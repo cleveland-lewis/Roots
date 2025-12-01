@@ -1,16 +1,21 @@
 import SwiftUI
 
 struct AddAssignmentView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var coursesStore: CoursesStore
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coursesStore: CoursesStore
 
     @State private var title: String = ""
     @State private var due: Date = Date()
     @State private var estimatedMinutes: Int = 60
     @State private var selectedCourseId: UUID? = nil
-    @State private var type: TaskType = .reading
+    @State private var type: TaskType
 
-    var onSave: (Task) -> Void
+    var onSave: (AppTask) -> Void
+
+    init(initialType: TaskType = .reading, onSave: @escaping (AppTask) -> Void) {
+        self.onSave = onSave
+        self._type = State(initialValue: initialType)
+    }
 
     private var isSaveDisabled: Bool {
         title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || selectedCourseId == nil
@@ -76,7 +81,7 @@ struct AddAssignmentView: View {
                             } else {
                                 Picker("Course", selection: $selectedCourseId) {
                                     ForEach(coursesStore.currentSemesterCourses, id: \.id) { c in
-                                        Text("\(c.code) — \(c.name)").tag(Optional(c.id))
+                                        Text("\(c.code) · \(c.title)").tag(Optional(c.id))
                                     }
                                 }
                                 .labelsHidden()
@@ -99,20 +104,24 @@ struct AddAssignmentView: View {
                 // Footer buttons
                 HStack {
                     Button("Cancel") {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                     .keyboardShortcut(.cancelAction)
 
                     Spacer()
 
                     Button("Save") {
-                        let task = Task(id: UUID(), title: title.trimmingCharacters(in: .whitespacesAndNewlines), courseId: selectedCourseId, due: due, estimatedMinutes: estimatedMinutes, minBlockMinutes: 20, maxBlockMinutes: 180, difficulty: 0.5, importance: 0.5, type: type, locked: false)
+                        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard !trimmed.isEmpty else { return }
+                        guard let courseId = selectedCourseId else { return }
+
+                        let task = AppTask(id: UUID(), title: trimmed, courseId: courseId, due: due, estimatedMinutes: estimatedMinutes, minBlockMinutes: 20, maxBlockMinutes: 180, difficulty: 0.5, importance: 0.5, type: type, locked: false)
                         onSave(task)
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)
-                    .disabled(isSaveDisabled || coursesStore.currentSemesterId == nil)
+                    .disabled(isSaveDisabled)
                 }
             }
             .padding(8)
@@ -126,6 +135,12 @@ struct AddAssignmentView: View {
         case .project: return "Project"
         case .examPrep: return "Exam Prep"
         case .other: return "Other"
+        }
+    }
+
+    private func preselectCourseIfNeeded() {
+        if selectedCourseId == nil, let first = coursesStore.currentSemesterCourses.first {
+            selectedCourseId = first.id
         }
     }
 }

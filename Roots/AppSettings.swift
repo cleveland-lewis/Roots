@@ -1,15 +1,14 @@
 import SwiftUI
-import Combine
 
 final class AppSettings: ObservableObject {
-    // Provide objectWillChange explicitly for Combine compatibility
-    let objectWillChange = ObservableObjectPublisher()
-    // General
-    @AppStorage("appearanceMode") private var appearanceModeRaw: String = AppearanceMode.system.rawValue
-    var appearanceMode: AppearanceMode {
-        get { AppearanceMode(rawValue: appearanceModeRaw) ?? .system }
-        set { appearanceModeRaw = newValue.rawValue }
+    // Accent color for app-wide tints
+    @AppStorage("accentColorHex") var accentColorHex: String = "#9B59B6" // purple-like default
+
+    var accentColor: Color {
+        Color(hex: accentColorHex) ?? .purple
     }
+    // General
+    @AppStorage("appearanceMode") var appearanceMode: AppearanceMode = .system
     @AppStorage("notificationsEnabled") var notificationsEnabled: Bool = true
 
     // Profile
@@ -20,11 +19,7 @@ final class AppSettings: ObservableObject {
     @AppStorage("enableDebugLogging") var enableDebugLogging: Bool = false
 
     // Design
-    @AppStorage("cardMaterial") private var cardMaterialRaw: String = AppSettings.CardMaterial.regular.rawValue
-    var cardMaterial: CardMaterial {
-        get { AppSettings.CardMaterial(rawValue: cardMaterialRaw) ?? .regular }
-        set { cardMaterialRaw = newValue.rawValue }
-    }
+    @AppStorage("cardMaterial") var cardMaterial: CardMaterial = .regular
     @AppStorage("cardCornerRadius") var cardCornerRadius: Double = 18
 
     enum AppearanceMode: String, CaseIterable, Identifiable {

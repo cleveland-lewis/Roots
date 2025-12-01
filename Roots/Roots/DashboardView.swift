@@ -81,6 +81,7 @@ struct DashboardView: View {
             calendarManager.requestAccess { _ in }
             insightsVM.refresh()
         }
+        .loadingHUD(isVisible: Binding(get: { insightsVM.isLoading || calendarManager.isLoading }, set: { _ in }), title: "Updating…", message: insightsVM.loadingMessage ?? calendarManager.loadingMessage)
         .navigationTitle("Dashboard")
     }
 
@@ -94,17 +95,22 @@ struct DashboardView: View {
             }
 
             if insightsVM.insights.isEmpty {
-                AppCard {
-                    VStack(spacing: DesignSystem.Spacing.small) {
-                        Image(systemName: "lightbulb")
-                            .imageScale(.large)
-                        Text("Insights")
-                            .font(DesignSystem.Typography.title)
-                        Text(DesignSystem.emptyStateMessage)
-                            .font(DesignSystem.Typography.body)
+                if insightsVM.isLoading {
+                    GlassLoadingCard(title: "Generating insights…", message: insightsVM.loadingMessage)
+                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
+                } else {
+                    AppCard {
+                        VStack(spacing: DesignSystem.Spacing.small) {
+                            Image(systemName: "lightbulb")
+                                .imageScale(.large)
+                            Text("Insights")
+                                .font(DesignSystem.Typography.title)
+                            Text(DesignSystem.emptyStateMessage)
+                                .font(DesignSystem.Typography.body)
+                        }
                     }
+                    .frame(minHeight: DesignSystem.Cards.defaultHeight)
                 }
-                .frame(minHeight: DesignSystem.Cards.defaultHeight)
             } else {
                 ForEach(insightsVM.insights) { insight in
                     AppCard {

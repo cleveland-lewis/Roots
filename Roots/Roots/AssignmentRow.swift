@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AssignmentRow: View {
-    let task: Task
+    let task: AppTask
 
     var body: some View {
         HStack {

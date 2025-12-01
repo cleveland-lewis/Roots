@@ -13,7 +13,7 @@ struct AssignmentsView: View {
     @EnvironmentObject var assignmentsStore: AssignmentsStore
 
     @State private var showingAddSheet: Bool = false
-    @State private var editingTask: Task? = nil
+    @State private var editingTask: AppTask? = nil
 
     var body: some View {
         ScrollView {
@@ -140,9 +140,10 @@ struct AssignmentsView: View {
         }
         .background(DesignSystem.background(for: .light))
         .sheet(isPresented: $showingAddSheet) {
-            AddAssignmentView { task in
+            // wrap to avoid ambiguity with trailing closure initializers
+            AddAssignmentView(initialType: .reading, onSave: { task in
                 AssignmentsStore.shared.addTask(task)
-            }
+            })
         }
     }
 }

@@ -84,9 +84,6 @@ struct DesignSystem {
         static let cardMinWidth: CGFloat = 260
         static let cardMinHeight: CGFloat = 140
         static let cardCornerRadius: CGFloat = 18
-        static let cornerRadius: CGFloat = Corners.medium
-        static let inset: CGFloat = Spacing.small
-        static let defaultHeight: CGFloat = 260
     }
 
     // semantic helpers

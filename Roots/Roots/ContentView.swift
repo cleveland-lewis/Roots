@@ -14,7 +14,7 @@ struct ContentView: View {
     private var selectedTint: Color = .clear
     private var cornerRadius: CGFloat = 16.0
 
-    @State private var selectedPage: AppPage = .dashboard
+    @EnvironmentObject private var appModel: AppModel
     @State private var isNavMenuVisible: Bool = false
     @State private var triggerHaptic: Bool = false
     private let selectedSensoryFeedback: SensoryFeedback = .selection
@@ -47,6 +47,18 @@ struct ContentView: View {
             .frame(minWidth: 960, minHeight: 640)
             .background(Color.clear)
         }
+        .sheet(isPresented: $appModel.isPresentingAddHomework) {
+            AddAssignmentView(initialType: .problemSet, onSave: { task in
+                AssignmentsStore.shared.addTask(task)
+            })
+            .frame(minWidth: 420)
+        }
+        .sheet(isPresented: $appModel.isPresentingAddExam) {
+            AddAssignmentView(initialType: .examPrep, onSave: { task in
+                AssignmentsStore.shared.addTask(task)
+            })
+            .frame(minWidth: 420)
+        }
         .sheet(isPresented: $isShowingSettings) {
             SettingsRootView()
         }
@@ -55,7 +67,7 @@ struct ContentView: View {
     // MARK: - Main content
     @ViewBuilder
     private var mainContent: some View {
-        switch selectedPage {
+        switch appModel.selectedPage {
         case .dashboard:
             DashboardView()
         case .calendar:
@@ -130,7 +142,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 4) {
             ForEach(AppPage.allCases) { page in
                 Button {
-                    selectedPage = page
+                    appModel.selectedPage = page
                     withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
                         isNavMenuVisible = false
                     }
@@ -140,14 +152,14 @@ struct ContentView: View {
                             .font(.system(size: 13, weight: .medium))
                             .bounceOnTap()
                         Text(page.title)
-                            .font(.system(size: 13, weight: selectedPage == page ? .semibold : .regular))
+                            .font(.system(size: 13, weight: appModel.selectedPage == page ? .semibold : .regular))
                     }
-                    .foregroundStyle(selectedPage == page ? Color.accentColor : .primary)
+                    .foregroundStyle(appModel.selectedPage == page ? Color.accentColor : .primary)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
                     .background(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(selectedPage == page ? Color.accentColor.opacity(0.18) : Color.clear)
+                            .fill(appModel.selectedPage == page ? Color.accentColor.opacity(0.18) : Color.clear)
                     )
                 }
                 .bounceOnTap()
