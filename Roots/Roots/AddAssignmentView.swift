@@ -17,8 +17,7 @@ struct AddAssignmentView: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
-            // Card container
+        AppCard {
             VStack(alignment: .leading, spacing: 12) {
                 // Header
                 VStack(alignment: .leading, spacing: 6) {
@@ -116,15 +115,8 @@ struct AddAssignmentView: View {
                     .disabled(isSaveDisabled || coursesStore.currentSemesterId == nil)
                 }
             }
-            .padding(20)
-            .background(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .fill(.thinMaterial)
-                    .shadow(radius: 8)
-            )
-            .padding()
-        }
-        .frame(minWidth: 420)
+            .padding(8)
+        }        .frame(minWidth: 420)
     }
 
     private func displayName(for t: TaskType) -> String {
