@@ -1,4 +1,5 @@
 import SwiftUI
+import EventKit
 
 struct DashboardView: View {
     @StateObject private var calendarManager = CalendarManager.shared
