@@ -12,6 +12,7 @@ import SwiftData
 struct RootsApp: App {
     @StateObject private var permissionsManager = PermissionsManager.shared
     @StateObject private var coursesStore = CoursesStore()
+    @StateObject private var appSettings = AppSettings()
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -32,6 +33,7 @@ struct RootsApp: App {
                 .environmentObject(AssignmentsStore.shared)
                 .environmentObject(permissionsManager)
                 .environmentObject(coursesStore)
+                .environmentObject(appSettings)
                 .buttonStyle(GlassProminentButtonStyle())
                 .controlSize(.regular)
                 .buttonBorderShape(.automatic)
