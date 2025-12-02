@@ -88,8 +88,8 @@ struct TimerPageView: View {
 
                     HStack(spacing: 8) {
                         if let cat = act.studyCategory { Text(cat.rawValue.capitalized).font(.caption).foregroundColor(.secondary) }
-                        if let course = act.courseID { Text("Course: \") }
-                        if let assn = act.assignmentID { Text("Assignment: \") }
+                        if let course = act.courseID { Text("Course") .font(.caption).foregroundColor(.secondary) }
+                        if let assn = act.assignmentID { Text("Assignment") .font(.caption).foregroundColor(.secondary) }
                     }
                 }
             } else {
