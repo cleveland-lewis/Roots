@@ -26,21 +26,19 @@ struct SettingsRootView: View {
             }
         }
         .frame(minWidth: 540, minHeight: 420)
-        .toolbarRole(.preference)
+        .toolbarRole(.automatic)
         .toolbar {
             ToolbarItemGroup(placement: .navigation) {
                 HStack(spacing: 12) {
-                    ForEach(SettingsToolbarIdentifier.allCases) { identifier in
-                        Button {
-                            guard selectedPane != identifier else { return }
-                            selectedPane = identifier
-                        } label: {
-                            Label(identifier.label, systemImage: identifier.systemImageName)
-                        }
-                        .labelStyle(.titleAndIcon)
-                        .buttonStyle(.plain)
-                        .foregroundStyle(selectedPane == identifier ? .accentColor : .secondary)
-                        .help("Show \(identifier.label) settings")
+                    ForEach(SettingsToolbarIdentifier.allCases, id: \.self) { identifier in
+                        SettingsToolbarButton(
+                            identifier: identifier,
+                            isSelected: selectedPane == identifier,
+                            action: {
+                                guard selectedPane != identifier else { return }
+                                selectedPane = identifier
+                            }
+                        )
                     }
                 }
             }
@@ -50,7 +48,7 @@ struct SettingsRootView: View {
             paneChanged(selectedPane)
             hasSetInitialPane = true
         }
-        .onChange(of: selectedPane) { newPane in
+        .onChange(of: selectedPane) { (prev, newPane) in
             print("[Settings] Switched to pane: \(newPane.label)")
             paneChanged(newPane)
         }
@@ -68,5 +66,21 @@ struct SettingsRootView: View {
         case .accounts:
             SettingsPane_Accounts()
         }
+    }
+}
+
+private struct SettingsToolbarButton: View {
+    let identifier: SettingsToolbarIdentifier
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label(identifier.label, systemImage: identifier.systemImageName)
+        }
+        .labelStyle(.titleAndIcon)
+        .buttonStyle(.plain)
+        .foregroundStyle(isSelected ? Color.accentColor : .secondary)
+        .help("Show \(identifier.label) settings")
     }
 }

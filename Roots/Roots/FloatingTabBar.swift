@@ -3,6 +3,7 @@ import SwiftUI
 struct FloatingTabBar: View {
     @Binding var selectedTab: RootTab
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var settingsCoordinator: SettingsCoordinator
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var bounceTab: RootTab?
@@ -66,7 +67,11 @@ struct FloatingTabBar: View {
 
     private func tabButton(for tab: RootTab) -> some View {
         Button {
-            select(tab)
+            if tab == .settings {
+                settingsCoordinator.show()
+            } else {
+                select(tab)
+            }
         } label: {
             tabLabel(for: tab)
         }

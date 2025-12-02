@@ -10,9 +10,10 @@ final class SettingsWindowController: NSWindowController {
         let savedPane = UserDefaults.standard.string(forKey: Self.lastPaneKey)
         let initialPane = SettingsToolbarIdentifier(rawValue: savedPane ?? "") ?? .general
 
-        let rootView = SettingsRootView(initialPane: initialPane) { [weak self] pane in
-            self?.updateTitle(for: pane)
-            self?.persistPane(pane)
+        // Create a placeholder handler to avoid capturing self before super.init
+        var onSelectPane: ((SettingsToolbarIdentifier) -> Void)? = nil
+        let rootView = SettingsRootView(initialPane: initialPane) { pane in
+            onSelectPane?(pane)
         }
 
         let hostingController = NSHostingController(rootView: rootView.environmentObject(appSettings))
@@ -34,11 +35,19 @@ final class SettingsWindowController: NSWindowController {
         window.center()
 
         super.init(window: window)
+
+        // Now that super.init has run, safely reference self
         window.toolbar?.allowsUserCustomization = false
         window.toolbar?.showsBaselineSeparator = true
         window.toolbar?.displayMode = .iconAndLabel
         window.toolbar?.sizeMode = .small
         updateTitle(for: initialPane)
+
+        // Wire the callback to use self methods
+        onSelectPane = { [weak self] pane in
+            self?.updateTitle(for: pane)
+            self?.persistPane(pane)
+        }
     }
 
     @available(*, unavailable)

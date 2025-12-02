@@ -13,8 +13,12 @@ struct RootsApp: App {
     @StateObject private var permissionsManager = PermissionsManager.shared
     @StateObject private var coursesStore = CoursesStore()
     @StateObject private var appSettings = AppSettingsModel.shared
-    private let settingsWindowController = SettingsWindowController(appSettings: AppSettingsModel.shared)
+    @StateObject private var settingsCoordinator = SettingsCoordinator(appSettings: AppSettingsModel.shared)
     @StateObject private var appModel = AppModel()
+
+    init() {
+        _ = DeveloperSettingsSynchronizer.shared
+    }
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -37,10 +41,12 @@ struct RootsApp: App {
                 .environmentObject(coursesStore)
                 .environmentObject(appSettings)
                 .environmentObject(appModel)
+                .environmentObject(settingsCoordinator)
+                .accentColor(appSettings.activeAccentColor)
                 .buttonStyle(.glassBlueProminent)
                 .controlSize(.regular)
                 .buttonBorderShape(.automatic)
-                .tint(.accentColor)
+                .tint(appSettings.activeAccentColor)
                 .task {
                     // Run adaptation on launch
                     SchedulerAdaptationManager.shared.runAdaptiveSchedulerUpdateIfNeeded()
@@ -49,7 +55,7 @@ struct RootsApp: App {
         .commands {
             AppCommands()
             SettingsCommands(showSettings: {
-                settingsWindowController.showSettings()
+                settingsCoordinator.show()
             })
         }
         .modelContainer(sharedModelContainer)

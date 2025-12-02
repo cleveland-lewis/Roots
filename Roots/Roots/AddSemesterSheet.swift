@@ -28,7 +28,7 @@ struct AddSemesterSheet: View {
                         Button("Cancel") { dismiss() }
                         Button("Save") {
                             guard !name.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                            var sem = Semester(
+                            let sem = Semester(
                                 name: name,
                                 startDate: startDate,
                                 endDate: endDate,

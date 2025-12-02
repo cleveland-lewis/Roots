@@ -1,5 +1,8 @@
+
 import SwiftUI
 import AppKit
+import Combine
+import CoreGraphics
 
 enum TabBarMode: String, CaseIterable, Identifiable {
     case iconsOnly
@@ -183,6 +186,36 @@ enum AppAccentColor: String, CaseIterable, Identifiable {
 @MainActor
 final class AppSettingsModel: ObservableObject {
     static let shared = AppSettingsModel()
+    let objectWillChange = ObservableObjectPublisher()
+
+    private static func components(from color: Color) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
+        guard let cgColor = color.cgColor else { return nil }
+        guard let srgbSpace = CGColorSpace(name: CGColorSpace.sRGB) else { return nil }
+        let converted = cgColor.converted(to: srgbSpace, intent: .defaultIntent, options: nil)
+        let target = converted ?? cgColor
+        guard let comps = target.components else { return nil }
+
+        let red: Double
+        let green: Double
+        let blue: Double
+        let alpha: Double
+
+        if comps.count >= 4 {
+            red = Double(comps[0])
+            green = Double(comps[1])
+            blue = Double(comps[2])
+            alpha = Double(comps[3])
+        } else if comps.count == 2 {
+            red = Double(comps[0])
+            green = Double(comps[0])
+            blue = Double(comps[0])
+            alpha = Double(comps[1])
+        } else {
+            return nil
+        }
+
+        return (red, green, blue, alpha)
+    }
 
     private enum Keys {
         static let accentColor = "roots.settings.accentColor"
@@ -201,13 +234,18 @@ final class AppSettingsModel: ObservableObject {
         static let cardRadius = "roots.settings.cardRadius"
         static let animationSoftness = "roots.settings.animationSoftness"
         static let typographyMode = "roots.settings.typographyMode"
+        static let devModeEnabled = "devMode.enabled"
+        static let devModeUILogging = "devMode.uiLogging"
+        static let devModeDataLogging = "devMode.dataLogging"
+        static let devModeSchedulerLogging = "devMode.schedulerLogging"
+        static let devModePerformance = "devMode.performance"
     }
 
     @AppStorage(Keys.accentColor) private var accentColorRaw: String = AppAccentColor.multicolor.rawValue
     @AppStorage(Keys.customAccentEnabled) private var customAccentEnabledStorage: Bool = false
-    @AppStorage(Keys.customAccentRed) private var customAccentRed: Double = NSColor.systemBlue.redComponent
-    @AppStorage(Keys.customAccentGreen) private var customAccentGreen: Double = NSColor.systemBlue.greenComponent
-    @AppStorage(Keys.customAccentBlue) private var customAccentBlue: Double = NSColor.systemBlue.blueComponent
+    @AppStorage(Keys.customAccentRed) private var customAccentRed: Double = 0
+    @AppStorage(Keys.customAccentGreen) private var customAccentGreen: Double = 122 / 255
+    @AppStorage(Keys.customAccentBlue) private var customAccentBlue: Double = 1
     @AppStorage(Keys.customAccentAlpha) private var customAccentAlpha: Double = 1
     @AppStorage(Keys.interfaceStyle) private var interfaceStyleRaw: String = InterfaceStyle.system.rawValue
     @AppStorage(Keys.glassLightStrength) private var glassLightStrength: Double = 0.33
@@ -219,6 +257,11 @@ final class AppSettingsModel: ObservableObject {
     @AppStorage(Keys.cardRadius) private var cardRadiusRaw: String = CardRadius.medium.rawValue
     @AppStorage(Keys.animationSoftness) private var animationSoftnessStorage: Double = 0.42
     @AppStorage(Keys.typographyMode) private var typographyModeRaw: String = TypographyMode.system.rawValue
+    @AppStorage(Keys.devModeEnabled) private var devModeEnabledStorage: Bool = false
+    @AppStorage(Keys.devModeUILogging) private var devModeUILoggingStorage: Bool = false
+    @AppStorage(Keys.devModeDataLogging) private var devModeDataLoggingStorage: Bool = false
+    @AppStorage(Keys.devModeSchedulerLogging) private var devModeSchedulerLoggingStorage: Bool = false
+    @AppStorage(Keys.devModePerformance) private var devModePerformanceStorage: Bool = false
 
     var accentColorChoice: AppAccentColor {
         get { AppAccentColor(rawValue: accentColorRaw) ?? .multicolor }
@@ -334,6 +377,46 @@ final class AppSettingsModel: ObservableObject {
         }
     }
 
+    var devModeEnabled: Bool {
+        get { devModeEnabledStorage }
+        set {
+            objectWillChange.send()
+            devModeEnabledStorage = newValue
+        }
+    }
+
+    var devModeUILogging: Bool {
+        get { devModeUILoggingStorage }
+        set {
+            objectWillChange.send()
+            devModeUILoggingStorage = newValue
+        }
+    }
+
+    var devModeDataLogging: Bool {
+        get { devModeDataLoggingStorage }
+        set {
+            objectWillChange.send()
+            devModeDataLoggingStorage = newValue
+        }
+    }
+
+    var devModeSchedulerLogging: Bool {
+        get { devModeSchedulerLoggingStorage }
+        set {
+            objectWillChange.send()
+            devModeSchedulerLoggingStorage = newValue
+        }
+    }
+
+    var devModePerformance: Bool {
+        get { devModePerformanceStorage }
+        set {
+            objectWillChange.send()
+            devModePerformanceStorage = newValue
+        }
+    }
+
     func font(for style: AppTypography.TextStyle) -> Font {
         AppTypography.font(for: style, mode: typographyMode)
     }
@@ -341,13 +424,6 @@ final class AppSettingsModel: ObservableObject {
     func glassOpacity(for scheme: ColorScheme) -> Double {
         guard enableGlassEffects else { return 0 }
         return scheme == .dark ? glassStrength.dark : glassStrength.light
-    }
-
-    private static func components(from color: Color) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
-        guard let cgColor = color.cgColor else { return nil }
-        guard let nsColor = NSColor(cgColor: cgColor) else { return nil }
-        let rgb = nsColor.usingColorSpace(.deviceRGB) ?? nsColor
-        return (Double(rgb.redComponent), Double(rgb.greenComponent), Double(rgb.blueComponent), Double(rgb.alphaComponent))
     }
 
     init() {}
