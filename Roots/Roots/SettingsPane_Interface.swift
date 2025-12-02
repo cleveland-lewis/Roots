@@ -59,6 +59,10 @@ struct SettingsPane_Interface: View {
             }
 
             Spacer()
+
+            Divider().padding(.vertical)
+
+            tabEditor
         }
         .frame(maxWidth: 640)
     }

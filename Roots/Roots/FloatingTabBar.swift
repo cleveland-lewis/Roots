@@ -14,7 +14,7 @@ struct FloatingTabBar: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            ForEach(RootTab.allCases) { tab in
+            ForEach(settings.tabOrder.filter { settings.visibleTabs.contains($0) }) { tab in
                 tabButton(for: tab)
             }
         }

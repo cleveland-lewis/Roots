@@ -230,6 +230,8 @@ final class AppSettingsModel: ObservableObject {
         static let sidebarBehavior = "roots.settings.sidebarBehavior"
         static let wiggleOnHover = "roots.settings.wiggleOnHover"
         static let tabBarMode = "roots.settings.tabBarMode"
+        static let visibleTabs = "roots.settings.visibleTabs"
+        static let tabOrder = "roots.settings.tabOrder"
         static let enableGlassEffects = "roots.settings.enableGlassEffects"
         static let cardRadius = "roots.settings.cardRadius"
         static let animationSoftness = "roots.settings.animationSoftness"
@@ -253,6 +255,8 @@ final class AppSettingsModel: ObservableObject {
     @AppStorage(Keys.sidebarBehavior) private var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
     @AppStorage(Keys.wiggleOnHover) private var wiggleOnHoverStorage: Bool = true
     @AppStorage(Keys.tabBarMode) private var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
+    @AppStorage(Keys.visibleTabs) private var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades"
+    @AppStorage(Keys.tabOrder) private var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades"
     @AppStorage(Keys.enableGlassEffects) private var enableGlassEffectsStorage: Bool = true
     @AppStorage(Keys.cardRadius) private var cardRadiusRaw: String = CardRadius.medium.rawValue
     @AppStorage(Keys.animationSoftness) private var animationSoftnessStorage: Double = 0.42
@@ -336,6 +340,22 @@ final class AppSettingsModel: ObservableObject {
             objectWillChange.send()
             tabBarModeRaw = newValue.rawValue
         }
+    }
+
+    // Visible tabs management (comma-separated raw values)
+    var visibleTabs: [RootTab] {
+        get {
+            visibleTabsRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) }
+        }
+        set {
+            visibleTabsRaw = newValue.map { $0.rawValue }.joined(separator: ",")
+            objectWillChange.send()
+        }
+    }
+
+    var tabOrder: [RootTab] {
+        get { tabOrderRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) } }
+        set { tabOrderRaw = newValue.map { $0.rawValue }.joined(separator: ",") ; objectWillChange.send() }
     }
 
     var iconLabelMode: TabBarMode {
