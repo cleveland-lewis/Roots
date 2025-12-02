@@ -85,8 +85,10 @@ struct ContentView: View {
             CoursesView()
         case .grades:
             GradesView()
-        default:
-            EmptyView()
+        case .timer:
+            TimerView()
+        case .settings:
+            SettingsRootView(initialPane: .general) { _ in }
         }
     }
 

@@ -256,8 +256,8 @@ final class AppSettingsModel: ObservableObject {
     @AppStorage(Keys.sidebarBehavior) private var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
     @AppStorage(Keys.wiggleOnHover) private var wiggleOnHoverStorage: Bool = true
     @AppStorage(Keys.tabBarMode) private var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
-    @AppStorage(Keys.visibleTabs) private var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades"
-    @AppStorage(Keys.tabOrder) private var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades"
+    @AppStorage(Keys.visibleTabs) private var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
+    @AppStorage(Keys.tabOrder) private var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
     @AppStorage(Keys.quickActions) private var quickActionsRaw: String = "add_assignment,add_course,quick_note"
     @AppStorage(Keys.enableGlassEffects) private var enableGlassEffectsStorage: Bool = true
     @AppStorage(Keys.cardRadius) private var cardRadiusRaw: String = CardRadius.medium.rawValue

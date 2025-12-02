@@ -8,6 +8,7 @@ enum RootTab: String, CaseIterable, Identifiable {
     case courses
     case grades
     case settings
+    case timer
 
     var id: String { rawValue }
 
