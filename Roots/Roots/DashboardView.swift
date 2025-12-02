@@ -54,7 +54,7 @@ struct DashboardView: View {
                 }
             }
             .padding()
-            .contentTransition(.opacity.combined(with: .scale))
+            .contentTransition(.opacity)
         }
     }
 }
@@ -76,3 +76,4 @@ struct DashboardTileBody: View {
         }
     }
 }
+

@@ -1,25 +1,5 @@
 import SwiftUI
 
-enum AppPage: CaseIterable, Hashable {
-    case dashboard, planner, courses
-
-    var label: String {
-        switch self {
-        case .dashboard: return "Dashboard"
-        case .planner: return "Planner"
-        case .courses: return "Courses"
-        }
-    }
-
-    var icon: Image {
-        switch self {
-        case .dashboard: return Image(systemName: "rectangle.grid.2x2.fill")
-        case .planner: return Image(systemName: "calendar.circle")
-        case .courses: return Image(systemName: "books.vertical")
-        }
-    }
-}
-
 struct ContentView: View {
     @StateObject private var settings = AppSettings()
     @State private var currentPage: AppPage = .dashboard
@@ -62,7 +42,7 @@ struct ContentView: View {
         }
         .padding()
         .background(.ultraThinMaterial)
-        .contentTransition(.opacity.combined(with: .scale))
+        .contentTransition(.opacity)
     }
 
     @ViewBuilder
@@ -82,15 +62,15 @@ struct ContentView: View {
             ForEach(AppPage.allCases, id: \.self) { page in
                 Button {
                     currentPage = page
-                    UILogger.log(.dashboard, "Tapped: \(page.label.lowercased())_tab")
+                    UILogger.log(.dashboard, "Tapped: \(page.title.lowercased())_tab")
                 } label: {
                     if settings.iconLabelMode != .textOnly {
-                        page.icon
+                        Image(systemName: page.systemImage)
                             .font(.title2)
                             .symbolEffect(.bounce)
                     }
                     if settings.iconLabelMode != .iconsOnly {
-                        Text(page.label)
+                        Text(page.title)
                             .font(settings.font(for: .body))
                     }
                 }
@@ -117,12 +97,12 @@ struct ContentView: View {
                             Button {
                                 currentPage = page
                                 isMenuPresented = false
-                                UILogger.log(.dashboard, "Tapped: menu_\(page.label.lowercased())")
+                                UILogger.log(.dashboard, "Tapped: menu_\(page.title.lowercased())")
                             } label: {
                                 HStack {
-                                    page.icon
+                                    Image(systemName: page.systemImage)
                                         .symbolEffect(.bounce)
-                                    Text(page.label)
+                                    Text(page.title)
                                         .font(settings.font(for: .body))
                                 }
                             }

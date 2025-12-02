@@ -20,7 +20,7 @@ struct CardGrid<Content: View>: View {
             ) {
                 content()
             }
-            .contentTransition(.opacity.combined(with: .scale))
+            .contentTransition(.opacity)
         }
         .frame(minHeight: 0)
     }

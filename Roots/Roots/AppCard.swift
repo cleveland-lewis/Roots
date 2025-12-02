@@ -36,6 +36,6 @@ struct AppCard<Content: View>: View {
         .opacity(settings.glassOpacity(for: colorScheme))
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
         .shadow(color: .black.opacity(0.25), radius: 24, x: 0, y: 10)
-        .contentTransition(.opacity.combined(with: .scale))
+        .contentTransition(.opacity)
     }
 }

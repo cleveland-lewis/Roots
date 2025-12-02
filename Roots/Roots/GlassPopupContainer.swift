@@ -21,8 +21,7 @@ struct GlassPopupContainer<Content: View>: View {
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
                 .shadow(color: .black.opacity(0.25), radius: 24, x: 0, y: 10)
-                .contentTransition(.opacity.combined(with: .scale))
-                .transition(.opacity.combined(with: .scale))
+                .transition(.opacity)
         }
     }
 }
