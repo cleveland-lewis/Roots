@@ -1,39 +1,41 @@
 import SwiftUI
 
 struct AppCard<Content: View>: View {
-    @Environment(\.colorScheme) private var scheme
-
+    @EnvironmentObject private var settings: AppSettings
+    @Environment(\.colorScheme) private var colorScheme
+    let title: String?
+    let icon: Image?
     let content: Content
 
-    init(@ViewBuilder content: () -> Content) {
+    init(title: String? = nil, icon: Image? = nil, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.icon = icon
         self.content = content()
     }
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
-                .fill(backgroundMaterial)
-                .shadow(color: .black.opacity(scheme == .dark ? 0.35 : 0.15), radius: 18, y: 8)
-        }
-        .overlay(
+        VStack(alignment: .leading, spacing: 12) {
+            if let title = title {
+                HStack(spacing: 8) {
+                    if let icon = icon {
+                        icon
+                            .symbolEffect(.bounce)
+                            .font(.title3)
+                    }
+                    Text(title)
+                        .font(settings.font(for: .title2))
+                        .fontWeight(.semibold)
+                }
+                Divider()
+            }
             content
-                .padding(16)
-        )
-        .frame(minWidth: DesignSystem.Cards.cardMinWidth, maxWidth: .infinity, minHeight: DesignSystem.Cards.cardMinHeight)
-        .compositingGroup()
-    }
-
-    private var backgroundMaterial: some ShapeStyle {
-        if scheme == .dark {
-            return .thinMaterial.opacity(0.45)
-        } else {
-            return .regularMaterial.opacity(0.4)
+                .font(settings.font(for: .body))
         }
-    }
-}
-
-extension AppCard where Content == EmptyView {
-    init() {
-        self.init { EmptyView() }
+        .padding(20)
+        .background(.ultraThinMaterial)
+        .opacity(settings.glassOpacity(for: colorScheme))
+        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .shadow(color: .black.opacity(0.25), radius: 24, x: 0, y: 10)
+        .contentTransition(.opacity.combined(with: .scale))
     }
 }

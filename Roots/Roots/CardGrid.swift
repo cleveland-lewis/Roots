@@ -1,19 +1,27 @@
 import SwiftUI
 
 struct CardGrid<Content: View>: View {
-    private let content: () -> Content
+    let content: () -> Content
 
     init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
     }
 
-    private var columns: [GridItem] {
-        [GridItem(.adaptive(minimum: DesignSystem.Cards.cardMinWidth, maximum: 360), spacing: 16)]
-    }
-
     var body: some View {
-        LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
-            content()
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let columns = max(1, min(5, Int(width / 260)))
+            LazyVGrid(
+                columns: Array(
+                    repeating: GridItem(.flexible(), spacing: 20),
+                    count: columns
+                ),
+                spacing: 20
+            ) {
+                content()
+            }
+            .contentTransition(.opacity.combined(with: .scale))
         }
+        .frame(minHeight: 0)
     }
 }

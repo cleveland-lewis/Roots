@@ -1,48 +1,68 @@
 import SwiftUI
+import Combine
 
-final class AppSettings: ObservableObject {
-    // Accent color for app-wide tints
-    @AppStorage("accentColorHex") var accentColorHex: String = "#9B59B6" // purple-like default
+enum IconLabelMode: String, CaseIterable, Codable {
+    case iconsOnly
+    case textOnly
+    case iconsAndText
+}
 
-    var accentColor: Color {
-        Color(hex: accentColorHex) ?? .purple
+enum TypographyMode: String, CaseIterable, Codable {
+    case system
+    case dos
+    case rounded
+}
+
+struct AppTypography {
+    enum TextStyle {
+        case headline, title2, body
     }
-    // General
-    @AppStorage("appearanceMode") var appearanceMode: AppearanceMode = .system
-    @AppStorage("notificationsEnabled") var notificationsEnabled: Bool = true
 
-    // Profile
-    @AppStorage("displayName") var displayName: String = ""
-    @AppStorage("showCourseCodes") var showCourseCodes: Bool = true
-
-    // Developer
-    @AppStorage("enableDebugLogging") var enableDebugLogging: Bool = false
-
-    // Design
-    @AppStorage("cardMaterial") var cardMaterial: CardMaterial = .regular
-    @AppStorage("cardCornerRadius") var cardCornerRadius: Double = 18
-
-    enum AppearanceMode: String, CaseIterable, Identifiable {
-        case system, light, dark
-        var id: String { rawValue }
-        var label: String {
-            switch self {
-            case .system: return "System"
-            case .light:  return "Light"
-            case .dark:   return "Dark"
+    static func font(for style: TextStyle, mode: TypographyMode) -> Font {
+        switch mode {
+        case .system:
+            switch style {
+            case .headline: return .system(size: 24, weight: .semibold)
+            case .title2: return .system(size: 20, weight: .semibold)
+            case .body: return .system(size: 16, weight: .regular)
+            }
+        case .dos:
+            switch style {
+            case .headline: return .custom("Menlo", size: 24).monospacedDigit()
+            case .title2: return .custom("Menlo", size: 20).monospacedDigit()
+            case .body: return .custom("Menlo", size: 16).monospacedDigit()
+            }
+        case .rounded:
+            switch style {
+            case .headline: return .system(size: 24, weight: .semibold, design: .rounded)
+            case .title2: return .system(size: 20, weight: .semibold, design: .rounded)
+            case .body: return .system(size: 16, weight: .regular, design: .rounded)
             }
         }
     }
+}
 
-    enum CardMaterial: String, CaseIterable, Identifiable {
-        case ultraThin, regular, thick
-        var id: String { rawValue }
-        var label: String {
-            switch self {
-            case .ultraThin: return "Ultra Thin"
-            case .regular:   return "Regular"
-            case .thick:     return "Thick"
-            }
+final class AppSettings: ObservableObject {
+    @Published var accentColor: Color = .accentColor
+    @Published var iconLabelMode: IconLabelMode = .iconsAndText
+    @Published var typographyMode: TypographyMode = .system
+
+    let lightGlassOpacity: Double = 0.33
+    let darkGlassOpacity: Double = 0.17
+
+    func glassOpacity(for scheme: ColorScheme) -> Double {
+        scheme == .dark ? darkGlassOpacity : lightGlassOpacity
+    }
+
+    func font(for style: AppTypography.TextStyle) -> Font {
+        AppTypography.font(for: style, mode: typographyMode)
+    }
+
+    func cycleIconLabelMode() {
+        let modes = IconLabelMode.allCases
+        if let currentIndex = modes.firstIndex(of: iconLabelMode) {
+            let nextIndex = (currentIndex + 1) % modes.count
+            iconLabelMode = modes[nextIndex]
         }
     }
 }

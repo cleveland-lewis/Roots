@@ -40,7 +40,7 @@ struct PlannerView: View {
                         .font(DesignSystem.Typography.title)
                     Spacer()
                     Button("Schedule") { runScheduler() }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.glassBlueProminent)
                     Button("Re-learn") {
                         var prefs = SchedulerPreferencesStore.shared.preferences
                         SchedulerLearner.updatePreferences(from: SchedulerFeedbackStore.shared.feedback, preferences: &prefs)

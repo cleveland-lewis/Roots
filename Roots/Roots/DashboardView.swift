@@ -1,194 +1,78 @@
 import SwiftUI
-import EventKit
 
 struct DashboardView: View {
-    @StateObject private var calendarManager = CalendarManager.shared
-    // Accept external arrays for future real data integration; default empty (no fake data)
-    var todayItems: [AnyHashable] = []
-    var courses: [AnyHashable] = []
-    var tasks: [AnyHashable] = []
-    var energyData: [AnyHashable] = []
-    var insights: [AnyHashable] = []
-
-    private let columns = [
-        GridItem(.adaptive(minimum: 300), spacing: DesignSystem.Spacing.medium)
-    ]
+    @EnvironmentObject private var settings: AppSettings
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
-                Text("Dashboard")
-                    .font(DesignSystem.Typography.title)
-                    .padding(.bottom, DesignSystem.Spacing.small)
-
-                // Device Calendars
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-                    HStack(spacing: DesignSystem.Spacing.small) {
-                        Image(systemName: "calendar")
-                        Text("Device Calendars").font(DesignSystem.Typography.body)
-                    }
-
-                    if calendarManager.calendars.isEmpty {
-                        AppCard {
-                            VStack(spacing: DesignSystem.Spacing.small) {
-                                Image(systemName: "calendar")
-                                    .imageScale(.large)
-                                Text(DesignSystem.emptyStateMessage)
-                                    .font(DesignSystem.Typography.body)
-                                    .foregroundStyle(.primary)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
-                    } else {
-                        AppCard {
-                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-                                Image(systemName: "calendar")
-                                    .imageScale(.large)
-                                Text("Connected Calendars")
-                                    .font(DesignSystem.Typography.body)
-                                ForEach(calendarManager.calendars, id: \.calendarIdentifier) { cal in
-                                    Text(cal.title)
-                                        .font(DesignSystem.Typography.caption)
-                                }
-                            }
-                        }
-                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
-                    }
+            CardGrid {
+                AppCard(title: "Today Overview", icon: Image(systemName: "sunrise.fill")) {
+                    DashboardTileBody(
+                        rows: [
+                            ("Schedule Today", "No data available"),
+                            ("Mood", "Balanced")
+                        ]
+                    )
+                }
+                .onTapGesture {
+                    UILogger.log(.dashboard, "Tapped: today_overview")
                 }
 
-                // Today Overview
-                SectionView(title: "Today Overview", items: todayItems, icon: Image(systemName: "sun.max"))
-
-                // Courses
-                SectionView(title: "Courses", items: courses, icon: Image(systemName: "book.closed"))
-
-                // Tasks / Due Soon
-                SectionView(title: "Tasks & Due Soon", items: tasks, icon: Image(systemName: "checkmark.circle"))
-
-                // Energy & Focus
-                SectionView(title: "Energy & Focus", items: energyData, icon: Image(systemName: "bolt.heart"))
-
-                // Insights (rule-based)
-                insightsSection
-
-                Spacer()
-            }
-            .padding(DesignSystem.Spacing.large)
-        }
-        .background(DesignSystem.background(for: .light))
-        .task {
-            calendarManager.requestAccess { _ in }
-            insightsVM.refresh()
-        }
-        .loadingHUD(isVisible: Binding(get: { insightsVM.isLoading || calendarManager.isLoading }, set: { _ in }), title: "Updating…", message: insightsVM.loadingMessage ?? calendarManager.loadingMessage)
-        .navigationTitle("Dashboard")
-    }
-
-    @StateObject private var insightsVM = InsightsViewModel()
-
-    private var insightsSection: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-            HStack(spacing: DesignSystem.Spacing.small) {
-                Image(systemName: "lightbulb")
-                Text("Insights").font(DesignSystem.Typography.body)
-            }
-
-            if insightsVM.insights.isEmpty {
-                if insightsVM.isLoading {
-                    GlassLoadingCard(title: "Generating insights…", message: insightsVM.loadingMessage)
-                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
-                } else {
-                    AppCard {
-                        VStack(spacing: DesignSystem.Spacing.small) {
-                            Image(systemName: "lightbulb")
-                                .imageScale(.large)
-                            Text("Insights")
-                                .font(DesignSystem.Typography.title)
-                            Text(DesignSystem.emptyStateMessage)
-                                .font(DesignSystem.Typography.body)
-                        }
-                    }
-                    .frame(minHeight: DesignSystem.Cards.defaultHeight)
+                AppCard(title: "Energy & Focus", icon: Image(systemName: "heart.fill")) {
+                    DashboardTileBody(
+                        rows: [
+                            ("Streak", "4 days"),
+                            ("Focus Window", "Next slot 2h")
+                        ]
+                    )
                 }
-            } else {
-                ForEach(insightsVM.insights) { insight in
-                    AppCard {
-                        VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-                            HStack {
-                                Image(systemName: icon(for: insight))
-                                Text(insight.title).font(DesignSystem.Typography.body)
-                            }
-                            Text(insight.message)
-                                .font(DesignSystem.Typography.caption)
-                        }
+                .onTapGesture {
+                    UILogger.log(.dashboard, "Tapped: energy_focus")
+                }
+
+                AppCard(title: "Insights", icon: Image(systemName: "lightbulb.fill")) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("No data available")
+                            .foregroundColor(.secondary)
+                            .font(settings.font(for: .body))
                     }
-                    .frame(height: DesignSystem.Cards.defaultHeight / 2)
+                }
+                .onTapGesture {
+                    UILogger.log(.dashboard, "Tapped: insights")
+                }
+
+                AppCard(title: "Upcoming Deadlines", icon: Image(systemName: "clock.arrow.circlepath")) {
+                    DashboardTileBody(
+                        rows: [
+                            ("Next", "Assignment - due tomorrow"),
+                            ("Following", "Quiz - Friday")
+                        ]
+                    )
+                }
+                .onTapGesture {
+                    UILogger.log(.dashboard, "Tapped: upcoming_deadlines")
                 }
             }
-        }
-        .padding(.bottom, DesignSystem.Spacing.large)
-    }
-
-    private func icon(for insight: Insight) -> String {
-        switch insight.category {
-        case .timeOfDay:     return "clock"
-        case .loadBalance:   return "calendar.badge.exclamationmark"
-        case .estimation:    return "chart.bar.doc.horizontal"
-        case .taskType:      return "list.bullet.clipboard"
-        case .adherence:     return "checklist"
+            .padding()
+            .contentTransition(.opacity.combined(with: .scale))
         }
     }
 }
 
-private struct SectionView: View {
-    var title: String
-    var items: [AnyHashable]
-    var icon: Image
+struct DashboardTileBody: View {
+    let rows: [(String, String)]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-            HStack(spacing: DesignSystem.Spacing.small) {
-                icon
-                Text(title).font(DesignSystem.Typography.body)
-            }
-
-            if items.isEmpty {
-                // Single empty state card
-                AppCard {
-                    VStack(spacing: DesignSystem.Spacing.small) {
-                        Image(systemName: "exclamationmark.circle")
-                            .imageScale(.large)
-                        Text(DesignSystem.emptyStateMessage)
-                            .font(DesignSystem.Typography.body)
-                            .foregroundStyle(.primary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .frame(minHeight: DesignSystem.Cards.defaultHeight)
-            } else {
-                // Render a card per item (structural only)
-                CardGrid {
-                    ForEach(Array(items.indices), id: \.self) { idx in
-                        AppCard {
-                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.small) {
-                                Text(title)
-                                    .font(DesignSystem.Typography.body)
-                                Text("Item \(idx + 1)")
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .frame(minHeight: DesignSystem.Cards.defaultHeight)
-                    }
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(rows, id: \.0) { row in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(row.0)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Text(row.1)
+                        .font(.headline)
                 }
             }
         }
-        .padding(.bottom, DesignSystem.Spacing.large)
     }
-}
-
-#Preview {
-    // Default preview shows empty-state cards
-    DashboardView()
 }

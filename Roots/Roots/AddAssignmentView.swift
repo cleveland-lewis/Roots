@@ -119,7 +119,7 @@ struct AddAssignmentView: View {
                         onSave(task)
                         dismiss()
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.glassBlueProminent)
                     .keyboardShortcut(.defaultAction)
                     .disabled(isSaveDisabled)
                 }

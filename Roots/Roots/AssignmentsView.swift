@@ -29,7 +29,7 @@ struct AssignmentsView: View {
                         Button(action: { showingAddSheet = true }) {
                             Label("Add Assignment", systemImage: "plus")
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.glassBlueProminent)
 
                         Picker("Filter", selection: $filter) {
                             ForEach(Filter.allCases) { f in

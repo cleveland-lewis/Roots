@@ -1,254 +1,136 @@
-//
-//  ContentView.swift
-//  Roots
-//
-//  Created by Cleveland Lewis III on 11/30/25.
-//
-
 import SwiftUI
-import SwiftData
+
+enum AppPage: CaseIterable, Hashable {
+    case dashboard, planner, courses
+
+    var label: String {
+        switch self {
+        case .dashboard: return "Dashboard"
+        case .planner: return "Planner"
+        case .courses: return "Courses"
+        }
+    }
+
+    var icon: Image {
+        switch self {
+        case .dashboard: return Image(systemName: "rectangle.grid.2x2.fill")
+        case .planner: return Image(systemName: "calendar.circle")
+        case .courses: return Image(systemName: "books.vertical")
+        }
+    }
+}
 
 struct ContentView: View {
-    private var spacing: CGFloat = 40.0
-    private var glassStyle: Glass = .clear
-    private var selectedTint: Color = .clear
-    private var cornerRadius: CGFloat = 16.0
-
-    @EnvironmentObject private var appModel: AppModel
-    @State private var isNavMenuVisible: Bool = false
-    @State private var triggerHaptic: Bool = false
-    private let selectedSensoryFeedback: SensoryFeedback = .selection
-
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @StateObject private var settings = AppSettings()
+    @State private var currentPage: AppPage = .dashboard
+    @State private var isMenuPresented = false
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .topLeading) {
-                // Main page content
-                mainContent
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                topBar
+                currentPageView
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.clear)
-
-                // Custom top toolbar
-                topToolbar
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
-
-                // Glass dropdown nav menu
-                if isNavMenuVisible {
-                    navMenu
-                        .padding(.top, 40)
-                        .padding(.leading, 12)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                        .zIndex(10)
-                }
             }
-            .frame(minWidth: 960, minHeight: 640)
-            .background(Color.clear)
+
+            floatingTabBar
         }
-        .sheet(isPresented: $appModel.isPresentingAddHomework) {
-            AddAssignmentView(initialType: .problemSet, onSave: { task in
-                AssignmentsStore.shared.addTask(task)
-            })
-            .frame(minWidth: 420)
-        }
-        .sheet(isPresented: $appModel.isPresentingAddExam) {
-            AddAssignmentView(initialType: .examPrep, onSave: { task in
-                AssignmentsStore.shared.addTask(task)
-            })
-            .frame(minWidth: 420)
-        }
-        .sheet(isPresented: $isShowingSettings) {
-            SettingsRootView()
-        }
+        .environmentObject(settings)
+        .overlay(menuOverlay)
     }
 
-    // MARK: - Main content
-    @ViewBuilder
-    private var mainContent: some View {
-        switch appModel.selectedPage {
-        case .dashboard:
-            DashboardView()
-        case .calendar:
-            CalendarView()
-        case .planner:
-            PlannerView()
-        case .assignments:
-            AssignmentsView()
-        case .courses:
-            CoursesView()
-        case .grades:
-            GradesView()
-        }
-    }
-
-        @State private var showFilterControls: Bool = false
-    @State private var isShowingSettings: Bool = false
-
-    // MARK: - Top toolbar
-    private var topToolbar: some View {
+    private var topBar: some View {
         HStack {
-            // Left: circular glass hamburger
             Button {
-                withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
-                    isNavMenuVisible.toggle()
-                }
+                isMenuPresented.toggle()
+                UILogger.log(.dashboard, "Tapped: menu_button")
             } label: {
-                Image(systemName: "line.3.horizontal")
-                    .font(.system(size: 14, weight: .medium))
-                    .frame(width: 28, height: 28)
-                    .background(
-                        Circle()
-                            .fill(.thinMaterial)
-                            .shadow(radius: 8, y: 4)
-                    )
+                Image(systemName: "line.horizontal.3")
+                    .font(.title2)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(GlassButtonStyle())
 
             Spacer()
 
-            // Right: single glass container for filter/settings/etc.
-            HStack(spacing: 8) {
-                if showFilterControls {
-                    // Placeholder for filter controls; keep lightweight
-                    Text("All")
-                        .font(.caption)
-                }
+            Button {
+                UILogger.log(.dashboard, "Tapped: settings_button")
+            } label: {
+                Image(systemName: "gear")
+                    .font(.title2)
+            }
+            .buttonStyle(GlassButtonStyle())
+        }
+        .padding()
+        .background(.ultraThinMaterial)
+        .contentTransition(.opacity.combined(with: .scale))
+    }
 
+    @ViewBuilder
+    private var currentPageView: some View {
+        switch currentPage {
+        case .dashboard:
+            DashboardView()
+        case .planner:
+            Text("Planner placeholder")
+        case .courses:
+            Text("Courses placeholder")
+        }
+    }
+
+    private var floatingTabBar: some View {
+        HStack(spacing: 30) {
+            ForEach(AppPage.allCases, id: \.self) { page in
                 Button {
-                    isShowingSettings = true
+                    currentPage = page
+                    UILogger.log(.dashboard, "Tapped: \(page.label.lowercased())_tab")
                 } label: {
-                    Image(systemName: "gearshape")
-                        .font(.system(size: 13, weight: .regular))
-                }
-                .buttonStyle(.plain)
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(
-                Capsule(style: .continuous)
-                    .fill(.thinMaterial)
-                    .shadow(radius: 8, y: 4)
-            )
-            .frame(minHeight: 32)
-        }
-        .padding(.horizontal, 16)
-        .padding(.top, 10)
-    }
-
-    // MARK: - Dropdown nav menu
-    private var navMenu: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            ForEach(AppPage.allCases) { page in
-                Button {
-                    appModel.selectedPage = page
-                    withAnimation(.spring(response: 0.25, dampingFraction: 0.9)) {
-                        isNavMenuVisible = false
+                    if settings.iconLabelMode != .textOnly {
+                        page.icon
+                            .font(.title2)
+                            .symbolEffect(.bounce)
                     }
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: page.systemImage)
-                            .font(.system(size: 13, weight: .medium))
-                            .bounceOnTap()
-                        Text(page.title)
-                            .font(.system(size: 13, weight: appModel.selectedPage == page ? .semibold : .regular))
+                    if settings.iconLabelMode != .iconsOnly {
+                        Text(page.label)
+                            .font(settings.font(for: .body))
                     }
-                    .foregroundStyle(appModel.selectedPage == page ? Color.accentColor : .primary)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(appModel.selectedPage == page ? Color.accentColor.opacity(0.18) : Color.clear)
-                    )
                 }
-                .bounceOnTap()
-                .buttonStyle(.plain)
+                .buttonStyle(.glassBlueProminent)
+                .onLongPressGesture {
+                    settings.cycleIconLabelMode()
+                }
             }
         }
-        .padding(8)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(.thinMaterial)
-                .shadow(radius: 14, y: 6)
-        )
-        .fixedSize()
-    }
-private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 24)
+        .background(.ultraThinMaterial)
+        .clipShape(Capsule())
+        .shadow(color: .black.opacity(0.25), radius: 24, x: 0, y: 10)
+        .padding(.bottom, 16)
     }
 
-    private func deleteItems(offsets: IndexSet) {
-        #if os(macOS)
-        HapticsManager.shared.play(.error)
-        #endif
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+    private var menuOverlay: some View {
+        Group {
+            if isMenuPresented {
+                GlassPopupContainer(onDismiss: { isMenuPresented = false }) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(AppPage.allCases, id: \.self) { page in
+                            Button {
+                                currentPage = page
+                                isMenuPresented = false
+                                UILogger.log(.dashboard, "Tapped: menu_\(page.label.lowercased())")
+                            } label: {
+                                HStack {
+                                    page.icon
+                                        .symbolEffect(.bounce)
+                                    Text(page.label)
+                                        .font(settings.font(for: .body))
+                                }
+                            }
+                            .buttonStyle(GlassButtonStyle())
+                        }
+                    }
+                }
             }
         }
     }
 }
-
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
-}
-
-// Simple local GlassEffectContainer used for toolbar visuals
-struct GlassEffectContainer<Content: View>: View {
-    let spacing: CGFloat
-    var glassStyle: Glass = .clear
-    var selectedTint: Color = .clear
-    var cornerRadius: CGFloat = 12
-    var isInteractive: Bool = false
-
-    let content: () -> Content
-
-    init(spacing: CGFloat = 24, glassStyle: Glass = .clear, selectedTint: Color = .clear, cornerRadius: CGFloat = 12, isInteractive: Bool = false, @ViewBuilder content: @escaping () -> Content) {
-        self.spacing = spacing
-        self.glassStyle = glassStyle
-        self.selectedTint = selectedTint
-        self.cornerRadius = cornerRadius
-        self.isInteractive = isInteractive
-        self.content = content
-    }
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(.ultraThinMaterial)
-                .padding(4)
-
-            content()
-                .padding(.horizontal, spacing)
-        }
-        .padding(.trailing)
-    }
-}
-
-// Reusable icon style for standalone icons (not attached to text)
-struct IconGlass: View {
-    let systemName: String
-    var offsetX: CGFloat = 0
-    var glassStyle: Glass = .clear
-    var selectedTint: Color = .clear
-    var cornerRadius: CGFloat = 12
-    var isInteractive: Bool = false
-
-    var body: some View {
-        Image(systemName: systemName)
-            .font(.largeTitle)
-            .frame(width: 80, height: 80)
-            .overlay {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(.clear)
-                    .glassEffect(glassStyle.tint(selectedTint).interactive(isInteractive), in: .rect(cornerRadius: cornerRadius))
-            }
-            .offset(x: offsetX, y: 0)
-    }
-}
-

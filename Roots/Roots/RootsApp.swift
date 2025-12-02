@@ -36,7 +36,7 @@ struct RootsApp: App {
                 .environmentObject(coursesStore)
                 .environmentObject(appSettings)
                 .environmentObject(appModel)
-                .buttonStyle(GlassProminentButtonStyle())
+                .buttonStyle(.glassBlueProminent)
                 .controlSize(.regular)
                 .buttonBorderShape(.automatic)
                 .tint(.accentColor)

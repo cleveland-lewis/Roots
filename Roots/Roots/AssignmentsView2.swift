@@ -16,7 +16,7 @@ struct AssignmentsView2: View {
                                 Text("Add Assignment")
                             }
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.glassBlueProminent)
                 }
 
                 LazyVStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {

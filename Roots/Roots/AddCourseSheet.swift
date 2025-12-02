@@ -27,7 +27,7 @@ struct AddCourseSheet: View {
                             coursesStore.addCourse(title: title, code: code, to: semester)
                             dismiss()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.glassBlueProminent)
                     }
                     .font(.callout)
                 }

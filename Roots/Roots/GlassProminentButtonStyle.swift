@@ -1,6 +1,7 @@
 import SwiftUI
 
-struct GlassProminentButtonStyle: ButtonStyle {
+// Renamed legacy style to avoid conflict with new GlassProminentBlueButtonStyle
+struct LegacyGlassProminentButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(.vertical, 6)

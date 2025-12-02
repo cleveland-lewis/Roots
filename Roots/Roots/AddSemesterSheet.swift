@@ -38,7 +38,7 @@ struct AddSemesterSheet: View {
                             if markAsCurrent { coursesStore.setCurrentSemester(sem) }
                             dismiss()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.glassBlueProminent)
                     }
                     .font(.callout)
                 }
