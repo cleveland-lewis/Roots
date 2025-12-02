@@ -9,6 +9,8 @@ struct AppCard<Content: View>: View {
     let content: Content
     private let cardCornerRadius: CGFloat = 24
     private let cardPadding: CGFloat = 24
+    // Unified card height guidance used on dashboard
+    private let unifiedCardMinHeight: CGFloat = 180
 
     init(
         title: String? = nil,
@@ -33,6 +35,7 @@ struct AppCard<Content: View>: View {
                 .foregroundStyle(.primary)
         }
         .padding(cardPadding)
+        .frame(minHeight: unifiedCardMinHeight)
         .background(
             .regularMaterial,
             in: RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous)
