@@ -27,3 +27,14 @@ struct AppCommands: Commands {
         }
     }
 }
+
+struct SettingsCommands: Commands {
+    let showSettings: () -> Void
+
+    var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            Button("Preferences…", action: showSettings)
+                .keyboardShortcut(",", modifiers: .command)
+        }
+    }
+}

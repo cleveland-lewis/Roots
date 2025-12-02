@@ -12,7 +12,8 @@ import SwiftData
 struct RootsApp: App {
     @StateObject private var permissionsManager = PermissionsManager.shared
     @StateObject private var coursesStore = CoursesStore()
-    @StateObject private var appSettings = AppSettings()
+    @StateObject private var appSettings = AppSettingsModel.shared
+    private let settingsWindowController = SettingsWindowController(appSettings: AppSettingsModel.shared)
     @StateObject private var appModel = AppModel()
 
     var sharedModelContainer: ModelContainer = {
@@ -47,6 +48,9 @@ struct RootsApp: App {
         }
         .commands {
             AppCommands()
+            SettingsCommands(showSettings: {
+                settingsWindowController.showSettings()
+            })
         }
         .modelContainer(sharedModelContainer)
     }

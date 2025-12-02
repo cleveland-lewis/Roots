@@ -30,8 +30,8 @@ public struct GlassProminentBlueButtonStyle: ButtonStyle {
 
         var body: some View {
             let isPressed = configuration.isPressed
-            let scale: CGFloat = isPressed ? 0.96 : (hovering ? 1.03 : 1.0)
-            let yOffset: CGFloat = hovering ? -1.5 : -0.5
+            let scale: CGFloat = isPressed ? 0.92 : (hovering ? 1.05 : 1.0)
+            let yOffset: CGFloat = isPressed ? 2 : (hovering ? -3 : -0.5)
 
             configuration.label
                 .font(.headline) // Default typography (short labels look best)
@@ -70,13 +70,14 @@ public struct GlassProminentBlueButtonStyle: ButtonStyle {
                         .animation(.easeOut(duration: 0.18), value: isPressed)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                .shadow(color: Color.black.opacity(shadowOpacity), radius: 20, x: 0, y: 10)
+                .shadow(color: Color.black.opacity(isPressed ? (colorScheme == .dark ? 0.12 : 0.10) : shadowOpacity), radius: isPressed ? 8 : (hovering ? 24 : 20), x: 0, y: isPressed ? 2 : (hovering ? 12 : 10))
                 .scaleEffect(scale)
                 .offset(y: yOffset)
-                .animation(.spring(response: 0.35, dampingFraction: 0.75), value: hovering)
-                .animation(.spring(response: 0.25, dampingFraction: 0.7), value: isPressed)
+                .animation(.spring(response: 0.28, dampingFraction: 0.7), value: hovering)
+                .animation(.spring(response: 0.18, dampingFraction: 0.6), value: isPressed)
                 .onHover { hovering = $0 }
                 .symbolEffect(.bounce, value: isPressed)
+                .hoverEffect(.lift)
         }
     }
 }

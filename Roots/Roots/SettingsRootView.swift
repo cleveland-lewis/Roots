@@ -1,166 +1,72 @@
 import SwiftUI
 
 struct SettingsRootView: View {
-    @EnvironmentObject var appSettings: AppSettings
-    @State private var selection: SettingsSection? = .appearance
+    @EnvironmentObject var settings: AppSettingsModel
+    @State private var selectedPane: SettingsToolbarIdentifier
+    @State private var hasSetInitialPane = false
+
+    private let paneChanged: (SettingsToolbarIdentifier) -> Void
+
+    init(initialPane: SettingsToolbarIdentifier, paneChanged: @escaping (SettingsToolbarIdentifier) -> Void) {
+        _selectedPane = State(initialValue: initialPane)
+        self.paneChanged = paneChanged
+    }
 
     var body: some View {
-        NavigationSplitView {
-            List(selection: $selection) {
-                Section(header: Text("General")) {
-                    SettingsRow(section: .appearance)
-                    SettingsRow(section: .notifications)
-                }
+        ZStack {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .shadow(color: Color.primary.opacity(0.05), radius: 12, x: 0, y: 6)
 
-                Section(header: Text("Account")) {
-                    SettingsRow(section: .profile)
-                }
-
-                Section(header: Text("Advanced")) {
-                    SettingsRow(section: .developer)
-                }
-
-                Section(header: Text("Design")) {
-                    SettingsRow(section: .design)
-                }
+            ScrollView {
+                paneContent
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 26)
+                    .padding(.vertical, 20)
             }
-            .listStyle(.sidebar)
-        } detail: {
-            detailView(for: selection ?? .appearance)
-                .padding(20)
         }
-        .frame(width: 720, height: 480)
-    }
-
-    private func detailView(for section: SettingsSection) -> some View {
-        switch section {
-        case .appearance:   return AnyView(AppearanceSettingsView())
-        case .notifications:return AnyView(NotificationSettingsView())
-        case .profile:      return AnyView(ProfileSettingsView())
-        case .developer:    return AnyView(DeveloperSettingsView())
-        case .design:       return AnyView(DesignSettingsView())
-        }
-    }
-}
-
-enum SettingsSection: String, CaseIterable, Identifiable {
-    case appearance, notifications, profile, developer, design
-
-    var id: String { rawValue }
-
-    var label: String {
-        switch self {
-        case .appearance:   return "Appearance"
-        case .notifications:return "Notifications"
-        case .profile:      return "Profile"
-        case .developer:    return "Developer"
-        case .design:       return "Design"
-        }
-    }
-
-    var systemImage: String {
-        switch self {
-        case .appearance:   return "paintpalette"
-        case .notifications:return "bell"
-        case .profile:      return "person.crop.circle"
-        case .developer:    return "wrench.and.screwdriver"
-        case .design:       return "square.on.square"
-        }
-    }
-}
-
-struct SettingsRow: View {
-    let section: SettingsSection
-
-    var body: some View {
-        Label(section.label, systemImage: section.systemImage)
-    }
-}
-
-// MARK: - Detail sections
-
-struct AppearanceSettingsView: View {
-    @EnvironmentObject var appSettings: AppSettings
-
-    var body: some View {
-        VStack(spacing: 12) {
-            Section("Appearance") {
-                Picker("Mode", selection: $appSettings.appearanceMode) {
-                    ForEach(AppSettings.AppearanceMode.allCases) { mode in
-                        Text(mode.label).tag(mode)
+        .frame(minWidth: 540, minHeight: 420)
+        .toolbarRole(.preference)
+        .toolbar {
+            ToolbarItemGroup(placement: .navigation) {
+                HStack(spacing: 12) {
+                    ForEach(SettingsToolbarIdentifier.allCases) { identifier in
+                        Button {
+                            guard selectedPane != identifier else { return }
+                            selectedPane = identifier
+                        } label: {
+                            Label(identifier.label, systemImage: identifier.systemImageName)
+                        }
+                        .labelStyle(.titleAndIcon)
+                        .buttonStyle(.plain)
+                        .foregroundStyle(selectedPane == identifier ? .accentColor : .secondary)
+                        .help("Show \(identifier.label) settings")
                     }
                 }
-                .pickerStyle(.segmented)
             }
         }
-        .navigationTitle("Appearance")
+        .onAppear {
+            guard !hasSetInitialPane else { return }
+            paneChanged(selectedPane)
+            hasSetInitialPane = true
+        }
+        .onChange(of: selectedPane) { newPane in
+            print("[Settings] Switched to pane: \(newPane.label)")
+            paneChanged(newPane)
+        }
     }
-}
 
-struct NotificationSettingsView: View {
-    @EnvironmentObject var appSettings: AppSettings
-
-    var body: some View {
-        VStack(spacing: 12) {
-            Section(header: Text("Notifications"), footer: Text("Roots can remind you about upcoming assignments and exams.")) {
-                Toggle("Enable notifications", isOn: $appSettings.notificationsEnabled)
-            }
+    @ViewBuilder
+    private var paneContent: some View {
+        switch selectedPane {
+        case .general:
+            SettingsPane_General()
+        case .appearance:
+            SettingsPane_Appearance()
+        case .interface:
+            SettingsPane_Interface()
+        case .accounts:
+            SettingsPane_Accounts()
         }
-        .navigationTitle("Notifications")
-    }
-}
-
-struct ProfileSettingsView: View {
-    @EnvironmentObject var appSettings: AppSettings
-
-    var body: some View {
-        Form {
-            Section("Profile") {
-                TextField("Display name", text: $appSettings.displayName)
-                Toggle("Show course codes", isOn: $appSettings.showCourseCodes)
-            }
-        }
-        .navigationTitle("Profile")
-    }
-}
-
-struct DeveloperSettingsView: View {
-    @EnvironmentObject var appSettings: AppSettings
-
-    var body: some View {
-        Form {
-            Section("Debugging") {
-                Toggle("Enable debug logging", isOn: $appSettings.enableDebugLogging)
-            }
-        }
-        .navigationTitle("Developer")
-    }
-}
-
-struct DesignSettingsView: View {
-    @EnvironmentObject var appSettings: AppSettings
-
-    var body: some View {
-        Form {
-            Section("Card Material") {
-                Picker("Material", selection: $appSettings.cardMaterial) {
-                    ForEach(AppSettings.CardMaterial.allCases) { mat in
-                        Text(mat.label).tag(mat)
-                    }
-                }
-                .pickerStyle(.segmented)
-            }
-
-            Section("Card Shape") {
-                HStack {
-                    Text("Corner radius")
-                    Slider(value: $appSettings.cardCornerRadius, in: 8...32, step: 1)
-                    Text("\(Int(appSettings.cardCornerRadius))")
-                        .monospacedDigit()
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
-        .navigationTitle("Design")
     }
 }
