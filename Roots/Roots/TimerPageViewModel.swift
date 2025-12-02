@@ -64,7 +64,7 @@ final class TimerPageViewModel: ObservableObject {
 
     // MARK: - Sessions
     func startSession(mode: TimerMode, plannedDuration: TimeInterval? = nil) {
-        guard currentSession?.state == .running == false else { return }
+        if let s = currentSession, s.state == .running { return }
         let session = FocusSession(activityID: currentActivityID, mode: mode, plannedDuration: plannedDuration, startedAt: Date(), state: .running)
         currentSession = session
         LOG_UI(.info, "Timer", "Started session \(session.id) for activity=\(String(describing: session.activityID)) mode=\(mode.rawValue)")

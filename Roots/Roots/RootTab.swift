@@ -21,6 +21,7 @@ enum RootTab: String, CaseIterable, Identifiable {
         case .courses:      return "Courses"
         case .grades:       return "Grades"
         case .settings:     return "Settings"
+        case .timer:        return "Timer"
         }
     }
 
