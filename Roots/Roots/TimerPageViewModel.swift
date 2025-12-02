@@ -3,24 +3,62 @@ import Combine
 
 @MainActor
 final class TimerPageViewModel: ObservableObject {
+    // Activities & collections
     @Published var activities: [TimerActivity] = []
     @Published var collections: [ActivityCollection] = []
-    @Published var selectedCollectionID: UUID? = nil
-    @Published var currentActivityID: UUID? = nil
+    @Published var selectedCollectionID: UUID?
+    @Published var currentActivityID: UUID?
+
+    // Time & mode
     @Published var currentMode: TimerMode = .omodoro
-    @Published var currentSession: FocusSession? = nil
+    @Published var currentSession: FocusSession?
     @Published var pastSessions: [FocusSession] = []
+
+    // Live clock
+    @Published var now: Date = .init()
+
+    // Timer internals
+    @Published var sessionElapsed: TimeInterval = 0
+    @Published var sessionRemaining: TimeInterval = 0
+    @Published var focusDuration: TimeInterval = 25 * 60
+    @Published var breakDuration: TimeInterval = 5 * 60
+    @Published var timerDuration: TimeInterval = 30 * 60
+    @Published var isOnBreak: Bool = false
+
+    private var timerCancellable: AnyCancellable?
+    private var clockCancellable: AnyCancellable?
 
     // Mode binding - assume a shared selector writes to this or inject externally
     var modeCancellable: AnyCancellable?
 
     init() {
-        // Load placeholder data
         loadPlaceholderData()
+        startClock()
     }
 
     deinit {
-        modeCancellable?.cancel()
+        Task { @MainActor in
+            stopClock()
+            modeCancellable?.cancel()
+        }
+    }
+
+    // MARK: - Clock
+    func startClock() {
+        clockCancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] date in
+                guard let self else { return }
+                now = date
+                tickSession()
+            }
+    }
+
+    func stopClock() {
+        clockCancellable?.cancel()
+        clockCancellable = nil
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
 
     // MARK: - CRUD for activities
@@ -36,6 +74,7 @@ final class TimerPageViewModel: ObservableObject {
 
     func deleteActivity(id: UUID) {
         activities.removeAll { $0.id == id }
+        if currentActivityID == id { currentActivityID = nil }
     }
 
     func selectActivity(_ id: UUID?) {
@@ -43,10 +82,8 @@ final class TimerPageViewModel: ObservableObject {
     }
 
     var filteredActivities: [TimerActivity] {
-        if let coll = selectedCollectionID {
-            return activities.filter { $0.collectionID == coll }
-        }
-        return activities
+        guard let coll = selectedCollectionID else { return activities }
+        return activities.filter { $0.collectionID == coll }
     }
 
     // MARK: - Collections
@@ -60,25 +97,39 @@ final class TimerPageViewModel: ObservableObject {
 
     func deleteCollection(id: UUID) {
         collections.removeAll { $0.id == id }
+        if selectedCollectionID == id { selectedCollectionID = nil }
     }
 
     // MARK: - Sessions
-    func startSession(mode: TimerMode, plannedDuration: TimeInterval? = nil) {
-        if let s = currentSession, s.state == .running { return }
-        let session = FocusSession(activityID: currentActivityID, mode: mode, plannedDuration: plannedDuration, startedAt: Date(), state: .running)
+    func startSession(plannedDuration: TimeInterval? = nil) {
+        guard currentSession?.state != .running else { return }
+        let planned: TimeInterval?
+        switch currentMode {
+        case .omodoro:
+            planned = isOnBreak ? breakDuration : focusDuration
+        case .timer:
+            planned = plannedDuration ?? timerDuration
+        case .stopwatch:
+            planned = nil
+        }
+
+        let session = FocusSession(activityID: currentActivityID, mode: currentMode, plannedDuration: planned, startedAt: Date(), state: .running)
         currentSession = session
-        LOG_UI(.info, "Timer", "Started session \(session.id) for activity=\(String(describing: session.activityID)) mode=\(mode.rawValue)")
+        sessionElapsed = 0
+        sessionRemaining = planned ?? 0
+
+        LOG_UI(.info, "Timer", "Started session \(session.id) for activity=\(String(describing: session.activityID)) mode=\(currentMode.rawValue)")
     }
 
     func pauseSession() {
-        guard var s = currentSession else { return }
+        guard var s = currentSession, s.state == .running else { return }
         s.state = .paused
         currentSession = s
         LOG_UI(.info, "Timer", "Paused session \(s.id)")
     }
 
     func resumeSession() {
-        guard var s = currentSession else { return }
+        guard var s = currentSession, s.state == .paused else { return }
         s.state = .running
         currentSession = s
         LOG_UI(.info, "Timer", "Resumed session \(s.id)")
@@ -88,21 +139,55 @@ final class TimerPageViewModel: ObservableObject {
         guard var s = currentSession else { return }
         s.state = completed ? .completed : .cancelled
         s.endedAt = Date()
+        s.actualDuration = sessionElapsed
         pastSessions.append(s)
-        LOG_UI(.info, "Timer", "Ended session \(s.id) completed=\(completed)")
         currentSession = nil
+        sessionElapsed = 0
+        sessionRemaining = 0
+        if s.mode == .omodoro && completed {
+            isOnBreak.toggle()
+        }
+        LOG_UI(.info, "Timer", "Ended session \(s.id) completed=\(completed)")
+    }
+
+    func sessions(for activityID: UUID?) -> [FocusSession] {
+        pastSessions.filter { $0.activityID == activityID }
+    }
+
+    // MARK: - Internals
+    private func tickSession() {
+        guard let session = currentSession, session.state == .running else { return }
+        sessionElapsed += 1
+
+        if let planned = session.plannedDuration {
+            sessionRemaining = max(planned - sessionElapsed, 0)
+            if sessionRemaining == 0 {
+                endSession(completed: true)
+                return
+            }
+        } else {
+            sessionRemaining = 0
+        }
+        currentSession = session
     }
 
     // MARK: - Placeholder data
     private func loadPlaceholderData() {
-        // Minimal placeholder activities and collections
-        let coll = ActivityCollection(name: "Default")
-        collections = [coll]
+        let deepWork = ActivityCollection(name: "Deep Work", description: "Long focus blocks")
+        let math = ActivityCollection(name: "Math", description: "Problem solving")
+        collections = [deepWork, math]
 
         activities = [
-            TimerActivity(name: "Reading Math", studyCategory: .reading, collectionID: coll.id, emoji: "📘"),
-            TimerActivity(name: "Problem Set", studyCategory: .problemSolving, collectionID: coll.id, emoji: "✏️"),
-            TimerActivity(name: "Review Notes", studyCategory: .reviewing, collectionID: coll.id, emoji: "📝")
+            TimerActivity(name: "Reading — Biology", note: "Chapters 4-6", studyCategory: .reading, collectionID: deepWork.id, emoji: "📚"),
+            TimerActivity(name: "Problem Set — Calculus", studyCategory: .problemSolving, collectionID: math.id, emoji: "✏️"),
+            TimerActivity(name: "Review Notes", studyCategory: .reviewing, collectionID: deepWork.id, emoji: "📝"),
+            TimerActivity(name: "Essay Draft", studyCategory: .writing, collectionID: nil, emoji: "🖋️")
+        ]
+        currentActivityID = activities.first?.id
+
+        pastSessions = [
+            FocusSession(activityID: activities.first?.id, mode: .omodoro, plannedDuration: focusDuration, startedAt: Date().addingTimeInterval(-3600), endedAt: Date().addingTimeInterval(-3300), state: .completed, actualDuration: 3000),
+            FocusSession(activityID: activities[1].id, mode: .timer, plannedDuration: 1800, startedAt: Date().addingTimeInterval(-7200), endedAt: Date().addingTimeInterval(-7000), state: .completed, actualDuration: 2000)
         ]
     }
 }

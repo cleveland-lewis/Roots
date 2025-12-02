@@ -34,6 +34,7 @@ enum RootTab: String, CaseIterable, Identifiable {
         case .courses:      return "book.closed"
         case .grades:       return "doc.text.magnifyingglass"
         case .settings:     return "gearshape"
+        case .timer:        return "timer"
         }
     }
 

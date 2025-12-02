@@ -1,54 +1,121 @@
 import SwiftUI
-import Combine
 
 struct TimerControlsView: View {
-    @ObservedObject var vm: TimerPageViewModel
-    @State private var countdown: TimeInterval = 25*60
-    @State private var elapsed: TimeInterval = 0
-    @State private var timerCancellable: AnyCancellable? = nil
+    @ObservedObject var viewModel: TimerPageViewModel
+    @Binding var currentMode: TimerMode
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            GroupBox(label: Label("Timer", systemImage: "timer")) {
-                VStack(spacing: 12) {
-                    Text(displayString)
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
-                        .monospacedDigit()
+        VStack(spacing: 16) {
+            VStack(spacing: 8) {
+                Text(timeDisplay)
+                    .font(.system(size: 64, weight: .heavy, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundColor(.primary)
+                    .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 10)
 
-                    HStack(spacing: 12) {
-                        Button(action: startPause) {
-                            Image(systemName: vm.currentSession?.state == .running ? "pause.fill" : "play.fill")
-                            Text(vm.currentSession?.state == .running ? "Pause" : "Start")
-                        }
-                        .buttonStyle(.glassProminent)
+                Text(modeSubtitle)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
 
-                        Button("Reset") { vm.endSession(completed: false) }
-                            .buttonStyle(.glass)
-                    }
+            HStack(spacing: 12) {
+                if viewModel.currentSession?.state == .running {
+                    button(label: "Pause", systemImage: "pause.fill", prominent: true) { viewModel.pauseSession() }
+                } else if viewModel.currentSession?.state == .paused {
+                    button(label: "Resume", systemImage: "play.fill", prominent: true) { viewModel.resumeSession() }
+                } else {
+                    button(label: "Start", systemImage: "play.fill", prominent: true) { viewModel.startSession(plannedDuration: currentMode == .timer ? viewModel.timerDuration : nil) }
+                }
 
-                    if vm.currentMode == .omodoro {
-                        HStack {
-                            Text("Segment: ")
-                            Text(vm.currentSession?.mode == .omodoro ? "Focus" : "Break")
-                        }
+                button(label: viewModel.currentSession == nil ? "Reset" : "End", systemImage: "stop.fill", prominent: false) {
+                    if viewModel.currentSession == nil {
+                        resetDefaults()
+                    } else {
+                        viewModel.endSession(completed: false)
                     }
                 }
-                .padding()
+            }
+
+            if currentMode == .omodoro {
+                HStack(spacing: 12) {
+                    durationControl(title: "Focus", duration: $viewModel.focusDuration, symbol: "flame")
+                    durationControl(title: "Break", duration: $viewModel.breakDuration, symbol: "cup.and.saucer")
+                    Label(viewModel.isOnBreak ? "Break" : "Focus", systemImage: viewModel.isOnBreak ? "leaf" : "bolt.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .padding(10)
+                        .background(.thinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+            } else if currentMode == .timer {
+                durationControl(title: "Duration", duration: $viewModel.timerDuration, symbol: "clock")
             }
         }
+        .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
-    private var displayString: String {
-        if vm.currentMode == .stopwatch {
-            let e = elapsed
-            return formatted(seconds: Int(e))
-        } else {
-            let s = Int(countdown)
-            return formatted(seconds: s)
+    private func button(label: String, systemImage: String, prominent: Bool, action: @escaping () -> Void) -> some View {
+        let style = prominent ? AnyButtonStyle(GlassBlueProminentButtonStyle()) : AnyButtonStyle(GlassButtonStyle())
+        return Button(action: action) {
+            Label(label, systemImage: systemImage)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(style)
+    }
+
+    private func durationControl(title: String, duration: Binding<TimeInterval>, symbol: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Label(title, systemImage: symbol)
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.secondary)
+            HStack {
+                Slider(value: Binding(get: { duration.wrappedValue / 60 }, set: { duration.wrappedValue = $0 * 60 }), in: 5...120, step: 5)
+                Text("\(Int(duration.wrappedValue / 60))m")
+                    .font(.caption.monospacedDigit())
+                    .foregroundColor(.secondary)
+                    .frame(width: 44)
+            }
+        }
+        .padding(10)
+        .background(.thinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private var timeDisplay: String {
+        if let session = viewModel.currentSession, session.state != .idle {
+            if session.mode == .stopwatch {
+                return format(seconds: Int(viewModel.sessionElapsed))
+            } else {
+                let remaining = viewModel.sessionRemaining > 0 ? viewModel.sessionRemaining : (session.plannedDuration ?? 0)
+                return format(seconds: Int(remaining))
+            }
+        }
+
+        switch currentMode {
+        case .omodoro:
+            return format(seconds: Int(viewModel.focusDuration))
+        case .timer:
+            return format(seconds: Int(viewModel.timerDuration))
+        case .stopwatch:
+            return "00:00"
         }
     }
 
-    private func formatted(seconds: Int) -> String {
+    private var modeSubtitle: String {
+        switch currentMode {
+        case .omodoro:
+            return viewModel.isOnBreak ? "Omodoro — Break" : "Omodoro — Focus Block"
+        case .timer:
+            return "Timer — Countdown"
+        case .stopwatch:
+            return "Stopwatch"
+        }
+    }
+
+    private func format(seconds: Int) -> String {
         let h = seconds / 3600
         let m = (seconds % 3600) / 60
         let s = seconds % 60
@@ -56,21 +123,8 @@ struct TimerControlsView: View {
         return String(format: "%02d:%02d", m, s)
     }
 
-    private func startPause() {
-        if vm.currentSession?.state == .running {
-            vm.pauseSession()
-            timerCancellable?.cancel()
-        } else {
-            vm.startSession(mode: vm.currentMode, plannedDuration: countdown)
-            // start a simple timer
-            timerCancellable = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-                .sink { _ in
-                    if vm.currentMode == .stopwatch {
-                        elapsed += 1
-                    } else {
-                        if countdown > 0 { countdown -= 1 } else { vm.endSession(completed: true); timerCancellable?.cancel() }
-                    }
-                }
-        }
+    private func resetDefaults() {
+        viewModel.sessionElapsed = 0
+        viewModel.sessionRemaining = 0
     }
 }

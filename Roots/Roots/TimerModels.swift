@@ -2,10 +2,36 @@ import Foundation
 
 // MARK: - Models
 
+/// High level timer mode controlled by the shared selector.
+enum TimerMode: String, CaseIterable, Identifiable, Codable {
+    case omodoro
+    case timer
+    case stopwatch
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .omodoro: return "Omodoro"
+        case .timer: return "Timer"
+        case .stopwatch: return "Stopwatch"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .omodoro: return "hourglass"
+        case .timer: return "timer"
+        case .stopwatch: return "stopwatch"
+        }
+    }
+}
+
 /// Represents an activity the user can time (e.g., study task, assignment, course work)
 struct TimerActivity: Identifiable, Hashable, Codable {
     let id: UUID
     var name: String
+    var note: String?
     var courseID: UUID?
     var assignmentID: UUID?
     var studyCategory: StudyCategory?
@@ -13,9 +39,10 @@ struct TimerActivity: Identifiable, Hashable, Codable {
     var colorHex: String?
     var emoji: String?
 
-    init(id: UUID = UUID(), name: String, courseID: UUID? = nil, assignmentID: UUID? = nil, studyCategory: StudyCategory? = nil, collectionID: UUID? = nil, colorHex: String? = nil, emoji: String? = nil) {
+    init(id: UUID = UUID(), name: String, note: String? = nil, courseID: UUID? = nil, assignmentID: UUID? = nil, studyCategory: StudyCategory? = nil, collectionID: UUID? = nil, colorHex: String? = nil, emoji: String? = nil) {
         self.id = id
         self.name = name
+        self.note = note
         self.courseID = courseID
         self.assignmentID = assignmentID
         self.studyCategory = studyCategory
@@ -25,12 +52,16 @@ struct TimerActivity: Identifiable, Hashable, Codable {
     }
 }
 
-enum StudyCategory: String, CaseIterable, Codable {
+enum StudyCategory: String, CaseIterable, Identifiable, Codable {
     case reading
     case problemSolving
     case reviewing
     case writing
-    case other
+    case admin
+
+    var id: String { rawValue }
+
+    var displayName: String { rawValue.capitalized }
 }
 
 /// Collection of activities
@@ -44,13 +75,6 @@ struct ActivityCollection: Identifiable, Hashable, Codable {
         self.name = name
         self.description = description
     }
-}
-
-/// Timer modes
-enum TimerMode: String, CaseIterable, Codable {
-    case omodoro
-    case timer
-    case stopwatch
 }
 
 /// Represents a run/session
@@ -70,8 +94,10 @@ struct FocusSession: Identifiable, Hashable, Codable {
     var startedAt: Date?
     var endedAt: Date?
     var state: State
+    var actualDuration: TimeInterval?
+    var interruptions: Int = 0
 
-    init(id: UUID = UUID(), activityID: UUID? = nil, mode: TimerMode = .omodoro, plannedDuration: TimeInterval? = nil, startedAt: Date? = nil, endedAt: Date? = nil, state: State = .idle) {
+    init(id: UUID = UUID(), activityID: UUID? = nil, mode: TimerMode = .omodoro, plannedDuration: TimeInterval? = nil, startedAt: Date? = nil, endedAt: Date? = nil, state: State = .idle, actualDuration: TimeInterval? = nil, interruptions: Int = 0) {
         self.id = id
         self.activityID = activityID
         self.mode = mode
@@ -79,5 +105,7 @@ struct FocusSession: Identifiable, Hashable, Codable {
         self.startedAt = startedAt
         self.endedAt = endedAt
         self.state = state
+        self.actualDuration = actualDuration
+        self.interruptions = interruptions
     }
 }

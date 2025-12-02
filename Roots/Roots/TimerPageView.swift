@@ -1,119 +1,123 @@
 import SwiftUI
+import Combine
 
 struct TimerPageView: View {
-    @StateObject var vm: TimerPageViewModel
-    @EnvironmentObject var appSettings: AppSettingsModel
+    @ObservedObject var viewModel: TimerPageViewModel
+    @Binding var currentMode: TimerMode
 
-    @State private var now: Date = Date()
-    private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var showActivityEditor: Bool = false
+    @State private var editingActivity: TimerActivity?
+    @State private var lowerSection: LowerSection = .activities
     @State private var graphMode: TimerGraphsView.GraphMode = .live
+    @State private var isMenuOpen: Bool = false
+
+    private enum LowerSection { case activities, graphs }
 
     var body: some View {
-        VStack(spacing: 18) {
-            // Top: Time & Date
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(now, style: .time)
-                        .font(.largeTitle).fontWeight(.semibold)
-                    Text(now, formatter: DateFormatter.longDate)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
+        ZStack {
+            LinearGradient(colors: [Color.black.opacity(0.6), Color.blue.opacity(0.25)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                .ignoresSafeArea()
 
-                // Mode indicator
-                Picker("Mode", selection: $vm.currentMode) {
-                    ForEach(TimerMode.allCases, id: \.self) { m in
-                        Label(m.rawValue.capitalized, systemImage: m == .omodoro ? "hourglass" : (m == .timer ? "timer" : "stopwatch"))
-                            .tag(m)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .frame(width: 320)
-            }
-            .padding()
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            ScrollView {
+                VStack(spacing: 20) {
+                    TimerHeaderView(now: viewModel.now, isMenuOpen: $isMenuOpen, onAdd: {
+                        editingActivity = nil
+                        showActivityEditor = true
+                    }, onSettings: { LOG_UI(.info, "Timer", "Settings tapped") })
 
-            // Middle: Activity + Timer
-            HStack(alignment: .top, spacing: 20) {
-                VStack(alignment: .leading, spacing: 12) {
-                    currentActivityView
-                    TimerControlsView(vm: vm)
-                }
-                .frame(minWidth: 360)
+                    modeSelector
 
-                VStack(alignment: .leading, spacing: 12) {
-                    Picker("Graphs", selection: $graphMode) {
-                        Text("Live").tag(TimerGraphsView.GraphMode.live)
-                        Text("History").tag(TimerGraphsView.GraphMode.history)
-                    }
-                    .pickerStyle(.segmented)
-                    TimerGraphsView(mode: graphMode, sessions: vm.pastSessions, currentSession: vm.currentSession)
-                }
-                .frame(minWidth: 360)
-            }
-
-            // Bottom: Activities & Collections
-            HStack(spacing: 16) {
-                ActivityListView(vm: vm)
-                    .frame(minWidth: 360)
-                VStack(alignment: .leading) {
-                    Text("Collections")
-                        .font(.headline)
-                    Picker("Collection", selection: Binding(get: { vm.selectedCollectionID }, set: { vm.selectedCollectionID = $0 })) {
-                        Text("All").tag(UUID?.none)
-                        ForEach(vm.collections) { c in
-                            Text(c.name).tag(Optional(c.id))
+                    VStack(spacing: 16) {
+                        TimerControlsView(viewModel: viewModel, currentMode: $currentMode)
+                        CurrentActivityView(viewModel: viewModel) {
+                            lowerSection = .activities
                         }
                     }
-                    .pickerStyle(.menu)
 
-                    Spacer()
+                    segmentedControl
+
+                    if lowerSection == .activities {
+                        ActivityListView(viewModel: viewModel, onAdd: { editingActivity = nil; showActivityEditor = true }) { activity in
+                            editingActivity = activity
+                            showActivityEditor = true
+                        }
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    } else {
+                        TimerGraphsView(mode: $graphMode, sessions: viewModel.pastSessions, currentSession: viewModel.currentSession, sessionElapsed: viewModel.sessionElapsed, sessionRemaining: viewModel.sessionRemaining)
+                    }
                 }
-                .frame(width: 220)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+                .padding(.bottom, 40)
             }
         }
-        .padding()
-        .onReceive(clockTimer) { d in now = d }
+        .onChange(of: currentMode) { newValue in
+            if viewModel.currentMode != newValue { viewModel.currentMode = newValue }
+        }
+        .onChange(of: viewModel.currentMode) { newValue in
+            if currentMode != newValue { currentMode = newValue }
+        }
+        .sheet(isPresented: $showActivityEditor) {
+            ActivityEditorView(activity: editingActivity, collections: viewModel.collections, onSave: { activity in
+                if let existing = viewModel.activities.first(where: { $0.id == activity.id }) {
+                    viewModel.updateActivity(activity)
+                    viewModel.selectActivity(activity.id)
+                    LOG_UI(.info, "Timer", "Updated activity \(existing.id)")
+                } else {
+                    viewModel.addActivity(activity)
+                    viewModel.selectActivity(activity.id)
+                }
+                showActivityEditor = false
+                isMenuOpen = false
+            }, onCancel: {
+                showActivityEditor = false
+                isMenuOpen = false
+            })
+            .presentationDetents([.medium, .large])
+        }
     }
 
-    private var currentActivityView: some View {
-        Group {
-            if let id = vm.currentActivityID, let act = vm.activities.first(where: { $0.id == id }) {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
-                        if let emoji = act.emoji { Text(emoji).font(.largeTitle) }
-                        Text(act.name).font(.title2).fontWeight(.semibold)
-                    }
-
-                    HStack(spacing: 8) {
-                        if let cat = act.studyCategory { Text(cat.rawValue.capitalized).font(.caption).foregroundColor(.secondary) }
-                        if let course = act.courseID { Text("Course") .font(.caption).foregroundColor(.secondary) }
-                        if let assn = act.assignmentID { Text("Assignment") .font(.caption).foregroundColor(.secondary) }
-                    }
-                }
-            } else {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("No activity selected")
-                        .font(.title2)
-                    Button("Create New Activity") {
-                        let a = TimerActivity(name: "New Activity")
-                        vm.addActivity(a)
-                        vm.selectActivity(a.id)
-                    }
-                    .buttonStyle(.glassProminent)
+    private var modeSelector: some View {
+        HStack {
+            Picker("Mode", selection: $currentMode) {
+                ForEach(TimerMode.allCases) { mode in
+                    Label(mode.displayName, systemImage: mode.systemImage).tag(mode)
                 }
             }
+            .pickerStyle(.segmented)
         }
+        .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
+    private var segmentedControl: some View {
+        HStack(spacing: 12) {
+            segmentButton(title: "Activities", isSelected: lowerSection == .activities) { lowerSection = .activities }
+            segmentButton(title: "Graphs", isSelected: lowerSection == .graphs) { lowerSection = .graphs }
+            Spacer()
+        }
+        .padding(.horizontal, 4)
+    }
+
+    private func segmentButton(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(isSelected ? Color.accentColor.opacity(0.2) : Color.white.opacity(0.06))
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
+        .buttonStyle(.plain)
     }
 }
 
-// MARK: - DateFormatter helper
-fileprivate extension DateFormatter {
-    static var longDate: DateFormatter = {
-        let f = DateFormatter()
-        f.dateStyle = .full
-        f.timeStyle = .none
-        return f
-    }()
+struct TimerPageView_Previews: PreviewProvider {
+    static var previews: some View {
+        TimerPageView(viewModel: TimerPageViewModel(), currentMode: .constant(.omodoro))
+            .environment(\.colorScheme, .dark)
+            .environmentObject(AppSettingsModel.shared)
+    }
 }

@@ -21,7 +21,7 @@ struct ContentView: View {
 
             VStack {
                 Spacer()
-                FloatingTabBar(selectedTab: $selectedTab)
+                GlassTabBar(selected: $selectedTab)
             }
         }
         .overlay(menuOverlay)
