@@ -7,6 +7,8 @@ struct ContentView: View {
     @State private var menuButtonFrame: CGRect = .zero
     @Environment(\.colorScheme) private var colorScheme
 
+    @State private var showSettings: Bool = false
+
     private let menuCardWidth: CGFloat = 248
     private let menuCornerRadius: CGFloat = DesignSystem.Cards.cardCornerRadius
 
@@ -57,13 +59,13 @@ struct ContentView: View {
 
             Spacer()
 
-            Button {
-                UILogger.log(.dashboard, "Tapped: settings_button")
-            } label: {
-                Image(systemName: "gearshape")
-                    .font(.title2)
+            GlassCircleButton(systemName: "gearshape") {
+                showSettings.toggle()
             }
-            .buttonStyle(GlassButtonStyle())
+            .sheet(isPresented: $showSettings) {
+                SettingsRootView(initialPane: .general) { _ in }
+                    .environmentObject(settings)
+            }
         }
         .padding()
         .background(.ultraThinMaterial)
