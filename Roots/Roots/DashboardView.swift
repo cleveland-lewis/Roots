@@ -23,38 +23,52 @@ struct DashboardView: View {
     private var showText: Bool { true }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                headerControls
-                CardGrid {
+        ZStack(alignment: .bottom) {
+            Color.black.opacity(0.96).ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 24) {
+                // Header
+                HStack {
+                    GlassCircleButton(systemName: "plus") { /* add */ }
+                    Spacer()
+                    Text("Dashboard")
+                        .font(.system(size: 26, weight: .bold))
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    GlassCircleButton(systemName: "gearshape") { /* settings */ }
+                }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+
+                // ROW 1
+                HStack(alignment: .top, spacing: 20) {
                     todayCard
                     energyCard
-                    insightsCard
                     deadlinesCard
                 }
+                .frame(height: 200)
+                .padding(.horizontal, 24)
 
                 Divider()
-                    .padding(.horizontal, 4)
+                    .background(Color.white.opacity(0.12))
+                    .padding(.horizontal, 24)
 
-                HStack(alignment: .top, spacing: 16) {
+                // ROW 2
+                HStack(alignment: .top, spacing: 20) {
                     DashboardCalendarColumn(selectedDate: $selectedDate)
-                        .frame(maxWidth: .infinity)
-
                     DashboardTasksColumn(tasks: $tasks)
-                        .frame(maxWidth: .infinity)
-
                     DashboardEventsColumn(events: events)
-                        .frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal, 4)
+                .frame(height: 260)
+                .padding(.horizontal, 24)
+
+                Spacer(minLength: 0)
             }
-            .padding()
-            .frame(maxWidth: .infinity)
+
+            GlassTabBar(selected: $selectedTab)
+                .padding(.bottom, 20)
         }
-        .contentTransition(.opacity)
-        .onAppear {
-            LOG_UI(.info, "Navigation", "Displayed DashboardView")
-        }
+        .onAppear { LOG_UI(.info, "Navigation", "Displayed DashboardView") }
     }
 
     private var headerControls: some View {
