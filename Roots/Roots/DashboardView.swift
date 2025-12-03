@@ -65,7 +65,8 @@ struct DashboardView: View {
                 Spacer(minLength: 0)
             }
 
-            GlassTabBar(selected: $selectedTab)
+            // Floating tab bar is provided by the app shell; do not duplicate here.
+            EmptyView()
                 .padding(.bottom, 20)
         }
         .onAppear { LOG_UI(.info, "Navigation", "Displayed DashboardView") }
