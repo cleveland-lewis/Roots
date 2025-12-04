@@ -10,8 +10,7 @@ struct GradesView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
-                Text("Grades")
-                    .font(DesignSystem.Typography.title)
+                // Title removed
 
                 LazyVStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
                     // Overall Status
@@ -97,7 +96,7 @@ struct GradesView: View {
             }
             .padding(DesignSystem.Spacing.large)
         }
-        .background(DesignSystem.background(for: .light))
+        .rootsSystemBackground()
     }
 }
 

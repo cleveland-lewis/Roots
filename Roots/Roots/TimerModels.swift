@@ -4,7 +4,7 @@ import Foundation
 
 /// High level timer mode controlled by the shared selector.
 enum TimerMode: String, CaseIterable, Identifiable, Codable {
-    case omodoro
+    case pomodoro
     case timer
     case stopwatch
 
@@ -12,7 +12,7 @@ enum TimerMode: String, CaseIterable, Identifiable, Codable {
 
     var displayName: String {
         switch self {
-        case .omodoro: return "Omodoro"
+        case .pomodoro: return "Pomodoro"
         case .timer: return "Timer"
         case .stopwatch: return "Stopwatch"
         }
@@ -20,7 +20,7 @@ enum TimerMode: String, CaseIterable, Identifiable, Codable {
 
     var systemImage: String {
         switch self {
-        case .omodoro: return "hourglass"
+        case .pomodoro: return "hourglass"
         case .timer: return "timer"
         case .stopwatch: return "stopwatch"
         }
@@ -97,7 +97,7 @@ struct FocusSession: Identifiable, Hashable, Codable {
     var actualDuration: TimeInterval?
     var interruptions: Int = 0
 
-    init(id: UUID = UUID(), activityID: UUID? = nil, mode: TimerMode = .omodoro, plannedDuration: TimeInterval? = nil, startedAt: Date? = nil, endedAt: Date? = nil, state: State = .idle, actualDuration: TimeInterval? = nil, interruptions: Int = 0) {
+    init(id: UUID = UUID(), activityID: UUID? = nil, mode: TimerMode = .pomodoro, plannedDuration: TimeInterval? = nil, startedAt: Date? = nil, endedAt: Date? = nil, state: State = .idle, actualDuration: TimeInterval? = nil, interruptions: Int = 0) {
         self.id = id
         self.activityID = activityID
         self.mode = mode

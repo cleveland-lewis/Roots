@@ -6,6 +6,7 @@ struct AddCourseSheet: View {
 
     @State private var title: String = ""
     @State private var code: String = ""
+    @State private var semesterId: UUID? = nil
 
     var body: some View {
         VStack {
@@ -14,17 +15,22 @@ struct AddCourseSheet: View {
                     Text("New Course")
                         .font(.title3.bold())
 
-                    TextField("Title (e.g. Neurobiology)", text: $title)
-                    TextField("Code (e.g. BIO 440)", text: $code)
+                    TextField("Biology 101", text: $title)
+                    TextField("e.g. BIO 101", text: $code)
+
+                    Text("Semester")
+                    SemesterPicker(selectedSemesterId: $semesterId)
+                        .environmentObject(coursesStore)
 
                     HStack {
                         Spacer()
                         Button("Cancel") { dismiss() }
                         Button("Save") {
-                            guard let semester = coursesStore.currentSemester else { return }
                             guard !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                            guard let semId = semesterId ?? coursesStore.currentSemesterId,
+                                  let sem = coursesStore.semesters.first(where: { $0.id == semId }) else { return }
 
-                            coursesStore.addCourse(title: title, code: code, to: semester)
+                            coursesStore.addCourse(title: title, code: code, to: sem)
                             dismiss()
                         }
                         .buttonStyle(.glassBlueProminent)

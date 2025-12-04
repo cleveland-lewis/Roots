@@ -10,11 +10,8 @@ struct CoursesView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
 
-                // Title
-                Text("Courses")
-                    .font(.largeTitle.bold())
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
+                // Title removed
+                Color.clear.frame(height: 12)
 
                 // Current semester selector
                 AppCard {

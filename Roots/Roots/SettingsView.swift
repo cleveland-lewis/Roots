@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var settings: AppSettingsModel
     // design tokens
     @State private var selectedMaterial: DesignMaterial = .regular
 
@@ -9,21 +10,20 @@ struct SettingsView: View {
         NavigationView {
             List {
                 Section(header: Text("General")) {
-                    NavigationLink(destination: EmptyView().navigationTitle("Appearance")) {
-                        HStack {
-                            DesignSystem.Icons.settings
-                            Text("Appearance")
-                        }
-                    }
-                    NavigationLink(destination: EmptyView().navigationTitle("Notifications")) {
-                        Label("Notifications", systemImage: "bell")
-                    }
+                    Toggle("Use 24-hour time", isOn: $settings.use24HourTime)
+                    Toggle("Show Energy Panel", isOn: $settings.showEnergyPanel)
+                    Toggle("High Contrast Mode", isOn: $settings.highContrastMode)
                 }
 
-                Section(header: Text("Account")) {
-                    NavigationLink(destination: EmptyView().navigationTitle("Profile")) {
-                        Label("Profile", systemImage: "person.crop.circle")
-                    }
+                Section(header: Text("Workday")) {
+                    DatePicker("Start", selection: Binding(
+                        get: { settings.date(from: settings.defaultWorkdayStart) },
+                        set: { settings.defaultWorkdayStart = settings.components(from: $0) }
+                    ), displayedComponents: [.hourAndMinute])
+                    DatePicker("End", selection: Binding(
+                        get: { settings.date(from: settings.defaultWorkdayEnd) },
+                        set: { settings.defaultWorkdayEnd = settings.components(from: $0) }
+                    ), displayedComponents: [.hourAndMinute])
                 }
 
                 Section(header: Text("Advanced")) {
@@ -51,8 +51,13 @@ struct SettingsView: View {
             .listStyle(.plain)
 #endif
             .navigationTitle("Settings")
-            .background(DesignSystem.background(for: colorScheme))
+            .onChange(of: settings.use24HourTime) { _ in settings.save() }
+            .onChange(of: settings.showEnergyPanel) { _ in settings.save() }
+            .onChange(of: settings.highContrastMode) { _ in settings.save() }
+            .onChange(of: settings.defaultWorkdayStart) { _ in settings.save() }
+            .onChange(of: settings.defaultWorkdayEnd) { _ in settings.save() }
         }
+        .rootsSystemBackground()
     }
 }
 

@@ -6,6 +6,8 @@ struct TimerHeaderView: View {
     var onAdd: () -> Void
     var onSettings: () -> Void
 
+    @EnvironmentObject private var settings: AppSettingsModel
+
     private var dateFormatter: DateFormatter {
         let f = DateFormatter()
         f.dateStyle = .full
@@ -15,35 +17,8 @@ struct TimerHeaderView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            HStack {
-                Button(action: {
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.72)) {
-                        isMenuOpen.toggle()
-                    }
-                    onAdd()
-                }) {
-                    Image(systemName: "plus")
-                        .font(.headline)
-                        .padding(12)
-                        .background(.ultraThinMaterial)
-                        .clipShape(Circle())
-                        .rotationEffect(.degrees(isMenuOpen ? 90 : 0))
-                }
-                Spacer()
-                Text("Timer")
-                    .font(.title2.weight(.semibold))
-                Spacer()
-                Button(action: onSettings) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.headline)
-                        .padding(12)
-                        .background(.ultraThinMaterial)
-                        .clipShape(Circle())
-                }
-            }
-
             VStack(spacing: 2) {
-                Text(now, style: .time)
+                Text(settings.formattedTime(now))
                     .font(.system(size: 34, weight: .bold, design: .rounded))
                     .monospacedDigit()
                 Text(dateFormatter.string(from: now))

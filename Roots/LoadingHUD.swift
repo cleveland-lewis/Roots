@@ -13,7 +13,7 @@ struct LoadingHUD: View {
         Group {
             if isVisible {
                 ZStack {
-                    Color.black.opacity(0.25)
+                    Color(nsColor: .windowBackgroundColor)
                         .ignoresSafeArea()
                         .transition(.opacity)
 
@@ -28,7 +28,7 @@ struct LoadingHUD: View {
                             Text(message)
                                 .font(.footnote)
                                 .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
+                                .multilineTextAlignment(.leading)
                                 .padding(.horizontal, 4)
                         }
                     }

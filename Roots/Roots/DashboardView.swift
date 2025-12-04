@@ -12,80 +12,49 @@ struct DashboardView: View {
         .init(title: "ST 311 – Quiz Review", course: "ST 311", isDone: false),
         .init(title: "Read Genetics notes", course: "GN 311", isDone: true)
     ]
-    @State private var events: [DashboardEvent] = [
-        .init(title: "MA 231 Lecture", time: "9:00–9:50 AM", location: "Biltmore 204"),
-        .init(title: "GN 311 Lab", time: "2:30–4:20 PM", location: "Jordan 112"),
-        .init(title: "Study Block – Library", time: "7:00–9:00 PM", location: "DHH Hill")
-    ]
-
-    // Icons and text are now fixed for the dashboard homepage
-    private var showIcons: Bool { true }
-    private var showText: Bool { true }
+    @State private var events: [DashboardEvent] = {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        return [
+            .init(title: "MA 231 Lecture", time: "9:00–9:50 AM", location: "Biltmore 204", date: today),
+            .init(title: "GN 311 Lab", time: "2:30–4:20 PM", location: "Jordan 112", date: calendar.date(byAdding: .day, value: 1, to: today) ?? today),
+            .init(title: "Study Block – Library", time: "7:00–9:00 PM", location: "DHH Hill", date: calendar.date(byAdding: .day, value: 3, to: today) ?? today),
+            .init(title: "Advisor Meeting", time: "3:00–3:45 PM", location: "Student Center", date: today)
+        ]
+    }()
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Color.black.opacity(0.96).ignoresSafeArea()
+        GeometryReader { proxy in
+            let width = proxy.size.width
+            let columns: Int = width > 1400 ? 3 : (width > 900 ? 2 : 1)
 
-            VStack(alignment: .leading, spacing: 24) {
-                // Header
-                HStack {
-                    GlassCircleButton(systemName: "plus") { /* add */ }
-                    Spacer()
-                    Text("Dashboard")
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(.primary)
-                    Spacer()
-                    GlassCircleButton(systemName: "gearshape") { /* settings */ }
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-
-                // ROW 1
-                HStack(alignment: .top, spacing: 20) {
+            ScrollView {
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: RootsSpacing.l), count: columns),
+                    spacing: RootsSpacing.l
+                ) {
                     todayCard
                     energyCard
                     deadlinesCard
-                }
-                .frame(height: 200)
-                .padding(.horizontal, 24)
-
-                Divider()
-                    .background(Color.white.opacity(0.12))
-                    .padding(.horizontal, 24)
-
-                // ROW 2
-                HStack(alignment: .top, spacing: 20) {
-                    DashboardCalendarColumn(selectedDate: $selectedDate)
+                    DashboardCalendarColumn(selectedDate: $selectedDate, events: events)
                     DashboardTasksColumn(tasks: $tasks)
                     DashboardEventsColumn(events: events)
                 }
-                .frame(height: 260)
-                .padding(.horizontal, 24)
-
-                Spacer(minLength: 0)
+                .padding(.horizontal, RootsSpacing.s)
+                .padding(.bottom, RootsSpacing.xl)
+                .frame(maxWidth: .infinity)
             }
-
-            // Floating tab bar is provided by the app shell; do not duplicate here.
-            EmptyView()
-                .padding(.bottom, 20)
+            .padding(.top, RootsSpacing.m)
+            .background(Color.clear)
         }
         .onAppear { LOG_UI(.info, "Navigation", "Displayed DashboardView") }
-    }
-
-    private var headerControls: some View {
-        HStack(spacing: 12) {
-            Text("Dashboard")
-                .font(settings.font(for: .headline))
-                .foregroundStyle(.primary)
-            Spacer()
-        }
+        .rootsSystemBackground()
     }
 
     private var todayCard: some View {
-        AppCard(
+        RootsCard(
             title: cardTitle("Today Overview"),
-            icon: cardIcon("sun.max"),
-            iconBounceTrigger: todayBounce
+            icon: "sun.max"
         ) {
             DashboardTileBody(
                 rows: [
@@ -102,35 +71,39 @@ struct DashboardView: View {
     }
 
     private var energyCard: some View {
-        AppCard(
-            title: cardTitle("Energy & Focus"),
-            icon: cardIcon("heart.fill"),
-            iconBounceTrigger: energyBounce
-        ) {
-            DashboardTileBody(
-                rows: [
-                    ("Streak", "4 days"),
-                    ("Focus Window", "Next slot 2h")
-                ]
-            )
+        Group {
+            if settings.showEnergyPanel {
+                RootsCard(
+                    title: cardTitle("Energy & Focus"),
+                    icon: "heart.fill"
+                ) {
+                    DashboardTileBody(
+                        rows: [
+                            ("Streak", "4 days"),
+                            ("Focus Window", "Next slot 2h")
+                        ]
+                    )
+                }
+                .onTapGesture {
+                    energyBounce.toggle()
+                    print("[Dashboard] card tapped: energyFocus")
+                }
+                .help("Energy & Focus")
+            } else {
+                EmptyView()
+            }
         }
-        .onTapGesture {
-            energyBounce.toggle()
-            print("[Dashboard] card tapped: energyFocus")
-        }
-        .help("Energy & Focus")
     }
 
     private var insightsCard: some View {
-        AppCard(
+        RootsCard(
             title: cardTitle("Insights"),
-            icon: cardIcon("lightbulb.fill"),
-            iconBounceTrigger: insightsBounce
+            icon: "lightbulb.fill"
         ) {
             VStack(alignment: .leading, spacing: 10) {
                 Text("No data available")
                     .foregroundColor(.secondary)
-                    .font(settings.font(for: .body))
+                    .rootsBody()
             }
         }
         .onTapGesture {
@@ -141,10 +114,9 @@ struct DashboardView: View {
     }
 
     private var deadlinesCard: some View {
-        AppCard(
+        RootsCard(
             title: cardTitle("Upcoming Deadlines"),
-            icon: cardIcon("clock.arrow.circlepath"),
-            iconBounceTrigger: deadlinesBounce
+            icon: "clock.arrow.circlepath"
         ) {
             DashboardTileBody(
                 rows: [
@@ -160,13 +132,8 @@ struct DashboardView: View {
         .help("Upcoming Deadlines")
     }
 
-    private func cardTitle(_ title: String) -> String? {
-        showText ? title : nil
-    }
+    private func cardTitle(_ title: String) -> String? { title }
 
-    private func cardIcon(_ name: String) -> Image? {
-        showIcons ? Image(systemName: name) : nil
-    }
 }
 
 struct DashboardTileBody: View {
@@ -174,14 +141,13 @@ struct DashboardTileBody: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            ForEach(rows, id: \.0) { row in
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(row.0)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .rootsBodySecondary()
                     Text(row.1)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(RootsColor.textPrimary)
                 }
             }
         }
@@ -202,37 +168,93 @@ struct DashboardEvent: Identifiable {
     var title: String
     var time: String
     var location: String?
+    var date: Date
 }
 
 // MARK: - Columns
 
 private struct DashboardCalendarColumn: View {
     @Binding var selectedDate: Date
+    var events: [DashboardEvent]
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Calendar")
-                .font(.headline)
-            Text(shortHeader(for: selectedDate))
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            DatePicker("", selection: $selectedDate, displayedComponents: [.date])
-                .datePickerStyle(.graphical)
-                .tint(.accentColor)
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(.ultraThinMaterial)
-                )
+            Text("Calendar").rootsSectionHeader()
+            Text(monthHeader(for: selectedDate)).rootsBodySecondary()
+
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(days, id: \.self) { day in
+                    let isInMonth = calendar.isDate(day, equalTo: selectedDate, toGranularity: .month)
+                    let isSelected = calendar.isDate(day, inSameDayAs: selectedDate)
+                    let normalized = calendar.startOfDay(for: day)
+                    let count = eventsByDate[normalized] ?? 0
+
+                    Button {
+                        selectedDate = day
+                    } label: {
+                        CalendarDayCell(
+                            date: day,
+                            isInCurrentMonth: isInMonth,
+                            isSelected: isSelected,
+                            eventCount: count,
+                            calendar: calendar
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(12)
+            .rootsCardBackground(radius: 20)
         }
         .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .rootsCardBackground(radius: 22)
     }
 
-    private func shortHeader(for date: Date) -> String {
+    private var eventsByDate: [Date: Int] {
+        Dictionary(grouping: events, by: { calendar.startOfDay(for: $0.date) })
+            .mapValues { $0.count }
+    }
+
+    private var days: [Date] {
+        guard
+            let monthInterval = calendar.dateInterval(of: .month, for: selectedDate),
+            let startWeekday = calendar.dateComponents([.weekday], from: monthInterval.start).weekday,
+            let range = calendar.range(of: .day, in: .month, for: selectedDate)
+        else { return [] }
+
+        let firstWeekdayIndex = (startWeekday - calendar.firstWeekday + 7) % 7
+        var items: [Date] = []
+
+        if let prevMonth = calendar.date(byAdding: .month, value: -1, to: selectedDate),
+           let prevRange = calendar.range(of: .day, in: .month, for: prevMonth) {
+            let prefixDays = prevRange.suffix(firstWeekdayIndex)
+            for day in prefixDays {
+                if let date = calendar.date(bySetting: .day, value: day, of: prevMonth) {
+                    items.append(date)
+                }
+            }
+        }
+
+        for day in range {
+            if let date = calendar.date(bySetting: .day, value: day, of: selectedDate) {
+                items.append(date)
+            }
+        }
+
+        while items.count % 7 != 0 {
+            if let nextDate = calendar.date(byAdding: .day, value: 1, to: items.last ?? selectedDate) {
+                items.append(nextDate)
+            } else { break }
+        }
+
+        return items
+    }
+
+    private func monthHeader(for date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMM d"
+        formatter.dateFormat = "LLLL yyyy"
         return formatter.string(from: date)
     }
 }
@@ -243,12 +265,11 @@ private struct DashboardTasksColumn: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Today’s Tasks")
-                .font(.headline)
+                .rootsSectionHeader()
 
             if tasks.isEmpty {
                 Text("No tasks scheduled.")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .rootsBodySecondary()
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 14) {
@@ -263,8 +284,7 @@ private struct DashboardTasksColumn: View {
             }
         }
         .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .rootsCardBackground(radius: 22)
     }
 }
 
@@ -274,12 +294,11 @@ private struct DashboardEventsColumn: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Upcoming Events")
-                .font(.headline)
+                .rootsSectionHeader()
 
             if events.isEmpty {
                 Text("No upcoming events.")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .rootsBodySecondary()
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
@@ -287,23 +306,18 @@ private struct DashboardEventsColumn: View {
                             HStack(alignment: .top, spacing: 10) {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(event.title)
-                                        .font(.subheadline.weight(.semibold))
+                                        .font(.system(size: 13, weight: .semibold))
                                     Text(event.time)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .rootsBodySecondary()
                                     if let location = event.location {
                                         Text(location)
-                                            .font(.caption2)
-                                            .foregroundColor(.secondary)
+                                            .rootsCaption()
                                     }
                                 }
                                 Spacer()
                             }
                             .padding(10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                    .fill(.ultraThinMaterial)
-                            )
+                            .rootsCardBackground(radius: 18)
                         }
                     }
                     .padding(.vertical, 4)
@@ -315,6 +329,9 @@ private struct DashboardEventsColumn: View {
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 }
+
+// MARK: - Calendar Load Helpers
+
 
 // MARK: - Task Row
 
@@ -365,22 +382,101 @@ private struct TaskRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(task.title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .strikethrough(task.isDone, color: .secondary)
 
                 if let course = task.course {
                     Text(course)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .rootsCaption()
                 }
             }
 
             Spacer()
         }
         .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.ultraThinMaterial)
-        )
+        .rootsCardBackground(radius: 18)
+    }
+}
+
+// MARK: - Static Month Calendar
+
+struct StaticMonthCalendarView: View {
+    let currentDate: Date
+    var events: [DashboardEvent] = []
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
+
+    var body: some View {
+        VStack(spacing: 10) {
+            weekdayHeader
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(leadingBlanks, id: \.self) { _ in
+                    Text(" ")
+                        .frame(maxWidth: .infinity, minHeight: 28)
+                }
+                ForEach(daysInMonth, id: \.self) { day in
+                    let date = calendar.date(bySetting: .day, value: day, of: currentDate) ?? currentDate
+                    let count = events.filter { calendar.isDate($0.date, inSameDayAs: date) }.count
+                    let isSelected = calendar.isDate(date, inSameDayAs: currentDate)
+                    CalendarDayCell(date: date, isInCurrentMonth: calendar.isDate(date, equalTo: currentDate, toGranularity: .month), isSelected: isSelected, eventCount: count, calendar: calendar)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var weekdayHeader: some View {
+        let symbols = calendar.shortWeekdaySymbols
+        let firstWeekdayIndex = calendar.firstWeekday - 1 // Calendar is 1-based
+        let ordered = Array(symbols[firstWeekdayIndex..<symbols.count] + symbols[0..<firstWeekdayIndex])
+
+        return HStack(spacing: 6) {
+            ForEach(ordered, id: \.self) { symbol in
+                Text(symbol.uppercased())
+                    .font(.caption2.weight(.semibold))
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+    }
+
+    private func dayView(_ day: Int) -> some View {
+        let isToday = day == todayDay && isCurrentMonth
+        return Text("\(day)")
+            .font(.caption.weight(.semibold))
+            .frame(maxWidth: .infinity, minHeight: 32)
+            .padding(6)
+            .background(
+                Circle()
+                    .fill(isToday ? Color.accentColor.opacity(0.85) : Color.clear)
+                    .background(
+                        Circle().fill(Color(nsColor: .controlBackgroundColor).opacity(isToday ? 0.12 : 0.06))
+                    )
+            )
+            .foregroundColor(isToday ? .white : .primary.opacity(0.7))
+    }
+
+    private var todayDay: Int {
+        calendar.component(.day, from: currentDate)
+    }
+
+    private var isCurrentMonth: Bool {
+        let now = Date()
+        return calendar.isDate(now, equalTo: currentDate, toGranularity: .month)
+    }
+
+    private var daysInMonth: [Int] {
+        guard let range = calendar.range(of: .day, in: .month, for: currentDate) else { return [] }
+        return Array(range)
+    }
+
+    private var leadingBlanks: [Int] {
+        guard
+            let monthInterval = calendar.dateInterval(of: .month, for: currentDate),
+            let firstWeekday = calendar.dateComponents([.weekday], from: monthInterval.start).weekday
+        else { return [] }
+
+        let adjusted = (firstWeekday - calendar.firstWeekday + 7) % 7
+        return Array(0..<adjusted)
     }
 }

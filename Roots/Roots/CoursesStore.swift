@@ -57,8 +57,21 @@ final class CoursesStore: ObservableObject {
     }
 
     func addCourse(title: String, code: String, to semester: Semester) {
-        let newCourse = Course(title: title, code: code, semesterId: semester.id)
+        let newCourse = Course(title: title, code: code, semesterId: semester.id, isArchived: false)
         courses.append(newCourse)
+        persist()
+    }
+
+    func toggleArchive(_ course: Course) {
+        guard let idx = courses.firstIndex(where: { $0.id == course.id }) else { return }
+        courses[idx].isArchived.toggle()
+        persist()
+    }
+
+    func deleteCourse(_ course: Course) {
+        courses.removeAll { $0.id == course.id }
+        // Detach other entities via notification so dependent stores can react.
+        NotificationCenter.default.post(name: .courseDeleted, object: nil, userInfo: ["courseId": course.id])
         persist()
     }
 
@@ -108,4 +121,8 @@ final class CoursesStore: ObservableObject {
             return s
         }
     }
+}
+
+extension Notification.Name {
+    static let courseDeleted = Notification.Name("courseDeleted")
 }

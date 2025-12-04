@@ -7,10 +7,6 @@ struct TimerView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Timer")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-
             Text(timeString(from: secondsRemaining))
                 .font(.system(size: 56, weight: .bold, design: .rounded))
                 .monospacedDigit()
@@ -30,6 +26,7 @@ struct TimerView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onDisappear { stopTimer() }
+        .rootsSystemBackground()
     }
 
     private func toggleRunning() {

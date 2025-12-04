@@ -10,7 +10,7 @@ final class TimerPageViewModel: ObservableObject {
     @Published var currentActivityID: UUID?
 
     // Time & mode
-    @Published var currentMode: TimerMode = .omodoro
+    @Published var currentMode: TimerMode = .pomodoro
     @Published var currentSession: FocusSession?
     @Published var pastSessions: [FocusSession] = []
 
@@ -105,7 +105,7 @@ final class TimerPageViewModel: ObservableObject {
         guard currentSession?.state != .running else { return }
         let planned: TimeInterval?
         switch currentMode {
-        case .omodoro:
+        case .pomodoro:
             planned = isOnBreak ? breakDuration : focusDuration
         case .timer:
             planned = plannedDuration ?? timerDuration
@@ -144,7 +144,7 @@ final class TimerPageViewModel: ObservableObject {
         currentSession = nil
         sessionElapsed = 0
         sessionRemaining = 0
-        if s.mode == .omodoro && completed {
+        if s.mode == .pomodoro && completed {
             isOnBreak.toggle()
         }
         LOG_UI(.info, "Timer", "Ended session \(s.id) completed=\(completed)")
@@ -186,7 +186,7 @@ final class TimerPageViewModel: ObservableObject {
         currentActivityID = activities.first?.id
 
         pastSessions = [
-            FocusSession(activityID: activities.first?.id, mode: .omodoro, plannedDuration: focusDuration, startedAt: Date().addingTimeInterval(-3600), endedAt: Date().addingTimeInterval(-3300), state: .completed, actualDuration: 3000),
+            FocusSession(activityID: activities.first?.id, mode: .pomodoro, plannedDuration: focusDuration, startedAt: Date().addingTimeInterval(-3600), endedAt: Date().addingTimeInterval(-3300), state: .completed, actualDuration: 3000),
             FocusSession(activityID: activities[1].id, mode: .timer, plannedDuration: 1800, startedAt: Date().addingTimeInterval(-7200), endedAt: Date().addingTimeInterval(-7000), state: .completed, actualDuration: 2000)
         ]
     }

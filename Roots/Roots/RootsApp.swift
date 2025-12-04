@@ -11,12 +11,17 @@ import SwiftData
 @main
 struct RootsApp: App {
     @StateObject private var permissionsManager = PermissionsManager.shared
-    @StateObject private var coursesStore = CoursesStore()
+    @StateObject private var coursesStore: CoursesStore
     @StateObject private var appSettings = AppSettingsModel.shared
-    @StateObject private var settingsCoordinator = SettingsCoordinator(appSettings: AppSettingsModel.shared)
+    @StateObject private var settingsCoordinator: SettingsCoordinator
     @StateObject private var appModel = AppModel()
 
+    @Environment(\.scenePhase) private var scenePhase
+
     init() {
+        let store = CoursesStore()
+        _coursesStore = StateObject(wrappedValue: store)
+        _settingsCoordinator = StateObject(wrappedValue: SettingsCoordinator(appSettings: AppSettingsModel.shared, coursesStore: store))
         _ = DeveloperSettingsSynchronizer.shared
     }
 
@@ -42,15 +47,25 @@ struct RootsApp: App {
                 .environmentObject(appSettings)
                 .environmentObject(appModel)
                 .environmentObject(settingsCoordinator)
+                .environmentObject(EventsCountStore())
                 .accentColor(appSettings.activeAccentColor)
                 .buttonStyle(.glassBlueProminent)
                 .controlSize(.regular)
                 .buttonBorderShape(.automatic)
                 .tint(appSettings.activeAccentColor)
+                .frame(minWidth: RootsWindowSizing.minMainWidth, minHeight: RootsWindowSizing.minMainHeight)
                 .task {
                     // Run adaptation on launch
                     SchedulerAdaptationManager.shared.runAdaptiveSchedulerUpdateIfNeeded()
+                    // Request calendar/reminder access immediately on launch
+                    permissionsManager.requestCalendarIfNeeded()
+                    permissionsManager.requestRemindersIfNeeded()
                 }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .background || phase == .inactive {
+                appSettings.save()
+            }
         }
         .commands {
             AppCommands()

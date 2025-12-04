@@ -16,9 +16,13 @@ struct AddSemesterSheet: View {
                     Text("New Semester")
                         .font(.title3.bold())
 
+                    Text("Name")
                     TextField("Name (e.g. Fall 2025)", text: $name)
 
+                    Text("Start date")
                     DatePicker("Start", selection: $startDate, displayedComponents: .date)
+
+                    Text("End date")
                     DatePicker("End", selection: $endDate, displayedComponents: .date)
 
                     Toggle("Set as current semester", isOn: $markAsCurrent)
@@ -28,6 +32,7 @@ struct AddSemesterSheet: View {
                         Button("Cancel") { dismiss() }
                         Button("Save") {
                             guard !name.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                            guard endDate >= startDate else { return }
                             let sem = Semester(
                                 name: name,
                                 startDate: startDate,

@@ -52,12 +52,12 @@ extension View {
 
                         // Glow/highlight
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .stroke(LinearGradient(colors: [Color.white.opacity(0.6), Color.white.opacity(0.05)], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
+                            .stroke(LinearGradient(colors: [Color(nsColor: .separatorColor).opacity(0.6), Color(nsColor: .separatorColor).opacity(0.05)], startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 1)
                             .blendMode(.overlay)
 
                         // Inner subtle shadow
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .stroke(Color.black.opacity(0.04), lineWidth: 0.5)
+                            .stroke(Color(nsColor: .separatorColor).opacity(0.04), lineWidth: 0.5)
                             .blendMode(.multiply)
                     }
                 )

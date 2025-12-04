@@ -60,6 +60,22 @@ struct SettingsPane_Interface: View {
 
             Spacer()
 
+            GroupBox {
+                HStack {
+                    Text("Clock format")
+                    Spacer()
+                    Picker("Clock format", selection: Binding(get: { settings.use24HourTime }, set: { settings.use24HourTime = $0 })) {
+                        Text("12-hour").tag(false)
+                        Text("24-hour").tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 200)
+                }
+                .padding(.vertical, 6)
+            } label: {
+                Label("Clock", systemImage: "clock")
+            }
+
             Divider().padding(.vertical)
 
             HStack(spacing: 20) {

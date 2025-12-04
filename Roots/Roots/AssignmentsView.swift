@@ -18,11 +18,8 @@ struct AssignmentsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
-                // Header + toolbar
+                // Toolbar (title removed)
                 HStack(spacing: DesignSystem.Spacing.medium) {
-                    Text("Assignments")
-                        .font(DesignSystem.Typography.title)
-
                     Spacer()
 
                     HStack(spacing: DesignSystem.Spacing.small) {
@@ -138,7 +135,7 @@ struct AssignmentsView: View {
             }
             .padding(DesignSystem.Spacing.large)
         }
-        .background(DesignSystem.background(for: .light))
+        .rootsSystemBackground()
         .sheet(isPresented: $showingAddSheet) {
             // wrap to avoid ambiguity with trailing closure initializers
             AddAssignmentView(initialType: .reading, onSave: { task in

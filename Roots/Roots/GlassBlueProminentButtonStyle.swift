@@ -15,12 +15,12 @@ struct GlassBlueProminentButtonStyle: ButtonStyle {
                         .fill(.ultraThinMaterial)
                         .opacity(0.15)
                     RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.25), lineWidth: 0.5)
+                        .strokeBorder(Color(nsColor: .separatorColor).opacity(0.25), lineWidth: 0.5)
                 }
             )
             .overlay(
                 RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
-                    .fill(Color.white.opacity(0.12))
+                    .fill(Color(nsColor: .controlBackgroundColor).opacity(0.12))
                     .blendMode(.softLight)
                     .opacity(configuration.isPressed ? 0.25 : 0)
             )

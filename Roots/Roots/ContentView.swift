@@ -2,35 +2,52 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var settings: AppSettingsModel
+    @EnvironmentObject var coursesStore: CoursesStore
+    @EnvironmentObject var settingsCoordinator: SettingsCoordinator
     @State private var selectedTab: RootTab = .dashboard
     @State private var isMenuOpen = false
     @State private var menuButtonFrame: CGRect = .zero
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var showSettings: Bool = false
-
     private let menuCardWidth: CGFloat = 248
-    private let menuCornerRadius: CGFloat = DesignSystem.Cards.cardCornerRadius
+    private let menuCornerRadius: CGFloat = 20
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                topBar
-                currentPageView
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.bottom, 88)
-            }
+        GeometryReader { proxy in
+            ZStack {
+                Color(nsColor: .windowBackgroundColor).ignoresSafeArea()
 
-            VStack {
-                Spacer()
-                GlassTabBar(selected: $selectedTab)
+                VStack(spacing: 0) {
+                    topBar
+                        .padding(.horizontal, 24)
+                        .padding(.top, 16)
+
+                    currentPageView
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 12)
+
+                    RootsFloatingTabBar(
+                        items: RootTab.allCases,
+                        selected: $selectedTab,
+                        mode: settings.tabBarMode,
+                        onSelect: { _ in }
+                    )
+                    .frame(height: 72)
+                    .frame(maxWidth: 640)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, proxy.safeAreaInsets.bottom == 0 ? 16 : proxy.safeAreaInsets.bottom)
+                    .frame(maxWidth: .infinity)
+                }
             }
+            .overlay(menuOverlay)
         }
         .overlay(menuOverlay)
         .onPreferenceChange(MenuButtonFramePreferenceKey.self) { menuButtonFrame = $0 }
         .onExitCommand {
             if isMenuOpen { setMenu(open: false) }
         }
+        .frame(minWidth: RootsWindowSizing.minMainWidth, minHeight: RootsWindowSizing.minMainHeight)
     }
 
     private var topBar: some View {
@@ -44,31 +61,24 @@ struct ContentView: View {
                     }
                 }
             } label: {
-                Image(systemName: "plus")
-                    .font(.title2.weight(.semibold))
-                    .foregroundStyle(.primary)
-            }
-            .buttonStyle(.glassCircularProminent)
-            .background(
-                GeometryReader { proxy in
-                    Color.clear
-                        .preference(key: MenuButtonFramePreferenceKey.self, value: proxy.frame(in: .global))
-                        .allowsHitTesting(false)
+                GlassAccentIconButton(systemName: "plus", accessibilityLabel: "New item") {
+                    performQuickAction(AppSettingsModel.shared.quickActions.first ?? .add_assignment)
                 }
-            )
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear
+                            .preference(key: MenuButtonFramePreferenceKey.self, value: proxy.frame(in: .global))
+                            .allowsHitTesting(false)
+                    }
+                )
+            }
 
             Spacer()
 
-            GlassCircleButton(systemName: "gearshape") {
-                showSettings.toggle()
-            }
-            .sheet(isPresented: $showSettings) {
-                SettingsRootView(initialPane: .general) { _ in }
-                    .environmentObject(settings)
+            GlassAccentIconButton(systemName: "gearshape", accessibilityLabel: "Settings") {
+                settingsCoordinator.show()
             }
         }
-        .padding()
-        .background(.ultraThinMaterial)
         .contentTransition(.opacity)
     }
 
@@ -80,17 +90,15 @@ struct ContentView: View {
         case .calendar:
             CalendarView()
         case .planner:
-            Text("Planner placeholder")
+            PlannerPageView()
         case .assignments:
-            AssignmentsView()
+            AssignmentsPageView()
         case .courses:
-            CoursesView()
+            CoursesPageView()
         case .grades:
-            GradesView()
+            GradesPageView()
         case .timer:
-            TimerView()
-        case .settings:
-            SettingsRootView(initialPane: .general) { _ in }
+            TimerPageView()
         }
     }
 
@@ -136,9 +144,9 @@ struct ContentView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: menuCornerRadius, style: .continuous)
-                .stroke(Color.white.opacity(colorScheme == .dark ? 0.12 : 0.06), lineWidth: 0.8)
+                .stroke(Color(nsColor: .separatorColor), lineWidth: 1)
         )
-        .shadow(color: .black.opacity(colorScheme == .dark ? 0.28 : 0.2), radius: colorScheme == .dark ? 28 : 20, x: 0, y: 12)
+        .shadow(color: Color(nsColor: .separatorColor).opacity(0.08), radius: colorScheme == .dark ? 28 : 20, x: 0, y: 12)
         .contentTransition(.opacity)
     }
 
@@ -226,7 +234,7 @@ private struct MenuRow: View {
             .padding(.horizontal, 10)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.primary.opacity(isHovered ? 0.12 : 0))
+                    .fill(Color(nsColor: .controlBackgroundColor).opacity(isHovered ? 0.12 : 0))
             )
             .contentShape(Rectangle())
         }
@@ -264,9 +272,9 @@ private struct GlassCircularProminentButtonStyle: ButtonStyle {
                     .fill(.ultraThinMaterial)
                     .overlay(
                         Circle()
-                            .strokeBorder(Color.white.opacity(0.15), lineWidth: 0.6)
+                            .strokeBorder(Color(nsColor: .separatorColor), lineWidth: 0.6)
                     )
-                    .shadow(color: Color.black.opacity(0.25), radius: 16, x: 0, y: 8)
+                    .shadow(color: Color(nsColor: .separatorColor).opacity(0.08), radius: 16, x: 0, y: 8)
             )
             .scaleEffect(configuration.isPressed ? 0.96 : 1)
             .contentShape(Circle())

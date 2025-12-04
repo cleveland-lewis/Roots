@@ -24,7 +24,7 @@ struct GlassLoadingCard: View {
                     Text(message)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                 }
 
                 LoadingIndicatorLinear(progress: $progress)

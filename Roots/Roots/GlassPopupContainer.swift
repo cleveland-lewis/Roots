@@ -11,7 +11,7 @@ struct GlassPopupContainer<Content: View>: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.001)
+            Color(nsColor: .underPageBackgroundColor)
                 .ignoresSafeArea()
                 .onTapGesture {
                     onDismiss()
@@ -20,7 +20,7 @@ struct GlassPopupContainer<Content: View>: View {
                 .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
-                .shadow(color: .black.opacity(0.25), radius: 24, x: 0, y: 10)
+                .shadow(color: Color(nsColor: .separatorColor).opacity(0.08), radius: 24, x: 0, y: 10)
                 .transition(.opacity)
         }
     }

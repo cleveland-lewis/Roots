@@ -17,7 +17,7 @@ struct GlassButtonStyle: ButtonStyle {
                 .background(.ultraThinMaterial)
                 .opacity(configuration.isPressed ? 0.6 : settings.glassOpacity(for: colorScheme))
                 .clipShape(Circle())
-                .shadow(color: .black.opacity(0.25), radius: 16, x: 0, y: 8)
+                .shadow(color: Color(nsColor: .separatorColor).opacity(0.08), radius: 16, x: 0, y: 8)
                 .symbolEffect(.bounce)
         }
     }

@@ -26,9 +26,9 @@ struct FloatingTabBar: View {
         )
         .overlay(
             Capsule()
-                .stroke(Color.white.opacity(colorScheme == .dark ? 0.08 : 0.12), lineWidth: 0.6)
+                .stroke(Color(nsColor: .separatorColor).opacity(colorScheme == .dark ? 0.08 : 0.12), lineWidth: 0.6)
         )
-        .shadow(color: Color.black.opacity(colorScheme == .dark ? 0.55 : 0.25), radius: 24, x: 0, y: 12)
+        .shadow(color: Color(nsColor: .separatorColor).opacity(colorScheme == .dark ? 0.12 : 0.08), radius: 24, x: 0, y: 12)
         .fixedSize(horizontal: true, vertical: true)
         .padding(.bottom, 26)
         .contextMenu {
@@ -46,7 +46,8 @@ struct FloatingTabBar: View {
     }
 
     private func tabLabel(for tab: RootTab) -> some View {
-        HStack(spacing: 6) {
+        let isSelected = (tab == selectedTab)
+        return HStack(spacing: 6) {
             if showIcons {
                 Image(systemName: tab.systemImage)
                     .font(.system(size: 16, weight: .semibold))
@@ -59,19 +60,16 @@ struct FloatingTabBar: View {
                     .lineLimit(1)
             }
         }
-        .foregroundStyle(tab == selectedTab ? Color.white : Color.primary.opacity(0.85))
         .padding(.vertical, 4)
         .padding(.horizontal, showText ? 8 : 0)
         .scaleEffect(hoveredTab == tab ? 1.02 : 1)
+        .foregroundColor(isSelected ? settings.activeAccentColor : Color.secondary)
+        .animation(.easeInOut(duration: 0.25), value: selectedTab)
     }
 
     private func tabButton(for tab: RootTab) -> some View {
         Button {
-            if tab == .settings {
-                settingsCoordinator.show()
-            } else {
-                select(tab)
-            }
+            select(tab)
         } label: {
             tabLabel(for: tab)
         }
@@ -114,11 +112,10 @@ private struct FloatingTabButtonStyle: ButtonStyle {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(Color.white.opacity(isSelected ? 0.25 : (colorScheme == .dark ? 0.04 : 0.12)), lineWidth: 0.6)
+                            .stroke(Color(nsColor: .separatorColor).opacity(isSelected ? 0.25 : (colorScheme == .dark ? 0.04 : 0.12)), lineWidth: 0.6)
                     )
             )
-            .foregroundStyle(isSelected ? Color.white : Color.primary.opacity(0.85))
-            .scaleEffect(configuration.isPressed ? (isSelected ? 0.96 : 0.97) : 1)
+                        .scaleEffect(configuration.isPressed ? (isSelected ? 0.96 : 0.97) : 1)
             .opacity(configuration.isPressed ? 0.9 : 1)
             .animation(.spring(response: 0.24, dampingFraction: 0.7), value: configuration.isPressed)
     }

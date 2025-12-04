@@ -11,7 +11,7 @@ struct TimerControlsView: View {
                     .font(.system(size: 64, weight: .heavy, design: .rounded))
                     .monospacedDigit()
                     .foregroundColor(.primary)
-                    .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 10)
+                    .shadow(color: Color(nsColor: .separatorColor).opacity(0.08), radius: 10, x: 0, y: 10)
 
                 Text(modeSubtitle)
                     .font(.subheadline)
@@ -38,7 +38,7 @@ struct TimerControlsView: View {
                 }
             }
 
-            if currentMode == .omodoro {
+            if currentMode == .pomodoro {
                 HStack(spacing: 12) {
                     durationControl(title: "Focus", duration: $viewModel.focusDuration, symbol: "flame")
                     durationControl(title: "Break", duration: $viewModel.breakDuration, symbol: "cup.and.saucer")
@@ -95,7 +95,7 @@ struct TimerControlsView: View {
         }
 
         switch currentMode {
-        case .omodoro:
+        case .pomodoro:
             return format(seconds: Int(viewModel.focusDuration))
         case .timer:
             return format(seconds: Int(viewModel.timerDuration))
@@ -106,8 +106,8 @@ struct TimerControlsView: View {
 
     private var modeSubtitle: String {
         switch currentMode {
-        case .omodoro:
-            return viewModel.isOnBreak ? "Omodoro — Break" : "Omodoro — Focus Block"
+        case .pomodoro:
+            return viewModel.isOnBreak ? "Pomodoro — Break" : "Pomodoro — Focus Block"
         case .timer:
             return "Timer — Countdown"
         case .stopwatch:

@@ -1,0 +1,1038 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -scheme Roots -project Roots.xcodeproj -configuration Debug test -enableCodeCoverage YES -verbose
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (3 targets)
+    Target 'RootsUITests' in project 'Roots'
+        ➜ Explicit dependency on target 'Roots' in project 'Roots'
+    Target 'RootsTests' in project 'Roots'
+        ➜ Explicit dependency on target 'Roots' in project 'Roots'
+    Target 'Roots' in project 'Roots' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: b0ade5cb5a1b597712687b98d74fe097
+Build description path: /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/XCBuildData/b0ade5cb5a1b597712687b98d74fe097.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache
+    cd /Users/clevelandlewis/Desktop/Roots/Roots/Roots.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache
+
+ProcessInfoPlistFile /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Info.plist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/empty-Roots.plist (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-infoPlistUtility /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/empty-Roots.plist -producttype com.apple.product-type.application -genpkginfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/assetcatalog_generated_info.plist -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Info.plist
+
+SwiftDriver Roots normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Roots -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ CardGrid.swift,\ ContentView.swift,\ CourseDetailView.swift,\ CourseModels.swift,\ CoursesPageView.swift,\ CoursesStore.swift,\ CoursesView.swift,\ CurrentActivityView.swift,\ DashboardView.swift,\ DesignCard.swift,\ DesignPage.swift,\ DesignShell.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CardGrid.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/ContentView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CourseDetailView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CourseModels.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesPageView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesStore.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CurrentActivityView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DashboardView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignCard.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignPage.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignShell.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CardGrid.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/ContentView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CourseDetailView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CourseModels.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesPageView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesPageView.swift:872:10: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+        .onChange(of: semesterId) { newValue in
+         ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesPageView.swift:1005:13: warning: initialization of immutable value 'calendar' was never used; consider replacing with assignment to '_' or removing it
+        let calendar = Calendar.current
+        ~~~~^~~~~~~~
+        _
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesStore.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CoursesView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CurrentActivityView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DashboardView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignCard.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignPage.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignShell.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ GlassCircleButton.swift,\ GlassIconButton.swift,\ GlassPopupContainer.swift,\ GlassProminentButtonStyle.swift,\ GradesPageView.swift,\ GradesView.swift,\ HapticsManager.swift,\ HistoryStoreImpl.swift,\ Insight.swift,\ InsightEngine.swift,\ InsightsViewModel.swift,\ Item.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassCircleButton.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassIconButton.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassPopupContainer.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GradesPageView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GradesView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/HapticsManager.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/HistoryStoreImpl.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Insight.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/InsightEngine.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/InsightsViewModel.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Item.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassCircleButton.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassIconButton.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassPopupContainer.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassProminentButtonStyle.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GradesPageView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GradesView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/HapticsManager.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/HistoryStoreImpl.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Insight.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/InsightEngine.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/InsightsViewModel.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/InsightsViewModel.swift:22:17: warning: no calls to throwing functions occur within 'try' expression
+            _ = try await self?.withLoading(message: "Analyzing usage…") {
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Item.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ ActivityEditorView.swift,\ ActivityListView.swift,\ AdaptiveSchedulerTests.swift,\ AddAssignmentView.swift,\ AddCourseSheet.swift,\ AddEditCourseView.swift,\ AddSemesterSheet.swift,\ AIScheduler.swift,\ AISchedulerTests.swift,\ AnyButtonStyle.swift,\ AppCard.swift,\ AppCommands.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/ActivityEditorView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/ActivityListView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AdaptiveSchedulerTests.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddAssignmentView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddCourseSheet.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddEditCourseView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddSemesterSheet.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AIScheduler.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AISchedulerTests.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AnyButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppCard.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppCommands.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/ActivityEditorView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/ActivityListView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AdaptiveSchedulerTests.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddAssignmentView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddCourseSheet.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddEditCourseView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AddSemesterSheet.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AIScheduler.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/AIScheduler.swift:191:21: warning: variable 'chosen' was never mutated; consider changing to 'let' constant
+                var chosen = candidates[chosenIdx]
+                ~~~ ^
+                let
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AISchedulerTests.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AnyButtonStyle.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppCard.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppCommands.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ AppModel.swift,\ AppPage.swift,\ AppSettingsModel.swift,\ AssignmentRow.swift,\ AssignmentsPageView.swift,\ AssignmentsStore.swift,\ AssignmentsView.swift,\ AssignmentsView2.swift,\ BounceOnTap.swift,\ CalendarDayCell.swift,\ CalendarManager.swift,\ CalendarPageView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppModel.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppPage.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppSettingsModel.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentRow.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsPageView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsStore.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsView2.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/BounceOnTap.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarDayCell.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarManager.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarPageView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppModel.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppPage.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AppSettingsModel.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentRow.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsPageView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsStore.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/AssignmentsView2.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/BounceOnTap.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarDayCell.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarManager.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarManager.swift:24:15: warning: 'requestAccess(to:completion:)' was deprecated in macOS 14.0: Use -requestFullAccessToEventsWithCompletion:, -requestWriteOnlyAccessToEventsWithCompletion:, or -requestFullAccessToRemindersWithCompletion:
+        store.requestAccess(to: .event) { grantedEvents, _ in
+              ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarManager.swift:25:24: warning: 'requestAccess(to:completion:)' was deprecated in macOS 14.0: Use -requestFullAccessToEventsWithCompletion:, -requestWriteOnlyAccessToEventsWithCompletion:, or -requestFullAccessToRemindersWithCompletion:
+            self.store.requestAccess(to: .reminder) { grantedReminders, _ in
+                       ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/CalendarPageView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ DesignSystem.swift,\ DesignTokensCompat.swift,\ DeveloperIntegrationExamples.swift,\ DeveloperSettings.swift,\ DeveloperSettingsView.swift,\ Diagnostics.swift,\ EventsCountStore.swift,\ FloatingTabBar.swift,\ Glass.swift,\ GlassBlueProminentButtonStyle.swift,\ GlassButtons.swift,\ GlassButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignSystem.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignTokensCompat.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DeveloperIntegrationExamples.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DeveloperSettings.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DeveloperSettingsView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Diagnostics.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/EventsCountStore.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/FloatingTabBar.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Glass.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassBlueProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassButtons.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassButtonStyle.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignSystem.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DesignTokensCompat.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DeveloperIntegrationExamples.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DeveloperSettings.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/DeveloperSettingsView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Diagnostics.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/EventsCountStore.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/FloatingTabBar.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/Glass.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassBlueProminentButtonStyle.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassButtons.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/GlassButtonStyle.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ Roots (in target 'Roots' from project 'Roots')
+
+EmitSwiftModule normal arm64 (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ LoadableViewModel.swift,\ PerformanceMonitor.swift,\ PermissionsManager.swift,\ PlannerPageView.swift,\ PlannerView.swift,\ PopupTextAlignment.swift,\ QuickAction.swift,\ RootDesignPreviewPage.swift,\ RootsApp.swift,\ RootsSettingsWindow.swift,\ RootsWindowSizing.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/LoadableViewModel.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PerformanceMonitor.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PermissionsManager.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PlannerPageView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PlannerView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PopupTextAlignment.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/QuickAction.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootDesignPreviewPage.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsApp.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsSettingsWindow.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsWindowSizing.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/LoadableViewModel.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PerformanceMonitor.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PermissionsManager.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/PermissionsManager.swift:29:20: warning: 'requestAccess(to:completion:)' was deprecated in macOS 14.0: Use -requestFullAccessToEventsWithCompletion:, -requestWriteOnlyAccessToEventsWithCompletion:, or -requestFullAccessToRemindersWithCompletion:
+        eventStore.requestAccess(to: .event) { _, _ in
+                   ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/PermissionsManager.swift:43:20: warning: 'requestAccess(to:completion:)' was deprecated in macOS 14.0: Use -requestFullAccessToEventsWithCompletion:, -requestWriteOnlyAccessToEventsWithCompletion:, or -requestFullAccessToRemindersWithCompletion:
+        eventStore.requestAccess(to: .reminder) { _, _ in
+                   ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PlannerPageView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PlannerView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/PopupTextAlignment.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/QuickAction.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootDesignPreviewPage.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsApp.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsApp.swift:65:10: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+        .onChange(of: scenePhase) { phase in
+         ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsSettingsWindow.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootsWindowSizing.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ TimerGraphsView.swift,\ TimerHeaderView.swift,\ TimerModels.swift,\ TimerPageView.swift,\ TimerPageViewModel.swift,\ TimerView.swift,\ UILogger.swift,\ UIStubs.swift,\ UsageStats.swift,\ UsageStatsBuilder.swift,\ GeneratedAssetSymbols.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerGraphsView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerHeaderView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerModels.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerPageView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerPageViewModel.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UILogger.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UIStubs.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UsageStats.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UsageStatsBuilder.swift /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Roots' from project 'Roots')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerGraphsView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerGraphsView.swift:46:28: warning: value 'planned' was defined but never used; consider replacing with boolean test
+                    if let planned = session.plannedDuration {
+                       ~~~~^~~~~~~~~~
+                                                             != nil
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerHeaderView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerModels.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerPageView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerPageViewModel.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerPageViewModel.swift:40:14: warning: capture of 'self' in a closure that outlives deinit; this is an error in the Swift 6 language mode
+        Task { @MainActor in
+             ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UILogger.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UIStubs.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UsageStats.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/UsageStatsBuilder.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ RootTab.swift,\ SchedulerAdaptationManager.swift,\ SchedulerFeedback.swift,\ SchedulerLearner.swift,\ SchedulerPreferences.swift,\ SchedulerPreferencesStore.swift,\ SemesterPicker.swift,\ SensoryFeedback.swift,\ SettingsCoordinator.swift,\ SwiftConcurrency.swift,\ TimerControlsView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootTab.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerAdaptationManager.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerFeedback.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerLearner.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerPreferences.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerPreferencesStore.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SemesterPicker.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SensoryFeedback.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsCoordinator.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SwiftConcurrency.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerControlsView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/RootTab.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerAdaptationManager.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerFeedback.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerLearner.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerPreferences.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SchedulerPreferencesStore.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SemesterPicker.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SensoryFeedback.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/SensoryFeedback.swift:21:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: trigger) { newValue in
+             ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsCoordinator.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SwiftConcurrency.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/TimerControlsView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for Roots (in target 'Roots' from project 'Roots')
+
+SwiftDriver\ Compilation\ Requirements Roots normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Roots -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling ActivityEditorView.swift, ActivityListView.swift, AdaptiveSchedulerTests.swift, AddAssignmentView.swift, AddCourseSheet.swift, AddEditCourseView.swift, AddSemesterSheet.swift, AIScheduler.swift, AISchedulerTests.swift, AnyButtonStyle.swift, AppCard.swift, AppCommands.swift (in target 'Roots' from project 'Roots')
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.swiftmodule/arm64-apple-macos.abi.json /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.abi.json (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.abi.json /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.swiftmodule/arm64-apple-macos.abi.json
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.swiftsourceinfo (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.swiftsourceinfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+SwiftDriver RootsTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name RootsTests -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftDriver RootsUITests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name RootsUITests -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.SwiftFileList -DDEBUG -module-alias Testing\=_Testing_Unavailable -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCUIAutomation-AP0A359Q70DPYVCNZ54T5AGWD.pcm
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/Testing-2DE5FW9SEMKNC.swiftmodule
+
+SwiftDriverJobDiscovery normal arm64 Compiling DesignSystem.swift, DesignTokensCompat.swift, DeveloperIntegrationExamples.swift, DeveloperSettings.swift, DeveloperSettingsView.swift, Diagnostics.swift, EventsCountStore.swift, FloatingTabBar.swift, Glass.swift, GlassBlueProminentButtonStyle.swift, GlassButtons.swift, GlassButtonStyle.swift (in target 'Roots' from project 'Roots')
+
+SwiftExplicitDependencyGeneratePcm arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCTest-98JA5WLZVW1ZO7X249JHFGD41.pcm
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCUIAutomation-2D8YMVGTW65DI.swiftmodule
+
+SwiftCompile normal arm64 Compiling\ SettingsPane_Accounts.swift,\ SettingsPane_Appearance.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Accounts.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Appearance.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Accounts.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Appearance.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ SidebarView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SidebarView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SidebarView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftExplicitDependencyCompileModuleFromInterface arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/XCTest-1ZL5EYW5U1AIC.swiftmodule
+
+SwiftDriverJobDiscovery normal arm64 Compiling RootTab.swift, SchedulerAdaptationManager.swift, SchedulerFeedback.swift, SchedulerLearner.swift, SchedulerPreferences.swift, SchedulerPreferencesStore.swift, SemesterPicker.swift, SensoryFeedback.swift, SettingsCoordinator.swift, SwiftConcurrency.swift, TimerControlsView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ SettingsWindowController.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsWindowController.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsWindowController.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsPane_Accounts.swift, SettingsPane_Appearance.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ SettingsPane_Courses.swift,\ SettingsPane_General.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Courses.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_General.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Courses.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_General.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling SidebarView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ SettingsPane_Interface+Tabs.swift,\ SettingsRootView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Interface+Tabs.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsRootView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Interface+Tabs.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsRootView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ RootsUITests (in target 'RootsUITests' from project 'Roots')
+
+EmitSwiftModule normal arm64 (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling GlassCircleButton.swift, GlassIconButton.swift, GlassPopupContainer.swift, GlassProminentButtonStyle.swift, GradesPageView.swift, GradesView.swift, HapticsManager.swift, HistoryStoreImpl.swift, Insight.swift, InsightEngine.swift, InsightsViewModel.swift, Item.swift (in target 'Roots' from project 'Roots')
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ RootsTests (in target 'RootsTests' from project 'Roots')
+
+EmitSwiftModule normal arm64 (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for RootsUITests (in target 'RootsUITests' from project 'Roots')
+
+SwiftDriver\ Compilation\ Requirements RootsUITests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name RootsUITests -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.SwiftFileList -DDEBUG -module-alias Testing\=_Testing_Unavailable -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsWindowController.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ RootsUITests.swift /Users/clevelandlewis/Desktop/Roots/Roots/RootsUITests/RootsUITests.swift (in target 'RootsUITests' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/RootsUITests/RootsUITests.swift (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftMergeGeneratedHeaders /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources/RootsUITests-Swift.h /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-Swift.h (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-swiftHeaderTool -arch arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-Swift.h -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources/RootsUITests-Swift.h
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for RootsTests (in target 'RootsTests' from project 'Roots')
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/arm64-apple-macos.swiftmodule /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftmodule (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftmodule /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/arm64-apple-macos.swiftdoc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftdoc (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftdoc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/arm64-apple-macos.abi.json /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.abi.json (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.abi.json /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/arm64-apple-macos.abi.json
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftsourceinfo (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftsourceinfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+SwiftDriver\ Compilation\ Requirements RootsTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name RootsTests -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftMergeGeneratedHeaders /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources/RootsTests-Swift.h /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-Swift.h (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-swiftHeaderTool -arch arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-Swift.h -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources/RootsTests-Swift.h
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/arm64-apple-macos.swiftmodule /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftmodule (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftmodule /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/arm64-apple-macos.swiftdoc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftdoc (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftdoc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/arm64-apple-macos.swiftdoc
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/arm64-apple-macos.abi.json /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.abi.json (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.abi.json /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/arm64-apple-macos.abi.json
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftsourceinfo (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftsourceinfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsTests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+SwiftCompile normal arm64 Compiling\ RootsUITestsLaunchTests.swift /Users/clevelandlewis/Desktop/Roots/Roots/RootsUITests/RootsUITestsLaunchTests.swift (in target 'RootsUITests' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/RootsUITests/RootsUITestsLaunchTests.swift (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ CoursesStoreTests.swift /Users/clevelandlewis/Desktop/Roots/Roots/RootsTests/CoursesStoreTests.swift (in target 'RootsTests' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/RootsTests/CoursesStoreTests.swift (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling RootsUITests.swift (in target 'RootsUITests' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsPane_Courses.swift, SettingsPane_General.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ RootsTests.swift /Users/clevelandlewis/Desktop/Roots/Roots/RootsTests/RootsTests.swift (in target 'RootsTests' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/RootsTests/RootsTests.swift (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 Compiling\ SettingsPane_Interface.swift,\ SettingsPane_Interface+QuickActions.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Interface.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Interface+QuickActions.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Interface.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsPane_Interface+QuickActions.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsPane_Interface+Tabs.swift, SettingsRootView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ SettingsView.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift:54:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: settings.use24HourTime) { _ in settings.save() }
+             ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift:55:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: settings.showEnergyPanel) { _ in settings.save() }
+             ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift:56:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: settings.highContrastMode) { _ in settings.save() }
+             ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift:57:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: settings.defaultWorkdayStart) { _ in settings.save() }
+             ^
+/Users/clevelandlewis/Desktop/Roots/Roots/Roots/SettingsView.swift:58:14: warning: 'onChange(of:perform:)' was deprecated in macOS 14.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: settings.defaultWorkdayEnd) { _ in settings.save() }
+             ^
+
+SwiftDriverJobDiscovery normal arm64 Compiling RootsUITestsLaunchTests.swift (in target 'RootsUITests' from project 'Roots')
+
+SwiftDriver\ Compilation RootsUITests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name RootsUITests -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.SwiftFileList -DDEBUG -module-alias Testing\=_Testing_Unavailable -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling CoursesStoreTests.swift (in target 'RootsTests' from project 'Roots')
+
+SwiftCompile normal arm64 Compiling\ SidebarStyling.swift /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SidebarStyling.swift (in target 'Roots' from project 'Roots')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/Roots/Roots/SidebarStyling.swift (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling RootsTests.swift (in target 'RootsTests' from project 'Roots')
+
+SwiftDriver\ Compilation RootsTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name RootsTests -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+SwiftDriverJobDiscovery normal arm64 Compiling SidebarStyling.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsView.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsPane_Interface.swift, SettingsPane_Interface+QuickActions.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling AppModel.swift, AppPage.swift, AppSettingsModel.swift, AssignmentRow.swift, AssignmentsPageView.swift, AssignmentsStore.swift, AssignmentsView.swift, AssignmentsView2.swift, BounceOnTap.swift, CalendarDayCell.swift, CalendarManager.swift, CalendarPageView.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling LoadableViewModel.swift, PerformanceMonitor.swift, PermissionsManager.swift, PlannerPageView.swift, PlannerView.swift, PopupTextAlignment.swift, QuickAction.swift, RootDesignPreviewPage.swift, RootsApp.swift, RootsSettingsWindow.swift, RootsWindowSizing.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling CardGrid.swift, ContentView.swift, CourseDetailView.swift, CourseModels.swift, CoursesPageView.swift, CoursesStore.swift, CoursesView.swift, CurrentActivityView.swift, DashboardView.swift, DesignCard.swift, DesignPage.swift, DesignShell.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriverJobDiscovery normal arm64 Compiling TimerGraphsView.swift, TimerHeaderView.swift, TimerModels.swift, TimerPageView.swift, TimerPageViewModel.swift, TimerView.swift, UILogger.swift, UIStubs.swift, UsageStats.swift, UsageStatsBuilder.swift, GeneratedAssetSymbols.swift (in target 'Roots' from project 'Roots')
+
+SwiftDriver\ Compilation Roots normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Roots -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -target arm64-apple-macos26.1 -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx26.1-25B74-3885c01c3e6b6a337905948deab2002e3ae1261907bdadc328169391a47051a6.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots/Roots -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib normal (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.1 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -O0 -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -filelist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.LinkFileList -install_name @rpath/Roots.debug.dylib -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -object_path_lto -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.swiftmodule @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots-linker-args.resp -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -Xlinker -no_adhoc_codesign -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib
+
+ConstructStubExecutorLinkFileList /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-ExecutorLinkFileList-normal-arm64.txt (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    construct-stub-executor-link-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'Roots' from project 'Roots')
+
+Ld /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots normal (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -O0 -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/../Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots-ExecutorLinkFileList-normal-arm64.txt /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots
+
+CopySwiftLibs /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-swiftStdLibTool --copy --verbose --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --scan-executable /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Frameworks --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Library/SystemExtensions --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Extensions --platform macosx --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.ci7HPc/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.ci7HPc/Metal.xctoolchain --module-name Roots --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk --xcode-version 17B100 --platform-family macOS --deployment-target 26.1 --bundle-identifier clewisiii.Roots --output /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/Resources --target-triple arm64-apple-macos26.1 --binary-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots --dependency-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots_dependency_info.dat --stringsdata-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.SwiftFileList --metadata-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots.DependencyMetadataFileList --static-metadata-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots.DependencyStaticMetadataFileList --swift-const-vals-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Objects-normal/arm64/Roots.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-12-03 14:28:11.283 appintentsmetadataprocessor[51648:2684137] Starting appintentsmetadataprocessor export
+2025-12-03 14:28:11.285 appintentsmetadataprocessor[51648:2684137] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+ProcessInfoPlistFile /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Info.plist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/empty-RootsTests.plist (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-infoPlistUtility /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/empty-RootsTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -platform macosx -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Info.plist
+
+Ld /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/MacOS/RootsTests normal (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.1 -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -O0 -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -bundle_loader /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots -Xlinker -object_path_lto -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.swiftmodule @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib -Xlinker -no_adhoc_codesign -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/MacOS/RootsTests
+
+CopySwiftLibs /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-swiftStdLibTool --copy --verbose --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --scan-executable /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/MacOS/RootsTests --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Frameworks --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/PlugIns --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Library/SystemExtensions --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Extensions --platform macosx --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.ci7HPc/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.ci7HPc/Metal.xctoolchain --module-name RootsTests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk --xcode-version 17B100 --platform-family macOS --deployment-target 26.1 --bundle-identifier clewisiii.RootsTests --output /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/Resources --target-triple arm64-apple-macos26.1 --binary-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest/Contents/MacOS/RootsTests --dependency-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests_dependency_info.dat --stringsdata-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.SwiftFileList --metadata-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests.DependencyMetadataFileList --static-metadata-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/RootsTests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsTests.build/Objects-normal/arm64/RootsTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-12-03 14:28:11.548 appintentsmetadataprocessor[51652:2684162] Starting appintentsmetadataprocessor export
+2025-12-03 14:28:11.549 appintentsmetadataprocessor[51652:2684162] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest
+
+RegisterExecutionPolicyException /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-RegisterExecutionPolicyException /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest
+
+Touch /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest (in target 'RootsTests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /usr/bin/touch -c /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/PlugIns/RootsTests.xctest
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE -o runtime --timestamp\=none --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/Roots.debug.dylib
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/__preview.dylib (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE -o runtime --timestamp\=none --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app/Contents/MacOS/__preview.dylib
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE -o runtime --entitlements /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/Roots.build/Roots.app.xcent --timestamp\=none --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app
+
+RegisterExecutionPolicyException /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-RegisterExecutionPolicyException /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app
+
+Validate /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-validationUtility /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app -no-validate-extension -infoplist-subpath Contents/Info.plist
+
+Touch /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /usr/bin/touch -c /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app
+
+RegisterWithLaunchServices /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app (in target 'Roots' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/Roots.app
+
+ProcessInfoPlistFile /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Info.plist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/empty-RootsUITests.plist (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-infoPlistUtility /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/empty-RootsUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -platform macosx -additionalcontentfile /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/ProductTypeInfoPlistAdditions.plist -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Info.plist
+
+Ld /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/MacOS/RootsUITests normal (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.1 -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk -O0 -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -Xlinker -object_path_lto -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.swiftmodule @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport -Xlinker -no_adhoc_codesign -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/MacOS/RootsUITests
+
+CopySwiftLibs /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-swiftStdLibTool --copy --verbose --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --scan-executable /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/MacOS/RootsUITests --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Frameworks --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/PlugIns --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Library/SystemExtensions --scan-folder /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Extensions --platform macosx --toolchain /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.ci7HPc/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /var/run/com.apple.security.cryptexd/mnt/com.apple.MobileAsset.MetalToolchain-v17.2.54.0.ci7HPc/Metal.xctoolchain --module-name RootsUITests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk --xcode-version 17B100 --platform-family macOS --deployment-target 26.1 --bundle-identifier clewisiii.RootsUITests --output /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Resources --target-triple arm64-apple-macos26.1 --binary-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/MacOS/RootsUITests --dependency-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests_dependency_info.dat --stringsdata-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.SwiftFileList --metadata-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests.DependencyMetadataFileList --static-metadata-file-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests.DependencyStaticMetadataFileList --swift-const-vals-list /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/Objects-normal/arm64/RootsUITests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2025-12-03 14:28:12.062 appintentsmetadataprocessor[51662:2684240] Starting appintentsmetadataprocessor export
+2025-12-03 14:28:12.063 appintentsmetadataprocessor[51662:2684240] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+MkDir /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /bin/mkdir -p /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestSupport.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTestSupport.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PkgInfo /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/PkgInfo (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/PkgInfo /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents
+
+CopyPlistFile /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Info.plist /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/Info.plist (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copyPlist --validate --convert xml1 --macro-expansion WRAPPEDPRODUCTNAME RootsUITests-Runner --macro-expansion WRAPPEDPRODUCTBUNDLEIDENTIFIER clewisiii.RootsUITests.xctrunner --macro-expansion TESTPRODUCTNAME RootsUITests --macro-expansion TESTPRODUCTBUNDLEIDENTIFIER clewisiii.RootsUITests --copy-value UIDeviceFamily /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest/Contents/Info.plist --outdir /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents -- /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/Info.plist
+
+CopyAndPreserveArchs /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/MacOS/RootsUITests-Runner (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Xcode/Agents/XCTRunner.app/Contents/MacOS/XCTRunner -output /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/MacOS/RootsUITests-Runner -extract arm64
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/libXCTestSwiftSupport.dylib /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUnit.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCUnit.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCUnit.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUIAutomation.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCUIAutomation.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCUIAutomation.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestCore.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTestCore.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTest.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTAutomationSupport.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+Copy /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/Testing.framework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/Testing.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks/Testing.framework /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/libXCTestSwiftSupport.dylib (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/libXCTestSwiftSupport.dylib
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/libXCTestSwiftSupport.dylib: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUnit.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUnit.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUnit.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTest.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTest.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTest.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestSupport.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestSupport.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestSupport.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTAutomationSupport.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTAutomationSupport.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTAutomationSupport.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestCore.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestCore.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCTestCore.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUIAutomation.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUIAutomation.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/XCUIAutomation.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/Testing.framework (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --timestamp\=none --preserve-metadata\=identifier,entitlements,flags --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/Testing.framework
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/Frameworks/Testing.framework: replacing existing signature
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --entitlements /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests.xctest.xcent --timestamp\=none --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest
+
+RegisterExecutionPolicyException /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    builtin-RegisterExecutionPolicyException /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest
+
+Touch /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    /usr/bin/touch -c /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app/Contents/PlugIns/RootsUITests.xctest
+
+CodeSign /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app (in target 'RootsUITests' from project 'Roots')
+    cd /Users/clevelandlewis/Desktop/Roots/Roots
+    
+    Signing Identity:     "Apple Development: lewisclevelandiii@gmail.com (U6VM6BZDYM)"
+    
+    /usr/bin/codesign --force --sign 9295EFBD80BF44882C7939A5C98AAC1C4F3D44EE --entitlements /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Intermediates.noindex/Roots.build/Debug/RootsUITests.build/RootsUITests.xctest.xcent --timestamp\=none --generate-entitlement-der /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app
+/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/Roots-gevhpbduqwkhrjccazmpeopgipgn/Build/Products/Debug/RootsUITests-Runner.app: replacing existing signature
+
+2025-12-03 14:28:24.968613-0500 RootsUITests-Runner[51739:2684866] [Default] Running tests...
+Test Suite 'All tests' started at 2025-12-03 14:28:31.508.
+Test Suite 'RootsUITests.xctest' started at 2025-12-03 14:28:31.508.
+Test Suite 'RootsUITests' started at 2025-12-03 14:28:31.508.
+Test Case '-[RootsUITests.RootsUITests testExample]' started.
+    t =     0.00s Start Test at 2025-12-03 14:28:31.509
+    t =     0.63s Set Up
+    t =     0.64s Open clewisiii.Roots
+    t =     0.64s     Launch clewisiii.Roots
+    t =     1.04s         Wait for accessibility to load
+    t =     1.17s         Setting up automation session
+    t =     1.19s         Wait for clewisiii.Roots to idle
+    t =     1.19s Tear Down
+Test Case '-[RootsUITests.RootsUITests testExample]' passed (1.426 seconds).
+Test Case '-[RootsUITests.RootsUITests testLaunchPerformance]' started.
+    t =     0.00s Start Test at 2025-12-03 14:28:32.936
+    t =     0.15s Set Up
+    t =     0.16s Open clewisiii.Roots
+    t =     0.16s     Launch clewisiii.Roots
+    t =     0.16s         Terminate clewisiii.Roots:51805
+    t =     1.49s         Wait for accessibility to load
+    t =     1.57s         Setting up automation session
+    t =     1.59s         Wait for clewisiii.Roots to idle
+    t =     2.62s Open clewisiii.Roots
+    t =     2.62s     Launch clewisiii.Roots
+    t =     2.62s         Terminate clewisiii.Roots:51806
+    t =     3.99s         Wait for accessibility to load
+    t =     4.06s         Setting up automation session
+    t =     4.06s         Wait for clewisiii.Roots to idle
+    t =     4.76s Open clewisiii.Roots
+    t =     4.76s     Launch clewisiii.Roots
+    t =     4.76s         Terminate clewisiii.Roots:51810
+    t =     6.16s         Wait for accessibility to load
+    t =     6.22s         Setting up automation session
+    t =     6.23s         Wait for clewisiii.Roots to idle
+    t =     6.92s Open clewisiii.Roots
+    t =     6.92s     Launch clewisiii.Roots
+    t =     6.92s         Terminate clewisiii.Roots:51811
+    t =     8.30s         Wait for accessibility to load
+    t =     8.36s         Setting up automation session
+    t =     8.37s         Wait for clewisiii.Roots to idle
+    t =     9.06s Open clewisiii.Roots
+    t =     9.06s     Launch clewisiii.Roots
+    t =     9.06s         Terminate clewisiii.Roots:51812
+    t =    10.46s         Wait for accessibility to load
+    t =    10.53s         Setting up automation session
+    t =    10.53s         Wait for clewisiii.Roots to idle
+    t =    11.24s Open clewisiii.Roots
+    t =    11.24s     Launch clewisiii.Roots
+    t =    11.24s         Terminate clewisiii.Roots:51813
+    t =    12.61s         Wait for accessibility to load
+    t =    12.69s         Setting up automation session
+    t =    12.69s         Wait for clewisiii.Roots to idle
+/Users/clevelandlewis/Desktop/Roots/Roots/RootsUITests/RootsUITests.swift:37: Test Case '-[RootsUITests.RootsUITests testLaunchPerformance]' measured [Duration (ApplicationLaunch), s] average: 0.307, relative standard deviation: 3.310%, values: [0.299673, 0.316874, 0.297782, 0.298599, 0.321469], performanceMetricID:com.apple.dt.XCTMetric_ApplicationLaunch-ApplicationLaunch.duration, baselineName: "", baselineAverage: , polarity: prefers smaller, maxPercentRegression: 10.000%, maxPercentRelativeStandardDeviation: 10.000%, maxRegression: 0.000, maxStandardDeviation: 0.000
+    t =    13.48s Tear Down
+Test Case '-[RootsUITests.RootsUITests testLaunchPerformance]' passed (13.707 seconds).
+Test Suite 'RootsUITests' passed at 2025-12-03 14:28:46.643.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 15.133 (15.135) seconds
+Test Suite 'RootsUITestsLaunchTests' started at 2025-12-03 14:28:46.644.
+Test Case '-[RootsUITests.RootsUITestsLaunchTests testLaunch]' started.
+    t =     0.00s Setting appearance mode to Light
+<unknown>:0: error: -[RootsUITests.RootsUITestsLaunchTests testLaunch] : Unable to update application state promptly for Application 'com.grammarly.ProjectLlama.UpdateService'.

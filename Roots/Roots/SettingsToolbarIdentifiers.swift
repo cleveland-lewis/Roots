@@ -4,6 +4,7 @@ enum SettingsToolbarIdentifier: String, CaseIterable, Identifiable {
     case general
     case appearance
     case interface
+    case courses
     case accounts
 
     var id: String { rawValue }
@@ -13,6 +14,7 @@ enum SettingsToolbarIdentifier: String, CaseIterable, Identifiable {
         case .general: return "General"
         case .appearance: return "Appearance"
         case .interface: return "Interface"
+        case .courses: return "Courses"
         case .accounts: return "Accounts"
         }
     }
@@ -22,6 +24,7 @@ enum SettingsToolbarIdentifier: String, CaseIterable, Identifiable {
         case .general: return "slider.horizontal.3"
         case .appearance: return "paintpalette"
         case .interface: return "macwindow"
+        case .courses: return "books.vertical"
         case .accounts: return "person.crop.circle"
         }
     }

@@ -34,10 +34,8 @@ struct PlannerView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
-                // Header
+                // Header controls (title removed)
                 HStack {
-                    Text("Planner")
-                        .font(DesignSystem.Typography.title)
                     Spacer()
                     Button("Schedule") { runScheduler() }
                         .buttonStyle(.glassBlueProminent)
@@ -263,7 +261,7 @@ private struct ScheduleResultView: View {
                                         .font(DesignSystem.Typography.caption)
                                 }
                             }
-                            Text(DateFormatter.localizedString(from: b.start, dateStyle: .none, timeStyle: .short) + " - " + DateFormatter.localizedString(from: b.end, dateStyle: .none, timeStyle: .short))
+                            Text(AppSettingsModel.shared.formattedTimeRange(start: b.start, end: b.end))
                                 .font(DesignSystem.Typography.caption)
                         }
                         .contextMenu {

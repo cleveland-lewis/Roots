@@ -9,7 +9,8 @@ struct AssignmentRow: View {
                 Text(task.title)
                     .font(DesignSystem.Typography.body)
                 if let due = task.due {
-                    Text(DateFormatter.localizedString(from: due, dateStyle: .short, timeStyle: .short))
+                    // Use app-wide time formatting via shared settings
+                    Text(AppSettingsModel.shared.formattedTime(due))
                         .font(DesignSystem.Typography.caption)
                 }
             }

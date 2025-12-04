@@ -7,18 +7,19 @@ struct GlassCircleButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.white)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Color.primary)
                 .frame(width: 40, height: 40)
                 .background(
                     Circle()
                         .fill(.ultraThinMaterial)
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-                        )
-                        .shadow(color: .black.opacity(0.6), radius: 18, x: 0, y: 10)
                 )
+                .overlay(
+                    Circle()
+                        .stroke(Color.primary.opacity(0.12), lineWidth: 0.5)
+                )
+                .shadow(color: Color.primary.opacity(0.12), radius: 12, y: 6)
+                .contentShape(Circle())
         }
         .buttonStyle(.plain)
     }

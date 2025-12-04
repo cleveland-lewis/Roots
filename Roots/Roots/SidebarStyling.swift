@@ -6,7 +6,7 @@ func makeSidebarBackground(colorScheme: ColorScheme) -> AnyView {
         .background(.ultraThinMaterial)
         .overlay(
             Rectangle()
-                .stroke(Color.white.opacity(colorScheme == .dark ? 0.06 : 0.03), lineWidth: 0.4)
+                .stroke(Color(nsColor: .separatorColor).opacity(colorScheme == .dark ? 0.06 : 0.03), lineWidth: 0.4)
         )
         .background(tint)
     return AnyView(bg)

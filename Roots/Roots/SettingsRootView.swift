@@ -1,14 +1,14 @@
 import SwiftUI
+import Combine
 
 struct SettingsRootView: View {
     @EnvironmentObject var settings: AppSettingsModel
-    @State private var selectedPane: SettingsToolbarIdentifier
+    @EnvironmentObject var coordinator: SettingsCoordinator
     @State private var hasSetInitialPane = false
 
     private let paneChanged: (SettingsToolbarIdentifier) -> Void
 
     init(initialPane: SettingsToolbarIdentifier, paneChanged: @escaping (SettingsToolbarIdentifier) -> Void) {
-        _selectedPane = State(initialValue: initialPane)
         self.paneChanged = paneChanged
     }
 
@@ -20,7 +20,7 @@ struct SettingsRootView: View {
 
             HStack(spacing: 0) {
                 // Left navigation stack
-                List(selection: $selectedPane) {
+                List(selection: $coordinator.selectedSection) {
                     ForEach(SettingsToolbarIdentifier.allCases) { id in
                         Label(id.label, systemImage: id.systemImageName)
                             .tag(id)
@@ -46,10 +46,10 @@ struct SettingsRootView: View {
                     ForEach(SettingsToolbarIdentifier.allCases, id: \.self) { identifier in
                         SettingsToolbarButton(
                             identifier: identifier,
-                            isSelected: selectedPane == identifier,
+                            isSelected: coordinator.selectedSection == identifier,
                             action: {
-                                guard selectedPane != identifier else { return }
-                                selectedPane = identifier
+                                guard coordinator.selectedSection != identifier else { return }
+                                coordinator.selectedSection = identifier
                             }
                         )
                     }
@@ -58,24 +58,32 @@ struct SettingsRootView: View {
         }
         .onAppear {
             guard !hasSetInitialPane else { return }
-            paneChanged(selectedPane)
+            paneChanged(coordinator.selectedSection)
             hasSetInitialPane = true
         }
-        .onChange(of: selectedPane) { (prev, newPane) in
+        .onChange(of: coordinator.selectedSection) { (prev, newPane) in
             print("[Settings] Switched to pane: \(newPane.label)")
             paneChanged(newPane)
+        }
+        .onReceive(settings.objectWillChange) { _ in
+            // Persist settings whenever they change
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                settings.save()
+            }
         }
     }
 
     @ViewBuilder
     private var paneContent: some View {
-        switch selectedPane {
+        switch coordinator.selectedSection {
         case .general:
             SettingsPane_General()
         case .appearance:
             SettingsPane_Appearance()
         case .interface:
             SettingsPane_Interface()
+        case .courses:
+            SettingsPane_Courses()
         case .accounts:
             SettingsPane_Accounts()
         }

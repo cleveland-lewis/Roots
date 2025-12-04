@@ -4,50 +4,36 @@ import AppKit
 final class SettingsWindowController: NSWindowController {
     private static let lastPaneKey = "roots.settings.lastSelectedPane"
     private let appSettings: AppSettingsModel
+    private let coursesStore: CoursesStore
+    private let coordinator: SettingsCoordinator
 
-    init(appSettings: AppSettingsModel) {
+    init(appSettings: AppSettingsModel, coursesStore: CoursesStore, coordinator: SettingsCoordinator) {
         self.appSettings = appSettings
-        let savedPane = UserDefaults.standard.string(forKey: Self.lastPaneKey)
-        let initialPane = SettingsToolbarIdentifier(rawValue: savedPane ?? "") ?? .general
-
-        // Create a placeholder handler to avoid capturing self before super.init
-        var onSelectPane: ((SettingsToolbarIdentifier) -> Void)? = nil
-        let rootView = SettingsRootView(initialPane: initialPane) { pane in
-            onSelectPane?(pane)
-        }
-
-        let hostingController = NSHostingController(rootView: rootView.environmentObject(appSettings))
+        self.coursesStore = coursesStore
+        self.coordinator = coordinator
+        let rootView = SettingsRootView(
+            initialPane: coordinator.selectedSection,
+            paneChanged: { _ in }
+        )
+        .environmentObject(appSettings)
+        .environmentObject(coursesStore)
+        .environmentObject(coordinator)
+        let hostingController = NSHostingController(rootView: rootView)
         let window = NSWindow(contentViewController: hostingController)
-        window.styleMask = [.titled, .closable]
-        window.setContentSize(NSSize(width: 580, height: 430))
-        window.minSize = NSSize(width: 580, height: 430)
-        window.maxSize = NSSize(width: 580, height: 430)
+        window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        window.setContentSize(NSSize(width: RootsWindowSizing.minSettingsWidth, height: RootsWindowSizing.minSettingsHeight))
+        window.minSize = NSSize(width: RootsWindowSizing.minSettingsWidth, height: RootsWindowSizing.minSettingsHeight)
+        RootsWindowSizing.applyMinimumSize(to: window, role: .settings)
         window.titleVisibility = .visible
-        window.titlebarAppearsTransparent = false
+        window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false
-        window.standardWindowButton(.miniaturizeButton)?.isEnabled = false
-        window.standardWindowButton(.zoomButton)?.isEnabled = false
-        window.standardWindowButton(.miniaturizeButton)?.alphaValue = 0.35
-        window.standardWindowButton(.zoomButton)?.alphaValue = 0.35
         window.isMovableByWindowBackground = true
         window.toolbarStyle = .unifiedCompact
         window.collectionBehavior = [.transient]
         window.center()
 
         super.init(window: window)
-
-        // Now that super.init has run, safely reference self
-        window.toolbar?.allowsUserCustomization = false
-        window.toolbar?.showsBaselineSeparator = true
-        window.toolbar?.displayMode = .iconAndLabel
-        window.toolbar?.sizeMode = .small
-        updateTitle(for: initialPane)
-
-        // Wire the callback to use self methods
-        onSelectPane = { [weak self] pane in
-            self?.updateTitle(for: pane)
-            self?.persistPane(pane)
-        }
+        window.title = "Settings"
     }
 
     @available(*, unavailable)

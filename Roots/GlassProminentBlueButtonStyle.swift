@@ -35,7 +35,7 @@ public struct GlassProminentBlueButtonStyle: ButtonStyle {
 
             configuration.label
                 .font(.headline) // Default typography (short labels look best)
-                .foregroundColor(Color.white.opacity(colorScheme == .dark ? 0.92 : 0.84))
+                .foregroundStyle(.primary)
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
                 .background(
@@ -52,7 +52,7 @@ public struct GlassProminentBlueButtonStyle: ButtonStyle {
 
                         // Soft inner glow under the material layer
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                            .stroke(Color(nsColor: .separatorColor).opacity(0.06), lineWidth: 1)
                             .blur(radius: 6)
                             .mask(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous).fill(LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)))
                     }
@@ -60,17 +60,17 @@ public struct GlassProminentBlueButtonStyle: ButtonStyle {
                 .overlay(
                     // Subtle stroke (white/blue blend approximation at 30% opacity)
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(Color.white.opacity(0.18).blendMode(.overlay), lineWidth: strokeWidth)
+                        .stroke(Color(nsColor: .separatorColor).blendMode(.overlay), lineWidth: strokeWidth)
                 )
                 .overlay(
                     // Highlight ring on press
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(Color.white.opacity(isPressed ? 0.28 : 0), lineWidth: isPressed ? 2.2 : 0)
+                        .stroke(Color(nsColor: .separatorColor).opacity(isPressed ? 0.28 : 0), lineWidth: isPressed ? 2.2 : 0)
                         .scaleEffect(isPressed ? 0.98 : 1.0)
                         .animation(.easeOut(duration: 0.18), value: isPressed)
                 )
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-                .shadow(color: Color.black.opacity(isPressed ? (colorScheme == .dark ? 0.12 : 0.10) : shadowOpacity), radius: isPressed ? 8 : (hovering ? 24 : 20), x: 0, y: isPressed ? 2 : (hovering ? 12 : 10))
+                .shadow(color: Color(nsColor: .separatorColor).opacity(isPressed ? (colorScheme == .dark ? 0.12 : 0.10) : shadowOpacity), radius: isPressed ? 8 : (hovering ? 24 : 20), x: 0, y: isPressed ? 2 : (hovering ? 12 : 10))
                 .scaleEffect(scale)
                 .offset(y: yOffset)
                 .animation(.spring(response: 0.28, dampingFraction: 0.7), value: hovering)

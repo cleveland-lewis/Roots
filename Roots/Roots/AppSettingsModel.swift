@@ -1,4 +1,3 @@
-
 import SwiftUI
 import AppKit
 import Combine
@@ -51,6 +50,9 @@ enum InterfaceStyle: String, CaseIterable, Identifiable {
         }
     }
 }
+
+// Legacy alias for compatibility with older views
+typealias AppSettings = AppSettingsModel
 
 enum SidebarBehavior: String, CaseIterable, Identifiable {
     case automatic
@@ -184,9 +186,22 @@ enum AppAccentColor: String, CaseIterable, Identifiable {
 }
 
 @MainActor
-final class AppSettingsModel: ObservableObject {
-    static let shared = AppSettingsModel()
-    let objectWillChange = ObservableObjectPublisher()
+final class AppSettingsModel: ObservableObject, Codable {
+    /// Shared singleton used across the app. Loaded from persisted storage when available.
+    static let shared: AppSettingsModel = {
+        return AppSettingsModel.load()
+    }()
+
+    // MARK: - Codable keys
+    enum CodingKeys: String, CodingKey {
+        case accentColorRaw, customAccentEnabledStorage, customAccentRed, customAccentGreen, customAccentBlue, customAccentAlpha
+        case interfaceStyleRaw, glassLightStrength, glassDarkStrength, sidebarBehaviorRaw, wiggleOnHoverStorage
+        case tabBarModeRaw, visibleTabsRaw, tabOrderRaw, quickActionsRaw, enableGlassEffectsStorage
+        case cardRadiusRaw, animationSoftnessStorage, typographyModeRaw
+        case devModeEnabledStorage, devModeUILoggingStorage, devModeDataLoggingStorage, devModeSchedulerLoggingStorage, devModePerformanceStorage
+        case enableICloudSyncStorage
+    }
+
 
     private static func components(from color: Color) -> (red: Double, green: Double, blue: Double, alpha: Double)? {
         guard let cgColor = color.cgColor else { return nil }
@@ -242,47 +257,73 @@ final class AppSettingsModel: ObservableObject {
         static let devModeDataLogging = "devMode.dataLogging"
         static let devModeSchedulerLogging = "devMode.schedulerLogging"
         static let devModePerformance = "devMode.performance"
+
+        // New keys for global settings
+        static let use24HourTime = "roots.settings.use24HourTime"
+        static let workdayStartHour = "roots.settings.workday.start.hour"
+        static let workdayStartMinute = "roots.settings.workday.start.minute"
+        static let workdayEndHour = "roots.settings.workday.end.hour"
+        static let workdayEndMinute = "roots.settings.workday.end.minute"
+        static let showEnergyPanel = "roots.settings.showEnergyPanel"
+        static let highContrastMode = "roots.settings.highContrastMode"
     }
 
-    @AppStorage(Keys.accentColor) private var accentColorRaw: String = AppAccentColor.multicolor.rawValue
-    @AppStorage(Keys.customAccentEnabled) private var customAccentEnabledStorage: Bool = false
-    @AppStorage(Keys.customAccentRed) private var customAccentRed: Double = 0
-    @AppStorage(Keys.customAccentGreen) private var customAccentGreen: Double = 122 / 255
-    @AppStorage(Keys.customAccentBlue) private var customAccentBlue: Double = 1
-    @AppStorage(Keys.customAccentAlpha) private var customAccentAlpha: Double = 1
-    @AppStorage(Keys.interfaceStyle) private var interfaceStyleRaw: String = InterfaceStyle.system.rawValue
-    @AppStorage(Keys.glassLightStrength) private var glassLightStrength: Double = 0.33
-    @AppStorage(Keys.glassDarkStrength) private var glassDarkStrength: Double = 0.17
-    @AppStorage(Keys.sidebarBehavior) private var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
-    @AppStorage(Keys.wiggleOnHover) private var wiggleOnHoverStorage: Bool = true
-    @AppStorage(Keys.tabBarMode) private var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
-    @AppStorage(Keys.visibleTabs) private var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
-    @AppStorage(Keys.tabOrder) private var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
-    @AppStorage(Keys.quickActions) private var quickActionsRaw: String = "add_assignment,add_course,quick_note"
-    @AppStorage(Keys.enableGlassEffects) private var enableGlassEffectsStorage: Bool = true
-    @AppStorage(Keys.cardRadius) private var cardRadiusRaw: String = CardRadius.medium.rawValue
-    @AppStorage(Keys.animationSoftness) private var animationSoftnessStorage: Double = 0.42
-    @AppStorage(Keys.typographyMode) private var typographyModeRaw: String = TypographyMode.system.rawValue
-    @AppStorage(Keys.devModeEnabled) private var devModeEnabledStorage: Bool = false
-    @AppStorage(Keys.devModeUILogging) private var devModeUILoggingStorage: Bool = false
-    @AppStorage(Keys.devModeDataLogging) private var devModeDataLoggingStorage: Bool = false
-    @AppStorage(Keys.devModeSchedulerLogging) private var devModeSchedulerLoggingStorage: Bool = false
-    @AppStorage(Keys.devModePerformance) private var devModePerformanceStorage: Bool = false
+    // Backing storage - migrate to UserDefaults-backed values to persist across launches
+    var accentColorRaw: String = AppAccentColor.multicolor.rawValue
+    var customAccentEnabledStorage: Bool = false
+    var customAccentRed: Double = 0
+    var customAccentGreen: Double = 122 / 255
+    var customAccentBlue: Double = 1
+    var customAccentAlpha: Double = 1
+    var interfaceStyleRaw: String = InterfaceStyle.system.rawValue
+    var glassLightStrength: Double = 0.33
+    var glassDarkStrength: Double = 0.17
+    var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
+    var wiggleOnHoverStorage: Bool = true
+    var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
+    var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
+    var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
+    var quickActionsRaw: String = "add_assignment,add_course,quick_note"
+    var enableGlassEffectsStorage: Bool = true
+    var cardRadiusRaw: String = CardRadius.medium.rawValue
+    var animationSoftnessStorage: Double = 0.42
+    var typographyModeRaw: String = TypographyMode.system.rawValue
+    var devModeEnabledStorage: Bool = false
+    var devModeUILoggingStorage: Bool = false
+    var devModeDataLoggingStorage: Bool = false
+    var devModeSchedulerLoggingStorage: Bool = false
+    var devModePerformanceStorage: Bool = false
+    var enableICloudSyncStorage: Bool = false
+
+    // New UserDefaults-backed properties
+    var use24HourTimeStorage: Bool = false
+    var workdayStartHourStorage: Int = 8
+    var workdayStartMinuteStorage: Int = 0
+    var workdayEndHourStorage: Int = 22
+    var workdayEndMinuteStorage: Int = 0
+    var showEnergyPanelStorage: Bool = true
+    var highContrastModeStorage: Bool = false
+
+    // Pomodoro defaults (migrated here)
+    var pomodoroFocusStorage: Int = 25
+    var pomodoroShortBreakStorage: Int = 5
+    var pomodoroLongBreakStorage: Int = 15
+
+    // Event load thresholds (persisted)
+    var loadLowThresholdStorage: Int = 1
+    var loadMediumThresholdStorage: Int = 3
+    var loadHighThresholdStorage: Int = 5
+
+    // MARK: - Manual Codable conformance will map to these keys
 
     var accentColorChoice: AppAccentColor {
         get { AppAccentColor(rawValue: accentColorRaw) ?? .multicolor }
-        set {
-            objectWillChange.send()
-            accentColorRaw = newValue.rawValue
-        }
+        set { accentColorRaw = newValue.rawValue }
     }
 
     var isCustomAccentEnabled: Bool {
         get { customAccentEnabledStorage }
-        set {
-            objectWillChange.send()
-            customAccentEnabledStorage = newValue
-        }
+        set { customAccentEnabledStorage = newValue }
     }
 
     var customAccentColor: Color {
@@ -291,7 +332,6 @@ final class AppSettingsModel: ObservableObject {
         }
         set {
             guard let components = Self.components(from: newValue) else { return }
-            objectWillChange.send()
             customAccentRed = components.red
             customAccentGreen = components.green
             customAccentBlue = components.blue
@@ -305,16 +345,12 @@ final class AppSettingsModel: ObservableObject {
 
     var interfaceStyle: InterfaceStyle {
         get { InterfaceStyle(rawValue: interfaceStyleRaw) ?? .system }
-        set {
-            objectWillChange.send()
-            interfaceStyleRaw = newValue.rawValue
-        }
+        set { interfaceStyleRaw = newValue.rawValue }
     }
 
     var glassStrength: GlassStrength {
         get { GlassStrength(light: glassLightStrength, dark: glassDarkStrength) }
         set {
-            objectWillChange.send()
             glassLightStrength = newValue.light
             glassDarkStrength = newValue.dark
         }
@@ -322,26 +358,17 @@ final class AppSettingsModel: ObservableObject {
 
     var sidebarBehavior: SidebarBehavior {
         get { SidebarBehavior(rawValue: sidebarBehaviorRaw) ?? .automatic }
-        set {
-            objectWillChange.send()
-            sidebarBehaviorRaw = newValue.rawValue
-        }
+        set { sidebarBehaviorRaw = newValue.rawValue }
     }
 
     var wiggleOnHover: Bool {
         get { wiggleOnHoverStorage }
-        set {
-            objectWillChange.send()
-            wiggleOnHoverStorage = newValue
-        }
+        set { wiggleOnHoverStorage = newValue }
     }
 
     var tabBarMode: TabBarMode {
         get { TabBarMode(rawValue: tabBarModeRaw) ?? .iconsAndText }
-        set {
-            objectWillChange.send()
-            tabBarModeRaw = newValue.rawValue
-        }
+        set { tabBarModeRaw = newValue.rawValue }
     }
 
     // Visible tabs management (comma-separated raw values)
@@ -349,15 +376,12 @@ final class AppSettingsModel: ObservableObject {
         get {
             visibleTabsRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) }
         }
-        set {
-            visibleTabsRaw = newValue.map { $0.rawValue }.joined(separator: ",")
-            objectWillChange.send()
-        }
+        set { visibleTabsRaw = newValue.map { $0.rawValue }.joined(separator: ",") }
     }
 
     var tabOrder: [RootTab] {
         get { tabOrderRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) } }
-        set { tabOrderRaw = newValue.map { $0.rawValue }.joined(separator: ",") ; objectWillChange.send() }
+        set { tabOrderRaw = newValue.map { $0.rawValue }.joined(separator: ",") }
     }
 
     var iconLabelMode: TabBarMode {
@@ -368,85 +392,150 @@ final class AppSettingsModel: ObservableObject {
     // Quick Actions
     var quickActions: [QuickAction] {
         get { quickActionsRaw.split(separator: ",").compactMap { QuickAction(rawValue: String($0)) } }
-        set { quickActionsRaw = newValue.map { $0.rawValue }.joined(separator: ","); objectWillChange.send() }
+        set { quickActionsRaw = newValue.map { $0.rawValue }.joined(separator: ",") }
     }
 
     var enableGlassEffects: Bool {
         get { enableGlassEffectsStorage }
-        set {
-            objectWillChange.send()
-            enableGlassEffectsStorage = newValue
-        }
+        set { enableGlassEffectsStorage = newValue }
     }
 
     var cardRadius: CardRadius {
         get { CardRadius(rawValue: cardRadiusRaw) ?? .medium }
-        set {
-            objectWillChange.send()
-            cardRadiusRaw = newValue.rawValue
-        }
+        set { cardRadiusRaw = newValue.rawValue }
     }
 
     var cardCornerRadius: Double { cardRadius.value }
 
     var animationSoftness: Double {
         get { animationSoftnessStorage }
-        set {
-            objectWillChange.send()
-            animationSoftnessStorage = newValue
-        }
+        set { animationSoftnessStorage = newValue }
     }
 
     var typographyMode: TypographyMode {
         get { TypographyMode(rawValue: typographyModeRaw) ?? .system }
-        set {
-            objectWillChange.send()
-            typographyModeRaw = newValue.rawValue
-        }
+        set { typographyModeRaw = newValue.rawValue }
     }
 
     var devModeEnabled: Bool {
         get { devModeEnabledStorage }
-        set {
-            objectWillChange.send()
-            devModeEnabledStorage = newValue
-        }
+        set { devModeEnabledStorage = newValue }
     }
 
     var devModeUILogging: Bool {
         get { devModeUILoggingStorage }
-        set {
-            objectWillChange.send()
-            devModeUILoggingStorage = newValue
-        }
+        set { devModeUILoggingStorage = newValue }
     }
 
     var devModeDataLogging: Bool {
         get { devModeDataLoggingStorage }
-        set {
-            objectWillChange.send()
-            devModeDataLoggingStorage = newValue
-        }
+        set { devModeDataLoggingStorage = newValue }
     }
 
     var devModeSchedulerLogging: Bool {
         get { devModeSchedulerLoggingStorage }
-        set {
-            objectWillChange.send()
-            devModeSchedulerLoggingStorage = newValue
-        }
+        set { devModeSchedulerLoggingStorage = newValue }
     }
 
     var devModePerformance: Bool {
         get { devModePerformanceStorage }
+        set { devModePerformanceStorage = newValue }
+    }
+
+    var enableICloudSync: Bool {
+        get { enableICloudSyncStorage }
+        set { enableICloudSyncStorage = newValue }
+    }
+
+    // New computed settings exposed to views
+    var use24HourTime: Bool {
+        get { use24HourTimeStorage }
+        set { use24HourTimeStorage = newValue }
+    }
+
+    // Pomodoro values exposed to views
+    var pomodoroFocusMinutes: Int {
+        get { pomodoroFocusStorage }
+        set { pomodoroFocusStorage = newValue }
+    }
+
+    var pomodoroShortBreakMinutes: Int {
+        get { pomodoroShortBreakStorage }
+        set { pomodoroShortBreakStorage = newValue }
+    }
+
+    var pomodoroLongBreakMinutes: Int {
+        get { pomodoroLongBreakStorage }
+        set { pomodoroLongBreakStorage = newValue }
+    }
+
+    // Event load thresholds exposed to views
+    var loadLowThreshold: Int {
+        get { loadLowThresholdStorage }
+        set { loadLowThresholdStorage = newValue }
+    }
+
+    var loadMediumThreshold: Int {
+        get { loadMediumThresholdStorage }
+        set { loadMediumThresholdStorage = newValue }
+    }
+
+    var loadHighThreshold: Int {
+        get { loadHighThresholdStorage }
+        set { loadHighThresholdStorage = newValue }
+    }
+
+    var defaultWorkdayStart: DateComponents {
+        get { DateComponents(hour: workdayStartHourStorage, minute: workdayStartMinuteStorage) }
         set {
-            objectWillChange.send()
-            devModePerformanceStorage = newValue
+            if let h = newValue.hour { workdayStartHourStorage = h }
+            if let m = newValue.minute { workdayStartMinuteStorage = m }
         }
+    }
+
+    var defaultWorkdayEnd: DateComponents {
+        get { DateComponents(hour: workdayEndHourStorage, minute: workdayEndMinuteStorage) }
+        set {
+            if let h = newValue.hour { workdayEndHourStorage = h }
+            if let m = newValue.minute { workdayEndMinuteStorage = m }
+        }
+    }
+
+    var showEnergyPanel: Bool {
+        get { showEnergyPanelStorage }
+        set { showEnergyPanelStorage = newValue }
+    }
+
+    var highContrastMode: Bool {
+        get { highContrastModeStorage }
+        set { highContrastModeStorage = newValue }
+    }
+
+    // Convenience helpers to convert components to Date and back for bindings
+    func date(from components: DateComponents) -> Date {
+        Calendar.current.date(from: components) ?? Date()
+    }
+
+    func components(from date: Date) -> DateComponents {
+        Calendar.current.dateComponents([.hour, .minute], from: date)
     }
 
     func font(for style: AppTypography.TextStyle) -> Font {
         AppTypography.font(for: style, mode: typographyMode)
+    }
+
+    // Time formatting helpers that respect use24HourTime
+    func formattedTime(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateStyle = .none
+        f.timeStyle = .short
+        // Use locale that uses 24-hour if requested
+        if use24HourTime { f.locale = Locale(identifier: "en_GB") }
+        return f.string(from: date)
+    }
+
+    func formattedTimeRange(start: Date, end: Date) -> String {
+        "\(formattedTime(start)) - \(formattedTime(end))"
     }
 
     func glassOpacity(for scheme: ColorScheme) -> Double {
@@ -454,7 +543,84 @@ final class AppSettingsModel: ObservableObject {
         return scheme == .dark ? glassStrength.dark : glassStrength.light
     }
 
-    init() {}
-}
+    // MARK: - Persistence helpers
+    static func load() -> AppSettingsModel {
+        let key = "roots.settings.appsettings"
+        if let data = UserDefaults.standard.data(forKey: key) {
+            let decoder = JSONDecoder()
+            if let decoded = try? decoder.decode(AppSettingsModel.self, from: data) {
+                return decoded
+            }
+        }
+        return AppSettingsModel()
+    }
 
-typealias AppSettings = AppSettingsModel
+    func save() {
+        let key = "roots.settings.appsettings"
+        let encoder = JSONEncoder()
+        if let data = try? encoder.encode(self) {
+            UserDefaults.standard.set(data, forKey: key)
+        }
+    }
+
+    // Codable
+    init() {}
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(accentColorRaw, forKey: .accentColorRaw)
+        try container.encode(customAccentEnabledStorage, forKey: .customAccentEnabledStorage)
+        try container.encode(customAccentRed, forKey: .customAccentRed)
+        try container.encode(customAccentGreen, forKey: .customAccentGreen)
+        try container.encode(customAccentBlue, forKey: .customAccentBlue)
+        try container.encode(customAccentAlpha, forKey: .customAccentAlpha)
+        try container.encode(interfaceStyleRaw, forKey: .interfaceStyleRaw)
+        try container.encode(glassLightStrength, forKey: .glassLightStrength)
+        try container.encode(glassDarkStrength, forKey: .glassDarkStrength)
+        try container.encode(sidebarBehaviorRaw, forKey: .sidebarBehaviorRaw)
+        try container.encode(wiggleOnHoverStorage, forKey: .wiggleOnHoverStorage)
+        try container.encode(tabBarModeRaw, forKey: .tabBarModeRaw)
+        try container.encode(visibleTabsRaw, forKey: .visibleTabsRaw)
+        try container.encode(tabOrderRaw, forKey: .tabOrderRaw)
+        try container.encode(quickActionsRaw, forKey: .quickActionsRaw)
+        try container.encode(enableGlassEffectsStorage, forKey: .enableGlassEffectsStorage)
+        try container.encode(cardRadiusRaw, forKey: .cardRadiusRaw)
+        try container.encode(animationSoftnessStorage, forKey: .animationSoftnessStorage)
+        try container.encode(typographyModeRaw, forKey: .typographyModeRaw)
+        try container.encode(devModeEnabledStorage, forKey: .devModeEnabledStorage)
+        try container.encode(devModeUILoggingStorage, forKey: .devModeUILoggingStorage)
+        try container.encode(devModeDataLoggingStorage, forKey: .devModeDataLoggingStorage)
+        try container.encode(devModeSchedulerLoggingStorage, forKey: .devModeSchedulerLoggingStorage)
+        try container.encode(devModePerformanceStorage, forKey: .devModePerformanceStorage)
+        try container.encode(enableICloudSyncStorage, forKey: .enableICloudSyncStorage)
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        accentColorRaw = try container.decodeIfPresent(String.self, forKey: .accentColorRaw) ?? AppAccentColor.multicolor.rawValue
+        customAccentEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .customAccentEnabledStorage) ?? false
+        customAccentRed = try container.decodeIfPresent(Double.self, forKey: .customAccentRed) ?? 0
+        customAccentGreen = try container.decodeIfPresent(Double.self, forKey: .customAccentGreen) ?? 122 / 255
+        customAccentBlue = try container.decodeIfPresent(Double.self, forKey: .customAccentBlue) ?? 1
+        customAccentAlpha = try container.decodeIfPresent(Double.self, forKey: .customAccentAlpha) ?? 1
+        interfaceStyleRaw = try container.decodeIfPresent(String.self, forKey: .interfaceStyleRaw) ?? InterfaceStyle.system.rawValue
+        glassLightStrength = try container.decodeIfPresent(Double.self, forKey: .glassLightStrength) ?? 0.33
+        glassDarkStrength = try container.decodeIfPresent(Double.self, forKey: .glassDarkStrength) ?? 0.17
+        sidebarBehaviorRaw = try container.decodeIfPresent(String.self, forKey: .sidebarBehaviorRaw) ?? SidebarBehavior.automatic.rawValue
+        wiggleOnHoverStorage = try container.decodeIfPresent(Bool.self, forKey: .wiggleOnHoverStorage) ?? true
+        tabBarModeRaw = try container.decodeIfPresent(String.self, forKey: .tabBarModeRaw) ?? TabBarMode.iconsAndText.rawValue
+        visibleTabsRaw = try container.decodeIfPresent(String.self, forKey: .visibleTabsRaw) ?? "dashboard,calendar,planner,assignments,courses,grades,timer"
+        tabOrderRaw = try container.decodeIfPresent(String.self, forKey: .tabOrderRaw) ?? "dashboard,calendar,planner,assignments,courses,grades,timer"
+        quickActionsRaw = try container.decodeIfPresent(String.self, forKey: .quickActionsRaw) ?? "add_assignment,add_course,quick_note"
+        enableGlassEffectsStorage = try container.decodeIfPresent(Bool.self, forKey: .enableGlassEffectsStorage) ?? true
+        cardRadiusRaw = try container.decodeIfPresent(String.self, forKey: .cardRadiusRaw) ?? CardRadius.medium.rawValue
+        animationSoftnessStorage = try container.decodeIfPresent(Double.self, forKey: .animationSoftnessStorage) ?? 0.42
+        typographyModeRaw = try container.decodeIfPresent(String.self, forKey: .typographyModeRaw) ?? TypographyMode.system.rawValue
+        devModeEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .devModeEnabledStorage) ?? false
+        devModeUILoggingStorage = try container.decodeIfPresent(Bool.self, forKey: .devModeUILoggingStorage) ?? false
+        devModeDataLoggingStorage = try container.decodeIfPresent(Bool.self, forKey: .devModeDataLoggingStorage) ?? false
+        devModeSchedulerLoggingStorage = try container.decodeIfPresent(Bool.self, forKey: .devModeSchedulerLoggingStorage) ?? false
+        devModePerformanceStorage = try container.decodeIfPresent(Bool.self, forKey: .devModePerformanceStorage) ?? false
+        enableICloudSyncStorage = try container.decodeIfPresent(Bool.self, forKey: .enableICloudSyncStorage) ?? false
+    }
+}

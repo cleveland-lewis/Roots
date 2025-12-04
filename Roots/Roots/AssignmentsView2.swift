@@ -8,7 +8,6 @@ struct AssignmentsView2: View {
         SwiftUI.ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading, spacing: DesignSystem.Spacing.large) {
                 HStack {
-                    Text("Assignments").font(DesignSystem.Typography.title)
                     Spacer()
                     Button(action: { showingAddSheet = true }) {
                             HStack(spacing: 6) {
@@ -42,7 +41,7 @@ struct AssignmentsView2: View {
             }
             .padding(DesignSystem.Spacing.large)
         }
-        .background(DesignSystem.background(for: .light))
+        .rootsSystemBackground()
         .sheet(isPresented: $showingAddSheet) {
             AddAssignmentView(initialType: .reading, onSave: { task in
                 AssignmentsStore.shared.addTask(task)

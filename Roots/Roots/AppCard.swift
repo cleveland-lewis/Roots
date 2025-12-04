@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AppCard<Content: View>: View {
-    @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var settings: AppSettingsModel
     @Environment(\.colorScheme) private var colorScheme
     let title: String?
     let icon: Image?
@@ -11,16 +11,19 @@ struct AppCard<Content: View>: View {
     private let cardPadding: CGFloat = 24
     // Unified card height guidance used on dashboard
     private let unifiedCardMinHeight: CGFloat = 180
+    private let isPopup: Bool
 
     init(
         title: String? = nil,
         icon: Image? = nil,
         iconBounceTrigger: Bool = false,
+        isPopup: Bool = true,
         @ViewBuilder content: () -> Content
     ) {
         self.title = title
         self.icon = icon
         self.iconBounceTrigger = iconBounceTrigger
+        self.isPopup = isPopup
         self.content = content()
     }
 
@@ -37,15 +40,15 @@ struct AppCard<Content: View>: View {
         .padding(cardPadding)
         .frame(minHeight: unifiedCardMinHeight)
         .background(
-            .regularMaterial,
-            in: RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous)
+            RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous)
+                .fill(.thinMaterial)
         )
         .overlay(
             RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous)
-                .stroke(borderColor, lineWidth: 0.6)
+                .stroke(Color(nsColor: .separatorColor), lineWidth: 1)
         )
-        .shadow(color: shadowColor, radius: 24, x: 0, y: 12)
         .contentTransition(.opacity)
+        .modifier(PopupAlignmentModifier(isPopup: isPopup))
     }
 
     private var header: some View {
@@ -59,8 +62,7 @@ struct AppCard<Content: View>: View {
 
             if let title {
                 Text(title)
-                    .font(settings.font(for: .title2))
-                    .fontWeight(.semibold)
+                    .font(.title2).fontWeight(.semibold)
                     .foregroundStyle(.primary)
                     .transition(.cardHeaderTransition)
             }
@@ -70,13 +72,6 @@ struct AppCard<Content: View>: View {
         .contentTransition(.opacity)
     }
 
-    private var borderColor: Color {
-        colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.08)
-    }
-
-    private var shadowColor: Color {
-        colorScheme == .dark ? Color.black.opacity(0.55) : Color.black.opacity(0.22)
-    }
 }
 
 private extension AnyTransition {
@@ -84,5 +79,17 @@ private extension AnyTransition {
         let opacity = AnyTransition.opacity
         let scale = AnyTransition.scale(scale: 0.95)
         return .asymmetric(insertion: opacity.combined(with: scale), removal: opacity.combined(with: scale))
+    }
+}
+
+private struct PopupAlignmentModifier: ViewModifier {
+    let isPopup: Bool
+
+    func body(content: Content) -> some View {
+        if isPopup {
+            content.popupTextAlignedLeft()
+        } else {
+            content
+        }
     }
 }

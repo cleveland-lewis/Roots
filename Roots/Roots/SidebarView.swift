@@ -20,9 +20,6 @@ struct SidebarView: View {
                 SidebarItemRow(tab: .grades, title: "Grades", systemImage: "doc.text.magnifyingglass", selectedTab: $selectedTab)
             }
 
-            Section("App") {
-                SidebarItemRow(tab: .settings, title: "Settings", systemImage: "gearshape", selectedTab: $selectedTab)
-            }
         }
         .listStyle(.sidebar)
         .scrollContentBackground(.hidden)

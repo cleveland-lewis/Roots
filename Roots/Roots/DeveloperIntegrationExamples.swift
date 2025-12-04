@@ -8,12 +8,12 @@ func assertCriticalDataExists(_ label: String, exists: Bool, details: String? = 
     }
 }
 
-func reportUnschedulableTasks(_ tasks: [String], semesterId: String) {
+func reportUnschedulableTasks(_ tasks: [String], semesterId: UUID) {
     if !tasks.isEmpty {
-        LOG_SCHEDULER(.error, "UnschedulableTasks", "Could not schedule tasks: \(tasks.joined(separator: ", "))", metadata: ["semester": semesterId])
+        LOG_SCHEDULER(.error, "UnschedulableTasks", "Could not schedule tasks: \(tasks.joined(separator: ", "))", metadata: ["semester": semesterId.uuidString])
     }
 }
 
-func reportExamGenerationFailure(courseId: String) {
-    LOG_PRACTICE(.error, "NoQuestionsForTopic", "No valid questions available for course \(courseId)")
+func reportExamGenerationFailure(courseId: UUID) {
+    LOG_PRACTICE(.error, "NoQuestionsForTopic", "No valid questions available for course \(courseId.uuidString)")
 }
