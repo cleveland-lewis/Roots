@@ -71,21 +71,23 @@ final class SettingsWindowController: NSWindowController {
         selectionCancellable = coordinator.$selectedSection
             .receive(on: DispatchQueue.main)
             .sink { [weak self] pane in
-                self?.window?.toolbar?.selectedItemIdentifier = pane.toolbarItemIdentifier
-                self?.updateTitle(for: pane)
-                self?.persistPane(pane)
-                if let navController = self?.contentViewController as? NSHostingController<AnyView>,
-                   let strongSelf = self {
-                    let selectionBinding = Binding<SettingsToolbarIdentifier>(
-                        get: { strongSelf.coordinator.selectedSection },
-                        set: { newValue in strongSelf.coordinator.selectedSection = newValue }
-                    )
-                    navController.rootView = SettingsWindowController.makeRootView(
-                        selection: selectionBinding,
-                        appSettings: strongSelf.appSettings,
-                        coursesStore: strongSelf.coursesStore,
-                        coordinator: strongSelf.coordinator
-                    )
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.window?.toolbar?.selectedItemIdentifier = pane.toolbarItemIdentifier
+                    self.updateTitle(for: pane)
+                    self.persistPane(pane)
+                    if let navController = self.contentViewController as? NSHostingController<AnyView> {
+                        let selectionBinding = Binding<SettingsToolbarIdentifier>(
+                            get: { self.coordinator.selectedSection },
+                            set: { newValue in self.coordinator.selectedSection = newValue }
+                        )
+                        navController.rootView = SettingsWindowController.makeRootView(
+                            selection: selectionBinding,
+                            appSettings: self.appSettings,
+                            coursesStore: self.coursesStore,
+                            coordinator: self.coordinator
+                        )
+                    }
                 }
             }
     }
