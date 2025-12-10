@@ -16,30 +16,43 @@ struct DashboardView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 12) {
-                let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
-                LazyVGrid(columns: columns, spacing: 12) {
-                    todayCard
-                        .animateEntry(isLoaded: isLoaded, index: 0)
+            GeometryReader { geo in
+                let spacing: CGFloat = 12
+                let columnWidth = (geo.size.width - (spacing * 3)) / 2
 
-                    clockCard
-                        .animateEntry(isLoaded: isLoaded, index: 1)
+                VStack(alignment: .leading, spacing: spacing) {
+                    HStack(alignment: .top, spacing: spacing) {
+                        todayCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 0)
+                        clockCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 1)
+                    }
 
-                    eventsCard
-                        .animateEntry(isLoaded: isLoaded, index: 2)
+                    HStack(alignment: .top, spacing: spacing) {
+                        eventsCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 2)
+                        assignmentsCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 3)
+                    }
 
-                    assignmentsCard
-                        .animateEntry(isLoaded: isLoaded, index: 3)
-
-                    calendarCard
-                        .animateEntry(isLoaded: isLoaded, index: 4)
-
-                    energyCard
-                        .animateEntry(isLoaded: isLoaded, index: 5)
+                    HStack(alignment: .top, spacing: spacing) {
+                        calendarCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 4)
+                        energyCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 5)
+                    }
                 }
+                .padding(.horizontal, spacing)
+                .padding(.vertical, spacing)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 12)
+            .frame(minHeight: 0)
         }
         .onAppear {
             isLoaded = true
