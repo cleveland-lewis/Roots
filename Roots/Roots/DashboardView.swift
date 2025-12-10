@@ -199,10 +199,10 @@ struct DashboardView: View {
 
     private var quickActions: [(label: String, icon: String, handler: () -> Void)] {
         [
-            ("Add Assignment", "plus.circle") { print("[Dashboard] Quick action: Add Assignment") },
-            ("Add Event", "calendar.badge.plus") { print("[Dashboard] Quick action: Add Event") },
-            ("Add Course", "graduationcap") { print("[Dashboard] Quick action: Add Course") },
-            ("Open Planner", "list.bullet.rectangle") { print("[Dashboard] Quick action: Open Planner") }
+            ("Add Assignment", "plus.circle", { print("[Dashboard] Quick action: Add Assignment") }),
+            ("Add Event", "calendar.badge.plus", { print("[Dashboard] Quick action: Add Event") }),
+            ("Add Course", "graduationcap", { print("[Dashboard] Quick action: Add Course") }),
+            ("Open Planner", "list.bullet.rectangle", { print("[Dashboard] Quick action: Open Planner") })
         ]
     }
 
