@@ -18,32 +18,33 @@ struct DashboardView: View {
         ScrollView {
             GeometryReader { geo in
                 let spacing: CGFloat = 12
-                let columnWidth = (geo.size.width - (spacing * 3)) / 2
 
                 HStack(alignment: .top, spacing: spacing) {
                     VStack(alignment: .leading, spacing: spacing) {
                         todayCard
-                            .frame(width: columnWidth)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .animateEntry(isLoaded: isLoaded, index: 0)
                         eventsCard
-                            .frame(width: columnWidth)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .animateEntry(isLoaded: isLoaded, index: 1)
                         calendarCard
-                            .frame(width: columnWidth)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .animateEntry(isLoaded: isLoaded, index: 2)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                     VStack(alignment: .leading, spacing: spacing) {
                         clockCard
-                            .frame(width: columnWidth)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .animateEntry(isLoaded: isLoaded, index: 3)
                         assignmentsCard
-                            .frame(width: columnWidth)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .animateEntry(isLoaded: isLoaded, index: 4)
                         energyCard
-                            .frame(width: columnWidth)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                             .animateEntry(isLoaded: isLoaded, index: 5)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, spacing)
                 .padding(.vertical, spacing)
