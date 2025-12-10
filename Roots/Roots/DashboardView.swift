@@ -20,27 +20,24 @@ struct DashboardView: View {
                 let spacing: CGFloat = 12
                 let columnWidth = (geo.size.width - (spacing * 3)) / 2
 
-                VStack(alignment: .leading, spacing: spacing) {
-                    HStack(alignment: .top, spacing: spacing) {
+                HStack(alignment: .top, spacing: spacing) {
+                    VStack(alignment: .leading, spacing: spacing) {
                         todayCard
                             .frame(width: columnWidth)
                             .animateEntry(isLoaded: isLoaded, index: 0)
-                        clockCard
-                            .frame(width: columnWidth)
-                            .animateEntry(isLoaded: isLoaded, index: 1)
-                    }
-
-                    HStack(alignment: .top, spacing: spacing) {
                         eventsCard
                             .frame(width: columnWidth)
-                            .animateEntry(isLoaded: isLoaded, index: 2)
-                        assignmentsCard
+                            .animateEntry(isLoaded: isLoaded, index: 1)
+                        calendarCard
                             .frame(width: columnWidth)
-                            .animateEntry(isLoaded: isLoaded, index: 3)
+                            .animateEntry(isLoaded: isLoaded, index: 2)
                     }
 
-                    HStack(alignment: .top, spacing: spacing) {
-                        calendarCard
+                    VStack(alignment: .leading, spacing: spacing) {
+                        clockCard
+                            .frame(width: columnWidth)
+                            .animateEntry(isLoaded: isLoaded, index: 3)
+                        assignmentsCard
                             .frame(width: columnWidth)
                             .animateEntry(isLoaded: isLoaded, index: 4)
                         energyCard
