@@ -25,22 +25,18 @@ struct DashboardView: View {
                     clockCard
                         .animateEntry(isLoaded: isLoaded, index: 1)
 
-                    assignmentsCard
+                    eventsCard
                         .animateEntry(isLoaded: isLoaded, index: 2)
 
-                    calendarCard
+                    assignmentsCard
                         .animateEntry(isLoaded: isLoaded, index: 3)
 
-                    energyCard
+                    calendarCard
                         .animateEntry(isLoaded: isLoaded, index: 4)
 
-                    eventsCard
+                    energyCard
                         .animateEntry(isLoaded: isLoaded, index: 5)
                 }
-
-                quickActionsCard
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .animateEntry(isLoaded: isLoaded, index: 6)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 12)
@@ -165,10 +161,30 @@ struct DashboardView: View {
 
     private var clockCard: some View {
         RootsCard {
-            VStack {
+            HStack(alignment: .center, spacing: RootsSpacing.l) {
                 RootsAnalogClock(diameter: 180, showSecondHand: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                VStack(alignment: .leading, spacing: RootsSpacing.m) {
+                    Button {
+                        print("[Dashboard] Quick action: Add Assignment")
+                    } label: {
+                        Label("Add Assignment", systemImage: "plus.circle")
+                            .font(DesignSystem.Typography.body)
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button {
+                        print("[Dashboard] Quick action: Add Event")
+                    } label: {
+                        Label("Add Event", systemImage: "calendar.badge.plus")
+                            .font(DesignSystem.Typography.body)
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
         }
     }
@@ -244,31 +260,6 @@ struct DashboardView: View {
     private enum EnergyLevel {
         case high, medium, low
     }
-    private var quickActionsCard: some View {
-        RootsCard(
-            title: "Quick Actions",
-            icon: "bolt.fill"
-        ) {
-            HStack(spacing: RootsSpacing.m) {
-                Button {
-                    print("[Dashboard] Quick action: Add Assignment")
-                } label: {
-                    Label("Add Assignment", systemImage: "plus.circle")
-                        .font(DesignSystem.Typography.body)
-                }
-                .buttonStyle(.borderedProminent)
-
-                Button {
-                    print("[Dashboard] Quick action: Add Event")
-                } label: {
-                    Label("Add Event", systemImage: "calendar.badge.plus")
-                        .font(DesignSystem.Typography.body)
-                }
-                .buttonStyle(.bordered)
-            }
-        }
-    }
-
 }
 
 struct DashboardTileBody: View {
