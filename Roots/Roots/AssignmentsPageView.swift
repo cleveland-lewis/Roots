@@ -227,6 +227,13 @@ struct AssignmentsPageView: View {
     @State private var filterStatus: AssignmentStatus? = nil
     @State private var filterCourse: String? = nil
     @State private var showFilterPopover: Bool = false
+    // Drag selection state
+    @State private var selectionStart: CGPoint?
+    @State private var selectionRect: CGRect?
+    @State private var selectionMenuLocation: CGPoint?
+    @State private var selectedIDs: Set<UUID> = []
+    @State private var assignmentFrames: [UUID: CGRect] = [:]
+    @State private var clipboard: [Assignment] = []
 
     private let cardCorner: CGFloat = 24
 
@@ -243,6 +250,9 @@ struct AssignmentsPageView: View {
                         .frame(width: columnWidth)
 
                     assignmentListCard
+                        .coordinateSpace(name: "assignmentsArea")
+                        .gesture(dragSelectionGesture())
+                        .overlay(selectionOverlay)
 
                     detailPanel
                         .frame(width: columnWidth + 60)
@@ -383,12 +393,18 @@ struct AssignmentsPageView: View {
                     ForEach(filteredAndSortedAssignments) { assignment in
                         AssignmentsPageRow(
                             assignment: assignment,
-                            isSelected: assignment.id == selectedAssignment?.id,
+                            isSelected: assignment.id == selectedAssignment?.id || selectedIDs.contains(assignment.id),
                             onToggleComplete: { toggleCompletion(for: assignment) },
                             onSelect: { selectedAssignment = assignment },
                             leadingAction: settings.assignmentSwipeLeading,
                             trailingAction: settings.assignmentSwipeTrailing,
                             onPerformAction: { performSwipeAction($0, assignment: assignment) }
+                        )
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear
+                                    .preference(key: AssignmentFramePreference.self, value: [assignment.id: geo.frame(in: .named("assignmentsArea"))])
+                            }
                         )
                     }
                 }
@@ -1360,5 +1376,152 @@ private extension AssignmentsPageView {
             Assignment(id: UUID(), courseId: UUID(), title: "Essay Outline", courseCode: "ENG 210", courseName: "Literature", category: .project, dueDate: day1, estimatedMinutes: 60, status: .completed, urgency: .low, weightPercent: nil, isLockedToDueDate: false, notes: ""),
             Assignment(id: UUID(), courseId: UUID(), title: "Exam Prep", courseCode: "MA 231", courseName: "Calculus II", category: .exam, dueDate: day2, estimatedMinutes: 180, status: .notStarted, urgency: .critical, weightPercent: 20, isLockedToDueDate: true, notes: "Create flashcards.")
         ]
+    }
+}
+
+// MARK: - Drag Selection (Assignments)
+
+private extension AssignmentsPageView {
+    func dragSelectionGesture() -> some Gesture {
+        DragGesture(minimumDistance: 8, coordinateSpace: .named("assignmentsArea"))
+            .onChanged { value in
+                if selectionStart == nil { selectionStart = value.startLocation }
+                if let start = selectionStart {
+                    selectionRect = rect(from: start, to: value.location)
+                    selectionMenuLocation = nil
+                }
+            }
+            .onEnded { value in
+                guard let start = selectionStart else { selectionRect = nil; return }
+                let finalRect = rect(from: start, to: value.location)
+                let hits = assignmentFrames.compactMap { id, frame in
+                    finalRect.intersects(frame) ? id : nil
+                }
+                selectedIDs = Set(hits)
+                selectionMenuLocation = hits.isEmpty ? nil : value.location
+                selectionStart = nil
+                selectionRect = nil
+            }
+    }
+
+    var selectionOverlay: some View {
+        GeometryReader { _ in
+            ZStack(alignment: .topLeading) {
+                if let rect = selectionRect {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(Color.accentColor.opacity(0.6), lineWidth: 1.2)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                .fill(Color.accentColor.opacity(0.12))
+                        )
+                        .frame(width: rect.width, height: rect.height)
+                        .position(x: rect.midX, y: rect.midY)
+                        .allowsHitTesting(false)
+                }
+                if let menuPoint = selectionMenuLocation, !selectedIDs.isEmpty {
+                    selectionMenu
+                        .position(menuPoint)
+                        .transition(.opacity.combined(with: .scale))
+                }
+            }
+            .onPreferenceChange(AssignmentFramePreference.self) { frames in
+                assignmentFrames = frames
+            }
+        }
+    }
+
+    var selectionMenu: some View {
+        HStack(spacing: 10) {
+            Button("Cut") { cutSelection() }
+                .disabled(selectedIDs.isEmpty)
+            Button("Copy") { copySelection() }
+                .disabled(selectedIDs.isEmpty)
+            Button("Duplicate") { duplicateSelection() }
+                .disabled(selectedIDs.isEmpty)
+            Button("Paste") { pasteClipboard() }
+                .disabled(clipboard.isEmpty)
+        }
+        .font(.caption.weight(.semibold))
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.regularMaterial, in: Capsule())
+        .shadow(color: Color.black.opacity(0.12), radius: 10, x: 0, y: 6)
+    }
+
+    func rect(from start: CGPoint, to end: CGPoint) -> CGRect {
+        CGRect(x: min(start.x, end.x),
+               y: min(start.y, end.y),
+               width: abs(end.x - start.x),
+               height: abs(end.y - start.y))
+    }
+
+    func copySelection() {
+        clipboard = assignments.filter { selectedIDs.contains($0.id) }
+    }
+
+    func cutSelection() {
+        copySelection()
+        assignments.removeAll { selectedIDs.contains($0.id) }
+        selectedIDs.removeAll()
+        selectionMenuLocation = nil
+    }
+
+    func duplicateSelection() {
+        let toDuplicate = assignments.filter { selectedIDs.contains($0.id) }
+        let copies = toDuplicate.map { item in
+            Assignment(
+                id: UUID(),
+                courseId: item.courseId,
+                title: item.title + " (copy)",
+                courseCode: item.courseCode,
+                courseName: item.courseName,
+                category: item.category,
+                dueDate: item.dueDate,
+                estimatedMinutes: item.estimatedMinutes,
+                status: item.status,
+                urgency: item.urgency,
+                weightPercent: item.weightPercent,
+                isLockedToDueDate: item.isLockedToDueDate,
+                notes: item.notes,
+                plan: item.plan
+            )
+        }
+        assignments.append(contentsOf: copies)
+        selectedIDs.removeAll()
+        selectionMenuLocation = nil
+    }
+
+    func pasteClipboard() {
+        guard !clipboard.isEmpty else { return }
+        let pasted = clipboard.map { item in
+            Assignment(
+                id: UUID(),
+                courseId: item.courseId,
+                title: item.title,
+                courseCode: item.courseCode,
+                courseName: item.courseName,
+                category: item.category,
+                dueDate: item.dueDate,
+                estimatedMinutes: item.estimatedMinutes,
+                status: item.status,
+                urgency: item.urgency,
+                weightPercent: item.weightPercent,
+                isLockedToDueDate: item.isLockedToDueDate,
+                notes: item.notes,
+                plan: item.plan
+            )
+        }
+        assignments.append(contentsOf: pasted)
+        selectedIDs.removeAll()
+        selectionMenuLocation = nil
+    }
+}
+
+// MARK: - Preferences
+
+private struct AssignmentFramePreference: PreferenceKey {
+    static var defaultValue: [UUID: CGRect] = [:]
+    static func reduce(value: inout [UUID: CGRect], nextValue: () -> [UUID: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
     }
 }
