@@ -22,7 +22,7 @@ struct DashboardView: View {
                     todayCard
                         .animateEntry(isLoaded: isLoaded, index: 0)
 
-                    eventsCard
+                    clockCard
                         .animateEntry(isLoaded: isLoaded, index: 1)
 
                     assignmentsCard
@@ -34,7 +34,7 @@ struct DashboardView: View {
                     energyCard
                         .animateEntry(isLoaded: isLoaded, index: 4)
 
-                    clockCard
+                    eventsCard
                         .animateEntry(isLoaded: isLoaded, index: 5)
                 }
 
