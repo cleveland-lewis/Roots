@@ -315,8 +315,8 @@ final class AppSettingsModel: ObservableObject, Codable {
     var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
     var wiggleOnHoverStorage: Bool = true
     var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
-    var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
-    var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer"
+    var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
+    var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
     var quickActionsRaw: String = "add_assignment,add_course,quick_note"
     var enableGlassEffectsStorage: Bool = true
     var cardRadiusRaw: String = CardRadius.medium.rawValue
@@ -477,14 +477,24 @@ final class AppSettingsModel: ObservableObject, Codable {
     /// Derived convenience: visible tabs minus flashcards if disabled
     var effectiveVisibleTabs: [RootTab] {
         var tabs = visibleTabs
-        if !enableFlashcards {
+        if enableFlashcards {
+            if !tabs.contains(.decks) { tabs.append(.decks) }
+        } else {
             tabs.removeAll { $0 == .decks }
         }
         return tabs
     }
 
     var tabOrder: [RootTab] {
-        get { tabOrderRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) } }
+        get {
+            var order = tabOrderRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) }
+            if enableFlashcards {
+                if !order.contains(.decks) { order.append(.decks) }
+            } else {
+                order.removeAll { $0 == .decks }
+            }
+            return order
+        }
         set { tabOrderRaw = newValue.map { $0.rawValue }.joined(separator: ",") }
     }
 
@@ -851,8 +861,8 @@ final class AppSettingsModel: ObservableObject, Codable {
         sidebarBehaviorRaw = try container.decodeIfPresent(String.self, forKey: .sidebarBehaviorRaw) ?? SidebarBehavior.automatic.rawValue
         wiggleOnHoverStorage = try container.decodeIfPresent(Bool.self, forKey: .wiggleOnHoverStorage) ?? true
         tabBarModeRaw = try container.decodeIfPresent(String.self, forKey: .tabBarModeRaw) ?? TabBarMode.iconsAndText.rawValue
-        visibleTabsRaw = try container.decodeIfPresent(String.self, forKey: .visibleTabsRaw) ?? "dashboard,calendar,planner,assignments,courses,grades,timer"
-        tabOrderRaw = try container.decodeIfPresent(String.self, forKey: .tabOrderRaw) ?? "dashboard,calendar,planner,assignments,courses,grades,timer"
+        visibleTabsRaw = try container.decodeIfPresent(String.self, forKey: .visibleTabsRaw) ?? "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
+        tabOrderRaw = try container.decodeIfPresent(String.self, forKey: .tabOrderRaw) ?? "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
         quickActionsRaw = try container.decodeIfPresent(String.self, forKey: .quickActionsRaw) ?? "add_assignment,add_course,quick_note"
         enableGlassEffectsStorage = try container.decodeIfPresent(Bool.self, forKey: .enableGlassEffectsStorage) ?? true
         cardRadiusRaw = try container.decodeIfPresent(String.self, forKey: .cardRadiusRaw) ?? CardRadius.medium.rawValue
