@@ -176,27 +176,34 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 VStack(alignment: .leading, spacing: RootsSpacing.m) {
-                    Button {
-                        print("[Dashboard] Quick action: Add Assignment")
-                    } label: {
-                        Label("Add Assignment", systemImage: "plus.circle")
-                            .font(DesignSystem.Typography.body)
+                    ForEach(quickActions, id: \.label) { action in
+                        Button {
+                            action.handler()
+                        } label: {
+                            Label(action.label, systemImage: action.icon)
+                                .font(.title3.weight(.semibold))
+                                .frame(maxWidth: 220, alignment: .leading)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
                     }
-                    .buttonStyle(.borderedProminent)
-
-                    Button {
-                        print("[Dashboard] Quick action: Add Event")
-                    } label: {
-                        Label("Add Event", systemImage: "calendar.badge.plus")
-                            .font(DesignSystem.Typography.body)
-                    }
-                    .buttonStyle(.bordered)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
         }
+    }
+
+    private var quickActions: [(label: String, icon: String, handler: () -> Void)] {
+        [
+            ("Add Assignment", "plus.circle") { print("[Dashboard] Quick action: Add Assignment") },
+            ("Add Event", "calendar.badge.plus") { print("[Dashboard] Quick action: Add Event") },
+            ("Add Course", "graduationcap") { print("[Dashboard] Quick action: Add Course") },
+            ("Open Planner", "list.bullet.rectangle") { print("[Dashboard] Quick action: Open Planner") }
+        ]
     }
 
     private func cardTitle(_ title: String) -> String? { title }
