@@ -131,7 +131,6 @@ struct GeneralSettingsView: View {
                         .textFieldStyle(.roundedBorder)
                         .font(.system(.body, design: .monospaced))
                         .disableAutocorrection(true)
-                        .textInputAutocapitalization(.never)
                 }
 
                 HStack(spacing: 12) {
