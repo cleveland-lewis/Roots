@@ -78,7 +78,7 @@ struct EnergyChart: View {
                         .gesture(DragGesture(minimumDistance: 0)
                             .onChanged { value in
                                 let location = value.location
-                                if let date: Date = proxy.value(atX: location.x) as? Date {
+                                if let date = proxy.value(atX: location.x, as: Date.self) {
                                     selectedHour = nearestExistingHour(to: date)
                                 }
                             }
