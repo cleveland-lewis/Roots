@@ -43,13 +43,32 @@ jobs:
             exit 1
           fi
 
-      - name: Upload test artifacts
+      - name: Upload test artifacts (inline uploader)
         if: always()
-        uses: ./.github/actions/upload-artifact
-        with:
-          name: xcodebuild-logs
-          path: "${{ github.workspace }}/xcodebuild.log\n${{ github.workspace }}/tests.xml"
-          token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          ART_NAME="xcodebuild-logs-${GITHUB_RUN_ID}"
+          TMPDIR="/tmp/${ART_NAME}"
+          mkdir -p "$TMPDIR"
+          cp -v "$GITHUB_WORKSPACE/xcodebuild.log" "$TMPDIR/" || true
+          cp -v "$GITHUB_WORKSPACE/tests.xml" "$TMPDIR/" || true
+          TAR="$TMPDIR/${ART_NAME}.tar.gz"
+          tar -C "$TMPDIR" -czf "$TAR" . || true
+
+          API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases"
+          DATA=$(jq -n --arg tag "artifact-${GITHUB_RUN_ID}-${ART_NAME}" --arg name "$ART_NAME" '{tag_name: $tag, name: $name, prerelease: true}')
+          RESP=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$DATA" "$API_URL")
+          UPLOAD_URL=$(echo "$RESP" | python -c 'import sys, json; d=json.load(sys.stdin); print(d.get("upload_url",""))')
+          if [ -z "$UPLOAD_URL" ]; then
+            echo "Failed to create release; response:" >&2
+            echo "$RESP" >&2
+            exit 0
+          fi
+          UPLOAD_URL=${UPLOAD_URL/%\{?name,label\}/}
+          BASENAME=$(basename "$TAR")
+          curl --fail -s -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/gzip" --data-binary "@$TAR" "$UPLOAD_URL?name=$BASENAME" || true
 
       - name: Fail on test failures
         if: always()
