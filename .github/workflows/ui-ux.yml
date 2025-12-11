@@ -34,13 +34,17 @@ jobs:
           set -o pipefail
           LOG="$GITHUB_WORKSPACE/xcodebuild-macos-ui.log"
           JUNIT="$GITHUB_WORKSPACE/macos-ui-tests.xml"
-          if [ -f "Roots.xcworkspace" ]; then
-            xcodebuild -workspace "Roots.xcworkspace" -scheme "Roots" -destination "platform=macOS" -only-testing:RootsUITests test | tee "$LOG" | xcpretty -r junit --output "$JUNIT"
-          elif [ -f "Roots.xcodeproj" ]; then
-            xcodebuild -project "Roots.xcodeproj" -scheme "Roots" -destination "platform=macOS" -only-testing:RootsUITests test | tee "$LOG" | xcpretty -r junit --output "$JUNIT"
-          else
-            echo "no project/workspace" && exit 1
-          fi
+          WS=$(find . -maxdepth 3 -type d -name "*.xcworkspace" | head -n 1)
+            PROJ=$(find . -maxdepth 3 -name "*.xcodeproj" | head -n 1)
+            if [ -n "$WS" ]; then
+              echo "Using workspace: $WS"
+              xcodebuild -workspace "$WS" -scheme "Roots" -destination "platform=macOS" -only-testing:RootsUITests test | tee "$LOG" | xcpretty -r junit --output "$JUNIT"
+            elif [ -n "$PROJ" ]; then
+              echo "Using project: $PROJ"
+              xcodebuild -project "$PROJ" -scheme "Roots" -destination "platform=macOS" -only-testing:RootsUITests test | tee "$LOG" | xcpretty -r junit --output "$JUNIT"
+            else
+              echo "no project/workspace" && exit 1
+            fi   fi
       - name: Upload macOS UI artifacts (inline uploader)
         if: always()
         env:
