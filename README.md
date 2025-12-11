@@ -1,7 +1,8 @@
 # Roots
 
 Roots is a macOS-native study planner and academic dashboard built with SwiftUI.  
-It centralizes courses, assignments, exams, and a Motion-style AI scheduler into a single Apple-native interface.
+It centralizes courses, assignments, exams, and an automatic scheduler into a single Apple-native interface.
+Any LLM usage is limited or allowed by the user and is built to work offline with local LLMs; however, users can utilize their API Keys.
 
 The app is designed for:
 
@@ -17,8 +18,8 @@ The app is designed for:
 
 - Course-centric assignment model (Exam, Quiz, Project, Homework, Reading).
 - Rich assignment metadata:
-  - Priority / importance
-  - Difficulty / energy requirement
+  - Priority/importance
+  - Difficulty/energy requirement
   - Estimated duration
   - Due date and time
   - Category and course linkage
@@ -36,7 +37,7 @@ The app is designed for:
   - Homework/Reading → 1–N chunks based on duration.
   - Projects → user-defined or auto-split “Work Sessions”.
 - Multi-day scheduling:
-  - Sessions scheduled across days up to due date.
+  - Sessions scheduled across days up to the due date.
   - Priority-aware ordering using:
     - `schedule_index = 0.5 * priority_factor + 0.4 * due_factor + 0.1 * category_factor`
   - Energy-aware placement:
