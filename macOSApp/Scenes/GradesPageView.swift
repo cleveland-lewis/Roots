@@ -67,9 +67,9 @@ struct GradesPageView: View {
             .rootsSystemBackground()
         }
         .sheet(isPresented: $showEditTargetSheet) {
-            if let course = courseToEditTarget {
-                EditTargetGradeSheet(course: course) { updatedTarget, letter in
-                    updateTarget(for: course, to: updatedTarget, letter: letter)
+            if let course = courseToEditTarget, let detail = courseDetails.first(where: { $0.id == course.id }) {
+                EditTargetGradeSheet(course: course, detail: detail) { updatedTarget, letter, components in
+                    updateTarget(for: course, to: updatedTarget, letter: letter, components: components)
                 }
             }
         }
@@ -320,16 +320,17 @@ struct GradesPageView: View {
         return fractional >= 7
     }
 
-    private func updateTarget(for course: GradeCourseSummary, to target: Double?, letter: String?) {
+    private func updateTarget(for course: GradeCourseSummary, to target: Double?, letter: String?, components: [GradeComponent]) {
         // Update course summary
         if let idx = allCourses.firstIndex(where: { $0.id == course.id }) {
             allCourses[idx].targetPercentage = target
             allCourses[idx].letterGrade = letter ?? allCourses[idx].letterGrade
         }
-        // Update detail
+        // Update detail and components
         if let detailIdx = courseDetails.firstIndex(where: { $0.course.id == course.id }) {
             courseDetails[detailIdx].course.targetPercentage = target
             courseDetails[detailIdx].course.letterGrade = letter ?? courseDetails[detailIdx].course.letterGrade
+            courseDetails[detailIdx].components = components
             selectedCourseDetail = courseDetails[detailIdx]
         }
     }
@@ -708,11 +709,13 @@ struct GradeDetailCard: View {
 
 struct EditTargetGradeSheet: View {
     var course: GradeCourseSummary
-    var onSave: (Double?, String?) -> Void
+    var detail: CourseGradeDetail
+    var onSave: (Double?, String?, [GradeComponent]) -> Void
     @Environment(\.dismiss) private var dismiss
 
     @State private var targetPercent: Double = 90
     @State private var letter: String = "A"
+    @State private var components: [GradeComponent] = []
 
     private let letters = ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"]
 
@@ -720,11 +723,34 @@ struct EditTargetGradeSheet: View {
         NavigationStack {
             Form {
                 Section("Target") {
-                    Slider(value: $targetPercent, in: 50...100, step: 1) {
+                    Slider(value: $targetPercent, in: 0...100, step: 1) {
                         Text("Target %")
                     }
                     Text("\(Int(targetPercent))%")
                         .font(.headline)
+                }
+
+                Section("Components") {
+                    VStack(spacing: 8) {
+                        ForEach($components) { $comp in
+                            HStack(spacing: 8) {
+                                TextField("Name", text: Binding(get: { comp.name }, set: { comp.name = $0 }))
+                                    .frame(width: 140)
+                                Stepper(value: Binding(get: { Int(comp.weightPercent) }, set: { comp.weightPercent = Double($0) }), in: 0...100) {
+                                    Text("\(Int(comp.weightPercent))%")
+                                }
+                                Slider(value: Binding(get: { comp.earnedPercent ?? 0 }, set: { comp.earnedPercent = $0 }), in: 0...100)
+                                    .frame(maxWidth: 160)
+                                TextField("\(Int(comp.earnedPercent ?? 0))%", text: Binding(get: { String(Int(comp.earnedPercent ?? 0)) }, set: { comp.earnedPercent = Double($0) ?? comp.earnedPercent }))
+                                    .frame(width: 50)
+                                Button(role: .destructive) { components.removeAll(where: { $0.id == comp.id }) } label: { Image(systemName: "trash") }
+                            }
+                        }
+
+                        Button { components.append(GradeComponent(id: UUID(), name: "New", weightPercent: 0, earnedPercent: nil)) } label: {
+                            Label("Add Component", systemImage: "plus")
+                        }
+                    }
                 }
 
                 Section("Letter") {
@@ -749,7 +775,7 @@ struct EditTargetGradeSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        onSave(targetPercent, letter)
+                        onSave(targetPercent, letter, components)
                         dismiss()
                     }
                 }
@@ -757,6 +783,7 @@ struct EditTargetGradeSheet: View {
             .onAppear {
                 targetPercent = course.targetPercentage ?? 90
                 letter = course.letterGrade ?? "A"
+                components = detail.components
             }
         }
     }
