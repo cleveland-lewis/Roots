@@ -8,8 +8,7 @@ The app is designed for:
 
 - Students who want a serious planner that actually respects time, energy, and due dates.
 - Heavy course loads with overlapping exams, quizzes, homeworks, readings, and projects.
-- A “single pane of glass” over grades, assignments, calendar, and planning.
-
+- Neurodivergent students who need to be "told" what to do, as if it's coming from a coach or instructor.
 ---
 
 ## Core Features
