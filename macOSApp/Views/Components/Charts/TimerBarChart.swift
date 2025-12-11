@@ -63,16 +63,7 @@ struct TimerBarChart: View {
         }
         .chartYAxis(.hidden)
         .chartXAxis {
-            AxisMarks(values: data.map(\.date)) { value in
-                if let date = value.as(Date.self) {
-                    AxisValueLabel {
-                        Text(xLabelFormatter(date))
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    AxisTick()
-                }
-            }
+            AxisMarks(values: data.map(\.date)) { _ in AxisTick() }
         }
         .chartYScale(domain: 0...(max(yMax * 1.1, minutesPerDot * 3)))
         .chartPlotStyle { plot in

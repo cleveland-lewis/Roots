@@ -68,8 +68,10 @@ struct EnergyChart: View {
                 }
             }
             .chartYScale(domain: 0...100)
-            .chartXAxis { DesignSystem.Charts.AxisPresets.dailyXAxis }
-            .chartYAxis { DesignSystem.Charts.AxisPresets.percentageYAxis }
+            .chartXAxis {
+                AxisMarks(values: data.map(\.hour)) { _ in AxisTick() }
+            }
+            .chartYAxis { AxisMarks(position: .leading) }
             .chartOverlay { proxy in
                 GeometryReader { geo in
                     Rectangle().fill(Color.clear).contentShape(Rectangle())
