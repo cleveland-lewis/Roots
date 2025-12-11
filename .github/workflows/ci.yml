@@ -26,9 +26,11 @@ jobs:
           echo "Repository cloned."
 
       - name: Select Xcode
-        uses: ./.github/actions/setup-xcode
-        with:
-          xcode-version: latest-stable
+        run: |
+          echo "Requested Xcode: latest-stable"
+          echo "Available Xcode installs:"
+          ls /Applications || true
+          echo "xcode-select path: $(xcode-select -p)" || true
 
       - name: Install dependencies
         run: |

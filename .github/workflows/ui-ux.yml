@@ -22,9 +22,11 @@ jobs:
           git clone --depth=1 "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "$GITHUB_WORKSPACE"
           echo "Repository cloned."
       - name: Select Xcode
-        uses: ./.github/actions/setup-xcode
-        with:
-          xcode-version: latest-stable
+        run: |
+          echo "Requested Xcode: latest-stable"
+          echo "Available Xcode installs:"
+          ls /Applications || true
+          echo "xcode-select path: $(xcode-select -p)" || true
       - name: Install xcpretty
         run: gem install --no-document xcpretty
       - name: Run macOS UI tests
@@ -81,9 +83,11 @@ jobs:
           git clone --depth=1 "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "$GITHUB_WORKSPACE"
           echo "Repository cloned."
       - name: Select Xcode
-        uses: ./.github/actions/setup-xcode
-        with:
-          xcode-version: latest-stable
+        run: |
+          echo "Requested Xcode: latest-stable"
+          echo "Available Xcode installs:"
+          ls /Applications || true
+          echo "xcode-select path: $(xcode-select -p)" || true
       - name: Install tools
         run: gem install --no-document xcpretty
       - name: Boot Simulator
