@@ -107,6 +107,17 @@ struct GradesPageView: View {
         .onAppear {
             refreshCourses()
             coursesStore.recalcGPA(tasks: assignmentsStore.tasks)
+
+            // Subscribe to course deletions
+            courseDeletedCancellable = CoursesStore.courseDeletedPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { deletedId in
+                    gradesStore.removeGrade(for: deletedId)
+                    refreshCourses()
+                    if let selected = selectedCourseDetail, selected.id == deletedId {
+                        selectedCourseDetail = nil
+                    }
+                }
         }
         .onReceive(assignmentsStore.$tasks) { tasks in
             coursesStore.recalcGPA(tasks: tasks)

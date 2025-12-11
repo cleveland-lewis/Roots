@@ -1,39 +1,26 @@
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Xcode user data
-xcuserdata/
-*.xccheckout
-*.xcuserstate
-
-# Derived data & build products
+# Xcode
 DerivedData/
 build/
-*.ipa
-*.dSYM
+xcuserdata/
+*.xcuserstate
+*.xcsettings
+*.xccheckout
 
-# SwiftPM
+# Swift Package Manager
 .swiftpm/
 .build/
-
-# CocoaPods (if you ever add it)
-Pods/
-Podfile.lock
-
-# Carthage (if you ever add it)
-Carthage/Build/
-
-# Fastlane output
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/
-fastlane/test_output/
 
 # Logs
 *.log
 
-# Personal notes/scratch (if any)
-scratch/
-tmp/
+# Fastlane
+fastlane/report.xml
+fastlane/screenshots/
+fastlane/test_output/
+
+# App artifacts
+*.ipa
+*.dSYM
+
+# macOS Finder
+.DS_Store

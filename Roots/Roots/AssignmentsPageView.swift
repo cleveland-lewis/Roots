@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 // MARK: - Models
 
@@ -216,8 +217,11 @@ enum AssignmentSortOption: String, CaseIterable, Identifiable {
 
 struct AssignmentsPageView: View {
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var coursesStore: CoursesStore
+    @EnvironmentObject private var assignmentsStore: AssignmentsStore
 
     @State private var assignments: [Assignment] = []
+    @State private var courseDeletedCancellable: AnyCancellable? = nil
     @State private var selectedSegment: AssignmentSegment = .all
     @State private var selectedAssignment: Assignment? = nil
     @State private var searchText: String = ""
@@ -266,6 +270,20 @@ struct AssignmentsPageView: View {
             AssignmentEditorSheet(assignment: editingAssignment) { newAssignment in
                 upsertAssignment(newAssignment)
             }
+        }
+        .onAppear {
+            // subscribe to course deletions
+            courseDeletedCancellable = CoursesStore.courseDeletedPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { deletedId in
+                    assignmentsStore.tasks.removeAll { $0.courseId == deletedId }
+                    if let fc = filterCourse, UUID(uuidString: fc) == deletedId {
+                        filterCourse = nil
+                    }
+                    if let sel = selectedAssignment, sel.courseId == deletedId {
+                        selectedAssignment = nil
+                    }
+                }
         }
     }
 

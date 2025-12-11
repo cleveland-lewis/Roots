@@ -7,7 +7,9 @@ struct DashboardView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
+    @EnvironmentObject private var coursesStore: CoursesStore
     @State private var isLoaded = false
+    @State private var cancellables: Set<AnyCancellable> = []
     @State private var todayBounce = false
     @State private var energyBounce = false
     @State private var selectedDate: Date = Date()
@@ -57,6 +59,15 @@ struct DashboardView: View {
             LOG_UI(.info, "Navigation", "Displayed DashboardView")
             syncTasks()
             syncEvents()
+
+            // subscribe to course deletions
+            CoursesStore.courseDeletedPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { deletedId in
+                    assignmentsStore.tasks.removeAll { $0.courseId == deletedId }
+                    syncTasks()
+                }
+                .store(in: &cancellables)
         }
         .background(DesignSystem.Colors.appBackground)
         .onReceive(assignmentsStore.$tasks) { _ in

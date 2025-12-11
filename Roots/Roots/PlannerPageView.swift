@@ -206,7 +206,12 @@ struct PlannerPageView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var plannerStore: PlannerStore
     @EnvironmentObject var assignmentsStore: AssignmentsStore
+    @EnvironmentObject var plannerCoordinator: PlannerCoordinator
+    @EnvironmentObject var coursesStore: CoursesStore
     @StateObject private var dayProgress = DayProgressModel()
+
+    @State private var filterCancellable: AnyCancellable? = nil
+    @State private var courseDeletedCancellable: AnyCancellable? = nil
 
     @State private var selectedDate: Date = Date()
     @State private var plannedBlocks: [PlannedBlock] = []
@@ -269,6 +274,33 @@ struct PlannerPageView: View {
             dayProgress.startUpdating()
             hydrateFromStoredScheduleIfNeeded()
             syncTodayTasksAndSchedule()
+
+            // subscribe to planner filter changes
+            filterCancellable = plannerCoordinator.$selectedCourseFilter
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] courseId in
+                    guard let self = self else { return }
+                    if let cid = courseId {
+                        // filter existing views immediately
+                        plannedBlocks.removeAll { $0.courseId != nil && $0.courseId != cid }
+                        unscheduledTasks.removeAll { $0.courseId != nil && $0.courseId != cid }
+                    } else {
+                        // refresh to show all
+                        syncTodayTasksAndSchedule()
+                    }
+                }
+
+            // subscribe to course deletions
+            courseDeletedCancellable = CoursesStore.courseDeletedPublisher
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] deletedId in
+                    guard let self = self else { return }
+                    plannedBlocks.removeAll { $0.courseId == deletedId }
+                    unscheduledTasks.removeAll { $0.courseId == deletedId }
+                    if plannerCoordinator.selectedCourseFilter == deletedId {
+                        plannerCoordinator.selectedCourseFilter = nil
+                    }
+                }
         }
         .onDisappear {
             dayProgress.stopUpdating()

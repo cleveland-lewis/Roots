@@ -1,0 +1,39 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode user data
+xcuserdata/
+*.xccheckout
+*.xcuserstate
+
+# Derived data & build products
+DerivedData/
+build/
+*.ipa
+*.dSYM
+
+# SwiftPM
+.swiftpm/
+.build/
+
+# CocoaPods (if you ever add it)
+Pods/
+Podfile.lock
+
+# Carthage (if you ever add it)
+Carthage/Build/
+
+# Fastlane output
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Logs
+*.log
+
+# Personal notes/scratch (if any)
+scratch/
+tmp/
