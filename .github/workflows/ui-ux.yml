@@ -1,4 +1,6 @@
 name: UI & UX Tests
+permissions:
+  contents: read
 
 on:
   pull_request:
