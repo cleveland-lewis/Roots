@@ -114,6 +114,12 @@ struct RootsApp: App {
                     timerManager.checkNotificationPermissions()
                 }
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            handleScenePhaseChange(newPhase)
+        }
+#if !DISABLE_SWIFTDATA
+        .modelContainer(sharedModelContainer)
+#endif
 #if os(macOS)
         Settings {
             SettingsRootView(selection: $settingsCoordinator.selectedSection)
@@ -136,12 +142,6 @@ struct RootsApp: App {
                 settingsCoordinator.show()
             })
         }
-#endif
-        .onChange(of: scenePhase) { _, newPhase in
-            handleScenePhaseChange(newPhase)
-        }
-#if !DISABLE_SWIFTDATA
-        .modelContainer(sharedModelContainer)
 #endif
     }
 
