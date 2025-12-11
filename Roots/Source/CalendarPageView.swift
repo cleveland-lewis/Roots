@@ -1200,7 +1200,6 @@ private struct EventEditSheet: View {
 
 // MARK: - Supporting Views (Stats & Sidebar)
 
-private struct CalendarStatsRow: View {
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var dataManager: CoursesStore
@@ -1261,7 +1260,6 @@ private struct CalendarStatsRow: View {
     }
 }
 
-private struct DayDetailSidebar: View {
     let date: Date
     let events: [CalendarEvent]
     let onSelectEvent: (CalendarEvent) -> Void
