@@ -12,7 +12,7 @@ struct GradeCourseSummary: Identifiable, Hashable {
     var targetPercentage: Double?
     var letterGrade: String?
     var creditHours: Int
-    var colorTag: ColorTag
+    var colorTag: Color
 }
 
 struct GradeComponent: Identifiable, Hashable {
@@ -475,7 +475,7 @@ struct CourseGradeRow: View {
     var onSelect: () -> Void
     var onEditTarget: () -> Void
 
-    private var ringColor: Color { course.colorTag.color }
+    private var ringColor: Color { course.colorTag }
 
     var body: some View {
         Button(action: onSelect) {

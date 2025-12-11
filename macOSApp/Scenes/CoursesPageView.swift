@@ -467,7 +467,7 @@ struct CourseSidebarRow: View {
         Button(action: onTap) {
             HStack(spacing: DesignSystem.Layout.spacing.small) {
                 Circle()
-                    .fill(course.colorTag.color.opacity(0.9))
+                    .fill(course.colorTag.opacity(0.9))
                     .frame(width: 12, height: 12)
 
                 VStack(alignment: .leading, spacing: 2) {

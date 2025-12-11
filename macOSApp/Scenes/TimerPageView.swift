@@ -697,7 +697,7 @@ struct TimerActivityRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Circle()
-                .fill(activity.colorTag.color)
+                .fill(activity.colorTag)
                 .frame(width: 10, height: 10)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -927,7 +927,7 @@ struct StudyAnalyticsCard: View {
     // category color helper local to the analytics card
     private func categoryColorMap() -> [String: Color] {
         var map: [String: Color] = [:]
-        for a in activities { map[a.category] = a.colorTag.color }
+        for a in activities { map[a.category] = a.colorTag }
         return map
     }
 
@@ -1001,7 +1001,7 @@ struct StudyAnalyticsCard: View {
         let total = max(1, activities.reduce(0) { $0 + $1.todayTrackedSeconds })
         return grouped.map { (k, v) in
             let secs = v.reduce(0) { $0 + $1.todayTrackedSeconds }
-            return (label: k, color: v.first?.colorTag.color ?? .gray, frac: secs / total)
+            return (label: k, color: v.first?.colorTag ?? .gray, frac: secs / total)
         }
     }
 

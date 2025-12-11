@@ -76,7 +76,17 @@ public struct LocalTimerActivity: Identifiable, Hashable {
 public enum ColorTag: String, CaseIterable, Identifiable {
     case blue, green, purple, orange, pink, yellow, gray
     public var id: String { rawValue }
-    public var color: Color { .blue }
+    public var color: Color {
+        switch self {
+        case .blue: return .blue
+        case .green: return .green
+        case .purple: return .purple
+        case .orange: return .orange
+        case .pink: return .pink
+        case .yellow: return .yellow
+        case .gray: return .gray
+        }
+    }
     public static func fromHex(_ hex: String?) -> ColorTag? { nil }
     public static func hex(for tag: ColorTag) -> String { "#000000" }
 }
