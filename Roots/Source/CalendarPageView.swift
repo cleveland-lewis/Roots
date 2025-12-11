@@ -1260,6 +1260,7 @@ private struct EventEditSheet: View {
     }
 }
 
+private struct DayDetailSidebar: View {
     let date: Date
     let events: [CalendarEvent]
     let onSelectEvent: (CalendarEvent) -> Void
