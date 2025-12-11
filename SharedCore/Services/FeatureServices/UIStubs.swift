@@ -147,9 +147,21 @@ struct CalendarDayView: View {
     var onSelectEvent: ((EKEvent) -> Void)?
     var body: some View { Text("Day: \(date.formatted())") }
 }
-struct CalendarWeekView: View { var body: some View { Text("Week") } }
-struct CalendarYearView: View { var body: some View { Text("Year") } }
-struct CalendarGrid: View { var body: some View { Text("Grid") } }
+struct CalendarWeekView: View {
+    let currentDate: Date
+    let events: [EKEvent]
+    var onSelectEvent: ((EKEvent) -> Void)?
+    var body: some View { Text("Week: \(currentDate.formatted())") }
+}
+struct CalendarYearView: View {
+    let currentYear: Date
+    var body: some View { Text("Year: \(currentYear.formatted())") }
+}
+struct CalendarGrid: View {
+    @Binding var currentMonth: Date
+    let events: [EKEvent]
+    var body: some View { Text("Grid for \(currentMonth.formatted())") }
+}
 struct CalendarHeader: View {
     @Binding var viewMode: CalendarViewMode
     @Binding var currentMonth: Date
