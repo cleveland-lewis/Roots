@@ -1,7 +1,5 @@
 import Foundation
 
-// Minimal Attachment model to satisfy AIScheduler and other references.
-// Keep fields minimal; expand if other compile errors request additional properties.
 public enum AttachmentTag: String, Codable {
     case syllabus, lecture, other
 }

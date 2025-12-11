@@ -45,13 +45,11 @@ extension View {
 
 // MARK: - Missing model + view shells
 
-// Lightweight attachment model used across scheduling and course flows.
-struct Attachment: Codable, Equatable, Hashable, Identifiable {
-    var id: UUID = UUID()
-    var name: String?
-    var localURL: URL?
-    var dateAdded: Date?
-}
+// Use the Attachment model from Models/Attachment.swift to avoid duplicate definitions.
+// Provide a module-local alias if the models are in a different module; here assume same target.
+// If the external model isn't visible, add a minimal alias to match expected shape.
+
+// UI stubs rely on the shared Attachment model in Models/Attachment.swift; no fallback needed.
 
 /// Simple list view for attachments to unblock builds.
 struct AttachmentListView: View {
@@ -105,6 +103,20 @@ struct FanOutMenuItem: Identifiable {
     let icon: String
     let title: String
     let action: () -> Void
+
+    // Backwards-compatible initializer using 'label' as many call sites expect.
+    init(icon: String, label: String, action: @escaping () -> Void) {
+        self.icon = icon
+        self.title = label
+        self.action = action
+    }
+
+    // Primary initializer using 'title'.
+    init(icon: String, title: String, action: @escaping () -> Void) {
+        self.icon = icon
+        self.title = title
+        self.action = action
+    }
 }
 
 struct RootsFanOutMenu: View {

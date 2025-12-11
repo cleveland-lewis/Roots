@@ -148,41 +148,44 @@ struct CalendarPageView: View {
                     }
 
                     // The grid content
-                    Group {
-                        switch currentViewMode {
-                        case .month:
-                            MonthCalendarView(
-                                focusedDate: $focusedDate,
-                                events: effectiveEvents,
-                                onSelectDate: { day in
-                                    focusedDate = day
-                                    selectedDate = day
-                                    calendarManager.selectedDate = day
-                                    selectedEvent = events(on: day).first
-                                    updateMetrics()
-                                },
-                                onSelectEvent: { event in
-                                    selectedEvent = event
-                                    focusedDate = event.startDate
-                                    selectedDate = event.startDate
-                                    calendarManager.selectedDate = event.startDate
-                                    updateMetrics()
-                                }
-                            )
-                        case .week:
-                            WeekCalendarView(focusedDate: $focusedDate, events: effectiveEvents)
-                        case .day:
-                            CalendarDayView(date: focusedDate, events: calendarManager.cachedMonthEvents)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        case .year:
-                            CalendarYearView(currentYear: focusedDate)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        }
-                    }
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    gridContent
+                        .padding()
+                        .background(.regularMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
+
+    private var gridContent: some View {
+        // Use AnyView to avoid complex generic inference inside switch in body
+        switch currentViewMode {
+        case .month:
+            return AnyView(
+                MonthCalendarView(
+                    focusedDate: $focusedDate,
+                    events: effectiveEvents,
+                    onSelectDate: { day in
+                        focusedDate = day
+                        selectedDate = day
+                        calendarManager.selectedDate = day
+                        selectedEvent = events(on: day).first
+                        updateMetrics()
+                    },
+                    onSelectEvent: { event in
+                        selectedEvent = event
+                        focusedDate = event.startDate
+                        selectedDate = event.startDate
+                        calendarManager.selectedDate = event.startDate
+                        updateMetrics()
+                    }
+                )
+            )
+        case .week:
+            return AnyView(WeekCalendarView(focusedDate: $focusedDate, events: effectiveEvents))
+        case .day:
+            return AnyView(CalendarDayView(date: focusedDate, events: calendarManager.cachedMonthEvents).frame(maxWidth: .infinity, maxHeight: .infinity))
+        case .year:
+            return AnyView(CalendarYearView(currentYear: focusedDate).frame(maxWidth: .infinity, maxHeight: .infinity))
+        }
+    }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
