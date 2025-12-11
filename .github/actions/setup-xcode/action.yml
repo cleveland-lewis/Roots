@@ -1,0 +1,21 @@
+name: Local Setup Xcode
+
+description: "Minimal local action to select/announce Xcode version. This does not install Xcode; runner must provide requested Xcode."
+
+inputs:
+  xcode-version:
+    description: 'Requested Xcode version (e.g., 14.3 or latest-stable)'
+    required: false
+    default: 'latest-stable'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Announce Xcode version
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "Requested Xcode version: '${{ inputs.xcode-version }}'"
+        echo "Listing available Xcode installs:"
+        ls /Applications || true
+        echo "Current xcode-select path:"; xcode-select -p || true

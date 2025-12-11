@@ -1,0 +1,21 @@
+name: Local Checkout
+
+description: "A minimal local checkout action that clones the repository using a token"
+
+inputs:
+  token:
+    description: 'GitHub token used to clone the repository'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Clone repository
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "Cloning repository into $GITHUB_WORKSPACE"
+        mkdir -p "$GITHUB_WORKSPACE"
+        # Remove any existing contents (safe on GitHub runner)
+        rm -rf "$GITHUB_WORKSPACE"/* || true
+        git clone --depth=1 "https://x-access-token:${{ inputs.token }}@github.com/${{ github.repository }}.git" "$GITHUB_WORKSPACE"

@@ -1,0 +1,55 @@
+name: Local Upload Artifact (release attachment)
+
+description: "Upload artifact by creating a temporary release and attaching the zipped artifact. Uses GITHUB_TOKEN."
+
+inputs:
+  name:
+    description: 'Artifact name'
+    required: true
+  path:
+    description: 'Files or glob to include in artifact (quoted, newline-separated supported)'
+    required: true
+  token:
+    description: 'GitHub token'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Package and upload
+      shell: bash
+      run: |
+        set -euo pipefail
+        ART_NAME="${{ inputs.name }}"
+        ART_PATH="${{ inputs.path }}"
+        TOKEN="${{ inputs.token }}"
+        echo "Packaging artifact '$ART_NAME' from paths: $ART_PATH"
+        TMP=/tmp/${ART_NAME}-${GITHUB_RUN_ID}
+        mkdir -p "$TMP"
+        # support newline-separated or space-separated paths
+        IFS=$'\n' read -r -d '' -a PATHS < <(printf "%s\0" "$ART_PATH") || true
+        # If ART_PATH is a single path, PATHS will contain that
+        for p in "${PATHS[@]}"; do
+          echo "Adding $p"
+          cp -R $p "$TMP/" || true
+        done
+        TAR="$TMP/$ART_NAME.tar.gz"
+        tar -czf "$TAR" -C "$TMP" .
+
+        # Create a prerelease to host artifact
+        API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
+        DATA=$(jq -n --arg tag "artifact-${GITHUB_RUN_ID}-${ART_NAME}" --arg name "artifact-${ART_NAME}-${GITHUB_RUN_ID}" '{tag_name: $tag, name: $name, prerelease: true}')
+        echo "Creating release"
+        RESP=$(curl -s -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/json" -d "$DATA" "$API_URL")
+        UPLOAD_URL=$(echo "$RESP" | python -c 'import sys, json; d=json.load(sys.stdin); print(d.get("upload_url",""))')
+        if [ -z "$UPLOAD_URL" ]; then
+          echo "Failed to create release. Response:" >&2
+          echo "$RESP" >&2
+          exit 1
+        fi
+        # upload_url has pattern https://uploads.github.com/repos/:owner/:repo/releases/:id/assets{?name,label}
+        UPLOAD_URL=${UPLOAD_URL/%\{?name,label\}/}
+        BASENAME=$(basename "$TAR")
+        echo "Uploading $TAR to $UPLOAD_URL?name=$BASENAME"
+        curl --fail -s -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/gzip" --data-binary "@$TAR" "$UPLOAD_URL?name=$BASENAME"
+        echo "Upload complete"
