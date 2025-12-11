@@ -43,8 +43,8 @@ struct RemindersSettingsView: View {
 
             if isAuthorized {
                 Section("School List") {
-                    Picker("School List", selection: $calendarManager.selectedReminderListID) {
-                        Text("Select a List").tag("")
+                    Picker("School List", selection: Binding(get: { calendarManager.selectedReminderListID.isEmpty ? nil : calendarManager.selectedReminderListID }, set: { calendarManager.selectedReminderListID = $0 ?? "" })) {
+                        Text("Select a List").tag(String?.none)
                         ForEach(calendarManager.availableReminderLists, id: \.calendarIdentifier) { list in
                             HStack {
                                 if let cgColor = list.cgColor, let nsColor = NSColor(cgColor: cgColor) {
@@ -54,7 +54,7 @@ struct RemindersSettingsView: View {
                                 }
                                 Text(list.title)
                             }
-                            .tag(list.calendarIdentifier)
+                            .tag(Optional(list.calendarIdentifier))
                         }
                     }
                     .pickerStyle(.menu)
