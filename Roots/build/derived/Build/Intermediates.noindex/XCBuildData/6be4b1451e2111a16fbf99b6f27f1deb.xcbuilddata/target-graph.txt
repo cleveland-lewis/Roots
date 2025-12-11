@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'Roots' in project 'Roots' (no dependencies)

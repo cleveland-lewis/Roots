@@ -1,3 +1,0 @@
-Command line invocation:
-    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project Roots/Roots.xcodeproj -list
-
