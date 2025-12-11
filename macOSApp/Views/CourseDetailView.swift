@@ -251,7 +251,7 @@ struct CourseDetailView: View {
     @ViewBuilder
     private func moduleDisclosure(for moduleNum: Int) -> some View {
         DisclosureGroup("Module \(moduleNum)") {
-            ForEach(groupedAttachments[moduleNum] ?? []) { file in
+            ForEach(groupedAttachments[moduleNum] ?? [], id: \.id) { file in
                 HStack(spacing: 10) {
                     Image(systemName: file.tag.icon)
                     VStack(alignment: .leading, spacing: 2) {
