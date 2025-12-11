@@ -3,7 +3,7 @@ import Combine
 
 @MainActor
 final class AppPreferences: ObservableObject {
-    let objectWillChange = ObservableObjectPublisher()
+    nonisolated let objectWillChange = ObservableObjectPublisher()
 
     // Interaction
     @AppStorage("preferences.enableHoverWiggle") var enableHoverWiggle: Bool = true

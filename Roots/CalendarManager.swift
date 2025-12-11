@@ -10,7 +10,7 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
     // Loadable conformance
     @Published var isLoading: Bool = false
     @Published var loadingMessage: String? = nil
-    let objectWillChange = ObservableObjectPublisher()
+    nonisolated let objectWillChange = ObservableObjectPublisher()
 
     static let shared = CalendarManager()
     let store = EKEventStore()

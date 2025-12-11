@@ -92,6 +92,18 @@ func suggestedSessionLength(_ bias: EffortBias) -> Int {
     }
 }
 
+struct PlannedSession: Identifiable, Hashable, Codable {
+    let id: UUID
+    var scheduledDate: Date
+    var durationMinutes: Int
+    
+    init(id: UUID = UUID(), scheduledDate: Date = Date(), durationMinutes: Int = 60) {
+        self.id = id
+        self.scheduledDate = scheduledDate
+        self.durationMinutes = durationMinutes
+    }
+}
+
 struct Assignment: Identifiable, Hashable, Codable {
     let id: UUID
     var courseId: UUID? = nil
@@ -106,9 +118,10 @@ struct Assignment: Identifiable, Hashable, Codable {
     var weightPercent: Double?
     var isLockedToDueDate: Bool
     var notes: String
+    var plan: [PlannedSession] = []
 
     // backward-compat convenience init for older data
-    init(id: UUID = UUID(), courseId: UUID? = nil, title: String = "", courseCode: String = "", courseName: String = "", category: AssignmentCategory = .homework, dueDate: Date = Date(), estimatedMinutes: Int = 60, status: AssignmentStatus = .notStarted, urgency: AssignmentUrgency = .medium, weightPercent: Double? = nil, isLockedToDueDate: Bool = false, notes: String = "") {
+    init(id: UUID = UUID(), courseId: UUID? = nil, title: String = "", courseCode: String = "", courseName: String = "", category: AssignmentCategory = .homework, dueDate: Date = Date(), estimatedMinutes: Int = 60, status: AssignmentStatus = .notStarted, urgency: AssignmentUrgency = .medium, weightPercent: Double? = nil, isLockedToDueDate: Bool = false, notes: String = "", plan: [PlannedSession] = []) {
         self.id = id
         self.courseId = courseId
         self.title = title
@@ -122,6 +135,7 @@ struct Assignment: Identifiable, Hashable, Codable {
         self.weightPercent = weightPercent
         self.isLockedToDueDate = isLockedToDueDate
         self.notes = notes
+        self.plan = plan
     }
 }
 
