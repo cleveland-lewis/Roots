@@ -187,6 +187,7 @@ struct DashboardView: View {
         RootsCard {
             HStack(alignment: .center, spacing: RootsSpacing.l) {
                 RootsAnalogClock(diameter: 180, showSecondHand: true)
+                    .padding(.leading, RootsSpacing.s)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 VStack(alignment: .leading, spacing: RootsSpacing.m) {
