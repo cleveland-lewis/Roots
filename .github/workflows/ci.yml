@@ -42,10 +42,10 @@ jobs:
           set -o pipefail
           LOG_FILE="$GITHUB_WORKSPACE/xcodebuild.log"
           JUNIT_FILE="$GITHUB_WORKSPACE/tests.xml"
-          if [ -f "Roots.xcworkspace" ]; then
-            xcodebuild -workspace "Roots.xcworkspace" -scheme "Roots" -destination "platform=macOS" clean test | tee "$LOG_FILE" | xcpretty -r junit --output "$JUNIT_FILE"
-          elif [ -f "Roots.xcodeproj" ]; then
-            xcodebuild -project "Roots.xcodeproj" -scheme "Roots" -destination "platform=macOS" clean test | tee "$LOG_FILE" | xcpretty -r junit --output "$JUNIT_FILE"
+          if [ -f "RootsApp.xcodeproj/project.xcworkspace" ]; then
+            xcodebuild -workspace "RootsApp.xcodeproj/project.xcworkspace" -scheme "Roots" -destination "platform=macOS" clean test | tee "$LOG_FILE" | xcpretty -r junit --output "$JUNIT_FILE"
+          elif [ -f "RootsApp.xcodeproj" ]; then
+            xcodebuild -project "RootsApp.xcodeproj" -scheme "Roots" -destination "platform=macOS" clean test | tee "$LOG_FILE" | xcpretty -r junit --output "$JUNIT_FILE"
           else
             echo "No Roots.xcworkspace or Roots.xcodeproj found in repo root" >&2
             ls -la
