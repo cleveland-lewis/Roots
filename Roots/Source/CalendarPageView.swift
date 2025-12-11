@@ -218,38 +218,6 @@ struct CalendarPageView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .padding(20)
-        .sheet(isPresented: $showingNewEventSheet) {
-            AddEventPopup().environmentObject(calendarManager)
-        }
-        .onAppear {
-            requestAccessAndSync()
-            calendarManager.refreshMonthlyCache(for: focusedDate)
-            updateMetrics()
-        }
-        .onChange(of: focusedDate) { _, newValue in
-            calendarManager.refreshMonthlyCache(for: focusedDate)
-            updateMetrics()
-        }
-        .onChange(of: currentViewMode) { _, _ in updateMetrics() }
-        .onReceive(calendarManager.$cachedMonthEvents) { _ in
-            updateMetrics()
-        }
-        // Present event detail without resizing layout
-        .sheet(item: $selectedEvent, onDismiss: {
-            // restore sidebar when the detail sheet is dismissed
-            withAnimation(.easeInOut(duration: 0.22)) { selectedDate = calendarManager.selectedDate ?? focusedDate }
-            selectedEvent = nil
-        }, content: { event in
-            // Add a subtle presentation animation inside the sheet
-            EventDetailView(item: event, isPresented: Binding(get: { selectedEvent != nil }, set: { if !$0 { selectedEvent = nil } }))
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-        })
-    }
 
     private func eventsFor(date: Date) -> [CalendarEvent] {
         let start = calendar.startOfDay(for: date)
