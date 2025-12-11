@@ -154,36 +154,36 @@ struct CalendarPageView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
 
+    @ViewBuilder
     private var gridContent: some View {
-        // Use AnyView to avoid complex generic inference inside switch in body
         switch currentViewMode {
         case .month:
-            return AnyView(
-                MonthCalendarView(
-                    focusedDate: $focusedDate,
-                    events: effectiveEvents,
-                    onSelectDate: { day in
-                        focusedDate = day
-                        selectedDate = day
-                        calendarManager.selectedDate = day
-                        selectedEvent = events(on: day).first
-                        updateMetrics()
-                    },
-                    onSelectEvent: { event in
-                        selectedEvent = event
-                        focusedDate = event.startDate
-                        selectedDate = event.startDate
-                        calendarManager.selectedDate = event.startDate
-                        updateMetrics()
-                    }
-                )
+            MonthCalendarView(
+                focusedDate: $focusedDate,
+                events: effectiveEvents,
+                onSelectDate: { day in
+                    focusedDate = day
+                    selectedDate = day
+                    calendarManager.selectedDate = day
+                    selectedEvent = events(on: day).first
+                    updateMetrics()
+                },
+                onSelectEvent: { event in
+                    selectedEvent = event
+                    focusedDate = event.startDate
+                    selectedDate = event.startDate
+                    calendarManager.selectedDate = event.startDate
+                    updateMetrics()
+                }
             )
         case .week:
-            return AnyView(WeekCalendarView(focusedDate: $focusedDate, events: effectiveEvents))
+            WeekCalendarView(focusedDate: $focusedDate, events: effectiveEvents)
         case .day:
-            return AnyView(CalendarDayView(date: focusedDate, events: calendarManager.cachedMonthEvents).frame(maxWidth: .infinity, maxHeight: .infinity))
+            CalendarDayView(date: focusedDate, events: calendarManager.cachedMonthEvents)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         case .year:
-            return AnyView(CalendarYearView(currentYear: focusedDate).frame(maxWidth: .infinity, maxHeight: .infinity))
+            CalendarYearView(currentYear: focusedDate)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
