@@ -1,0 +1,22 @@
+name: "Security – Dependency Review"
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          # If you want to be strict, you can also set:
+          # deny-licenses: AGPL-1.0, AGPL-3.0

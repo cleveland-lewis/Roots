@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Keep GitHub Actions (including CodeQL) up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Swift Package Manager dependencies (if you use Package.swift / Package.resolved)
+  - package-ecosystem: "swift"
+    directory: "/"
+    schedule:
+      interval: "weekly"
