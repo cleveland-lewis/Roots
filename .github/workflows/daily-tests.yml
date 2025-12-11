@@ -1,4 +1,6 @@
-name: Daily Test Suite
+name: Daily Tests
+permissions:
+  contents: read
 
 on:
   schedule:
