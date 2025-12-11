@@ -12,7 +12,7 @@ final class CalendarManager: ObservableObject, @MainActor LoadableViewModel {
     // Loadable conformance
     @Published var isLoading: Bool = false
     @Published var loadingMessage: String? = nil
-    let objectWillChange = ObservableObjectPublisher()
+    nonisolated let objectWillChange = ObservableObjectPublisher()
 
     static let shared = CalendarManager()
     let store = EKEventStore()
@@ -454,7 +454,9 @@ final class CalendarManager: ObservableObject, @MainActor LoadableViewModel {
     }
 
     func openCalendarPrivacySettings() {
+#if os(macOS)
         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Calendars")!)
+#endif
     }
 
     // MARK: - Caching

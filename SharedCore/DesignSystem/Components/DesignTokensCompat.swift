@@ -29,7 +29,13 @@ enum RootsColor {
     static var label: Color { .primary }
     static var secondaryLabel: Color { .secondary }
     static var cardBackground: Color { Color(nsColor: .controlBackgroundColor) }
-    static var inputBackground: Color { Color(nsColor: .textBackgroundColor) }
+    static var inputBackground: Color {
+#if os(macOS)
+        return Color(nsColor: .textBackgroundColor)
+#else
+        return Color(uiColor: .secondarySystemBackground)
+#endif
+    }
     static var subtleFill: Color { Color(nsColor: .controlBackgroundColor).opacity(0.4) }
     static var accent: Color { .accentColor }
     static var calendarDensityLow: Color { Color.green.opacity(0.8) }

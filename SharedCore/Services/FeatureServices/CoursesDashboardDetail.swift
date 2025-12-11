@@ -393,28 +393,7 @@ struct CoursesDashboardDetail: View {
             } else {
                 VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
                     ForEach(course.upcomingDeadlines.prefix(3)) { deadline in
-                        VStack(alignment: .leading, spacing: 3) {
-                            HStack {
-                                Text(deadline.title)
-                                    .font(DesignSystem.Typography.body)
-                                    .foregroundStyle(.primary)
-
-                                Spacer()
-
-                                Text(deadline.type.rawValue)
-                                    .font(DesignSystem.Typography.body)
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 2)
-                                    .background(deadlineTypeColor(deadline.type), in: Capsule())
-                            }
-
-                            Text(deadline.formattedDate)
-                                .font(DesignSystem.Typography.body)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(DesignSystem.Layout.spacing.small)
-                        .background(Color(nsColor: .textBackgroundColor).opacity(0.5), in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+                        deadlineRow(for: deadline)
                     }
                 }
             }
@@ -431,5 +410,42 @@ struct CoursesDashboardDetail: View {
         case .project: return .green
         case .quiz: return .orange
         }
+    }
+}
+
+private extension CoursesDashboardDetail {
+    func deadlineRow(for deadline: CourseDeadline) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack {
+                Text(deadline.title)
+                    .font(DesignSystem.Typography.body)
+                    .foregroundStyle(.primary)
+
+                Spacer()
+
+                Text(deadline.type.rawValue)
+                    .font(DesignSystem.Typography.body)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(deadlineTypeColor(deadline.type), in: Capsule())
+            }
+
+            Text(deadline.formattedDate)
+                .font(DesignSystem.Typography.body)
+                .foregroundStyle(.secondary)
+        }
+        .padding(DesignSystem.Layout.spacing.small)
+        .background(deadlineBackgroundColor, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+    }
+
+    var deadlineBackgroundColor: Color {
+    #if os(macOS)
+        return Color(nsColor: .textBackgroundColor).opacity(0.5)
+    #elseif canImport(UIKit)
+        return Color(uiColor: .secondarySystemBackground).opacity(0.5)
+    #else
+        return Color.gray.opacity(0.2)
+    #endif
     }
 }

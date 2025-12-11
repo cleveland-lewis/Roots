@@ -81,8 +81,10 @@ struct SettingsPane_Interface: View {
             Divider().padding(.vertical)
 
             HStack(spacing: 20) {
+                #if os(macOS)
                 tabEditor
                 Divider()
+                #endif
                 quickActionsEditor
             }
             .padding(.top)

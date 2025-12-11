@@ -30,8 +30,8 @@ ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeD
 
 ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
 
-Build description signature: 20f8ee860c263c7207c41a14dcbdb9d3
-Build description path: /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/XCBuildData/20f8ee860c263c7207c41a14dcbdb9d3.xcbuilddata
+Build description signature: 2d3bd1e9448a876a019ff48a539267bb
+Build description path: /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/XCBuildData/2d3bd1e9448a876a019ff48a539267bb.xcbuilddata
 ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-3885c01c3e6b6a337905948deab2002e90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache
     cd /Users/clevelandlewis/Desktop/Roots/RootsApp.xcodeproj
     /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-3885c01c3e6b6a337905948deab2002e90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache
@@ -44,13 +44,13 @@ SwiftDriver Roots normal arm64 com.apple.xcode.tools.swift.compiler (in target '
     cd /Users/clevelandlewis/Desktop/Roots
     builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Roots -Onone -enforce-exclusivity\=checked @/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots.SwiftFileList -DDEBUG -DDISABLE_PREVIEWS -DDISABLE_SWIFTDATA -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -target arm64-apple-ios26.1-simulator -g -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-3885c01c3e6b6a337905948deab2002e90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache -output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots.swiftmodule -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots_const_extract_protocols.json -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-Swift.h -working-directory /Users/clevelandlewis/Desktop/Roots -experimental-emit-module-separately -disable-cmo
 
-SwiftCompile normal arm64 Compiling\ RootsButtons.swift,\ RootsDesignSystem.swift,\ RootsGlassStyle.swift,\ RootsHeaderButton.swift,\ RootsIconButtonCompat.swift,\ RootsMotionModifiers.swift,\ SidebarStyling.swift,\ Insight.swift,\ InsightEngine.swift,\ InsightsViewModel.swift,\ RootsInsightsEngine.swift,\ UsageStatsBuilder.swift,\ AIScheduler.swift,\ SchedulerAdaptationManager.swift,\ SchedulerFeedback.swift,\ SchedulerLearner.swift,\ SchedulerPreferences.swift,\ AppPage.swift,\ Attachment.swift,\ CourseModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsButtons.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsDesignSystem.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsGlassStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsHeaderButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsIconButtonCompat.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsMotionModifiers.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/SidebarStyling.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/Insight.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/InsightEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/InsightsViewModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/RootsInsightsEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/UsageStatsBuilder.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/AIScheduler.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerAdaptationManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerFeedback.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerLearner.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerPreferences.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/AppPage.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/Attachment.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/CourseModels.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ GlassIconButton.swift,\ RootsButtons.swift,\ RootsGlassStyle.swift,\ RootsHeaderButton.swift,\ RootsMotionModifiers.swift,\ SidebarStyling.swift,\ DayDetailSidebar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassIconButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsButtons.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsGlassStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsHeaderButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsMotionModifiers.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/SidebarStyling.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift (in target 'Roots' from project 'RootsApp')
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsButtons.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassIconButton.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsDesignSystem.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsButtons.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
@@ -62,10 +62,6 @@ SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignS
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsIconButtonCompat.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
 SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsMotionModifiers.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
@@ -74,172 +70,214 @@ SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignS
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/Insight.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/InsightEngine.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ AutoScheduler.swift,\ BounceOnTap.swift,\ CalendarManager.swift,\ Color+Hex.swift,\ CoursesDashboardDetail.swift,\ CoursesDashboardFloatingNav.swift,\ CoursesDashboardSidebar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AutoScheduler.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/BounceOnTap.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/Color+Hex.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardDetail.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardFloatingNav.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardSidebar.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AutoScheduler.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/InsightsViewModel.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/BounceOnTap.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/RootsInsightsEngine.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/UsageStatsBuilder.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/Color+Hex.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/AIScheduler.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardDetail.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerAdaptationManager.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardFloatingNav.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerFeedback.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardSidebar.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerLearner.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ RootsChartContainer.swift,\ TimerBarChart.swift,\ TimerView.swift,\ TimerModels.swift,\ AnalyticsService.swift,\ AppDebugger.swift,\ AttachmentManager.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/RootsChartContainer.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/TimerBarChart.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerView.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/TimerModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/Analytics/AnalyticsService.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AppDebugger.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AttachmentManager.swift (in target 'Roots' from project 'RootsApp')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/RootsChartContainer.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerPreferences.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/TimerBarChart.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/AppPage.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerView.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/Attachment.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/TimerModels.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/CourseModels.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/Analytics/AnalyticsService.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 Compiling\ CoursesDashboardModels.swift,\ Item.swift,\ AppCommands.swift,\ RootsApp.swift,\ RootsSettingsWindow.swift,\ RootsWindowLayout.swift,\ RootsWindowSizing.swift,\ SettingsToolbarIdentifiers.swift,\ SettingsWindowController.swift,\ SidebarView.swift,\ AssignmentsPageView.swift,\ AssignmentsView.swift,\ ContentView.swift,\ CoursesDashboardRootView.swift,\ CoursesPageView.swift,\ CoursesSettingsView.swift,\ CoursesView.swift,\ DashboardView.swift,\ GradesPageView.swift,\ GradesView.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/CoursesDashboardModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/Item.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/App/AppCommands.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/App/RootsApp.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsSettingsWindow.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsWindowLayout.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsWindowSizing.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SettingsToolbarIdentifiers.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SettingsWindowController.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SidebarView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/AssignmentsPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/AssignmentsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/ContentView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesDashboardRootView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/DashboardView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/GradesPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/GradesView.swift (in target 'Roots' from project 'RootsApp')
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/CoursesDashboardModels.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AppDebugger.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/Item.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AttachmentManager.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/App/AppCommands.swift (in target 'Roots' from project 'RootsApp')
+SwiftEmitModule normal arm64 Emitting\ module\ for\ Roots (in target 'Roots' from project 'RootsApp')
+
+EmitSwiftModule normal arm64 (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/App/RootsApp.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ TimerManager.swift,\ UIStubs.swift,\ AppModel.swift,\ AppPreferences.swift,\ AppSettingsModel.swift,\ PlatformStubs.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift (in target 'Roots' from project 'RootsApp')
+Failed frontend command:
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -c -filelist /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/sources-1 -primary-file /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift -primary-file /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift -primary-file /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift -primary-file /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift -primary-file /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift -primary-file /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift -supplementary-output-file-map /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/supplementaryOutputs-8 -emit-localized-strings -emit-localized-strings-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64 -target arm64-apple-ios26.1-simulator -module-can-import-version Charts 4.1.4 0 -module-can-import-version DeveloperToolsSupport 23.0.4 23.0.4 -module-can-import-version SwiftUI 7.1.13.1 7.1.13 -module-can-import-version UIKit 9126.1.12.1 9126.1.12 -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-dependencies-1.json -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -D DISABLE_PREVIEWS -D DISABLE_SWIFTDATA -serialize-debugging-options -const-gather-protocols-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots_const_extract_protocols.json -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -default-isolation\=MainActor -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/clevelandlewis/Desktop/Roots -enable-anonymous-context-mangled-names -file-compilation-dir /Users/clevelandlewis/Desktop/Roots -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-3885c01c3e6b6a337905948deab2002e90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name Roots -frontend-parseable-output -disable-clang-spi -target-sdk-version 26.1 -target-sdk-name iphonesimulator26.1 -clang-target arm64-apple-ios26.1-simulator -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/TimerManager.o -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/UIStubs.o -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/AppModel.o -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/AppPreferences.o -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/AppSettingsModel.o -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/PlatformStubs.o -index-unit-output-path /RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/TimerManager.o -index-unit-output-path /RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/UIStubs.o -index-unit-output-path /RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/AppModel.o -index-unit-output-path /RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/AppPreferences.o -index-unit-output-path /RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/AppSettingsModel.o -index-unit-output-path /RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/PlatformStubs.o -index-store-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Index.noindex/DataStore -index-system-modules
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift (in target 'Roots' from project 'RootsApp')
+    cd /Users/clevelandlewis/Desktop/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift:19:17: warning: reference to captured var 'self' in concurrently-executing code; this is an error in the Swift 6 language mode
+                self?.tick()
+                ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsSettingsWindow.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsWindowLayout.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsWindowSizing.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift (in target 'Roots' from project 'RootsApp')
+    cd /Users/clevelandlewis/Desktop/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift:483:32: error: type 'RootTab' has no member 'decks'
+            if !tabs.contains(.decks) { tabs.append(.decks) }
+                              ~^~~~~
+/Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift:483:54: error: type 'RootTab' has no member 'decks'
+            if !tabs.contains(.decks) { tabs.append(.decks) }
+                                                    ~^~~~~
+/Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift:485:37: error: type 'RootTab' has no member 'decks'
+            tabs.removeAll { $0 == .decks }
+                                   ~^~~~~
+/Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift:494:37: error: type 'RootTab' has no member 'decks'
+                if !order.contains(.decks) { order.append(.decks) }
+                                   ~^~~~~
+/Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift:494:60: error: type 'RootTab' has no member 'decks'
+                if !order.contains(.decks) { order.append(.decks) }
+                                                          ~^~~~~
+/Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift:496:42: error: type 'RootTab' has no member 'decks'
+                order.removeAll { $0 == .decks }
+                                        ~^~~~~
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SettingsToolbarIdentifiers.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ PerformanceMonitor.swift,\ PlannerEngine.swift,\ PlannerService+Generation.swift,\ SemesterPicker.swift,\ SensoryFeedback.swift,\ SettingsPane_Accounts.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PerformanceMonitor.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerService+Generation.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SemesterPicker.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SensoryFeedback.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Accounts.swift (in target 'Roots' from project 'RootsApp')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PerformanceMonitor.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SettingsWindowController.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift (in target 'Roots' from project 'RootsApp')
+    cd /Users/clevelandlewis/Desktop/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:252:21: warning: variable 'slotsForDay' was never mutated; consider changing to 'let' constant
+                var slotsForDay = slots(for: day)
+                ~~~ ^
+                let
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerService+Generation.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SidebarView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SemesterPicker.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/AssignmentsPageView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SensoryFeedback.swift (in target 'Roots' from project 'RootsApp')
+    cd /Users/clevelandlewis/Desktop/Roots
+    
+/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SensoryFeedback.swift:23:14: warning: 'onChange(of:perform:)' was deprecated in iOS 17.0: Use `onChange` with a two or zero parameter action closure instead.
+            .onChange(of: trigger) { newValue in
+             ^
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Accounts.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/AssignmentsView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ DateDaySelector.swift,\ DeveloperIntegrationExamples.swift,\ DeveloperSettings.swift,\ FlashcardManager.swift,\ GradeCalculator.swift,\ HapticsManager.swift,\ NotificationManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DateDaySelector.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperIntegrationExamples.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperSettings.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/FlashcardManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/GradeCalculator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/HapticsManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/NotificationManager.swift (in target 'Roots' from project 'RootsApp')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DateDaySelector.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/ContentView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperIntegrationExamples.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesDashboardRootView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperSettings.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesPageView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/FlashcardManager.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesSettingsView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/GradeCalculator.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/HapticsManager.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/DashboardView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/NotificationManager.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/GradesPageView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ SettingsPane_Appearance.swift,\ SettingsPane_Flashcards.swift,\ SettingsPane_General.swift,\ SettingsPane_Interface.swift,\ SettingsPane_Interface+QuickActions.swift,\ SyllabusParser.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Appearance.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Flashcards.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_General.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface+QuickActions.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SyllabusParser.swift (in target 'Roots' from project 'RootsApp')
+
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Appearance.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/GradesView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Flashcards.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 Compiling\ AnyButtonStyle.swift,\ AppCard.swift,\ CardGrid.swift,\ DesignCard.swift,\ DesignPage.swift,\ DesignShell.swift,\ DesignSystem.swift,\ DesignSystem+Motion.swift,\ DesignTokensCompat.swift,\ FloatingTabBar.swift,\ Glass.swift,\ GlassBlueProminentButtonStyle.swift,\ GlassButtons.swift,\ GlassButtonStyle.swift,\ GlassCircleButton.swift,\ GlassIconButton.swift,\ GlassPopupContainer.swift,\ GlassProminentButtonStyle.swift,\ QuickAction.swift,\ QuickActionFanOut.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/AnyButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/AppCard.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/CardGrid.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignCard.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignPage.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignShell.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignSystem.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignSystem+Motion.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignTokensCompat.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/FloatingTabBar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/Glass.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassBlueProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassButtons.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassCircleButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassIconButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassPopupContainer.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickAction.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickActionFanOut.swift (in target 'Roots' from project 'RootsApp')
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/AnyButtonStyle.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_General.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/AppCard.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/CardGrid.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface+QuickActions.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignCard.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SyllabusParser.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignPage.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignShell.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignSystem.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignSystem+Motion.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
+SwiftCompile normal arm64 Compiling\ DesignTokensCompat.swift,\ FloatingTabBar.swift,\ Glass.swift,\ GlassBlueProminentButtonStyle.swift,\ GlassButtons.swift,\ GlassButtonStyle.swift,\ GlassCircleButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignTokensCompat.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/FloatingTabBar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/Glass.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassBlueProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassButtons.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassCircleButton.swift (in target 'Roots' from project 'RootsApp')
 
 SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignTokensCompat.swift (in target 'Roots' from project 'RootsApp')
     cd /Users/clevelandlewis/Desktop/Roots
@@ -269,656 +307,23 @@ SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignS
     cd /Users/clevelandlewis/Desktop/Roots
     
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassIconButton.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
+SwiftDriverJobDiscovery normal arm64 Compiling PerformanceMonitor.swift, PlannerEngine.swift, PlannerService+Generation.swift, SemesterPicker.swift, SensoryFeedback.swift, SettingsPane_Accounts.swift (in target 'Roots' from project 'RootsApp')
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassPopupContainer.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
+SwiftDriverJobDiscovery normal arm64 Compiling SettingsPane_Appearance.swift, SettingsPane_Flashcards.swift, SettingsPane_General.swift, SettingsPane_Interface.swift, SettingsPane_Interface+QuickActions.swift, SyllabusParser.swift (in target 'Roots' from project 'RootsApp')
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassProminentButtonStyle.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
+SwiftCompile normal arm64 Compiling\ QuickActionFanOut.swift,\ RootsDesignSystem.swift,\ RootsIconButtonCompat.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickActionFanOut.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsDesignSystem.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsIconButtonCompat.swift (in target 'Roots' from project 'RootsApp')
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickAction.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
+SwiftCompile normal arm64 Compiling\ EnergyChart.swift,\ RootsAnalogClock.swift,\ CoursesStore.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/EnergyChart.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Clock/RootsAnalogClock.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/CoursesStore.swift (in target 'Roots' from project 'RootsApp')
 
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickActionFanOut.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
+SwiftDriverJobDiscovery normal arm64 Compiling DateDaySelector.swift, DeveloperIntegrationExamples.swift, DeveloperSettings.swift, FlashcardManager.swift, GradeCalculator.swift, HapticsManager.swift, NotificationManager.swift (in target 'Roots' from project 'RootsApp')
 
-SwiftCompile normal arm64 Compiling\ AssignmentRow.swift,\ AssignmentsView2.swift,\ CalendarDayCell.swift,\ CalendarPageView.swift,\ CalendarSettingsView.swift,\ ChartViewVerticalStacked.swift,\ CourseDetailView.swift,\ CourseEditView.swift,\ CurrentActivityView.swift,\ DeveloperSettingsView.swift,\ GeneralSettingsView.swift,\ InterfaceSettingsView.swift,\ LoadableViewModel.swift,\ PermissionHelpPopup.swift,\ ProfilesSettingsView.swift,\ RecentlyDeletedSemestersView.swift,\ RemindersSettingsView.swift,\ RootDesignPreviewPage.swift,\ SemesterEditView.swift,\ SemestersSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AssignmentRow.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AssignmentsView2.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarDayCell.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ChartViewVerticalStacked.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseDetailView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseEditView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CurrentActivityView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/DeveloperSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/GeneralSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/InterfaceSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/LoadableViewModel.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/PermissionHelpPopup.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ProfilesSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RecentlyDeletedSemestersView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RemindersSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RootDesignPreviewPage.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemesterEditView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemestersSettingsView.swift (in target 'Roots' from project 'RootsApp')
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AssignmentRow.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AssignmentsView2.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarDayCell.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarPageView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ChartViewVerticalStacked.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseDetailView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseEditView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CurrentActivityView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/DeveloperSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/GeneralSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/InterfaceSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/LoadableViewModel.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/PermissionHelpPopup.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ProfilesSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RecentlyDeletedSemestersView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RemindersSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RootDesignPreviewPage.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemesterEditView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemestersSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftEmitModule normal arm64 Emitting\ module\ for\ Roots (in target 'Roots' from project 'RootsApp')
-Failed frontend command:
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -emit-module -experimental-skip-non-inlinable-function-bodies-without-types /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/AnyButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/AppCard.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/CardGrid.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignCard.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignPage.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignShell.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignSystem.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignSystem+Motion.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignTokensCompat.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/FloatingTabBar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/Glass.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassBlueProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassButtons.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassCircleButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassIconButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassPopupContainer.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/GlassProminentButtonStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickAction.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/QuickActionFanOut.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsButtons.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsDesignSystem.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsGlassStyle.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsHeaderButton.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsIconButtonCompat.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/RootsMotionModifiers.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/SidebarStyling.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/Insight.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/InsightEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/InsightsViewModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/RootsInsightsEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Insights/UsageStatsBuilder.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/AIScheduler.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerAdaptationManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerFeedback.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerLearner.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Features/Scheduler/SchedulerPreferences.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/AppPage.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/Attachment.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/CourseModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/CoursesDashboardModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/Item.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/App/AppCommands.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/App/RootsApp.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsSettingsWindow.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsWindowLayout.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/RootsWindowSizing.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SettingsToolbarIdentifiers.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SettingsWindowController.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/PlatformAdapters/SidebarView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/AssignmentsPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/AssignmentsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/ContentView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesDashboardRootView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/CoursesView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/DashboardView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/GradesPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/GradesView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/RootTab.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsRootView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/TimerPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/CalendarStatsRow.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/EnergyChart.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/RootsChartContainer.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/TimerBarChart.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Clock/RootsAnalogClock.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ActivityEditorView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ActivityListView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddAssignmentView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddCourseSheet.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddEditCourseView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddExamPopup.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddSemesterSheet.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AssignmentRow.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AssignmentsView2.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarDayCell.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ChartViewVerticalStacked.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseDetailView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseEditView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CurrentActivityView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/DeveloperSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/GeneralSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/InterfaceSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/LoadableViewModel.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/PermissionHelpPopup.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ProfilesSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RecentlyDeletedSemestersView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RemindersSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RootDesignPreviewPage.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemesterEditView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemestersSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SettingsPane_Interface+Tabs.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerControlsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerGraphsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerHeaderView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerView.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/TimerModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/Analytics/AnalyticsService.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AppDebugger.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AttachmentManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AutoScheduler.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/BounceOnTap.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/Color+Hex.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardDetail.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardFloatingNav.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardSidebar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DateDaySelector.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperIntegrationExamples.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperSettings.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/FlashcardManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/GradeCalculator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/HapticsManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/NotificationManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PerformanceMonitor.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerService+Generation.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SemesterPicker.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SensoryFeedback.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Accounts.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Appearance.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Flashcards.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_General.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface+QuickActions.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SyllabusParser.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AssignmentsStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/CoursesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/EventsCountStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/GradesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/HistoryStoreImpl.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerCoordinator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/SchedulerPreferencesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/SettingsCoordinator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/StudyAnalyticsAggregator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/TimerPageViewModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/UsageStats.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/DataManagerAlias.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/Diagnostics.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/PopupTextAlignment.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/SwiftConcurrency.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/UILogger.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources/GeneratedAssetSymbols.swift -target arm64-apple-ios26.1-simulator -module-can-import-version Charts 4.1.4 0 -module-can-import-version DeveloperToolsSupport 23.0.4 23.0.4 -module-can-import-version SwiftUI 7.1.13.1 7.1.13 -module-can-import-version UIKit 9126.1.12.1 9126.1.12 -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libFoundationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#FoundationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libObservationMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#ObservationMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libPreviewsMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#PreviewsMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftMacros -load-resolved-plugin /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/lib/swift/host/plugins/libSwiftUIMacros.dylib\#/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/swift-plugin-server\#SwiftUIMacros -disable-implicit-swift-modules -Xcc -fno-implicit-modules -Xcc -fno-implicit-module-maps -explicit-swift-module-map-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-dependencies-1.json -Xllvm -aarch64-use-tbi -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.1.sdk -I /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator -F /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator -no-color-diagnostics -Xcc -fno-color-diagnostics -enable-testing -g -debug-info-format\=dwarf -dwarf-version\=5 -module-cache-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -profile-generate -profile-coverage-mapping -swift-version 5 -enforce-exclusivity\=checked -Onone -D DEBUG -D DISABLE_PREVIEWS -D DISABLE_SWIFTDATA -serialize-debugging-options -const-gather-protocols-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots_const_extract_protocols.json -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -default-isolation\=MainActor -empty-abi-descriptor -validate-clang-modules-once -clang-build-session-file /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -working-directory -Xcc /Users/clevelandlewis/Desktop/Roots -enable-anonymous-context-mangled-names -file-compilation-dir /Users/clevelandlewis/Desktop/Roots -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -Xcc -ivfsstatcache -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.1-23B77-3885c01c3e6b6a337905948deab2002e90cf18a4295e390e64c810bc6bd7acbc.sdkstatcache -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-generated-files.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-own-target-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-all-target-headers.hmap -Xcc -iquote -Xcc /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Roots-project-headers.hmap -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Products/Debug-iphonesimulator/include -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources-normal/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources/arm64 -Xcc -I/Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources -Xcc -DDEBUG\=1 -no-auto-bridging-header-chaining -module-name Roots -frontend-parseable-output -disable-clang-spi -target-sdk-version 26.1 -target-sdk-name iphonesimulator26.1 -clang-target arm64-apple-ios26.1-simulator -in-process-plugin-server-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/libSwiftInProcPluginServer.dylib -emit-module-doc-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots.swiftdoc -emit-module-source-info-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots.swiftsourceinfo -emit-objc-header-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-Swift.h -serialize-diagnostics-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-primary-emit-module.dia -emit-dependencies-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots-primary-emit-module.d -o /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots.swiftmodule -emit-abi-descriptor-path /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/Objects-normal/arm64/Roots.abi.json
-
-EmitSwiftModule normal arm64 (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift:5:18: error: cannot find type 'CalendarEvent' in scope
-    var events: [CalendarEvent]
-                 ^~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift:6:25: error: cannot find type 'CalendarEvent' in scope
-    var onSelectEvent: (CalendarEvent) -> Void = { _ in }
-                        ^~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift:88:39: error: cannot find type 'CalendarEvent' in scope
-    private func timeRange(for event: CalendarEvent) -> String {
-                                      ^~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift:97:31: error: cannot find type 'CalendarEvent' in scope
-    static var sampleEvents: [CalendarEvent] = [
-                              ^~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift:85:13: error: overriding declaration requires an 'override' keyword
-    private init() {
-            ^
-            override 
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:138:12: note: overridden declaration is here
-open class LoadableViewModel: ObservableObject {}
-           ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift:129:5: error: nonisolated deinitializer 'deinit' has different actor isolation from main actor-isolated overridden declaration
-    deinit {
-    ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:138:12: note: overridden declaration is here
-open class LoadableViewModel: ObservableObject {}
-           ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift:11:48: error: superclass 'LoadableViewModel' must appear first in the inheritance clause
-final class CalendarManager: ObservableObject, @MainActor LoadableViewModel {
-                                             ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                             LoadableViewModel,  
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift:11:30: error: redundant conformance of 'CalendarManager' to protocol 'ObservableObject'
-final class CalendarManager: ObservableObject, @MainActor LoadableViewModel {
-                             ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift:11:13: note: 'CalendarManager' inherits conformance to protocol 'ObservableObject' from superclass here
-final class CalendarManager: ObservableObject, @MainActor LoadableViewModel {
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:33:21: error: cannot find type 'AssignmentUrgency' in scope
-    let importance: AssignmentUrgency
-                    ^~~~~~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:34:21: error: cannot find type 'AssignmentUrgency' in scope
-    let difficulty: AssignmentUrgency
-                    ^~~~~~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:25:8: error: type 'PlannerSession' does not conform to protocol 'Hashable'
-struct PlannerSession: Identifiable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:33:9: note: stored property type '<<error type>>' does not conform to protocol 'Hashable', preventing synthesized conformance of 'PlannerSession' to 'Hashable'
-    let importance: AssignmentUrgency
-        ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:34:9: note: stored property type '<<error type>>' does not conform to protocol 'Hashable', preventing synthesized conformance of 'PlannerSession' to 'Hashable'
-    let difficulty: AssignmentUrgency
-        ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:25:8: error: type 'PlannerSession' does not conform to protocol 'Equatable'
-struct PlannerSession: Identifiable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:33:9: note: stored property type '<<error type>>' does not conform to protocol 'Equatable', preventing synthesized conformance of 'PlannerSession' to 'Equatable'
-    let importance: AssignmentUrgency
-        ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:34:9: note: stored property type '<<error type>>' does not conform to protocol 'Equatable', preventing synthesized conformance of 'PlannerSession' to 'Equatable'
-    let difficulty: AssignmentUrgency
-        ^
-Swift.==:1:24: note: candidate would match if 'PlannerSession' conformed to 'RawRepresentable'
-@inlinable public func == <T>(lhs: T, rhs: T) -> Bool where T : RawRepresentable, T.RawValue : Equatable
-                       ^
-Swift.FloatingPoint.==:2:20: note: candidate would match if 'PlannerSession' conformed to 'FloatingPoint'
-public static func == (lhs: Self, rhs: Self) -> Bool}
-                   ^
-Swift.BinaryInteger.==:2:20: note: candidate would match if 'PlannerSession' conformed to 'BinaryInteger'
-public static func == <Other>(lhs: Self, rhs: Other) -> Bool where Other : BinaryInteger}
-                   ^
-Swift._Pointer.==:2:20: note: candidate would match if 'PlannerSession' conformed to '_Pointer'
-public static func == (lhs: Self, rhs: Self) -> Bool}
-                   ^
-Swift._Pointer.==:2:31: note: candidate would match if 'PlannerSession' conformed to '_Pointer'
-@inlinable public static func == <Other>(lhs: Self, rhs: Other) -> Bool where Other : _Pointer}
-                              ^
-Swift.Strideable.==:2:31: note: candidate would match if 'PlannerSession' conformed to 'Strideable'
-@inlinable public static func == (x: Self, y: Self) -> Bool}
-                              ^
-Swift.StringProtocol.==:2:31: note: candidate would match if 'PlannerSession' conformed to 'StringProtocol'
-@inlinable public static func == <RHS>(lhs: Self, rhs: RHS) -> Bool where RHS : StringProtocol}
-                              ^
-Swift.SIMD.==:2:20: note: candidate would match if 'PlannerSession' conformed to 'SIMD'
-public static func == (a: Self, b: Self) -> Bool}
-                   ^
-Foundation.AttributedStringProtocol.==:2:20: note: candidate would match if 'PlannerSession' conformed to 'AttributedStringProtocol'
-public static func == <RHS>(lhs: Self, rhs: RHS) -> Bool where RHS : AttributedStringProtocol}
-                   ^
-Foundation._BridgedStoredNSError.==:2:20: note: candidate would match if 'PlannerSession' conformed to '_BridgedStoredNSError'
-public static func == (lhs: Self, rhs: Self) -> Bool}
-                   ^
-CoreFoundation._CFObject.==:2:20: note: candidate would match if 'PlannerSession' conformed to '_CFObject'
-public static func == (left: Self, right: Self) -> Bool}
-                   ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift:25:8: note: add stubs for conformance
-struct PlannerSession: Identifiable, Hashable {
-       ^
-Swift.Equatable.==:2:13: note: protocol requires function '==' with type '(PlannerSession, PlannerSession) -> Bool'
-static func == (lhs: Self, rhs: Self) -> Bool}
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:4:8: error: invalid redeclaration of 'StoredScheduledSession'
-struct StoredScheduledSession: Identifiable, Codable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:130:15: note: 'StoredScheduledSession' previously declared here
-public struct StoredScheduledSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:130:15: note: 'StoredScheduledSession' previously declared here
-public struct StoredScheduledSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:16:8: error: invalid redeclaration of 'StoredOverflowSession'
-struct StoredOverflowSession: Identifiable, Codable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:134:15: note: 'StoredOverflowSession' previously declared here
-public struct StoredOverflowSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:134:15: note: 'StoredOverflowSession' previously declared here
-public struct StoredOverflowSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:31:45: error: 'StoredScheduledSession' is ambiguous for type lookup in this context
-    @Published private(set) var scheduled: [StoredScheduledSession] = []
-                                            ^~~~~~~~~~~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:4:8: note: found this candidate
-struct StoredScheduledSession: Identifiable, Codable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:130:15: note: found this candidate
-public struct StoredScheduledSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:32:44: error: 'StoredOverflowSession' is ambiguous for type lookup in this context
-    @Published private(set) var overflow: [StoredOverflowSession] = []
-                                           ^~~~~~~~~~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:16:8: note: found this candidate
-struct StoredOverflowSession: Identifiable, Codable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:134:15: note: found this candidate
-public struct StoredOverflowSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:103:25: error: 'StoredScheduledSession' is ambiguous for type lookup in this context
-        var scheduled: [StoredScheduledSession]
-                        ^~~~~~~~~~~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:4:8: note: found this candidate
-struct StoredScheduledSession: Identifiable, Codable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:130:15: note: found this candidate
-public struct StoredScheduledSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:104:24: error: 'StoredOverflowSession' is ambiguous for type lookup in this context
-        var overflow: [StoredOverflowSession]
-                       ^~~~~~~~~~~~~~~~~~~~~
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:16:8: note: found this candidate
-struct StoredOverflowSession: Identifiable, Codable, Hashable {
-       ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:134:15: note: found this candidate
-public struct StoredOverflowSession: Codable, Hashable {
-              ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:102:20: error: type 'PlannerStore.Persisted' does not conform to protocol 'Decodable'
-    private struct Persisted: Codable {
-                   ^
-Swift.Decodable.init:2:1: note: protocol requires initializer 'init(from:)' with type 'Decodable'
-init(from decoder: any Decoder) throws}
-^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:103:13: note: cannot automatically synthesize 'Decodable' because '[StoredScheduledSession]' does not conform to 'Decodable'
-        var scheduled: [StoredScheduledSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:104:13: note: cannot automatically synthesize 'Decodable' because '[StoredOverflowSession]' does not conform to 'Decodable'
-        var overflow: [StoredOverflowSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:102:20: error: type 'PlannerStore.Persisted' does not conform to protocol 'Decodable'
-    private struct Persisted: Codable {
-                   ^
-Swift.Decodable.init:2:1: note: protocol requires initializer 'init(from:)' with type 'Decodable'
-init(from decoder: any Decoder) throws}
-^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:103:13: note: cannot automatically synthesize 'Decodable' because '[StoredScheduledSession]' does not conform to 'Decodable'
-        var scheduled: [StoredScheduledSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:104:13: note: cannot automatically synthesize 'Decodable' because '[StoredOverflowSession]' does not conform to 'Decodable'
-        var overflow: [StoredOverflowSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:102:20: error: type 'PlannerStore.Persisted' does not conform to protocol 'Encodable'
-    private struct Persisted: Codable {
-                   ^
-Swift.Encodable.encode:2:6: note: protocol requires function 'encode(to:)' with type 'Encodable'
-func encode(to encoder: any Encoder) throws}
-     ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:103:13: note: cannot automatically synthesize 'Encodable' because '[StoredScheduledSession]' does not conform to 'Encodable'
-        var scheduled: [StoredScheduledSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:104:13: note: cannot automatically synthesize 'Encodable' because '[StoredOverflowSession]' does not conform to 'Encodable'
-        var overflow: [StoredOverflowSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:102:20: error: type 'PlannerStore.Persisted' does not conform to protocol 'Encodable'
-    private struct Persisted: Codable {
-                   ^
-Swift.Encodable.encode:2:6: note: protocol requires function 'encode(to:)' with type 'Encodable'
-func encode(to encoder: any Encoder) throws}
-     ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:103:13: note: cannot automatically synthesize 'Encodable' because '[StoredScheduledSession]' does not conform to 'Encodable'
-        var scheduled: [StoredScheduledSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift:104:13: note: cannot automatically synthesize 'Encodable' because '[StoredOverflowSession]' does not conform to 'Encodable'
-        var overflow: [StoredOverflowSession]
-            ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:138:12: error: type 'LoadableViewModel' does not conform to protocol 'ObservableObject'
-open class LoadableViewModel: ObservableObject {}
-           ^
-/Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift:138:12: note: add stubs for conformance
-open class LoadableViewModel: ObservableObject {}
-           ^
-Combine.ObservableObject.objectWillChange:2:5: note: protocol requires property 'objectWillChange' with type 'Self.ObjectWillChangePublisher'
-var objectWillChange: Self.ObjectWillChangePublisher { get }}
-    ^
-
-SwiftCompile normal arm64 Compiling\ SettingsPane_Interface+Tabs.swift,\ TimerControlsView.swift,\ TimerGraphsView.swift,\ TimerHeaderView.swift,\ TimerView.swift,\ TimerModels.swift,\ AnalyticsService.swift,\ AppDebugger.swift,\ AttachmentManager.swift,\ AutoScheduler.swift,\ BounceOnTap.swift,\ CalendarManager.swift,\ Color+Hex.swift,\ CoursesDashboardDetail.swift,\ CoursesDashboardFloatingNav.swift,\ CoursesDashboardSidebar.swift,\ DateDaySelector.swift,\ DeveloperIntegrationExamples.swift,\ DeveloperSettings.swift,\ FlashcardManager.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SettingsPane_Interface+Tabs.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerControlsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerGraphsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerHeaderView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerView.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/TimerModels.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/Analytics/AnalyticsService.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AppDebugger.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AttachmentManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AutoScheduler.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/BounceOnTap.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/Color+Hex.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardDetail.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardFloatingNav.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardSidebar.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DateDaySelector.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperIntegrationExamples.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperSettings.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/FlashcardManager.swift (in target 'Roots' from project 'RootsApp')
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SettingsPane_Interface+Tabs.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerControlsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerGraphsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerHeaderView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Models/TimerModels.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/Analytics/AnalyticsService.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AppDebugger.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AttachmentManager.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/AutoScheduler.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/BounceOnTap.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CalendarManager.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/Color+Hex.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardDetail.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardFloatingNav.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/CoursesDashboardSidebar.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DateDaySelector.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperIntegrationExamples.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/DeveloperSettings.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/FlashcardManager.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 Compiling\ AssignmentsStore.swift,\ CoursesStore.swift,\ EventsCountStore.swift,\ GradesStore.swift,\ HistoryStoreImpl.swift,\ PlannerCoordinator.swift,\ PlannerStore.swift,\ SchedulerPreferencesStore.swift,\ SettingsCoordinator.swift,\ StudyAnalyticsAggregator.swift,\ TimerPageViewModel.swift,\ UsageStats.swift,\ DataManagerAlias.swift,\ Diagnostics.swift,\ PopupTextAlignment.swift,\ SwiftConcurrency.swift,\ UILogger.swift,\ PlatformStubs.swift,\ GeneratedAssetSymbols.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AssignmentsStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/CoursesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/EventsCountStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/GradesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/HistoryStoreImpl.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerCoordinator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/SchedulerPreferencesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/SettingsCoordinator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/StudyAnalyticsAggregator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/TimerPageViewModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/UsageStats.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/DataManagerAlias.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/Diagnostics.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/PopupTextAlignment.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/SwiftConcurrency.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/UILogger.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Roots' from project 'RootsApp')
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AssignmentsStore.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/CoursesStore.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/EventsCountStore.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/GradesStore.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/HistoryStoreImpl.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerCoordinator.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/SchedulerPreferencesStore.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/SettingsCoordinator.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/StudyAnalyticsAggregator.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/TimerPageViewModel.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/UsageStats.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/DataManagerAlias.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/Diagnostics.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/PopupTextAlignment.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/SwiftConcurrency.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Utilities/UILogger.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Library/Developer/Xcode/DerivedData/RootsApp-avfkhljcwvdejheriduznimnpdhd/Build/Intermediates.noindex/RootsApp.build/Debug-iphonesimulator/Roots.build/DerivedSources/GeneratedAssetSymbols.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 Compiling\ GradeCalculator.swift,\ HapticsManager.swift,\ NotificationManager.swift,\ PerformanceMonitor.swift,\ PlannerEngine.swift,\ PlannerService+Generation.swift,\ SemesterPicker.swift,\ SensoryFeedback.swift,\ SettingsPane_Accounts.swift,\ SettingsPane_Appearance.swift,\ SettingsPane_Flashcards.swift,\ SettingsPane_General.swift,\ SettingsPane_Interface.swift,\ SettingsPane_Interface+QuickActions.swift,\ SyllabusParser.swift,\ TimerManager.swift,\ UIStubs.swift,\ AppModel.swift,\ AppPreferences.swift,\ AppSettingsModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/GradeCalculator.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/HapticsManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/NotificationManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PerformanceMonitor.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerService+Generation.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SemesterPicker.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SensoryFeedback.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Accounts.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Appearance.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Flashcards.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_General.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface+QuickActions.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SyllabusParser.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift (in target 'Roots' from project 'RootsApp')
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/GradeCalculator.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/HapticsManager.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/NotificationManager.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PerformanceMonitor.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerEngine.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/PlannerService+Generation.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SemesterPicker.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SensoryFeedback.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Accounts.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Appearance.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Flashcards.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_General.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface+QuickActions.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SyllabusParser.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 Compiling\ PlannerPageView.swift,\ PlannerSettingsView.swift,\ PlannerView.swift,\ RootTab.swift,\ SettingsRootView.swift,\ SettingsView.swift,\ TimerPageView.swift,\ CalendarStatsRow.swift,\ DayDetailSidebar.swift,\ EnergyChart.swift,\ RootsChartContainer.swift,\ TimerBarChart.swift,\ RootsAnalogClock.swift,\ ActivityEditorView.swift,\ ActivityListView.swift,\ AddAssignmentView.swift,\ AddCourseSheet.swift,\ AddEditCourseView.swift,\ AddExamPopup.swift,\ AddSemesterSheet.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerSettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/RootTab.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsRootView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/TimerPageView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/CalendarStatsRow.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/EnergyChart.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/RootsChartContainer.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/TimerBarChart.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Clock/RootsAnalogClock.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ActivityEditorView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ActivityListView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddAssignmentView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddCourseSheet.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddEditCourseView.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddExamPopup.swift /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddSemesterSheet.swift (in target 'Roots' from project 'RootsApp')
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerPageView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerSettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/PlannerView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/RootTab.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsRootView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/TimerPageView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/CalendarStatsRow.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/EnergyChart.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/RootsChartContainer.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Charts/TimerBarChart.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Clock/RootsAnalogClock.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ActivityEditorView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ActivityListView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddAssignmentView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddCourseSheet.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddEditCourseView.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddExamPopup.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/macOSApp/Views/AddSemesterSheet.swift (in target 'Roots' from project 'RootsApp')
-    cd /Users/clevelandlewis/Desktop/Roots
-    
-
-SwiftDriverJobDiscovery normal arm64 Compiling AssignmentRow.swift, AssignmentsView2.swift, CalendarDayCell.swift, CalendarPageView.swift, CalendarSettingsView.swift, ChartViewVerticalStacked.swift, CourseDetailView.swift, CourseEditView.swift, CurrentActivityView.swift, DeveloperSettingsView.swift, GeneralSettingsView.swift, InterfaceSettingsView.swift, LoadableViewModel.swift, PermissionHelpPopup.swift, ProfilesSettingsView.swift, RecentlyDeletedSemestersView.swift, RemindersSettingsView.swift, RootDesignPreviewPage.swift, SemesterEditView.swift, SemestersSettingsView.swift (in target 'Roots' from project 'RootsApp')
+SwiftCompile normal arm64 Compiling\ GradesStore.swift,\ PlannerStore.swift,\ TimerPageViewModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/GradesStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/PlannerStore.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/TimerPageViewModel.swift (in target 'Roots' from project 'RootsApp')
 
 ** BUILD FAILED **
 
 
 The following build commands failed:
-	SwiftEmitModule normal arm64 Emitting\ module\ for\ Roots (in target 'Roots' from project 'RootsApp')
-	EmitSwiftModule normal arm64 (in target 'Roots' from project 'RootsApp')
+	SwiftCompile normal arm64 Compiling\ TimerManager.swift,\ UIStubs.swift,\ AppModel.swift,\ AppPreferences.swift,\ AppSettingsModel.swift,\ PlatformStubs.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/TimerManager.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/UIStubs.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppPreferences.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift /Users/clevelandlewis/Desktop/Roots/SharedCore/PlatformStubs.swift (in target 'Roots' from project 'RootsApp')
+	SwiftCompile normal arm64 /Users/clevelandlewis/Desktop/Roots/SharedCore/State/AppSettingsModel.swift (in target 'Roots' from project 'RootsApp')
 	Building project RootsApp with scheme Roots and configuration Debug
 (3 failures)

@@ -88,7 +88,7 @@ enum PlannerEngine {
                 let mins = (i < sessionCount) ? perSession : max(15, totalMinutes - perSession * (sessionCount - 1))
                 makeSession(title: "\(assignment.title) – Study Session \(i)/\(sessionCount)", index: i, count: sessionCount, minutes: mins)
             }
-        case .practiceHomework:
+        case .practiceHomework, .homework:
             if totalMinutes <= settings.homeworkSingleSessionThreshold {
                 makeSession(title: assignment.title, index: 1, count: 1, minutes: totalMinutes)
             } else {
@@ -156,7 +156,7 @@ enum PlannerEngine {
             case .exam: return 1.0
             case .project: return 0.9
             case .quiz: return 0.8
-            case .practiceHomework: return 0.7
+            case .practiceHomework, .homework: return 0.7
             case .reading: return 0.6
             case .review: return 0.65
             }
@@ -219,7 +219,7 @@ enum PlannerEngine {
                     return calendar.date(byAdding: .day, value: -settings.examStartDaysBeforeDue, to: end) ?? end
                 case .quiz:
                     return calendar.date(byAdding: .day, value: -settings.quizStartDaysBeforeDue, to: end) ?? end
-                case .practiceHomework:
+                case .practiceHomework, .homework:
                     let delta = session.importance == .high ? -3 : (session.importance == .medium ? -2 : -1)
                     return calendar.date(byAdding: .day, value: delta, to: end) ?? end
                 case .reading:

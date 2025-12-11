@@ -1,4 +1,3 @@
-#if os(macOS)
 //
 //  RootsApp.swift
 //  Roots
@@ -57,7 +56,6 @@ struct RootsApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(AssignmentsStore.shared)
-                
                 .environmentObject(coursesStore)
                 .environmentObject(appSettings)
                 .environmentObject(appModel)
@@ -116,6 +114,7 @@ struct RootsApp: App {
                     timerManager.checkNotificationPermissions()
                 }
         }
+#if os(macOS)
         Settings {
             SettingsRootView(selection: $settingsCoordinator.selectedSection)
                 .environmentObject(AssignmentsStore.shared)
@@ -131,14 +130,15 @@ struct RootsApp: App {
                 .environmentObject(gradesStore)
                 .environmentObject(plannerStore)
         }
-        .onChange(of: scenePhase) { _, newPhase in
-            handleScenePhaseChange(newPhase)
-        }
         .commands {
             AppCommands()
             SettingsCommands(showSettings: {
                 settingsCoordinator.show()
             })
+        }
+#endif
+        .onChange(of: scenePhase) { _, newPhase in
+            handleScenePhaseChange(newPhase)
         }
 #if !DISABLE_SWIFTDATA
         .modelContainer(sharedModelContainer)
@@ -157,4 +157,3 @@ struct RootsApp: App {
         }
     }
 }
-#endif

@@ -100,12 +100,50 @@ public class SettingsWindowController {
 // Additional lightweight stubs for shared types referenced by iOS target when macOS sources are excluded
 
 public enum RootTab: String, CaseIterable, Identifiable {
-    case dashboard, planner, courses, grades, timer
+    case dashboard, calendar, planner, assignments, courses, grades, timer, decks
     public var id: String { rawValue }
+
+    public var title: String {
+        switch self {
+        case .dashboard: return "Dashboard"
+        case .calendar: return "Calendar"
+        case .planner: return "Planner"
+        case .assignments: return "Assignments"
+        case .courses: return "Courses"
+        case .grades: return "Grades"
+        case .timer: return "Timer"
+        case .decks: return "Decks"
+        }
+    }
+
+    public var systemImage: String {
+        switch self {
+        case .dashboard: return "square.grid.2x2"
+        case .calendar: return "calendar"
+        case .planner: return "pencil.and.list.clipboard"
+        case .assignments: return "slider.horizontal.3"
+        case .courses: return "book.closed"
+        case .grades: return "number.circle"
+        case .timer: return "timer"
+        case .decks: return "rectangle.stack"
+        }
+    }
+
+    public var logKey: String { title.lowercased().replacingOccurrences(of: " ", with: "") }
 }
 
 public enum AssignmentCategory: String, CaseIterable, Codable {
-    case reading, exam, homework, other
+    case reading, exam, homework, practiceHomework, quiz, review, project
+}
+
+public enum AssignmentUrgency: String, Codable, CaseIterable, Hashable {
+    case low, medium, high, critical
+}
+
+public struct PlanStep: Codable, Hashable {
+    public var title: String
+    public var expectedMinutes: Int
+    public init(title: String = "", expectedMinutes: Int = 0) { self.title = title; self.expectedMinutes = expectedMinutes }
 }
 
 public struct Assignment: Identifiable, Codable, Hashable {
@@ -113,9 +151,25 @@ public struct Assignment: Identifiable, Codable, Hashable {
     public var courseId: UUID?
     public var title: String
     public var dueDate: Date
-    public var estimatedMinutes: Int?
+    public var estimatedMinutes: Int
     public var weightPercent: Double?
-    public var category: AssignmentCategory?
+    public var category: AssignmentCategory
+    public var urgency: AssignmentUrgency
+    public var isLockedToDueDate: Bool
+    public var plan: [PlanStep]
+
+    public init(id: UUID = UUID(), courseId: UUID? = nil, title: String = "", dueDate: Date = Date(), estimatedMinutes: Int = 60, weightPercent: Double? = nil, category: AssignmentCategory = .practiceHomework, urgency: AssignmentUrgency = .medium, isLockedToDueDate: Bool = false, plan: [PlanStep] = []) {
+        self.id = id
+        self.courseId = courseId
+        self.title = title
+        self.dueDate = dueDate
+        self.estimatedMinutes = estimatedMinutes
+        self.weightPercent = weightPercent
+        self.category = category
+        self.urgency = urgency
+        self.isLockedToDueDate = isLockedToDueDate
+        self.plan = plan
+    }
 }
 
 public enum CalendarViewMode: String, Codable {
@@ -127,14 +181,44 @@ public struct GradeCourseSummary: Hashable {
     public var title: String
 }
 
-public struct StoredScheduledSession: Codable, Hashable {
-    public var id: UUID = UUID()
+public struct CalendarEvent: Identifiable, Hashable {
+    public let id: UUID
+    public var title: String
+    public var startDate: Date
+    public var endDate: Date
+    public var location: String?
+    public init(id: UUID = UUID(), title: String = "", startDate: Date = Date(), endDate: Date = Date(), location: String? = nil) {
+        self.id = id
+        self.title = title
+        self.startDate = startDate
+        self.endDate = endDate
+        self.location = location
+    }
 }
 
-public struct StoredOverflowSession: Codable, Hashable {
-    public var id: UUID = UUID()
+// StoredScheduledSession and StoredOverflowSession are defined in SharedCore/State/PlannerStore.swift; avoid duplicating them here.
+
+// Provide LoadableViewModel protocol similar to macOS implementation
+@MainActor
+public protocol LoadableViewModel: AnyObject, ObservableObject {
+    var isLoading: Bool { get set }
+    var loadingMessage: String? { get set }
 }
 
-open class LoadableViewModel: ObservableObject {}
+public extension LoadableViewModel {
+    func withLoading<T>(message: String? = nil, work: @escaping () async throws -> T) async rethrows -> T {
+        await MainActor.run {
+            self.isLoading = true
+            self.loadingMessage = message
+        }
+        defer {
+            Task { @MainActor in
+                self.isLoading = false
+                self.loadingMessage = nil
+            }
+        }
+        return try await work()
+    }
+}
 
 #endif
