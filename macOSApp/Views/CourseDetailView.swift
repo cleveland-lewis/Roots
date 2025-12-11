@@ -205,22 +205,7 @@ struct CourseDetailView: View {
                 } else {
                     let moduleNums = groupedAttachments.keys.sorted()
                     ForEach(moduleNums, id: \.self) { moduleNum in
-                        DisclosureGroup("Module \(moduleNum)") {
-                            ForEach(groupedAttachments[moduleNum] ?? []) { file in
-                                HStack(spacing: 10) {
-                                    Image(systemName: file.tag.icon)
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(file.name)
-                                        Text(file.taskType.rawValue)
-                                            .font(DesignSystem.Typography.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    Spacer()
-                                }
-                                .padding(.vertical, 4)
-                            }
-                        }
-                        .padding(.vertical, 4)
+                        moduleDisclosure(for: moduleNum)
                     }
                 }
             }
@@ -261,5 +246,25 @@ struct CourseDetailView: View {
             return (module, attachment)
         }
         return Dictionary(grouping: withModule, by: { $0.0 }).mapValues { $0.map { $0.1 } }
+    }
+
+    @ViewBuilder
+    private func moduleDisclosure(for moduleNum: Int) -> some View {
+        DisclosureGroup("Module \(moduleNum)") {
+            ForEach(groupedAttachments[moduleNum] ?? []) { file in
+                HStack(spacing: 10) {
+                    Image(systemName: file.tag.icon)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(file.name)
+                        Text(file.taskType.rawValue)
+                            .font(DesignSystem.Typography.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                }
+                .padding(.vertical, 4)
+            }
+        }
+        .padding(.vertical, 4)
     }
 }
