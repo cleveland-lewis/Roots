@@ -15,10 +15,15 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout
-        uses: ./.github/actions/checkout
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Cloning repository into $GITHUB_WORKSPACE"
+          rm -rf "$GITHUB_WORKSPACE"/* || true
+          git clone --depth=1 "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "$GITHUB_WORKSPACE"
+          echo "Repository cloned."
 
       - name: Select Xcode
         uses: ./.github/actions/setup-xcode
