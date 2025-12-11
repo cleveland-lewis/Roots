@@ -40,7 +40,7 @@ struct TimerBarChart: View {
     var body: some View {
         #if canImport(Charts)
         Chart {
-            ForEach(data) { point in
+            ForEach(data, id: \.id) { point in
                 DottedBarStack(point: point, minutesPerDot: minutesPerDot)
                 if point.isCurrent {
                     CurrentPointMark(point: point, minutesPerDot: minutesPerDot)
@@ -70,7 +70,8 @@ private struct DottedBarStack: View {
     let minutesPerDot: Double
 
     var body: some View {
-        ForEach(0..<max(1, Int(ceil(point.minutes / minutesPerDot))), id: \.self) { idx in
+        let count = max(1, Int(ceil(point.minutes / minutesPerDot)))
+        ForEach(0..<count, id: \.self) { idx in
             PointMark(
                 x: .value("Time", point.date),
                 y: .value("Minutes", Double(idx) * minutesPerDot)
@@ -88,9 +89,10 @@ private struct CurrentPointMark: View {
     var body: some View {
         PointMark(
             x: .value("Time", point.date),
-            y: .value("Minutes", max(point.minutes, minutesPerDot))
+            y: .value("Minutes", Double(max(point.minutes, minutesPerDot)))
         )
-        .symbol(Circle().strokeBorder(lineWidth: 0).background(Circle().fill(Color.yellow)))
+        .symbol(.circle)
+        .foregroundStyle(Color.yellow)
         .symbolSize(120)
     }
 }
