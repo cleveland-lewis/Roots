@@ -59,6 +59,7 @@ struct GradesPageView: View {
     @State private var whatIfSlider: Double = 90
     @State private var showAddGradeSheet: Bool = false
     @State private var gradeAnalyticsWindowOpen: Bool = false
+    @State private var courseDeletedCancellable: AnyCancellable? = nil
 
     private let cardCorner: CGFloat = 24
 
