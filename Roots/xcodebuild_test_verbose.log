@@ -1,3 +1,0 @@
-Command line invocation:
-    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project Roots.xcodeproj -scheme Roots -destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.0" -verbose
-

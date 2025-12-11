@@ -30,9 +30,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1AD7D4362EDD328800D403F3 /* Roots */ = {
+		1AD7D4362EDD328800D403F3 /* Source */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Roots;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		1AD7D4462EDD328A00D403F3 /* RootsTests */ = {
@@ -43,21 +43,6 @@
 		1AD7D4502EDD328A00D403F3 /* RootsUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RootsUITests;
-			sourceTree = "<group>";
-		};
-		B4B5C47B2138428D94908342 /* Components */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Components;
-			sourceTree = "<group>";
-		};
-		E82353EC92E14584932CE723 /* Behavioral */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Behavioral;
-			sourceTree = "<group>";
-		};
-		FFB08EA75856444E8E4C0274 /* DesignSystem */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = DesignSystem;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -90,10 +75,7 @@
 		1AD7D42B2EDD328800D403F3 = {
 			isa = PBXGroup;
 			children = (
-				1AD7D4362EDD328800D403F3 /* Roots */,
-				E82353EC92E14584932CE723 /* Behavioral */,
-				B4B5C47B2138428D94908342 /* Components */,
-				FFB08EA75856444E8E4C0274 /* DesignSystem */,
+				1AD7D4362EDD328800D403F3 /* Source */,
 				1AD7D4462EDD328A00D403F3 /* RootsTests */,
 				1AD7D4502EDD328A00D403F3 /* RootsUITests */,
 				1AD7D4352EDD328800D403F3 /* Products */,
@@ -126,7 +108,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				1AD7D4362EDD328800D403F3 /* Roots */,
+				1AD7D4362EDD328800D403F3 /* Source */,
 			);
 			name = Roots;
 			packageProductDependencies = (

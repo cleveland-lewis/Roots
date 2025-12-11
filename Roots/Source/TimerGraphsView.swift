@@ -123,7 +123,6 @@ struct TimerDataPoint: Identifiable {
 import Charts
 
 // Local dotted bar chart to avoid missing target membership issues.
-struct TimerBarChart: View {
     let data: [TimerDataPoint]
     var minutesPerDot: Double = 5
     var xLabelFormatter: (Date) -> String = { date in

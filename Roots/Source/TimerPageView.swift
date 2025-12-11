@@ -919,7 +919,6 @@ private struct FocusSessionView: View {
 
 import SwiftUI
 
-struct RootsAnalogClock: View {
     var diameter: CGFloat = 200
     var showSecondHand: Bool = true
 

@@ -1,6 +1,0 @@
-Command line invocation:
-    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project Roots.xcodeproj -scheme Roots -configuration Debug -sdk macosx build
-
-Build settings from command line:
-    SDKROOT = macosx26.1
-
