@@ -41,23 +41,9 @@ struct TimerBarChart: View {
         #if canImport(Charts)
         Chart {
             ForEach(data) { point in
-                let dotCount = max(1, Int(ceil(point.minutes / minutesPerDot)))
-                ForEach(0..<dotCount, id: \.self) { idx in
-                    PointMark(
-                        x: .value("Time", point.date),
-                        y: .value("Minutes", Double(idx) * minutesPerDot)
-                    )
-                    .symbolSize(28)
-                    .foregroundStyle(point.isCurrent ? Color.yellow : Color.secondary.opacity(0.55))
-                }
-
+                DottedBarStack(point: point, minutesPerDot: minutesPerDot)
                 if point.isCurrent {
-                    PointMark(
-                        x: .value("Time", point.date),
-                        y: .value("Minutes", max(point.minutes, minutesPerDot))
-                    )
-                    .symbol(Circle().strokeBorder(lineWidth: 0).background(Circle().fill(Color.yellow)))
-                    .symbolSize(120)
+                    CurrentPointMark(point: point, minutesPerDot: minutesPerDot)
                 }
             }
         }
