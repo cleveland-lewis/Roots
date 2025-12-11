@@ -251,12 +251,14 @@ struct CourseDetailView: View {
     @ViewBuilder
     private func moduleDisclosure(for moduleNum: Int) -> some View {
         DisclosureGroup("Module \(moduleNum)") {
-            ForEach(groupedAttachments[moduleNum] ?? [], id: \.id) { file in
+            let attachments = groupedAttachments[moduleNum] ?? []
+            ForEach(attachments.indices, id: \.self) { index in
+                let file = attachments[index]
                 HStack(spacing: 10) {
-                    Image(systemName: file.tag.icon)
+                    Image(systemName: file.tag?.icon ?? "paperclip")
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(file.name)
-                        Text(file.taskType.rawValue)
+                        Text(file.name ?? "Untitled")
+                        Text(file.tag?.rawValue.capitalized ?? "Attachment")
                             .font(DesignSystem.Typography.caption)
                             .foregroundStyle(.secondary)
                     }

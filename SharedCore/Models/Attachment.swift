@@ -4,6 +4,16 @@ public enum AttachmentTag: String, Codable {
     case syllabus, lecture, other
 }
 
+public extension AttachmentTag {
+    var icon: String {
+        switch self {
+        case .syllabus: return "doc.text"
+        case .lecture: return "book"
+        case .other: return "paperclip"
+        }
+    }
+}
+
 public struct Attachment: Codable, Equatable, Hashable, Identifiable {
     public let id: UUID
     public let name: String?

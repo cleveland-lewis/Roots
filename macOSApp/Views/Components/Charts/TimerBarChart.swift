@@ -40,16 +40,40 @@ struct TimerBarChart: View {
     var body: some View {
         #if canImport(Charts)
         Chart {
-            ForEach(data, id: \.id) { point in
-                DottedBarStack(point: point, minutesPerDot: minutesPerDot)
+            ForEach(data) { point in
+                let dotCount = max(1, Int(ceil(point.minutes / minutesPerDot)))
+                ForEach(0..<dotCount, id: \.self) { idx in
+                    PointMark(
+                        x: .value("Time", point.date),
+                        y: .value("Minutes", Double(idx) * minutesPerDot)
+                    )
+                    .symbolSize(28)
+                    .foregroundStyle(point.isCurrent ? Color.yellow : Color.secondary.opacity(0.55))
+                }
+
                 if point.isCurrent {
-                    CurrentPointMark(point: point, minutesPerDot: minutesPerDot)
+                    PointMark(
+                        x: .value("Time", point.date),
+                        y: .value("Minutes", max(point.minutes, minutesPerDot))
+                    )
+                    .symbol(.circle)
+                    .foregroundStyle(Color.yellow)
+                    .symbolSize(120)
                 }
             }
         }
         .chartYAxis(.hidden)
         .chartXAxis {
-            AxisMarks(values: data.map(\.date)) { _ in AxisTick() }
+            AxisMarks(values: data.map(\.date)) { value in
+                if let date = value.as(Date.self) {
+                    AxisValueLabel {
+                        Text(xLabelFormatter(date))
+                            .font(DesignSystem.Typography.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    AxisTick()
+                }
+            }
         }
         .chartYScale(domain: 0...(max(yMax * 1.1, minutesPerDot * 3)))
         .chartPlotStyle { plot in
@@ -63,37 +87,3 @@ struct TimerBarChart: View {
         #endif
     }
 }
-
-#if canImport(Charts)
-private struct DottedBarStack: View {
-    let point: TimerDataPoint
-    let minutesPerDot: Double
-
-    var body: some View {
-        let count = max(1, Int(ceil(point.minutes / minutesPerDot)))
-        ForEach(0..<count, id: \.self) { idx in
-            PointMark(
-                x: .value("Time", point.date),
-                y: .value("Minutes", Double(idx) * minutesPerDot)
-            )
-            .symbolSize(28)
-            .foregroundStyle(point.isCurrent ? Color.yellow : Color.secondary.opacity(0.55))
-        }
-    }
-}
-
-private struct CurrentPointMark: View {
-    let point: TimerDataPoint
-    let minutesPerDot: Double
-
-    var body: some View {
-        PointMark(
-            x: .value("Time", point.date),
-            y: .value("Minutes", Double(max(point.minutes, minutesPerDot)))
-        )
-        .symbol(.circle)
-        .foregroundStyle(Color.yellow)
-        .symbolSize(120)
-    }
-}
-#endif
