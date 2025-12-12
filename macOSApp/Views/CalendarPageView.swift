@@ -1443,34 +1443,37 @@ struct CalendarView: View {
             startKeyboardMonitoring()
         }
         .overlay(alignment: .topTrailing) {
-            VStack(alignment: .trailing, spacing: 6) {
-                HStack(spacing: 8) {
-                    Text(DeviceCalendarManager.shared.isAuthorized ? "Authorized" : "Unauthorized")
-                        .font(.caption2)
-                        .foregroundColor(.white)
-                        .padding(6)
-                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.45)))
+            if AppSettingsModel.shared.devModeEnabled {
+                VStack(alignment: .trailing, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Text(DeviceCalendarManager.shared.isAuthorized ? "Authorized" : "Unauthorized")
+                            .font(.caption2)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.45)))
 
-                    Text("Events: \(DeviceCalendarManager.shared.events.count)")
+                        Text("Events: \(DeviceCalendarManager.shared.events.count)")
+                            .font(.caption2)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.45)))
+                    }
+
+                    Text("Last refresh: \(DeviceCalendarManager.shared.lastRefreshAt.map { Self.debugDateFormatter.string(from: $0) } ?? "never")")
+                        .font(.caption2)
+                        .foregroundColor(.white.opacity(0.85))
+                        .padding(6)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.35)))
+
+                    Text(DeviceCalendarManager.shared.isObservingStoreChanges ? "Observer: registered" : "Observer: not registered")
                         .font(.caption2)
                         .foregroundColor(.white)
                         .padding(6)
-                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.45)))
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.35)))
                 }
-                Text("Last refresh: \(Date(), formatter: Self.debugDateFormatter)")
-                    .font(.caption2)
-                    .foregroundColor(.white.opacity(0.85))
-                    .padding(6)
-                    .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.35)))
-
-                Text(DeviceCalendarManager.shared.startObservingStoreChanges as Any != nil ? "Observer: registered" : "Observer: not registered")
-                    .font(.caption2)
-                    .foregroundColor(.white)
-                    .padding(6)
-                    .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.35)))
+                .padding(8)
+                .opacity(0.8)
             }
-            .padding(8)
-            .opacity(0.8)
         }
         .onDisappear {
             stopKeyboardMonitoring()

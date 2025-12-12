@@ -11,6 +11,10 @@ final class DeviceCalendarManager: ObservableObject {
     @Published private(set) var isAuthorized: Bool = false
     @Published private(set) var events: [EKEvent] = []
 
+    @Published private(set) var lastRefreshAt: Date? = nil
+    @Published private(set) var isObservingStoreChanges: Bool = false
+    @Published private(set) var lastRefreshReason: String? = nil
+
     private var storeChangedObserver: Any?
 
     private init() {}
@@ -21,7 +25,22 @@ final class DeviceCalendarManager: ObservableObject {
         guard granted else { return }
 
         startObservingStoreChanges()
-        await refreshEventsForVisibleRange()
+        await refreshEventsForVisibleRange(reason: "launch")
+    }
+
+    func refreshEventsForVisibleRange(reason: String = "rangeRefresh") async {
+        let cal = Calendar.current
+        let start = cal.date(byAdding: .day, value: -30, to: .now)!
+        let end   = cal.date(byAdding: .day, value:  90, to: .now)!
+
+        let predicate = store.predicateForEvents(withStart: start, end: end, calendars: nil)
+        let fetched = store.events(matching: predicate)
+
+        await MainActor.run {
+            self.events = fetched
+            self.lastRefreshAt = Date()
+            self.lastRefreshReason = reason
+        }
     }
 
     func requestFullAccessIfNeeded() async -> Bool {
@@ -67,7 +86,9 @@ final class DeviceCalendarManager: ObservableObject {
 
         storeChangedObserver = NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: store, queue: .main) { [weak self] _ in
             guard let self = self else { return }
-            Task { await self.refreshEventsForVisibleRange() }
+            Task { await self.refreshEventsForVisibleRange(reason: "storeChanged") }
         }
+
+        isObservingStoreChanges = true
     }
 }
