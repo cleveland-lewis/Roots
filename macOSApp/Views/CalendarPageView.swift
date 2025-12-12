@@ -52,16 +52,22 @@ public struct CalendarEvent: Identifiable, Hashable {
     var endDate: Date
     var location: String?
     var notes: String?
+    var url: URL?
+    var alarms: [EKAlarm]?
+    var travelTime: TimeInterval?
     var ekIdentifier: String?
     var isReminder: Bool = false
 
-    init(id: UUID = UUID(), title: String, startDate: Date, endDate: Date, location: String? = nil, notes: String? = nil, ekIdentifier: String? = nil, isReminder: Bool = false) {
+    init(id: UUID = UUID(), title: String, startDate: Date, endDate: Date, location: String? = nil, notes: String? = nil, url: URL? = nil, alarms: [EKAlarm]? = nil, travelTime: TimeInterval? = nil, ekIdentifier: String? = nil, isReminder: Bool = false) {
         self.id = id
         self.title = title
         self.startDate = startDate
         self.endDate = endDate
         self.location = location
         self.notes = notes
+        self.url = url
+        self.alarms = alarms
+        self.travelTime = travelTime
         self.ekIdentifier = ekIdentifier
         self.isReminder = isReminder
     }
@@ -350,7 +356,7 @@ struct CalendarPageView: View {
         let predicate = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: targetCalendars)
         let ekEvents = eventStore.events(matching: predicate)
         let mapped = ekEvents.map { ek in
-            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, ekIdentifier: ek.eventIdentifier, isReminder: false)
+            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: ek.travelTime, ekIdentifier: ek.eventIdentifier, isReminder: false)
         }
         syncedEvents = mapped
         updateMetrics()
@@ -370,7 +376,7 @@ struct CalendarPageView: View {
             guard let reminders else { return }
             let mappedReminders = reminders.compactMap { reminder -> CalendarEvent? in
                 guard let dueDate = reminder.dueDateComponents?.date else { return nil }
-                return CalendarEvent(title: reminder.title, startDate: dueDate, endDate: dueDate, location: reminder.location, notes: reminder.notes, ekIdentifier: reminder.calendarItemIdentifier, isReminder: true)
+                return CalendarEvent(title: reminder.title, startDate: dueDate, endDate: dueDate, location: reminder.location, notes: reminder.notes, url: nil, alarms: nil, travelTime: nil, ekIdentifier: reminder.calendarItemIdentifier, isReminder: true)
             }
             DispatchQueue.main.async {
                 self.syncedEvents.append(contentsOf: mappedReminders)
@@ -972,6 +978,8 @@ private struct EventDetailView: View {
     @EnvironmentObject private var calendarManager: CalendarManager
     @State private var showDeleteConfirm = false
     @State private var showEdit = false
+    @State private var errorMessage: String?
+    @State private var showError = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -1026,6 +1034,47 @@ private struct EventDetailView: View {
                             .symbolRenderingMode(.hierarchical)
                             .frame(width: 24)
                         Text(location)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                
+                if let url = item.url {
+                    HStack(spacing: DesignSystem.Layout.spacing.small) {
+                        Image(systemName: "link.circle.fill")
+                            .font(.body)
+                            .foregroundStyle(.blue)
+                            .symbolRenderingMode(.hierarchical)
+                            .frame(width: 24)
+                        Link(url.absoluteString, destination: url)
+                            .font(.body)
+                            .foregroundStyle(.blue)
+                    }
+                }
+                
+                if let alarms = item.alarms, !alarms.isEmpty {
+                    HStack(spacing: DesignSystem.Layout.spacing.small) {
+                        Image(systemName: "bell.fill")
+                            .font(.body)
+                            .foregroundStyle(.orange)
+                            .symbolRenderingMode(.hierarchical)
+                            .frame(width: 24)
+                        Text(alarms.compactMap { alarm in
+                            CalendarManager.AlertOption.from(alarm: alarm).rawValue
+                        }.joined(separator: ", "))
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                
+                if let travelTime = item.travelTime, travelTime > 0 {
+                    HStack(spacing: DesignSystem.Layout.spacing.small) {
+                        Image(systemName: "car.fill")
+                            .font(.body)
+                            .foregroundStyle(.green)
+                            .symbolRenderingMode(.hierarchical)
+                            .frame(width: 24)
+                        Text("Travel time: \(CalendarManager.TravelTimeOption.from(interval: travelTime).rawValue)")
                             .font(.body)
                             .foregroundStyle(.primary)
                     }
@@ -1089,20 +1138,45 @@ private struct EventDetailView: View {
         .sheet(isPresented: $showEdit) {
             EventEditSheet(item: item) { updated in
                 _Concurrency.Task {
-                    guard let id = item.ekIdentifier else { return }
-                    try? await calendarManager.updateEvent(
-                        identifier: id,
-                        title: updated.title,
-                        startDate: updated.startDate,
-                        endDate: updated.endDate,
-                        isAllDay: updated.isAllDay,
-                        location: updated.location,
-                        notes: updated.notes,
-                        recurrence: updated.recurrence
-                    )
-                    isPresented = false
+                    guard let id = item.ekIdentifier else { 
+                        await MainActor.run {
+                            errorMessage = "Event identifier not found"
+                            showError = true
+                        }
+                        return 
+                    }
+                    
+                    do {
+                        try await calendarManager.updateEvent(
+                            identifier: id,
+                            title: updated.title,
+                            startDate: updated.startDate,
+                            endDate: updated.endDate,
+                            isAllDay: updated.isAllDay,
+                            location: updated.location,
+                            notes: updated.notes,
+                            url: updated.url,
+                            primaryAlert: updated.primaryAlert,
+                            secondaryAlert: updated.secondaryAlert,
+                            travelTime: updated.travelTime.timeInterval,
+                            recurrence: updated.recurrence
+                        )
+                        await MainActor.run {
+                            isPresented = false
+                        }
+                    } catch {
+                        await MainActor.run {
+                            errorMessage = "Failed to save event: \(error.localizedDescription)"
+                            showError = true
+                        }
+                    }
                 }
             }
+        }
+        .alert("Error", isPresented: $showError, presenting: errorMessage) { _ in
+            Button("OK", role: .cancel) { }
+        } message: { message in
+            Text(message)
         }
     }
 
@@ -1177,7 +1251,12 @@ private struct EventEditSheet: View {
     @State private var isAllDay: Bool
     @State private var location: String
     @State private var notes: String
+    @State private var urlString: String
+    @State private var primaryAlert: CalendarManager.AlertOption
+    @State private var secondaryAlert: CalendarManager.AlertOption
+    @State private var travelTime: CalendarManager.TravelTimeOption
     @State private var recurrence: CalendarManager.RecurrenceOption = .none
+    @State private var urlError: String?
 
     init(item: CalendarEvent, onSave: @escaping (EditableEvent) -> Void) {
         self.item = item
@@ -1188,6 +1267,19 @@ private struct EventEditSheet: View {
         _isAllDay = State(initialValue: false)
         _location = State(initialValue: item.location ?? "")
         _notes = State(initialValue: item.notes ?? "")
+        _urlString = State(initialValue: item.url?.absoluteString ?? "")
+        _primaryAlert = State(initialValue: item.alarms?.first.map { CalendarManager.AlertOption.from(alarm: $0) } ?? .none)
+        _secondaryAlert = State(initialValue: item.alarms?.dropFirst().first.map { CalendarManager.AlertOption.from(alarm: $0) } ?? .none)
+        _travelTime = State(initialValue: CalendarManager.TravelTimeOption.from(interval: item.travelTime))
+    }
+    
+    private var isValidURL: Bool {
+        guard !urlString.isEmpty else { return true }
+        return URL(string: urlString) != nil
+    }
+    
+    private var canSave: Bool {
+        !title.isEmpty && isValidURL
     }
 
     var body: some View {
@@ -1208,12 +1300,44 @@ private struct EventEditSheet: View {
             DatePicker("End", selection: $endDate, in: startDate..., displayedComponents: isAllDay ? [.date] : [.date, .hourAndMinute])
 
             TextField("Location", text: $location)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                TextField("URL", text: $urlString)
+                    .textContentType(.URL)
+                
+                if !urlString.isEmpty && !isValidURL {
+                    Text("Invalid URL format")
+                        .font(.caption)
+                        .foregroundColor(.red)
+                }
+            }
+            
             TextField("Notes", text: $notes, axis: .vertical)
                 .lineLimit(3, reservesSpace: true)
 
             Picker("Repeat", selection: $recurrence) {
                 ForEach(CalendarManager.RecurrenceOption.allCases) { opt in
                     Text(opt.rawValue.capitalized).tag(opt)
+                }
+            }
+            
+            Picker("Alert", selection: $primaryAlert) {
+                ForEach(CalendarManager.AlertOption.allCases) { opt in
+                    Text(opt.rawValue).tag(opt)
+                }
+            }
+            
+            if primaryAlert != .none {
+                Picker("2nd Alert", selection: $secondaryAlert) {
+                    ForEach(CalendarManager.AlertOption.allCases) { opt in
+                        Text(opt.rawValue).tag(opt)
+                    }
+                }
+            }
+            
+            Picker("Travel Time", selection: $travelTime) {
+                ForEach(CalendarManager.TravelTimeOption.allCases) { opt in
+                    Text(opt.rawValue).tag(opt)
                 }
             }
 
@@ -1227,12 +1351,17 @@ private struct EventEditSheet: View {
                         isAllDay: isAllDay,
                         location: location.isEmpty ? nil : location,
                         notes: notes.isEmpty ? nil : notes,
+                        url: urlString.isEmpty ? nil : urlString,
+                        primaryAlert: primaryAlert,
+                        secondaryAlert: secondaryAlert,
+                        travelTime: travelTime,
                         recurrence: recurrence
                     )
                     onSave(updated)
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(!canSave)
             }
         }
         .padding()
@@ -1246,6 +1375,10 @@ private struct EventEditSheet: View {
         var isAllDay: Bool
         var location: String?
         var notes: String?
+        var url: String?
+        var primaryAlert: CalendarManager.AlertOption
+        var secondaryAlert: CalendarManager.AlertOption
+        var travelTime: CalendarManager.TravelTimeOption
         var recurrence: CalendarManager.RecurrenceOption
     }
 }
@@ -1344,7 +1477,7 @@ struct CalendarView: View {
 
     private var calendarEvents: [CalendarEvent] {
         displayEKEvents.map {
-            CalendarEvent(title: $0.title, startDate: $0.startDate, endDate: $0.endDate, location: $0.location, notes: $0.notes, ekIdentifier: $0.eventIdentifier, isReminder: false)
+            CalendarEvent(title: $0.title, startDate: $0.startDate, endDate: $0.endDate, location: $0.location, notes: $0.notes, url: $0.url, alarms: $0.alarms, travelTime: $0.travelTime, ekIdentifier: $0.eventIdentifier, isReminder: false)
         }
     }
 
@@ -1562,7 +1695,7 @@ struct CalendarView: View {
     }
 
     private func mapEvent(_ ek: EKEvent) -> CalendarEvent {
-        CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, ekIdentifier: ek.eventIdentifier, isReminder: false)
+        CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: ek.travelTime, ekIdentifier: ek.eventIdentifier, isReminder: false)
     }
 
     private func eventCategoryLabel(for title: String) -> String {

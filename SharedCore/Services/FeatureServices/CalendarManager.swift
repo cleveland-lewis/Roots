@@ -354,6 +354,10 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
                      isAllDay: Bool,
                      location: String?,
                      notes: String?,
+                     url: String?,
+                     primaryAlert: AlertOption?,
+                     secondaryAlert: AlertOption?,
+                     travelTime: TimeInterval?,
                      recurrence: RecurrenceOption = .none) async throws {
         guard let item = DeviceCalendarManager.shared.store.calendarItem(withIdentifier: identifier) as? EKEvent else { return }
         item.title = title
@@ -362,7 +366,30 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
         item.isAllDay = isAllDay
         item.location = location
         item.notes = notes
+        
+        // Handle URL
+        if let urlString = url, !urlString.isEmpty, let validURL = URL(string: urlString) {
+            item.url = validURL
+        } else {
+            item.url = nil
+        }
+        
+        // Handle alarms
+        var alarms: [EKAlarm] = []
+        if let primary = primaryAlert?.alarm {
+            alarms.append(primary)
+        }
+        if let secondary = secondaryAlert?.alarm {
+            alarms.append(secondary)
+        }
+        item.alarms = alarms.isEmpty ? nil : alarms
+        
+        // Handle travel time
+        item.travelTime = travelTime
+        
+        // Handle recurrence
         item.recurrenceRules = recurrence.rule.map { [$0] }
+        
         try DeviceCalendarManager.shared.store.save(item, span: .thisEvent, commit: true)
         await refreshAll()
     }
@@ -403,6 +430,100 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
                 return EKRecurrenceRule(recurrenceWith: .weekly, interval: 1, end: nil)
             case .monthly:
                 return EKRecurrenceRule(recurrenceWith: .monthly, interval: 1, end: nil)
+            }
+        }
+    }
+    
+    enum AlertOption: String, CaseIterable, Identifiable {
+        case none = "None"
+        case atTime = "At time of event"
+        case fiveMinutes = "5 minutes before"
+        case fifteenMinutes = "15 minutes before"
+        case thirtyMinutes = "30 minutes before"
+        case oneHour = "1 hour before"
+        case twoHours = "2 hours before"
+        case oneDay = "1 day before"
+        case twoDays = "2 days before"
+        
+        var id: String { rawValue }
+        
+        var alarm: EKAlarm? {
+            switch self {
+            case .none:
+                return nil
+            case .atTime:
+                return EKAlarm(relativeOffset: 0)
+            case .fiveMinutes:
+                return EKAlarm(relativeOffset: -5 * 60)
+            case .fifteenMinutes:
+                return EKAlarm(relativeOffset: -15 * 60)
+            case .thirtyMinutes:
+                return EKAlarm(relativeOffset: -30 * 60)
+            case .oneHour:
+                return EKAlarm(relativeOffset: -60 * 60)
+            case .twoHours:
+                return EKAlarm(relativeOffset: -2 * 60 * 60)
+            case .oneDay:
+                return EKAlarm(relativeOffset: -24 * 60 * 60)
+            case .twoDays:
+                return EKAlarm(relativeOffset: -2 * 24 * 60 * 60)
+            }
+        }
+        
+        static func from(alarm: EKAlarm?) -> AlertOption {
+            guard let alarm = alarm else { return .none }
+            
+            switch alarm.relativeOffset {
+            case 0: return .atTime
+            case -5 * 60: return .fiveMinutes
+            case -15 * 60: return .fifteenMinutes
+            case -30 * 60: return .thirtyMinutes
+            case -60 * 60: return .oneHour
+            case -2 * 60 * 60: return .twoHours
+            case -24 * 60 * 60: return .oneDay
+            case -2 * 24 * 60 * 60: return .twoDays
+            default: return .none
+            }
+        }
+    }
+    
+    enum TravelTimeOption: String, CaseIterable, Identifiable {
+        case none = "None"
+        case fifteenMinutes = "15 minutes"
+        case thirtyMinutes = "30 minutes"
+        case oneHour = "1 hour"
+        case oneAndHalfHours = "1.5 hours"
+        case twoHours = "2 hours"
+        
+        var id: String { rawValue }
+        
+        var timeInterval: TimeInterval? {
+            switch self {
+            case .none:
+                return nil
+            case .fifteenMinutes:
+                return 15 * 60
+            case .thirtyMinutes:
+                return 30 * 60
+            case .oneHour:
+                return 60 * 60
+            case .oneAndHalfHours:
+                return 90 * 60
+            case .twoHours:
+                return 2 * 60 * 60
+            }
+        }
+        
+        static func from(interval: TimeInterval?) -> TravelTimeOption {
+            guard let interval = interval else { return .none }
+            
+            switch interval {
+            case 15 * 60: return .fifteenMinutes
+            case 30 * 60: return .thirtyMinutes
+            case 60 * 60: return .oneHour
+            case 90 * 60: return .oneAndHalfHours
+            case 2 * 60 * 60: return .twoHours
+            default: return .none
             }
         }
     }
