@@ -1325,6 +1325,12 @@ private struct WeekHeaderView: View {
 // MARK: - Modern Calendar Entry
 
 struct CalendarView: View {
+    private static let debugDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .short
+        f.timeStyle = .medium
+        return f
+    }()
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var deviceCalendar: DeviceCalendarManager
     @State private var viewMode: CalendarViewMode = .month
@@ -1435,6 +1441,36 @@ struct CalendarView: View {
             currentMonth = calendarManager.selectedDate ?? Date()
             calendarManager.ensureMonthCache(for: currentMonth)
             startKeyboardMonitoring()
+        }
+        .overlay(alignment: .topTrailing) {
+            VStack(alignment: .trailing, spacing: 6) {
+                HStack(spacing: 8) {
+                    Text(DeviceCalendarManager.shared.isAuthorized ? "Authorized" : "Unauthorized")
+                        .font(.caption2)
+                        .foregroundColor(.white)
+                        .padding(6)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.45)))
+
+                    Text("Events: \(DeviceCalendarManager.shared.events.count)")
+                        .font(.caption2)
+                        .foregroundColor(.white)
+                        .padding(6)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.45)))
+                }
+                Text("Last refresh: \(Date(), formatter: Self.debugDateFormatter)")
+                    .font(.caption2)
+                    .foregroundColor(.white.opacity(0.85))
+                    .padding(6)
+                    .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.35)))
+
+                Text(DeviceCalendarManager.shared.startObservingStoreChanges as Any != nil ? "Observer: registered" : "Observer: not registered")
+                    .font(.caption2)
+                    .foregroundColor(.white)
+                    .padding(6)
+                    .background(RoundedRectangle(cornerRadius: 6).fill(Color.black.opacity(0.35)))
+            }
+            .padding(8)
+            .opacity(0.8)
         }
         .onDisappear {
             stopKeyboardMonitoring()
