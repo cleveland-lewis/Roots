@@ -618,8 +618,8 @@ private struct MonthCalendarView: View {
                                         } label: {
                                             HStack(spacing: 6) {
                                                 Circle()
-                                                    .fill(Color.accentColor.opacity(0.8))
-                                                    .frame(width: 6, height: 6)
+                                                    .fill(categoryColor(for: event.title))
+                                                    .frame(width: 8, height: 8)
                                                 Text(eventCategoryLabel(for: event.title))
                                                     .font(DesignSystem.Typography.caption)
                                                     .foregroundStyle(.secondary)
@@ -1724,6 +1724,13 @@ struct CalendarView: View {
             if lower.contains(key) { return label }
         }
         return "Other"
+    }
+    
+    private func categoryColor(for title: String) -> Color {
+        if let category = parseEventCategory(from: title) {
+            return category.color
+        }
+        return Color.accentColor
     }
 }
 
