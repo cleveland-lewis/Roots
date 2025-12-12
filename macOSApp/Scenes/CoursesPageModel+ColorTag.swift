@@ -1,8 +1,8 @@
 #if os(macOS)
 import SwiftUI
 
-extension CoursesPageModel.ColorTag {
-    static func fromHex(_ hex: String?) -> CoursesPageModel.ColorTag? {
+extension ColorTag {
+    static func fromHex(_ hex: String?) -> ColorTag? {
         guard let hex = hex?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() else { return nil }
         switch hex {
         case "#4c78ff", "blue": return .blue
@@ -16,7 +16,7 @@ extension CoursesPageModel.ColorTag {
         }
     }
 
-    static func hex(for tag: CoursesPageModel.ColorTag) -> String {
+    static func hex(for tag: ColorTag) -> String {
         switch tag {
         case .blue: return "#4C78FF"
         case .green: return "#34C759"

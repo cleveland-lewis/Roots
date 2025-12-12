@@ -436,12 +436,12 @@ struct GradesPageView: View {
     }
 
     private func colorTag(for hex: String?) -> Color {
-        (CoursesPageModel.ColorTag.fromHex(hex) ?? .blue).color
+        (ColorTag.fromHex(hex) ?? .blue).color
     }
 
     private func courseEditorModel(from course: Course) -> CoursesPageModel.Course {
         let semesterName = coursesStore.semesters.first(where: { $0.id == course.semesterId })?.name ?? "Current Term"
-        let colorTag = CoursesPageModel.ColorTag.fromHex(course.colorHex) ?? .blue
+        let colorTag = ColorTag.fromHex(course.colorHex) ?? .blue
         let gradeEntry = gradesStore.grade(for: course.id)
         let gradeInfo = CoursesPageModel.CourseGradeInfo(
             currentPercentage: gradeEntry?.percent,
@@ -477,7 +477,7 @@ struct GradesPageView: View {
             existing.credits = Double(course.credits)
             existing.semesterId = semesterId
             existing.isArchived = course.isArchived
-            existing.colorHex = CoursesPageModel.ColorTag.hex(for: course.colorTag)
+            existing.colorHex = ColorTag.hex(for: course.colorTag)
             coursesStore.updateCourse(existing)
         } else {
             let newCourse = Course(
@@ -485,7 +485,7 @@ struct GradesPageView: View {
                 title: course.title,
                 code: course.code,
                 semesterId: semesterId,
-                colorHex: CoursesPageModel.ColorTag.hex(for: course.colorTag),
+                colorHex: ColorTag.hex(for: course.colorTag),
                 isArchived: course.isArchived,
                 courseType: .regular,
                 instructor: course.instructor,

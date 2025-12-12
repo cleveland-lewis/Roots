@@ -47,22 +47,7 @@ enum CoursesPageModel {
         var weight: Double
     }
 
-    enum ColorTag: String, CaseIterable, Identifiable {
-        case blue, green, purple, orange, pink, yellow, gray
-        var id: String { rawValue }
 
-        var color: Color {
-            switch self {
-            case .blue: return .blue
-            case .green: return .green
-            case .purple: return .purple
-            case .orange: return .orange
-            case .pink: return .pink
-            case .yellow: return .yellow
-            case .gray: return .gray
-            }
-        }
-    }
 }
 
 // Short aliases for readability inside this file
@@ -71,7 +56,7 @@ typealias CourseMeeting = CoursesPageModel.CourseMeeting
 typealias CourseGradeInfo = CoursesPageModel.CourseGradeInfo
 typealias CourseSyllabus = CoursesPageModel.CourseSyllabus
 typealias SyllabusCategory = CoursesPageModel.SyllabusCategory
-typealias ColorTag = CoursesPageModel.ColorTag
+
 
 // MARK: - Root Page
 

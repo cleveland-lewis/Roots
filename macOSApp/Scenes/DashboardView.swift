@@ -188,7 +188,7 @@ struct DashboardView: View {
     }
 
     private func gradeColor(for hex: String?) -> Color {
-        (CoursesPageModel.ColorTag.fromHex(hex) ?? .blue).color
+        (ColorTag.fromHex(hex) ?? .blue).color
     }
 
     private var todayCard: some View {

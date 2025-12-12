@@ -304,85 +304,85 @@ final class AppSettingsModel: ObservableObject, Codable {
     }
 
     // Backing storage - migrate to UserDefaults-backed values to persist across launches
-    nonisolated var accentColorRaw: String = AppAccentColor.multicolor.rawValue
-    nonisolated var customAccentEnabledStorage: Bool = false
-    nonisolated var customAccentRed: Double = 0
-    nonisolated var customAccentGreen: Double = 122 / 255
-    nonisolated var customAccentBlue: Double = 1
-    nonisolated var customAccentAlpha: Double = 1
-    nonisolated var interfaceStyleRaw: String = InterfaceStyle.system.rawValue
-    nonisolated var glassLightStrength: Double = 0.33
-    nonisolated var glassDarkStrength: Double = 0.17
-    nonisolated var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
-    nonisolated var wiggleOnHoverStorage: Bool = true
-    nonisolated var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
-    nonisolated var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
-    nonisolated var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
-    nonisolated var quickActionsRaw: String = "add_assignment,add_course,quick_note"
-    nonisolated var enableGlassEffectsStorage: Bool = true
-    nonisolated var cardRadiusRaw: String = CardRadius.medium.rawValue
-    nonisolated var animationSoftnessStorage: Double = 0.42
-    nonisolated var typographyModeRaw: String = TypographyMode.system.rawValue
-    nonisolated var devModeEnabledStorage: Bool = false
-    nonisolated var devModeUILoggingStorage: Bool = false
-    nonisolated var devModeDataLoggingStorage: Bool = false
-    nonisolated var devModeSchedulerLoggingStorage: Bool = false
-    nonisolated var devModePerformanceStorage: Bool = false
-    nonisolated var enableICloudSyncStorage: Bool = false
+    var accentColorRaw: String = AppAccentColor.multicolor.rawValue
+    var customAccentEnabledStorage: Bool = false
+    var customAccentRed: Double = 0
+    var customAccentGreen: Double = 122 / 255
+    var customAccentBlue: Double = 1
+    var customAccentAlpha: Double = 1
+    var interfaceStyleRaw: String = InterfaceStyle.system.rawValue
+    var glassLightStrength: Double = 0.33
+    var glassDarkStrength: Double = 0.17
+    var sidebarBehaviorRaw: String = SidebarBehavior.automatic.rawValue
+    var wiggleOnHoverStorage: Bool = true
+    var tabBarModeRaw: String = TabBarMode.iconsAndText.rawValue
+    var visibleTabsRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
+    var tabOrderRaw: String = "dashboard,calendar,planner,assignments,courses,grades,timer,decks"
+    var quickActionsRaw: String = "add_assignment,add_course,quick_note"
+    var enableGlassEffectsStorage: Bool = true
+    var cardRadiusRaw: String = CardRadius.medium.rawValue
+    var animationSoftnessStorage: Double = 0.42
+    var typographyModeRaw: String = TypographyMode.system.rawValue
+    var devModeEnabledStorage: Bool = false
+    var devModeUILoggingStorage: Bool = false
+    var devModeDataLoggingStorage: Bool = false
+    var devModeSchedulerLoggingStorage: Bool = false
+    var devModePerformanceStorage: Bool = false
+    var enableICloudSyncStorage: Bool = false
 
     // New UserDefaults-backed properties
-    nonisolated var use24HourTimeStorage: Bool = false
-    nonisolated var workdayStartHourStorage: Int = 8
-    nonisolated var workdayStartMinuteStorage: Int = 0
-    nonisolated var workdayEndHourStorage: Int = 22
-    nonisolated var workdayEndMinuteStorage: Int = 0
-    nonisolated var showEnergyPanelStorage: Bool = true
-    nonisolated var highContrastModeStorage: Bool = false
-    nonisolated var enableAIPlannerStorage: Bool = false
-    nonisolated var plannerHorizonStorage: String = "1w"
-    nonisolated var enableFlashcardsStorage: Bool = true
-    nonisolated var assignmentSwipeLeadingRaw: String = AssignmentSwipeAction.complete.rawValue
-    nonisolated var assignmentSwipeTrailingRaw: String = AssignmentSwipeAction.delete.rawValue
+    var use24HourTimeStorage: Bool = false
+    var workdayStartHourStorage: Int = 8
+    var workdayStartMinuteStorage: Int = 0
+    var workdayEndHourStorage: Int = 22
+    var workdayEndMinuteStorage: Int = 0
+    var showEnergyPanelStorage: Bool = true
+    var highContrastModeStorage: Bool = false
+    var enableAIPlannerStorage: Bool = false
+    var plannerHorizonStorage: String = "1w"
+    var enableFlashcardsStorage: Bool = true
+    var assignmentSwipeLeadingRaw: String = AssignmentSwipeAction.complete.rawValue
+    var assignmentSwipeTrailingRaw: String = AssignmentSwipeAction.delete.rawValue
 
     // General Settings
-    nonisolated var userNameStorage: String? = nil
-    nonisolated var startOfWeekStorage: String? = "Sunday"
-    nonisolated var defaultViewStorage: String? = "Dashboard"
+    var userNameStorage: String? = nil
+    var startOfWeekStorage: String? = "Sunday"
+    var defaultViewStorage: String? = "Dashboard"
 
     // Interface Settings
-    nonisolated var reduceMotionStorage: Bool = false
-    nonisolated var increaseTransparencyStorage: Bool = false
-    nonisolated var glassIntensityStorage: Double? = 0.5
-    nonisolated var accentColorNameStorage: String? = "Blue"
-    nonisolated var showSidebarByDefaultStorage: Bool = true
-    nonisolated var compactModeStorage: Bool = false
-    nonisolated var showAnimationsStorage: Bool = true
-    nonisolated var enableHapticsStorage: Bool = true
-    nonisolated var showTooltipsStorage: Bool = true
+    var reduceMotionStorage: Bool = false
+    var increaseTransparencyStorage: Bool = false
+    var glassIntensityStorage: Double? = 0.5
+    var accentColorNameStorage: String? = "Blue"
+    var showSidebarByDefaultStorage: Bool = true
+    var compactModeStorage: Bool = false
+    var showAnimationsStorage: Bool = true
+    var enableHapticsStorage: Bool = true
+    var showTooltipsStorage: Bool = true
 
     // Profile/Study Coach Settings
-    nonisolated var defaultFocusDurationStorage: Int? = 25
-    nonisolated var defaultBreakDurationStorage: Int? = 5
-    nonisolated var defaultEnergyLevelStorage: String? = "Medium"
-    nonisolated var enableStudyCoachStorage: Bool = true
-    nonisolated var smartNotificationsStorage: Bool = true
-    nonisolated var autoScheduleBreaksStorage: Bool = true
-    nonisolated var trackStudyHoursStorage: Bool = true
-    nonisolated var showProductivityInsightsStorage: Bool = true
-    nonisolated var weeklySummaryNotificationsStorage: Bool = false
-    nonisolated var preferMorningSessionsStorage: Bool = false
-    nonisolated var preferEveningSessionsStorage: Bool = false
-    nonisolated var enableDeepWorkModeStorage: Bool = false
+    var defaultFocusDurationStorage: Int? = 25
+    var defaultBreakDurationStorage: Int? = 5
+    var defaultEnergyLevelStorage: String? = "Medium"
+    var enableStudyCoachStorage: Bool = true
+    var smartNotificationsStorage: Bool = true
+    var autoScheduleBreaksStorage: Bool = true
+    var trackStudyHoursStorage: Bool = true
+    var showProductivityInsightsStorage: Bool = true
+    var weeklySummaryNotificationsStorage: Bool = false
+    var preferMorningSessionsStorage: Bool = false
+    var preferEveningSessionsStorage: Bool = false
+    var enableDeepWorkModeStorage: Bool = false
 
     // Pomodoro defaults (migrated here)
-    nonisolated var pomodoroFocusStorage: Int = 25
-    nonisolated var pomodoroShortBreakStorage: Int = 5
-    nonisolated var pomodoroLongBreakStorage: Int = 15
+    var pomodoroFocusStorage: Int = 25
+    var pomodoroShortBreakStorage: Int = 5
+    var pomodoroLongBreakStorage: Int = 15
 
     // Event load thresholds (persisted)
-    nonisolated var loadLowThresholdStorage: Int = 1
-    nonisolated var loadMediumThresholdStorage: Int = 3
-    nonisolated var loadHighThresholdStorage: Int = 5
+    var loadLowThresholdStorage: Int = 1
+    var loadMediumThresholdStorage: Int = 3
+    var loadHighThresholdStorage: Int = 5
 
     // Category effort profiles (user-tunable)
     struct CategoryEffortProfileStorage: Codable, Equatable {
@@ -392,7 +392,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         var sessionBiasRaw: String
     }
 
-    nonisolated var categoryEffortProfilesStorage: [String: CategoryEffortProfileStorage] = [:]
+    var categoryEffortProfilesStorage: [String: CategoryEffortProfileStorage] = [:]
 
     // MARK: - Manual Codable conformance will map to these keys
 
@@ -814,7 +814,7 @@ final class AppSettingsModel: ObservableObject, Codable {
     // Codable
     init() {}
 
-    nonisolated func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(accentColorRaw, forKey: .accentColorRaw)
         try container.encode(customAccentEnabledStorage, forKey: .customAccentEnabledStorage)
@@ -848,7 +848,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         try container.encode(assignmentSwipeTrailingRaw, forKey: .assignmentSwipeTrailingRaw)
     }
 
-    required nonisolated init(from decoder: Decoder) throws {
+    required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         accentColorRaw = try container.decodeIfPresent(String.self, forKey: .accentColorRaw) ?? AppAccentColor.multicolor.rawValue
         customAccentEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .customAccentEnabledStorage) ?? false

@@ -1,4 +1,10 @@
 import SwiftUI
+#if canImport(AppKit)
+import AppKit
+#endif
+#if canImport(UIKit)
+import UIKit
+#endif
 
 // Compatibility shim for legacy helpers. The canonical definitions live in
 // DesignSystem/DesignTokens.swift and Components/. This file now only hosts
@@ -30,10 +36,12 @@ enum RootsColor {
     static var secondaryLabel: Color { .secondary }
     static var cardBackground: Color { Color(nsColor: .controlBackgroundColor) }
     static var inputBackground: Color {
-#if os(macOS)
-        return Color(nsColor: .textBackgroundColor)
+#if canImport(AppKit)
+        return Color(nsColor: NSColor.textBackgroundColor)
+#elseif canImport(UIKit)
+        return Color(uiColor: UIColor.secondarySystemBackground)
 #else
-        return Color(uiColor: .secondarySystemBackground)
+        return .secondary
 #endif
     }
     static var subtleFill: Color { Color(nsColor: .controlBackgroundColor).opacity(0.4) }
