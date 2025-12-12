@@ -82,6 +82,8 @@ struct SettingsRootView: View {
             .id(selectedPane)
             .frame(minWidth: 400, minHeight: 400)
         }
+        .navigationSplitViewStyle(.balanced)
+        .hideSplitViewDivider()
         .frame(minWidth: 600, minHeight: 400)
     }
 }

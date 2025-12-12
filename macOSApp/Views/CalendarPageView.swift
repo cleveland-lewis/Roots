@@ -465,6 +465,8 @@ private struct MonthCalendarSplitView: View {
                 }
             )
         }
+        .navigationSplitViewStyle(.balanced)
+        .hideSplitViewDivider()
     }
 
     private var sidebar: some View {
@@ -518,7 +520,7 @@ private struct MonthCalendarSplitView: View {
                                 }
                                 .buttonStyle(.plain)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    RoundedRectangle(cornerRadius: DesignSystem.Corners.pill, style: .continuous)
                                         .fill(event.id == selectedEvent?.id ? Color(nsColor: .controlAccentColor).opacity(0.1) : Color.clear)
                                 )
                             }
@@ -846,7 +848,7 @@ private struct WeekCalendarView: View {
                 .foregroundColor(isToday ? .white : .primary.opacity(0.8))
         }
         .padding(DesignSystem.Layout.spacing.small)
-        .glassChrome(cornerRadius: 14)
+        .glassChrome(cornerRadius: DesignSystem.Layout.cornerRadiusSmall)
     }
 
     private func formatHour(_ hour: Double) -> String {
@@ -1134,7 +1136,7 @@ private struct EventDetailView: View {
         }
         .padding(DesignSystem.Layout.spacing.large)
         .frame(minWidth: 420, minHeight: 320)
-        .glassCard(cornerRadius: 16)
+        .glassCard(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
         .sheet(isPresented: $showEdit) {
             EventEditSheet(item: item) { updated in
                 _Concurrency.Task {
@@ -1834,7 +1836,7 @@ private struct DayHeaderCard: View {
         }
         .padding(DesignSystem.Layout.spacing.small)
         .frame(maxWidth: .infinity)
-        .glassChrome(cornerRadius: 14)
+        .glassChrome(cornerRadius: DesignSystem.Layout.cornerRadiusSmall)
         .scaleEffect(hovering ? 1.02 : 1.0)
         .animation(.easeInOut(duration: 0.12), value: hovering)
         .onHover { hovering = $0 }
@@ -1994,7 +1996,7 @@ private struct MetricCard: View {
             Spacer(minLength: 0)
         }
         .padding(12)
-        .glassCard(cornerRadius: 14)
+        .glassCard(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
     }
 }
 #endif
