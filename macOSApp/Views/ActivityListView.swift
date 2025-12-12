@@ -15,7 +15,7 @@ struct ActivityListView: View {
                 Button(action: onAdd) {
                     Label("New", systemImage: "plus")
                 }
-                .buttonStyle(.glass)
+                .buttonStyle(GlassButtonStyle())
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -39,7 +39,7 @@ struct ActivityListView: View {
                 Label("Add Collection", systemImage: "folder.badge.plus")
                     .font(.footnote.weight(.semibold))
             }
-            .buttonStyle(.glass)
+            .buttonStyle(GlassButtonStyle())
 
             List {
                 ForEach(viewModel.filteredActivities) { activity in

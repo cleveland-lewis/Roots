@@ -78,7 +78,7 @@ struct TimerView: View {
                 Button("Reset") {
                     reset()
                 }
-                .buttonStyle(.glass)
+                .buttonStyle(GlassButtonStyle())
             }
         }
         .padding(DesignSystem.Layout.padding.card)
