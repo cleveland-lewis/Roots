@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSPrivacyTracking</key>
+    <false/>
+
+    <key>NSPrivacyCollectedDataTypes</key>
+    <array/>
+
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array/>
+
+    <key>NSPrivacyPolicyText</key>
+    <string>Roots stores user data locally on-device and does not send data to third-party servers; cloud sync (if enabled) uses the user\'s iCloud account.</string>
+</dict>
+</plist>

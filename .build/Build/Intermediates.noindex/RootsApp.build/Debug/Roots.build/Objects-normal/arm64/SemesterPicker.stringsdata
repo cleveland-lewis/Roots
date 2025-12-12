@@ -1,0 +1,32 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SemesterPicker.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Recent",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 11
+        }
+      },
+      {
+        "comment": "",
+        "key": "All",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "No semesters",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 27
+        }
+      }
+    ]
+  },
+  "version": 1
+}

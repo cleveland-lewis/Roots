@@ -1,0 +1,24 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/Components/Calendar/DayDetailSidebar.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "SELECTED DATE",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 14
+        }
+      },
+      {
+        "comment": "",
+        "key": "No events",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 34
+        }
+      }
+    ]
+  },
+  "version": 1
+}

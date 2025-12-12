@@ -1,0 +1,48 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Interface+QuickActions.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Quick Actions",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 6
+        }
+      },
+      {
+        "comment": "",
+        "key": "Configure the quick actions shown under the + button in the top-left of the app.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 8
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 29
+        }
+      },
+      {
+        "comment": "",
+        "key": "Restore Defaults",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Custom Action",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 52
+        }
+      }
+    ]
+  },
+  "version": 1
+}

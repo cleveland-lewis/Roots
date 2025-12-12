@@ -1,0 +1,149 @@
+{
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarDayCell.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarDayCell.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarDayCell.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarDayCell.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarDayCell.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarDayCell.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarPageView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarPageView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarPageView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarPageView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarPageView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarPageView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CalendarSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CalendarSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ChartViewVerticalStacked.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ChartViewVerticalStacked.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ChartViewVerticalStacked.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ChartViewVerticalStacked.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ChartViewVerticalStacked.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ChartViewVerticalStacked.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseDetailView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseDetailView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseDetailView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseDetailView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseDetailView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseDetailView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CourseEditView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseEditView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseEditView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseEditView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseEditView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CourseEditView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/CurrentActivityView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CurrentActivityView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CurrentActivityView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CurrentActivityView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CurrentActivityView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/CurrentActivityView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/DeveloperSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/DeveloperSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/DeveloperSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/DeveloperSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/DeveloperSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/DeveloperSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/GeneralSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/GeneralSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/GeneralSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/GeneralSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/GeneralSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/GeneralSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/InterfaceSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/InterfaceSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/InterfaceSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/InterfaceSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/InterfaceSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/InterfaceSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/LoadableViewModel.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/LoadableViewModel.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/LoadableViewModel.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/LoadableViewModel.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/LoadableViewModel.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/LoadableViewModel.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/PermissionHelpPopup.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/PermissionHelpPopup.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/PermissionHelpPopup.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/PermissionHelpPopup.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/PermissionHelpPopup.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/PermissionHelpPopup.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/ProfilesSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ProfilesSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ProfilesSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ProfilesSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ProfilesSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/ProfilesSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RecentlyDeletedSemestersView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RecentlyDeletedSemestersView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RecentlyDeletedSemestersView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RecentlyDeletedSemestersView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RecentlyDeletedSemestersView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RecentlyDeletedSemestersView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RemindersSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RemindersSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RemindersSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RemindersSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RemindersSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RemindersSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/RootDesignPreviewPage.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RootDesignPreviewPage.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RootDesignPreviewPage.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RootDesignPreviewPage.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RootDesignPreviewPage.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/RootDesignPreviewPage.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemesterEditView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemesterEditView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemesterEditView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemesterEditView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemesterEditView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemesterEditView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SemestersSettingsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemestersSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemestersSettingsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemestersSettingsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemestersSettingsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SemestersSettingsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/SettingsPane_Interface+Tabs.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SettingsPane_Interface+Tabs.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SettingsPane_Interface+Tabs.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SettingsPane_Interface+Tabs.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SettingsPane_Interface+Tabs.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/SettingsPane_Interface+Tabs.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerControlsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerControlsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerControlsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerControlsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerControlsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerControlsView.swiftdeps"
+  },
+  "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerGraphsView.swift" : {
+    "const-values" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerGraphsView.swiftconstvalues",
+    "dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerGraphsView.d",
+    "diagnostics" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerGraphsView.dia",
+    "object" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerGraphsView.o",
+    "swift-dependencies" : "/Users/clevelandlewis/Desktop/Roots/.build/Build/Intermediates.noindex/RootsApp.build/Debug/Roots.build/Objects-normal/arm64/TimerGraphsView.swiftdeps"
+  }
+}

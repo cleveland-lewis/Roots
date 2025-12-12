@@ -1,0 +1,312 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/TimerPageView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Change",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 220
+        }
+      },
+      {
+        "comment": "",
+        "key": "Current Activity",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 199
+        }
+      },
+      {
+        "comment": "",
+        "key": "No activity selected",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 212
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 282
+        }
+      },
+      {
+        "comment": "",
+        "key": "Activities",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 275
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pinned",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 288
+        }
+      },
+      {
+        "comment": "",
+        "key": "All Activities",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 307
+        }
+      },
+      {
+        "comment": "",
+        "key": "New Activity",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 335
+        }
+      },
+      {
+        "comment": "",
+        "key": "Select an activity to view details.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 498
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tasks for this Activity",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 457
+        }
+      },
+      {
+        "comment": "",
+        "key": "Notes",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 483
+        }
+      },
+      {
+        "comment": "",
+        "key": "Selected: %@ • %@ today",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 519
+        }
+      },
+      {
+        "comment": "",
+        "key": "Today: %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 513
+        }
+      },
+      {
+        "comment": "",
+        "key": "Today %@ · Total %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 696
+        }
+      },
+      {
+        "comment": "",
+        "key": "· %@",
+        "location": {
+          "startingColumn": 62,
+          "startingLine": 690
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unpin",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 704
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pin",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 704
+        }
+      },
+      {
+        "comment": "",
+        "key": "Edit",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 705
+        }
+      },
+      {
+        "comment": "",
+        "key": "Reset totals",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 706
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 708
+        }
+      },
+      {
+        "comment": "",
+        "key": "􀅊",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 777
+        }
+      },
+      {
+        "comment": "",
+        "key": "Start (%@)",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 868
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ running",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 903
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ running",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 927
+        }
+      },
+      {
+        "comment": "",
+        "key": "Current Activity",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 941
+        }
+      },
+      {
+        "comment": "",
+        "key": "No activity selected.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 987
+        }
+      },
+      {
+        "comment": "",
+        "key": "No linked tasks yet.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 957
+        }
+      },
+      {
+        "comment": "",
+        "key": "Activity",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 1149
+        }
+      },
+      {
+        "comment": "",
+        "key": "Activity name",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 1151
+        }
+      },
+      {
+        "comment": "",
+        "key": "e.g. Studying",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 1157
+        }
+      },
+      {
+        "comment": "",
+        "key": "Course code (optional)",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 1162
+        }
+      },
+      {
+        "comment": "",
+        "key": "Assignment link (optional)",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 1167
+        }
+      },
+      {
+        "comment": "",
+        "key": "Details",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 1175
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 1180
+        }
+      },
+      {
+        "comment": "",
+        "key": "You can edit activities later from the Timer page.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 1191
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 1194
+        }
+      },
+      {
+        "comment": "",
+        "key": "Create",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 1195
+        }
+      },
+      {
+        "comment": "",
+        "key": "Save",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 1195
+        }
+      }
+    ]
+  },
+  "version": 1
+}

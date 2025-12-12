@@ -1,0 +1,16 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 40
+        }
+      }
+    ]
+  },
+  "version": 1
+}

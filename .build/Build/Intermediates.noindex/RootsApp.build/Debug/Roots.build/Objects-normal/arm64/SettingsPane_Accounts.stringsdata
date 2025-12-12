@@ -1,0 +1,32 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Accounts.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Account management will arrive in a future update.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 9
+        }
+      },
+      {
+        "comment": "",
+        "key": "Keep your profile, backups, and school-wide settings in their respective sections. Roots will link here when account syncing is available.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 12
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open System Settings…",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 15
+        }
+      }
+    ]
+  },
+  "version": 1
+}

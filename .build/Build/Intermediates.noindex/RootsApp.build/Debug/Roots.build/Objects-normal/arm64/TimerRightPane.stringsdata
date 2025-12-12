@@ -1,0 +1,16 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/macOSApp/Views/TimerRightPane.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Study Summary",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 12
+        }
+      }
+    ]
+  },
+  "version": 1
+}

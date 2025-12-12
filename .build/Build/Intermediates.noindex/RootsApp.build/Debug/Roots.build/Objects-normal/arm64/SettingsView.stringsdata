@@ -1,0 +1,192 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/macOSApp/Scenes/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Health Check",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 88
+        }
+      },
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "General",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "Academic",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "Workday",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Advanced",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "Design",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "Use 24-hour time",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Energy Panel",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 19
+        }
+      },
+      {
+        "comment": "",
+        "key": "High Contrast Mode",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "Start",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "End",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 35
+        }
+      },
+      {
+        "comment": "",
+        "key": "Developer",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "Material",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "Run Health Check",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 65
+        }
+      },
+      {
+        "comment": "",
+        "key": "Runs a quick self-diagnostic across data, permissions, and local files.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 68
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "All systems look healthy.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 92
+        }
+      },
+      {
+        "comment": "",
+        "key": "Developer",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 117
+        }
+      },
+      {
+        "comment": "",
+        "key": "Design debug",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 108
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enable verbose logging",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 105
+        }
+      },
+      {
+        "comment": "",
+        "key": "Reset demo data",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 106
+        }
+      },
+      {
+        "comment": "",
+        "key": "Selected material",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 110
+        }
+      }
+    ]
+  },
+  "version": 1
+}

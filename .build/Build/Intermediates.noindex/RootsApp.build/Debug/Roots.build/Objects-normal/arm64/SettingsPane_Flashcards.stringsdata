@@ -1,0 +1,40 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/SharedCore/Services/FeatureServices/SettingsPane_Flashcards.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Flashcards",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "Flashcards",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 8
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enable Flashcards",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 9
+        }
+      },
+      {
+        "comment": "",
+        "key": "Turn flashcards on or off across the app. Disabling hides related UI and study flows.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}

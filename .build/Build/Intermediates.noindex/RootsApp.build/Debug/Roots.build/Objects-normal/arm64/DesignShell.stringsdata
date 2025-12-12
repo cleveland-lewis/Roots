@@ -1,0 +1,16 @@
+{
+  "source": "/Users/clevelandlewis/Desktop/Roots/SharedCore/DesignSystem/Components/DesignShell.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Updated: %@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 38
+        }
+      }
+    ]
+  },
+  "version": 1
+}
