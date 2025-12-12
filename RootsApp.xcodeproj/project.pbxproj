@@ -30,16 +30,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1AD7D46B2EDD328800D403F3 /* SharedCore */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SharedCore;
-			sourceTree = "<group>";
-		};
-		1AD7D46C2EDD328800D403F3 /* macOSApp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = macOSApp;
-			sourceTree = "<group>";
-		};
 		1AD7D4462EDD328A00D403F3 /* RootsTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RootsTests;
@@ -48,6 +38,16 @@
 		1AD7D4502EDD328A00D403F3 /* RootsUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RootsUITests;
+			sourceTree = "<group>";
+		};
+		1AD7D46B2EDD328800D403F3 /* SharedCore */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SharedCore;
+			sourceTree = "<group>";
+		};
+		1AD7D46C2EDD328800D403F3 /* macOSApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = macOSApp;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -310,12 +310,12 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				CODE_SIGN_IDENTITY = "";
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -602,9 +602,9 @@
 		1AD7D45E2EDD328A00D403F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -630,9 +630,9 @@
 		1AD7D45F2EDD328A00D403F3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
