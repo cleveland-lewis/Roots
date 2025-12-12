@@ -16,16 +16,9 @@ struct DayEventsSidebar: View {
             header
 
             // legend
-            HStack(spacing: 10) {
-                ForEach(EventCategory.allCases) { c in
-                    HStack(spacing: 6) {
-                        Circle().fill(c.color).frame(width: 8, height: 8)
-                        Text(c.rawValue).font(.caption2).foregroundColor(.secondary)
-                    }
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            FlexibleLegend()
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
 
             Divider()
                 .padding(.horizontal, 16)
@@ -135,6 +128,64 @@ private struct DayEventRow: View {
         let start = formatter.string(from: event.startDate ?? Date())
         let end = formatter.string(from: event.endDate ?? (event.startDate ?? Date()))
         return "\(start) — \(end)"
+    }
+}
+
+private struct FlexibleLegend: View {
+    var body: some View {
+        FlowLayout(spacing: 10) {
+            ForEach(EventCategory.allCases) { c in
+                HStack(spacing: 6) {
+                    Circle().fill(c.color).frame(width: 8, height: 8)
+                    Text(c.rawValue)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .fixedSize()
+                }
+            }
+        }
+    }
+}
+
+private struct FlowLayout: Layout {
+    var spacing: CGFloat = 10
+    
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let result = computeLayout(proposal: proposal, subviews: subviews)
+        return result.size
+    }
+    
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let result = computeLayout(proposal: proposal, subviews: subviews)
+        for (index, position) in result.positions.enumerated() {
+            subviews[index].place(at: CGPoint(x: bounds.minX + position.x, y: bounds.minY + position.y), proposal: .unspecified)
+        }
+    }
+    
+    private func computeLayout(proposal: ProposedViewSize, subviews: Subviews) -> (size: CGSize, positions: [CGPoint]) {
+        var positions: [CGPoint] = []
+        var currentX: CGFloat = 0
+        var currentY: CGFloat = 0
+        var maxHeight: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        let maxWidth = proposal.width ?? .infinity
+        
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            
+            if currentX + size.width > maxWidth && currentX > 0 {
+                currentX = 0
+                currentY += rowHeight + spacing
+                rowHeight = 0
+            }
+            
+            positions.append(CGPoint(x: currentX, y: currentY))
+            currentX += size.width + spacing
+            rowHeight = max(rowHeight, size.height)
+            maxHeight = max(maxHeight, currentY + size.height)
+        }
+        
+        return (CGSize(width: maxWidth, height: maxHeight), positions)
     }
 }
 #endif
