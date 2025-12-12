@@ -4,6 +4,7 @@ import SwiftUI
 struct RootsAnalogClock: View {
     var diameter: CGFloat = 200
     var showSecondHand: Bool = true
+    var accentColor: Color = .accentColor
 
     private var radius: CGFloat { diameter / 2 }
 
@@ -34,7 +35,7 @@ struct RootsAnalogClock: View {
 
             ForEach(1..<4) { idx in
                 Circle()
-                    .stroke(Color.secondary.opacity(0.12), lineWidth: 1)
+                    .stroke(idx == 2 ? accentColor : Color.secondary.opacity(0.12), lineWidth: 1)
                     .frame(width: diameter * (1 - CGFloat(idx) * 0.15), height: diameter * (1 - CGFloat(idx) * 0.15))
             }
         }
@@ -80,7 +81,7 @@ struct RootsAnalogClock: View {
 
             if showSecondHand {
                 Capsule(style: .continuous)
-                    .fill(Color.accentColor)
+                    .fill(accentColor)
                     .frame(width: 2, height: radius * 0.85)
                     .offset(y: -radius * 0.42)
                     .rotationEffect(.degrees((seconds / 60) * 360))

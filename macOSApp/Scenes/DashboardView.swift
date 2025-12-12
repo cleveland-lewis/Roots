@@ -344,7 +344,7 @@ struct DashboardView: View {
 
                 Spacer(minLength: RootsSpacing.m)
 
-                RootsAnalogClock(diameter: 180, showSecondHand: true)
+                RootsAnalogClock(diameter: 180, showSecondHand: true, accentColor: settings.activeAccentColor)
                     .padding(.trailing, RootsSpacing.s)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }

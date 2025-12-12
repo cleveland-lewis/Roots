@@ -418,6 +418,7 @@ struct TimerPageView: View {
             mode: mode,
             timerText: TimerCoreCard.timeDisplayStatic(mode: mode, remainingSeconds: remainingSeconds, elapsedSeconds: elapsedSeconds),
             clockString: clockString,
+            accentColor: settings.activeAccentColor,
             activityName: selectedActivity?.name,
             activityNotes: notesBinding,
             tasksLeftToday: tasksLeft,
@@ -427,7 +428,7 @@ struct TimerPageView: View {
         )
         let hosting = NSHostingController(rootView: focusView)
         let window = NSWindow(contentViewController: hosting)
-        window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        window.styleMask = [.titled, .closable, .miniaturizable, .resizable] as NSWindow.StyleMask
         window.setContentSize(NSSize(width: 640, height: 480))
         window.center()
         window.title = "Focus"
@@ -1018,6 +1019,7 @@ private struct FocusWindowView: View {
     let mode: LocalTimerMode
     let timerText: String
     let clockString: String
+    let accentColor: Color
     let activityName: String?
     let activityNotes: Binding<String>
     let tasksLeftToday: Int
