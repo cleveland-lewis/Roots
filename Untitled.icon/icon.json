@@ -4,30 +4,219 @@
   },
   "groups" : [
     {
+      "blur-material" : null,
+      "layers" : [
+
+      ],
+      "lighting" : "combined",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.75
+      }
+    },
+    {
+      "blend-mode" : "lighten",
+      "blur-material" : null,
+      "hidden" : true,
       "layers" : [
         {
-          "image-name" : "Group 3.png",
-          "name" : "Group 3",
-          "opacity-specializations" : [
+          "glass" : false,
+          "image-name" : "Star.png",
+          "name" : "Star",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              -213.90881374214428
+            ]
+          }
+        },
+        {
+          "fill" : "automatic",
+          "image-name" : "Rectangle 2.png",
+          "name" : "Rectangle 2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              134.73084257443338
+            ]
+          }
+        },
+        {
+          "image-name" : "Rectangle 2 Copy 2.png",
+          "name" : "Rectangle 2 Copy 2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              264.03125
+            ]
+          }
+        },
+        {
+          "fill" : "automatic",
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Rectangle 2 Copy.png",
+          "name" : "Rectangle 2 Copy",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              14.479084722100652
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.9
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.9
+      }
+    },
+    {
+      "blur-material" : 0.5,
+      "hidden" : false,
+      "layers" : [
+        {
+          "blend-mode-specializations" : [
             {
-              "value" : 0.85
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Star 2.png",
+          "name" : "Star 2",
+          "position" : {
+            "scale" : 2,
+            "translation-in-points" : [
+              0,
+              -213.90881374214428
+            ]
+          }
+        },
+        {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:1.00000,1.00000"
+              }
             },
             {
               "appearance" : "tinted",
-              "value" : 1
+              "value" : {
+                "solid" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+              }
             }
           ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Rectangle 2 2.png",
+          "name" : "Rectangle 2 2",
           "position" : {
-            "scale" : 0.28,
+            "scale" : 2.9,
             "translation-in-points" : [
               0,
-              0
+              -43.848118601138935
+            ]
+          }
+        },
+        {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:1.00000,1.00000"
+              }
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Rectangle 2 2.png",
+          "name" : "Rectangle 2 2",
+          "position" : {
+            "scale" : 2.9,
+            "translation-in-points" : [
+              0,
+              74.93977986310597
+            ]
+          }
+        },
+        {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:1.00000,1.00000"
+              }
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Rectangle 2 2.png",
+          "name" : "Rectangle 2 2",
+          "position" : {
+            "scale" : 2.9,
+            "translation-in-points" : [
+              0,
+              195.1915377154387
             ]
           }
         }
       ],
       "shadow" : {
-        "kind" : "neutral",
+        "kind" : "layer-color",
         "opacity" : 0.5
       },
       "translucency" : {
