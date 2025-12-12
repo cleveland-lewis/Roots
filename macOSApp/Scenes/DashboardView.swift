@@ -324,33 +324,52 @@ struct DashboardView: View {
 
     private var clockCard: some View {
         RootsCard {
-            HStack(alignment: .center, spacing: RootsSpacing.l) {
-                VStack(alignment: .leading, spacing: RootsSpacing.m) {
-                    ForEach(quickActions, id: \.label) { action in
-                        Button {
-                            action.handler()
-                        } label: {
-                            Label(action.label, systemImage: action.icon)
-                                .font(.title3.weight(.semibold))
-                                .frame(maxWidth: 220, alignment: .leading)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 10)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.large)
-                    }
+            let buttonHeight: CGFloat = 36
+            let columnSpacing: CGFloat = 24
+
+            HStack(alignment: .center, spacing: columnSpacing) {
+                // COLUMN 1 — Clock centered vertically
+                VStack {
+                    Spacer(minLength: 0)
+                    RootsAnalogClock(diameter: 160, showSecondHand: true, accentColor: settings.activeAccentColor)
+                        .frame(width: 160, height: 160)
+                    Spacer(minLength: 0)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .center)
 
-                Spacer(minLength: RootsSpacing.m)
-
-                RootsAnalogClock(diameter: 180, showSecondHand: true, accentColor: settings.activeAccentColor)
-                    .padding(.trailing, RootsSpacing.s)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                // COLUMN 2 — Buttons
+                VStack(spacing: 12) {
+                    actionButton("Add Assignment", systemImage: "doc.badge.plus")
+                    actionButton("Add Event", systemImage: "calendar.badge.plus")
+                    actionButton("Add Course", systemImage: "graduationcap.fill")
+                    actionButton("Open Planner", systemImage: "calendar")
+                }
+                .frame(maxWidth: 180)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: 220, alignment: .center)
             .padding(12)
         }
+    }
+
+    private func actionButton(_ title: String, systemImage: String) -> some View {
+        Button {
+            // TODO: wire actions
+            switch title {
+            case "Add Assignment": print("Quick: Add Assignment")
+            case "Add Event": print("Quick: Add Event")
+            case "Add Course": print("Quick: Add Course")
+            case "Open Planner": appModel.selectedPage = .planner
+            default: break
+            }
+        } label: {
+            HStack {
+                Image(systemName: systemImage)
+                Text(title)
+            }
+            .font(.subheadline)
+            .frame(maxWidth: .infinity, minHeight: 36)
+        }
+        .buttonStyle(.borderedProminent)
     }
 
     private var quickActions: [(label: String, icon: String, handler: () -> Void)] {
