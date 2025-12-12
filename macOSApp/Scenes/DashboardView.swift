@@ -32,34 +32,37 @@ struct DashboardView: View {
 
                 GeometryReader { geo in
                     let spacing: CGFloat = DesignSystem.Layout.spacing.medium
-                    let columnWidth = max(0, (geo.size.width - spacing) / 2)
 
-                    HStack(alignment: .top, spacing: spacing) {
-                        VStack(alignment: .leading, spacing: spacing) {
+                    VStack(spacing: spacing) {
+                        HStack(spacing: spacing) {
                             todayCard
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .animateEntry(isLoaded: isLoaded, index: 0)
-                            eventsCard
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .animateEntry(isLoaded: isLoaded, index: 1)
-                            calendarCard
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .animateEntry(isLoaded: isLoaded, index: 2)
-                        }
-                        .frame(width: columnWidth, alignment: .leading)
 
-                        VStack(alignment: .leading, spacing: spacing) {
                             clockCard
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .animateEntry(isLoaded: isLoaded, index: 3)
+                        }
+
+                        HStack(spacing: spacing) {
+                            eventsCard
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .animateEntry(isLoaded: isLoaded, index: 1)
+
                             assignmentsCard
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .animateEntry(isLoaded: isLoaded, index: 4)
+                        }
+
+                        HStack(spacing: spacing) {
+                            calendarCard
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .animateEntry(isLoaded: isLoaded, index: 2)
+
                             energyCard
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .animateEntry(isLoaded: isLoaded, index: 5)
                         }
-                        .frame(width: columnWidth, alignment: .leading)
                     }
                     .padding(.horizontal, DesignSystem.Layout.padding.window)
                     .padding(.vertical, DesignSystem.Layout.spacing.medium)
@@ -242,15 +245,14 @@ struct DashboardView: View {
                     title: cardTitle("Energy"),
                     icon: "bolt.heart.fill"
                 ) {
-                    HStack(spacing: 10) {
-                        Button("High") { setEnergy(.high) }
-                            .buttonStyle(.borderedProminent)
-                        Button("Medium") { setEnergy(.medium) }
-                            .buttonStyle(.bordered)
-                        Button("Low") { setEnergy(.low) }
-                            .buttonStyle(.bordered)
+                    let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+                    LazyVGrid(columns: columns, alignment: .leading, spacing: 12) {
+                        energyButton("High", level: .high)
+                        energyButton("Medium", level: .medium)
+                        energyButton("Low", level: .low)
+                        plannerButton("Open Planner")
                     }
-                    .font(DesignSystem.Typography.body)
+                    .frame(maxWidth: .infinity)
                 }
                 .onTapGesture {
                     energyBounce.toggle()
@@ -259,6 +261,35 @@ struct DashboardView: View {
                 .help("Energy & Focus")
             }
         }
+    }
+
+    @ViewBuilder
+    private func energyButton(_ title: String, level: EnergyLevel) -> some View {
+        Button {
+            setEnergy(level)
+        } label: {
+            Text(title)
+                .font(.headline)
+                .frame(maxWidth: .infinity, minHeight: 56)
+                .padding(.vertical, 8)
+        }
+        .buttonStyle(.borderedProminent)
+    }
+
+    @ViewBuilder
+    private func plannerButton(_ title: String) -> some View {
+        Button {
+            appModel.selectedPage = .planner
+        } label: {
+            HStack {
+                Image(systemName: "list.bullet.rectangle")
+                Text(title)
+            }
+            .font(.headline)
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .padding(.vertical, 8)
+        }
+        .buttonStyle(.borderedProminent)
     }
 
     private var eventsCard: some View {
@@ -275,7 +306,9 @@ struct DashboardView: View {
             VStack(alignment: .leading, spacing: RootsSpacing.m) {
                 Text("Assignments Due Today").rootsSectionHeader()
                 DashboardTasksColumn(tasks: $tasks)
+                Spacer()
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity)
     }
