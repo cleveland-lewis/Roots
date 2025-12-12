@@ -27,15 +27,37 @@ struct StudyTimeLineGraphView: View {
             }
 
             if let peak = maxSample {
+                // Subtle point mark at peak
                 PointMark(x: .value("Date", peak.date), y: .value("Minutes", peak.minutes))
                     .foregroundStyle(accentColor)
                     .annotation(position: .top, alignment: .center) {
-                        Text("\(Int(peak.minutes))m")
-                            .font(.caption)
+                        // Format as Hh Mm when >= 60 minutes
+                        let minutes = Int(peak.minutes)
+                        let label: String = {
+                            if minutes >= 60 {
+                                let h = minutes / 60
+                                let m = minutes % 60
+                                return m == 0 ? "\(h)h" : "\(h)h \(m)m"
+                            } else {
+                                return "\(minutes)m"
+                            }
+                        }()
+
+                        Text(label)
+                            .font(.caption2)
                             .fontWeight(.semibold)
-                            .padding(6)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.08)))
+                            .foregroundStyle(Color.primary.opacity(0.9))
                     }
+
+                // Add faint horizontal guide lines at 50% and 75% of peak
+                if peak.minutes > 0 {
+                    RuleMark(y: .value("50pct", peak.minutes * 0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: []))
+                        .foregroundStyle(Color.primary.opacity(0.06))
+                    RuleMark(y: .value("75pct", peak.minutes * 0.75))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: []))
+                        .foregroundStyle(Color.primary.opacity(0.04))
+                }
             }
         }
         .chartXAxis(.hidden)
