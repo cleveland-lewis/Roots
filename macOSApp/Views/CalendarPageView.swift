@@ -1864,11 +1864,11 @@ private struct MonthDayCell: View {
                         .background(
                             Circle().fill(DesignSystem.Materials.hud)
                         )
-                        .shadow(color: day.isSelected ? Color.accentColor.opacity(0.25) : Color.clear, radius: 3, x: 0, y: 2)
+                        .shadow(color: shadowColor, radius: shadowRadius, x: 0, y: shadowY)
                 )
                 .overlay(
                     Circle()
-                        .strokeBorder(outlineColor, lineWidth: 1)
+                        .strokeBorder(outlineColor, lineWidth: outlineWidth)
                 )
 
         }
@@ -1895,7 +1895,26 @@ private struct MonthDayCell: View {
     }
 
     private var outlineColor: Color {
-        day.isToday && !day.isSelected ? Color.accentColor.opacity(0.4) : .clear
+        if day.isSelected { return Color.accentColor.opacity(0.3) }
+        if day.isToday { return Color.accentColor.opacity(0.4) }
+        return .clear
+    }
+    
+    private var outlineWidth: CGFloat {
+        day.isSelected ? 2.5 : 1
+    }
+    
+    private var shadowColor: Color {
+        if day.isSelected { return Color.accentColor.opacity(0.4) }
+        return .clear
+    }
+    
+    private var shadowRadius: CGFloat {
+        day.isSelected ? 6 : 0
+    }
+    
+    private var shadowY: CGFloat {
+        day.isSelected ? 3 : 0
     }
 }
 
