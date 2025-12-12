@@ -331,19 +331,19 @@ struct DashboardView: View {
                     }
                 }
 
-                // Main content: quick area (left) + clock (right)
-                HStack(alignment: .center, spacing: 24) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        // When collapsed, show a single compact placeholder or nothing
-                        if !quickActionsExpanded {
-                            Text("Actions")
-                                .rootsBodySecondary()
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                // Main content: CLOCK (left) + Study graph (right)
+                let clockGraphSize: CGFloat = 180
+                HStack(alignment: .center, spacing: DesignSystem.Layout.spacing.large) {
+                    RootsAnalogClock(diameter: clockGraphSize, showSecondHand: true, accentColor: settings.activeAccentColor)
+                        .frame(width: clockGraphSize, height: clockGraphSize)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                    RootsAnalogClock(diameter: 160, showSecondHand: true, accentColor: settings.activeAccentColor)
-                        .frame(width: 160, height: 160)
+                    // Build samples from analytics service (last 7 days)
+                    let raw = AnalyticsService.shared.getStudyTrends(range: .last7Days)
+                    let studySamples = raw.map { StudySample(date: $0.date, minutes: $0.seconds / 60.0) }
+
+                    StudyTimeLineGraphView(samples: studySamples, accentColor: settings.activeAccentColor)
+                        .frame(width: clockGraphSize, height: clockGraphSize)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
