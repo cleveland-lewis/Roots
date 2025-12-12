@@ -194,7 +194,7 @@ struct GradesPageView: View {
                 detailCard
             }
         } else {
-            let spacing: CGFloat = 12
+            let spacing: CGFloat = 22
             let overallWidth = max(280, width * 0.22)
             let courseWidth = max(340, width * 0.34)
 
@@ -233,7 +233,7 @@ struct GradesPageView: View {
                 Button {
                     gradeAnalyticsWindowOpen = true
                     // Placeholder: open analytics window
-                    print("Open Grade Analytics tapped")
+                    print("Analytics tapped")
                 } label: {
                     Label("Analytics", systemImage: "chart.bar.xaxis")
                         .font(.system(size: 13, weight: .semibold))

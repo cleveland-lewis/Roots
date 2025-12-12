@@ -277,6 +277,7 @@ struct DashboardView: View {
                 DashboardTasksColumn(tasks: $tasks)
             }
         }
+        .frame(maxWidth: .infinity)
     }
 
     private var calendarCard: some View {
@@ -291,10 +292,6 @@ struct DashboardView: View {
     private var clockCard: some View {
         RootsCard {
             HStack(alignment: .center, spacing: RootsSpacing.l) {
-                RootsAnalogClock(diameter: 180, showSecondHand: true)
-                    .padding(.leading, RootsSpacing.s)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
                 VStack(alignment: .leading, spacing: RootsSpacing.m) {
                     ForEach(quickActions, id: \.label) { action in
                         Button {
@@ -311,6 +308,12 @@ struct DashboardView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+                Spacer(minLength: RootsSpacing.m)
+
+                RootsAnalogClock(diameter: 180, showSecondHand: true)
+                    .padding(.trailing, RootsSpacing.s)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)

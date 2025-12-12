@@ -221,7 +221,6 @@ struct AssignmentsPageView: View {
     @EnvironmentObject private var coursesStore: CoursesStore
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var appModel: AppModel
-    @EnvironmentObject private var appModel: AppModel
 
     @State private var assignments: [Assignment] = []
     @State private var courseDeletedCancellable: AnyCancellable? = nil
@@ -292,11 +291,6 @@ struct AssignmentsPageView: View {
                         selectedAssignment = nil
                     }
                 }
-        }
-        .onChange(of: appModel.requestedAssignmentDueDate) { dueDate in
-            guard let dueDate else { return }
-            focusAssignment(closestTo: dueDate)
-            appModel.requestedAssignmentDueDate = nil
         }
     }
 
@@ -627,6 +621,20 @@ struct AssignmentsPageView: View {
         return assignment
     }
 
+    private func focusAssignment(closestTo dueDate: Date) {
+        let sorted = assignments
+            .filter { $0.status != .archived }
+            .sorted { $0.dueDate < $1.dueDate }
+        guard !sorted.isEmpty else { return }
+        if let match = sorted.first(where: { $0.dueDate >= dueDate }) {
+            selectedAssignment = match
+        } else {
+            selectedAssignment = sorted.first
+        }
+    }
+
+}
+
 // MARK: - Summary Cards
 
 struct TodaySummaryCard: View {
@@ -660,18 +668,6 @@ struct TodaySummaryCard: View {
                     }
                 }
             }
-        }
-    }
-
-    private func focusAssignment(closestTo dueDate: Date) {
-        let sorted = assignments
-            .filter { $0.status != .archived }
-            .sorted { $0.dueDate < $1.dueDate }
-        guard !sorted.isEmpty else { return }
-        if let match = sorted.first(where: { $0.dueDate >= dueDate }) {
-            selectedAssignment = match
-        } else {
-            selectedAssignment = sorted.first
         }
     }
 }
