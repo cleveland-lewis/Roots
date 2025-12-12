@@ -411,10 +411,8 @@ struct TimerPageView: View {
         window.isReleasedWhenClosed = false
         
         // Create and store delegate with strong reference to prevent deallocation
-        let delegate = FocusWindowDelegate()
-        delegate.onWindowWillClose = { [weak self] in
-            self?.focusWindowController = nil
-            self?.focusWindowDelegate = nil
+        let delegate = FocusWindowDelegate {
+            // Window closed - cleanup will happen automatically
         }
         window.delegate = delegate
         focusWindowDelegate = delegate
@@ -1268,17 +1266,6 @@ private extension TimerPageView {
 #if os(macOS)
 import AppKit
 
-class FocusWindowDelegate: NSObject, NSWindowDelegate {
-    var onWindowWillClose: (() -> Void)?
-    
-    func windowWillClose(_ notification: Notification) {
-        onWindowWillClose?()
-    }
-    
-    func windowShouldClose(_ sender: NSWindow) -> Bool {
-        return true
-    }
-}
 #endif
 
 #endif

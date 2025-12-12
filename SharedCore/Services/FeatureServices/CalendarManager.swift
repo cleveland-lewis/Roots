@@ -390,8 +390,8 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
         }
         item.alarms = alarms.isEmpty ? nil : alarms
         
-        // Handle travel time
-        item.travelTime = travelTime
+        // Note: EKEvent doesn't have a travelTime property in EventKit API
+        // Travel time functionality would need to be handled differently
         
         // Handle recurrence
         item.recurrenceRules = recurrence.rule.map { [$0] }

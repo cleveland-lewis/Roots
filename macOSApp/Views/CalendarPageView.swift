@@ -356,7 +356,7 @@ struct CalendarPageView: View {
         let predicate = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: targetCalendars)
         let ekEvents = eventStore.events(matching: predicate)
         let mapped = ekEvents.map { ek in
-            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: ek.travelTime, ekIdentifier: ek.eventIdentifier, isReminder: false)
+            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false)
         }
         syncedEvents = mapped
         updateMetrics()
@@ -722,6 +722,13 @@ private struct MonthCalendarView: View {
 
     private func events(for date: Date) -> [CalendarEvent] {
         events.filter { calendar.isDate($0.startDate, inSameDayAs: date) }
+    }
+    
+    private func categoryColor(for title: String) -> Color {
+        if let category = parseEventCategory(from: title) {
+            return category.color
+        }
+        return Color.accentColor
     }
 
     private struct DayItem: Hashable, Identifiable {
@@ -1480,7 +1487,7 @@ struct CalendarView: View {
 
     private var calendarEvents: [CalendarEvent] {
         displayEKEvents.map {
-            CalendarEvent(title: $0.title, startDate: $0.startDate, endDate: $0.endDate, location: $0.location, notes: $0.notes, url: $0.url, alarms: $0.alarms, travelTime: $0.travelTime, ekIdentifier: $0.eventIdentifier, isReminder: false)
+            CalendarEvent(title: $0.title, startDate: $0.startDate, endDate: $0.endDate, location: $0.location, notes: $0.notes, url: $0.url, alarms: $0.alarms, travelTime: nil, ekIdentifier: $0.eventIdentifier, isReminder: false)
         }
     }
 
@@ -1698,7 +1705,7 @@ struct CalendarView: View {
     }
 
     private func mapEvent(_ ek: EKEvent) -> CalendarEvent {
-        CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: ek.travelTime, ekIdentifier: ek.eventIdentifier, isReminder: false)
+        CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false)
     }
 
     private func eventCategoryLabel(for title: String) -> String {

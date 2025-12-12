@@ -58,7 +58,7 @@ struct ChartViewVerticalStacked: View {
     }
     
     private var legendView: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.tiny) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text("Categories")
                     .font(DesignSystem.Typography.caption)
