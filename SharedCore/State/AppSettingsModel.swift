@@ -214,7 +214,6 @@ enum AppAccentColor: String, CaseIterable, Identifiable {
     }
 }
 
-@MainActor
 final class AppSettingsModel: ObservableObject, Codable {
     /// Shared singleton used across the app. Loaded from persisted storage when available.
     static let shared: AppSettingsModel = {
