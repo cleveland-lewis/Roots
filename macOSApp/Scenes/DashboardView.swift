@@ -302,9 +302,8 @@ struct DashboardView: View {
                     ZStack(alignment: .trailing) {
                         HStack(spacing: 10) {
                             if quickActionsExpanded {
-                                ForEach(Array(["Add Assignment", "Add Event", "Add Course", "Open Planner"].enumerated()), id: \.offset) { idx, title in
-                                    let icons = ["doc.badge.plus", "calendar.badge.plus", "graduationcap.fill", "calendar"]
-                                    quickActionButton(title, systemImage: icons[idx])
+                                ForEach(Array(quickActionList.enumerated()), id: \.offset) { idx, action in
+                                    quickActionButton(action.label, systemImage: action.icon, action: action.handler)
                                         .scaleEffect(quickActionsExpanded ? 1 : 0.92)
                                         .opacity(quickActionsExpanded ? 1 : 0)
                                         .offset(x: quickActionsExpanded ? 0 : 8)
@@ -351,16 +350,8 @@ struct DashboardView: View {
         }
     }
 
-    private func quickActionButton(_ title: String, systemImage: String) -> some View {
-        Button {
-            switch title {
-            case "Add Assignment": showAddAssignmentSheet = true
-            case "Add Event": showAddEventSheet = true
-            case "Add Course": appModel.selectedPage = .courses
-            case "Open Planner": appModel.selectedPage = .planner
-            default: break
-            }
-        } label: {
+    private func quickActionButton(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
             HStack(spacing: 6) {
                 Image(systemName: systemImage)
                 Text(title)
@@ -375,12 +366,13 @@ struct DashboardView: View {
         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .trailing).combined(with: .opacity)))
     }
 
-    private var quickActions: [(label: String, icon: String, handler: () -> Void)] {
+    private var quickActionList: [(label: String, icon: String, handler: () -> Void)] {
         [
-            ("Add Assignment", "plus.circle", { print("[Dashboard] Quick action: Add Assignment") }),
-            ("Add Event", "calendar.badge.plus", { print("[Dashboard] Quick action: Add Event") }),
-            ("Add Course", "graduationcap", { print("[Dashboard] Quick action: Add Course") }),
-            ("Open Planner", "list.bullet.rectangle", { print("[Dashboard] Quick action: Open Planner") })
+            ("Add Assignment", "doc.badge.plus") { showAddAssignmentSheet = true },
+            ("Next Assignment", "arrow.right.circle") { triggerNextAssignment() },
+            ("Add Grade", "chart.bar.doc.horizontal") { showAddGradeSheet = true },
+            ("Add Event", "calendar.badge.plus") { showAddEventSheet = true },
+            ("Add Task", "list.bullet.rectangle") { showAddTaskSheet = true }
         ]
     }
 
