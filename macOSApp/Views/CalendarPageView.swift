@@ -96,9 +96,10 @@ struct CalendarPageView: View {
     @State private var todayHover = false
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             // Header: Add button, Title, View selector, Navigation
-            HStack(alignment: .center, spacing: DesignSystem.Layout.spacing.medium) {                Button {
+            HStack(alignment: .center, spacing: 12) {
+                Button {
                     showingNewEventSheet = true
                 } label: {
                     Image(systemName: "plus")
@@ -140,10 +141,10 @@ struct CalendarPageView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                .frame(maxWidth: 420)
+                .frame(width: 280)
                 .tint(settings.activeAccentColor)
 
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     Button { shift(by: -1) } label: {
                         Image(systemName: "chevron.left")
                             .foregroundStyle(chevronLeftHover ? settings.activeAccentColor : .primary)
@@ -182,7 +183,7 @@ struct CalendarPageView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .padding(.horizontal, DesignSystem.Layout.padding.window)
-            .padding(.vertical, 6)
+            .padding(.vertical, 4)
 
             // Main content: single glass area without sidebars
             VStack(spacing: 12) {
