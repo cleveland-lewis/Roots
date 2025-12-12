@@ -123,39 +123,6 @@ struct DashboardView: View {
         }
     }
 
-    private var dashboardHeader: some View {
-        RootsCard(compact: true) {
-            HStack(spacing: DesignSystem.Layout.spacing.small) {
-                headerActionButton("Add Assignment", icon: "doc.badge.plus") {
-                    showAddAssignmentSheet = true
-                }
-                headerActionButton("Next Assignment", icon: "arrow.right.circle") {
-                    triggerNextAssignment()
-                }
-                headerActionButton("Add Grade", icon: "chart.bar.doc.horizontal") {
-                    showAddGradeSheet = true
-                }
-                headerActionButton("Add Event", icon: "calendar.badge.plus") {
-                    showAddEventSheet = true
-                }
-                headerActionButton("Add Task", icon: "list.bullet.rectangle") {
-                    showAddTaskSheet = true
-                }
-            }
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    private func headerActionButton(_ label: String, icon: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Label(label, systemImage: icon)
-                .font(.subheadline.weight(.semibold))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-        }
-        .buttonStyle(.glassBlueProminent)
-        .controlSize(.large)
-    }
 
     private func triggerNextAssignment() {
         let today = Calendar.current.startOfDay(for: Date())
@@ -343,20 +310,20 @@ struct DashboardView: View {
                         }
                         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .trailing).combined(with: .opacity)))
 
-                        Button(action: {
+                        GlassIconButton(systemName: "plus", accessibilityLabel: "Quick Actions") {
                             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                                 quickActionsExpanded.toggle()
                             }
-                        }) {
+                        }
+                        .overlay {
                             Image(systemName: "plus")
                                 .font(.system(size: 14, weight: .semibold))
                                 .rotationEffect(.degrees(quickActionsExpanded ? 360 : 0))
                                 .animation(.easeInOut(duration: 0.35), value: quickActionsExpanded)
                                 .frame(width: 36, height: 36)
-                                .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
                         }
-                        .buttonStyle(.plain)
-                        .rootsStandardInteraction()
+                        .controlSize(.regular)
+                        .accessibilityLabel("Quick Actions")
                     }
                 }
 
@@ -398,6 +365,11 @@ struct DashboardView: View {
             .padding(.horizontal, 10)
             .frame(minHeight: 34)
         }
+        .buttonStyle(.borderedProminent)
+        .tint(settings.activeAccentColor)
+        .controlSize(.small)
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .trailing).combined(with: .opacity)))
+    }
         .buttonStyle(.borderedProminent)
     }
 
