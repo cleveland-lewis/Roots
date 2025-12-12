@@ -221,6 +221,7 @@ struct AssignmentsPageView: View {
     @EnvironmentObject private var coursesStore: CoursesStore
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var appModel: AppModel
+    @EnvironmentObject private var appModel: AppModel
 
     @State private var assignments: [Assignment] = []
     @State private var courseDeletedCancellable: AnyCancellable? = nil
@@ -272,6 +273,11 @@ struct AssignmentsPageView: View {
             AssignmentEditorSheet(assignment: editingAssignment) { newAssignment in
                 upsertAssignment(newAssignment)
             }
+        }
+        .onChange(of: appModel.requestedAssignmentDueDate) { dueDate in
+            guard let dueDate else { return }
+            focusAssignment(closestTo: dueDate)
+            appModel.requestedAssignmentDueDate = nil
         }
         .onAppear {
             // subscribe to course deletions
