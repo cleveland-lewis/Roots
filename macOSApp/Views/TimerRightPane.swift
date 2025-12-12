@@ -8,7 +8,7 @@ struct TimerRightPane: View {
     var activities: [LocalTimerActivity]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.l) {
+        VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.large) {
             Text("Study Summary")
                 .font(.headline)
 

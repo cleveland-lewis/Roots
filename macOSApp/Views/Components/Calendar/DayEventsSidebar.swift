@@ -14,13 +14,27 @@ struct DayEventsSidebar: View {
     var body: some View {
         VStack(spacing: 0) {
             header
+
+            // legend
+            HStack(spacing: 10) {
+                ForEach(EventCategory.allCases) { c in
+                    HStack(spacing: 6) {
+                        Circle().fill(c.color).frame(width: 8, height: 8)
+                        Text(c.rawValue).font(.caption2).foregroundColor(.secondary)
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+
             Divider()
                 .padding(.horizontal, 16)
             content
         }
+        .padding() // match calendar card padding so rounded backgrounds align
         .background(DesignSystem.Materials.card)
         .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
-        .shadow(color: Color.black.opacity(0.08), radius: 12, y: 6)
+        .shadow(color: Color.black.opacity(0.06), radius: 8, y: 4)
     }
 
     private var header: some View {
@@ -32,6 +46,7 @@ struct DayEventsSidebar: View {
                 .foregroundStyle(.secondary)
         }
         .padding(16)
+        .padding(.bottom, 4)
     }
 
     private var content: some View {
@@ -96,7 +111,7 @@ private struct DayEventRow: View {
 
                 if let location = event.location, !location.isEmpty {
                     Text(location)
-                        .font(DesignSystem.Typography.caption2)
+                        .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
             }

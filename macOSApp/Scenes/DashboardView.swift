@@ -368,11 +368,11 @@ struct DashboardView: View {
 
     private var quickActionList: [(label: String, icon: String, handler: () -> Void)] {
         [
-            ("Add Assignment", "doc.badge.plus") { showAddAssignmentSheet = true },
-            ("Next Assignment", "arrow.right.circle") { triggerNextAssignment() },
-            ("Add Grade", "chart.bar.doc.horizontal") { showAddGradeSheet = true },
-            ("Add Event", "calendar.badge.plus") { showAddEventSheet = true },
-            ("Add Task", "list.bullet.rectangle") { showAddTaskSheet = true }
+            ("Add Assignment", "doc.badge.plus", { showAddAssignmentSheet = true }),
+            ("Next Assignment", "arrow.right.circle", { triggerNextAssignment() }),
+            ("Add Grade", "chart.bar.doc.horizontal", { showAddGradeSheet = true }),
+            ("Add Event", "calendar.badge.plus", { showAddEventSheet = true }),
+            ("Add Task", "list.bullet.rectangle", { showAddTaskSheet = true })
         ]
     }
 

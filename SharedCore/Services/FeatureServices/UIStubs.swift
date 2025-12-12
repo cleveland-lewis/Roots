@@ -172,7 +172,154 @@ struct CalendarHeader: View {
 
     var body: some View { Text("Calendar Header") }
 }
-struct AddEventPopup: View { var body: some View { Text("Add Event") } }
+enum EventCategory: String, CaseIterable, Identifiable {
+    case study = "Study"
+    case review = "Review"
+    case homework = "Homework"
+    case reading = "Reading"
+    case exam = "Exam"
+    case `class` = "Class"
+    case lab = "Lab"
+    case other = "Other"
+    var id: String { rawValue }
+}
+
+// Shared category parsing & colors
+func parseEventCategory(from title: String) -> EventCategory? {
+    let t = title.lowercased()
+    if t.contains("exam") || t.contains("final") || t.contains("quiz") || t.contains("midterm") { return .exam }
+    if t.contains("lab") { return .lab }
+    if t.contains("class") || t.contains("lecture") { return .class }
+    if t.contains("homework") || t.contains("assignment") || t.contains("problem set") || t.contains("ps") { return .homework }
+    if t.contains("study") { return .study }
+    if t.contains("review") { return .review }
+    if t.contains("read") || t.contains("reading") { return .reading }
+    return nil
+}
+
+extension EventCategory {
+    var color: Color {
+        switch self {
+        case .study: return Color(hue: 0.55, saturation: 0.85, brightness: 0.8) // blue
+        case .review: return Color(hue: 0.78, saturation: 0.65, brightness: 0.85) // purple
+        case .homework: return Color(hue: 0.33, saturation: 0.6, brightness: 0.85) // green
+        case .reading: return Color(hue: 0.08, saturation: 0.7, brightness: 0.9) // orange
+        case .exam: return Color(hue: 0.02, saturation: 0.75, brightness: 0.9) // red
+        case .class: return Color(hue: 0.6, saturation: 0.5, brightness: 0.8) // teal
+        case .lab: return Color(hue: 0.48, saturation: 0.6, brightness: 0.85) // cyan
+        case .other: return Color.secondary.opacity(0.85)
+        }
+    }
+}
+
+// New shared Add Event popup used throughout the app
+struct AddEventPopup: View {
+    @EnvironmentObject var calendarManager: CalendarManager
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var title: String = ""
+    @State private var category: EventCategory = .other
+    @State private var userSelectedCategory: Bool = false
+    @State private var startDate: Date = Date()
+    @State private var endDate: Date = Date().addingTimeInterval(3600)
+    @State private var isAllDay: Bool = false
+    @State private var location: String = ""
+    @State private var notes: String = ""
+    @State private var recurrence: CalendarManager.RecurrenceOption = .none
+    @State private var isSaving: Bool = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("New Event")
+                    .font(.title2.weight(.bold))
+                Spacer()
+                Button("Close") { dismiss() }
+            }
+
+            Form {
+                TextField("Title", text: $title)
+                    .onChange(of: title) { new in
+                        // If user has not explicitly selected category, parse from title
+                        if !userSelectedCategory {
+                            if let parsed = parseCategory(from: new) {
+                                category = parsed
+                            } else {
+                                category = .other
+                            }
+                        }
+                    }
+
+                Picker("Category", selection: Binding(get: { category }, set: { v in category = v; userSelectedCategory = true })) {
+                    ForEach(EventCategory.allCases) { c in
+                        Text(c.rawValue).tag(c)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                Toggle("All-day", isOn: $isAllDay)
+                DatePicker("Starts", selection: $startDate)
+                DatePicker("Ends", selection: $endDate)
+                TextField("Location", text: $location)
+                TextEditor(text: $notes).frame(height: 120)
+
+                Picker("Repeat", selection: $recurrence) {
+                    ForEach(CalendarManager.RecurrenceOption.allCases, id: \.self) { opt in
+                        Text(opt.rawValue.capitalized).tag(opt)
+                    }
+                }
+            }
+
+            HStack {
+                Spacer()
+                Button("Create") {
+                    createEvent()
+                }
+                .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(16)
+        .frame(minWidth: 520, minHeight: 360)
+    }
+
+    private func parseCategory(from title: String) -> EventCategory? {
+        let t = title.lowercased()
+        if t.contains("exam") || t.contains("final") || t.contains("quiz") || t.contains("midterm") { return .exam }
+        if t.contains("lab") { return .lab }
+        if t.contains("class") || t.contains("lecture") { return .class }
+        if t.contains("homework") || t.contains("assignment") || t.contains("problem set") || t.contains("ps") { return .homework }
+        if t.contains("study") { return .study }
+        if t.contains("review") { return .review }
+        if t.contains("read") || t.contains("reading") { return .reading }
+        return nil
+    }
+
+    private func createEvent() {
+        Task {
+            isSaving = true
+            // If category not explicitly chosen, ensure title contains category keyword to surface label parsing
+            var finalTitle = title
+            if !userSelectedCategory {
+                if category != .other && !title.lowercased().contains(category.rawValue.lowercased()) {
+                    finalTitle = "\(category.rawValue) \(title)"
+                }
+            }
+
+            do {
+                try await calendarManager.saveEvent(title: finalTitle, startDate: startDate, endDate: endDate, isAllDay: isAllDay, location: location, notes: notes, calendar: nil)
+                // refresh device events
+                await DeviceCalendarManager.shared.refreshEventsForVisibleRange()
+            } catch {
+                print("Failed to save event: \(error)")
+            }
+            isSaving = false
+            dismiss()
+        }
+    }
+}
+
+// Backwards compatibility alias
+//struct AddEventPopup: View { var body: some View { Text("Add Event") } }
 
 // Grades + analytics shells
 struct GPABreakdownCard: View {

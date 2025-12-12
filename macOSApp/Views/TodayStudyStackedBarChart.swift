@@ -56,14 +56,13 @@ struct TodayStudyStackedBarChart: View {
                             x: .value("Label", "Today"),
                             y: .value("Minutes", slice.minutes)
                         )
-                        .foregroundStyle(by: .value("Course", slice.courseName))
+                        .foregroundStyle(slice.color)
                         .annotation(position: .overlay) {
                             // no per-segment labels for compactness
                             EmptyView()
                         }
                     }
                 }
-                .chartForegroundStyleScale(sliceColorScale(slices: slices))
                 .chartYAxis(.hidden)
                 .chartXAxis(.hidden)
                 .frame(height: 140)
@@ -103,10 +102,5 @@ struct TodayStudyStackedBarChart: View {
         }
     }
 
-    private func sliceColorScale(slices: [CourseStudySlice]) -> [String: Color] {
-        var map: [String: Color] = [:]
-        for s in slices { map[s.courseName] = s.color }
-        return map
-    }
 }
 #endif

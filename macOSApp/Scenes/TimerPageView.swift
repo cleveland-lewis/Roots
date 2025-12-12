@@ -245,7 +245,7 @@ struct TimerPageView: View {
                     analyticsCard
                 }
             } else {
-                HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.m) {
+                HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.medium) {
                     // LEFT: existing timer UI (activities + center stack)
                     HStack(alignment: .top, spacing: 16) {
                         activitiesColumn
@@ -403,13 +403,13 @@ struct TimerPageView: View {
         let hosting = NSHostingController(rootView: focusView)
         hosting.rootView.environmentObject(assignmentsStore)
         let window = NSWindow(contentViewController: hosting)
-        window.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        window.styleMask = NSWindow.StyleMask([.titled, .closable, .miniaturizable, .resizable])
         window.setContentSize(NSSize(width: 640, height: 480))
         window.center()
         window.title = "Focus"
         window.isReleasedWhenClosed = false
         window.delegate = FocusWindowDelegate { focusWindowController = nil }
-        window.makeKeyAndOrderFront(nil)
+        window.makeKeyAndOrderFront(nil as Any?)
         focusWindowController = NSWindowController(window: window)
     }
 
@@ -532,6 +532,10 @@ struct TimerPageView: View {
 
     private var currentActivity: LocalTimerActivity? {
         activities.first(where: { $0.id == selectedActivityID }) ?? activities.first
+    }
+
+    private var selectedActivity: LocalTimerActivity? {
+        currentActivity
     }
 
     private func formattedDuration(_ seconds: TimeInterval) -> String {

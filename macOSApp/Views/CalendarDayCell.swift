@@ -12,13 +12,13 @@ struct CalendarDayCell: View {
     @State private var isPressed = false
 
     var body: some View {
-        _ = densityLevel(for: eventCount)
         let isToday = calendar.isDateInToday(date)
 
         VStack(spacing: 7) {
             Text(dayString)
                 .font(DesignSystem.Typography.body)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: 28, minHeight: 28)
+                .padding(4)
                 .foregroundColor(textColor(isToday: isToday))
                 .background(
                     Circle()
