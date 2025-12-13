@@ -25,14 +25,25 @@ struct RootsApp: App {
     @StateObject private var calendarManager = CalendarManager.shared
     @StateObject private var deviceCalendar = DeviceCalendarManager.shared
     @StateObject private var timerManager = TimerManager()
+    @StateObject private var focusManager = FocusManager()
     @StateObject private var preferences = AppPreferences()
 
     @Environment(\.scenePhase) private var scenePhase
 
+    private var menuBarManager: MenuBarManager
+
     init() {
         let store = CoursesStore()
         _coursesStore = StateObject(wrappedValue: store)
-        _settingsCoordinator = StateObject(wrappedValue: SettingsCoordinator(appSettings: AppSettingsModel.shared, coursesStore: store))
+        let settings = AppSettingsModel.shared
+        _appSettings = StateObject(wrappedValue: settings)
+        _settingsCoordinator = StateObject(wrappedValue: SettingsCoordinator(appSettings: settings, coursesStore: store))
+        let assignments = AssignmentsStore.shared
+        let timer = TimerManager()
+        _timerManager = StateObject(wrappedValue: timer)
+        let focus = FocusManager()
+        _focusManager = StateObject(wrappedValue: focus)
+        menuBarManager = MenuBarManager(focusManager: focus, assignmentsStore: assignments, settings: settings)
         _ = DeveloperSettingsSynchronizer.shared
     }
 
@@ -65,6 +76,7 @@ struct RootsApp: App {
                 .environmentObject(calendarManager)
                 .environmentObject(DeviceCalendarManager.shared)
                 .environmentObject(timerManager)
+                .environmentObject(focusManager)
                 .environmentObject(FlashcardManager.shared)
                 .environmentObject(preferences)
                 .environmentObject(gradesStore)
@@ -114,6 +126,11 @@ struct RootsApp: App {
                     await calendarManager.checkPermissionsOnStartup()
                     await calendarManager.planTodayIfNeeded(tasks: AssignmentsStore.shared.tasks)
                     timerManager.checkNotificationPermissions()
+                    
+                    // Schedule daily overview if enabled
+                    if appSettings.dailyOverviewEnabled {
+                        NotificationManager.shared.scheduleDailyOverview()
+                    }
                 }
         }
         .onChange(of: scenePhase) { _, newPhase in
@@ -133,6 +150,7 @@ struct RootsApp: App {
                 .environmentObject(EventsCountStore())
                 .environmentObject(calendarManager)
                 .environmentObject(timerManager)
+                .environmentObject(focusManager)
                 .environmentObject(FlashcardManager.shared)
                 .environmentObject(preferences)
                 .environmentObject(gradesStore)

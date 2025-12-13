@@ -25,6 +25,9 @@ final class AssignmentsStore: ObservableObject {
         saveCache()
         _Concurrency.Task { await CalendarManager.shared.syncPlannerTaskToCalendar(task) }
         refreshGPA()
+        
+        // Schedule notification for new task
+        scheduleNotificationIfNeeded(for: task)
     }
 
     func removeTask(id: UUID) {
@@ -32,6 +35,9 @@ final class AssignmentsStore: ObservableObject {
         updateAppBadge()
         saveCache()
         refreshGPA()
+        
+        // Cancel notification when task is removed
+        NotificationManager.shared.cancelAssignmentNotification(id)
     }
 
     func updateTask(_ task: AppTask) {
@@ -42,6 +48,9 @@ final class AssignmentsStore: ObservableObject {
         saveCache()
         _Concurrency.Task { await CalendarManager.shared.syncPlannerTaskToCalendar(task) }
         refreshGPA()
+        
+        // Reschedule notification for updated task
+        rescheduleNotificationIfNeeded(for: task)
     }
 
     func incompleteTasks() -> [AppTask] {
@@ -91,8 +100,35 @@ final class AssignmentsStore: ObservableObject {
             let data = try Data(contentsOf: url)
             let decoded = try JSONDecoder().decode([AppTask].self, from: data)
             tasks = decoded
+            
+            // Schedule notifications for all loaded incomplete tasks
+            scheduleNotificationsForLoadedTasks()
         } catch {
             print("Failed to load tasks cache: \(error)")
+        }
+    }
+    
+    // MARK: - Notification Scheduling
+    
+    private func scheduleNotificationIfNeeded(for task: AppTask) {
+        guard !task.isCompleted else { return }
+        NotificationManager.shared.scheduleAssignmentDue(task)
+    }
+    
+    private func rescheduleNotificationIfNeeded(for task: AppTask) {
+        // Cancel existing notification
+        NotificationManager.shared.cancelAssignmentNotification(task.id)
+        
+        // Schedule new one if task is incomplete
+        if !task.isCompleted {
+            NotificationManager.shared.scheduleAssignmentDue(task)
+        }
+    }
+    
+    private func scheduleNotificationsForLoadedTasks() {
+        // Schedule notifications for all incomplete tasks on app launch
+        for task in tasks where !task.isCompleted {
+            NotificationManager.shared.scheduleAssignmentDue(task)
         }
     }
 }

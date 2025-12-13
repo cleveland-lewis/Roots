@@ -233,7 +233,19 @@ final class AppSettingsModel: ObservableObject, Codable {
         case enableFlashcardsStorage
         case assignmentSwipeLeadingRaw
         case assignmentSwipeTrailingRaw
+        case pomodoroFocusStorage
+        case pomodoroShortBreakStorage
+        case pomodoroLongBreakStorage
+        case pomodoroIterationsStorage
         case longBreakCadenceStorage
+        case notificationsEnabledStorage
+        case assignmentRemindersEnabledStorage
+        case dailyOverviewEnabledStorage
+        case affirmationsEnabledStorage
+        case timerAlertsEnabledStorage
+        case pomodoroAlertsEnabledStorage
+        case assignmentLeadTimeStorage
+        case dailyOverviewTimeStorage
     }
 
 
@@ -381,6 +393,21 @@ final class AppSettingsModel: ObservableObject, Codable {
     var pomodoroLongBreakStorage: Int = 15
     var pomodoroIterationsStorage: Int = 4
     var longBreakCadenceStorage: Int = 4
+    
+    // Notification settings
+    var notificationsEnabledStorage: Bool = false
+    var assignmentRemindersEnabledStorage: Bool = true
+    var dailyOverviewEnabledStorage: Bool = false
+    var affirmationsEnabledStorage: Bool = false
+    var timerAlertsEnabledStorage: Bool = true
+    var pomodoroAlertsEnabledStorage: Bool = true
+    var assignmentLeadTimeStorage: Double = 3600 // 1 hour in seconds
+    var dailyOverviewTimeStorage: Date = {
+        var components = DateComponents()
+        components.hour = 8
+        components.minute = 0
+        return Calendar.current.date(from: components) ?? Date()
+    }()
 
     // Event load thresholds (persisted)
     var loadLowThresholdStorage: Int = 1
@@ -599,12 +626,56 @@ final class AppSettingsModel: ObservableObject, Codable {
 
     var pomodoroIterations: Int {
         get { pomodoroIterationsStorage }
-        set { pomodoroIterationsStorage = newValue }
+        set {
+            objectWillChange.send()
+            pomodoroIterationsStorage = newValue
+        }
     }
     
     var longBreakCadence: Int {
         get { longBreakCadenceStorage }
         set { longBreakCadenceStorage = newValue }
+    }
+    
+    // Notification settings exposed to views
+    var notificationsEnabled: Bool {
+        get { notificationsEnabledStorage }
+        set { notificationsEnabledStorage = newValue }
+    }
+    
+    var assignmentRemindersEnabled: Bool {
+        get { assignmentRemindersEnabledStorage }
+        set { assignmentRemindersEnabledStorage = newValue }
+    }
+    
+    var dailyOverviewEnabled: Bool {
+        get { dailyOverviewEnabledStorage }
+        set { dailyOverviewEnabledStorage = newValue }
+    }
+    
+    var affirmationsEnabled: Bool {
+        get { affirmationsEnabledStorage }
+        set { affirmationsEnabledStorage = newValue }
+    }
+    
+    var timerAlertsEnabled: Bool {
+        get { timerAlertsEnabledStorage }
+        set { timerAlertsEnabledStorage = newValue }
+    }
+    
+    var pomodoroAlertsEnabled: Bool {
+        get { pomodoroAlertsEnabledStorage }
+        set { pomodoroAlertsEnabledStorage = newValue }
+    }
+    
+    var assignmentLeadTime: TimeInterval {
+        get { assignmentLeadTimeStorage }
+        set { assignmentLeadTimeStorage = newValue }
+    }
+    
+    var dailyOverviewTime: Date {
+        get { dailyOverviewTimeStorage }
+        set { dailyOverviewTimeStorage = newValue }
     }
 
     // Event load thresholds exposed to views
@@ -859,6 +930,19 @@ final class AppSettingsModel: ObservableObject, Codable {
         try container.encode(enableFlashcardsStorage, forKey: .enableFlashcardsStorage)
         try container.encode(assignmentSwipeLeadingRaw, forKey: .assignmentSwipeLeadingRaw)
         try container.encode(assignmentSwipeTrailingRaw, forKey: .assignmentSwipeTrailingRaw)
+        try container.encode(pomodoroFocusStorage, forKey: .pomodoroFocusStorage)
+        try container.encode(pomodoroShortBreakStorage, forKey: .pomodoroShortBreakStorage)
+        try container.encode(pomodoroLongBreakStorage, forKey: .pomodoroLongBreakStorage)
+        try container.encode(pomodoroIterationsStorage, forKey: .pomodoroIterationsStorage)
+        try container.encode(longBreakCadenceStorage, forKey: .longBreakCadenceStorage)
+        try container.encode(notificationsEnabledStorage, forKey: .notificationsEnabledStorage)
+        try container.encode(assignmentRemindersEnabledStorage, forKey: .assignmentRemindersEnabledStorage)
+        try container.encode(dailyOverviewEnabledStorage, forKey: .dailyOverviewEnabledStorage)
+        try container.encode(affirmationsEnabledStorage, forKey: .affirmationsEnabledStorage)
+        try container.encode(timerAlertsEnabledStorage, forKey: .timerAlertsEnabledStorage)
+        try container.encode(pomodoroAlertsEnabledStorage, forKey: .pomodoroAlertsEnabledStorage)
+        try container.encode(assignmentLeadTimeStorage, forKey: .assignmentLeadTimeStorage)
+        try container.encode(dailyOverviewTimeStorage, forKey: .dailyOverviewTimeStorage)
     }
 
     required init(from decoder: Decoder) throws {
@@ -891,6 +975,24 @@ final class AppSettingsModel: ObservableObject, Codable {
         enableFlashcardsStorage = try container.decodeIfPresent(Bool.self, forKey: .enableFlashcardsStorage) ?? true
         assignmentSwipeLeadingRaw = try container.decodeIfPresent(String.self, forKey: .assignmentSwipeLeadingRaw) ?? AssignmentSwipeAction.complete.rawValue
         assignmentSwipeTrailingRaw = try container.decodeIfPresent(String.self, forKey: .assignmentSwipeTrailingRaw) ?? AssignmentSwipeAction.delete.rawValue
+        pomodoroFocusStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroFocusStorage) ?? 25
+        pomodoroShortBreakStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroShortBreakStorage) ?? 5
+        pomodoroLongBreakStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroLongBreakStorage) ?? 15
+        pomodoroIterationsStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroIterationsStorage) ?? 4
+        longBreakCadenceStorage = try container.decodeIfPresent(Int.self, forKey: .longBreakCadenceStorage) ?? 4
+        notificationsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .notificationsEnabledStorage) ?? false
+        assignmentRemindersEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .assignmentRemindersEnabledStorage) ?? true
+        dailyOverviewEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .dailyOverviewEnabledStorage) ?? false
+        affirmationsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .affirmationsEnabledStorage) ?? false
+        timerAlertsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .timerAlertsEnabledStorage) ?? true
+        pomodoroAlertsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .pomodoroAlertsEnabledStorage) ?? true
+        assignmentLeadTimeStorage = try container.decodeIfPresent(Double.self, forKey: .assignmentLeadTimeStorage) ?? 3600
+        dailyOverviewTimeStorage = try container.decodeIfPresent(Date.self, forKey: .dailyOverviewTimeStorage) ?? {
+            var components = DateComponents()
+            components.hour = 8
+            components.minute = 0
+            return Calendar.current.date(from: components) ?? Date()
+        }()
     }
 
     func resetUserDefaults() {

@@ -75,6 +75,8 @@ struct SettingsRootView: View {
                     ProfilesSettingsView()
                 case .flashcards:
                     FlashcardSettingsView()
+                case .notifications:
+                    NotificationsSettingsView()
                 case .privacy:
                     PrivacySettingsView()
                 }
