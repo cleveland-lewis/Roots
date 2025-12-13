@@ -604,7 +604,51 @@ private struct MonthCalendarView: View {
                             isInCurrentMonth: day.isCurrentMonth
                         )
                         let dayEvents = events(for: day.date).sorted { $0.startDate < $1.startDate }
-                        VStack(alignment: .leading, spacing: 6) {
+                        ZStack(alignment: .topTrailing) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Spacer()
+                                    .frame(height: 36)
+                                
+                                if !dayEvents.isEmpty {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        ForEach(dayEvents.prefix(3)) { event in
+                                            Button {
+                                                onSelectEvent(event)
+                                            } label: {
+                                                HStack(spacing: 6) {
+                                                    Circle()
+                                                        .fill(event.category.color)
+                                                        .frame(width: 8, height: 8)
+                                                    Text(event.category.rawValue)
+                                                        .font(DesignSystem.Typography.caption)
+                                                        .foregroundStyle(.secondary)
+                                                    Text(event.title)
+                                                        .font(DesignSystem.Typography.caption)
+                                                        .foregroundStyle(.primary)
+                                                        .lineLimit(1)
+                                                    Spacer(minLength: 0)
+                                                }
+                                                .padding(.horizontal, 6)
+                                                .padding(.vertical, 3)
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                                        .fill(event.category.color.opacity(0.08))
+                                                )
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                        if dayEvents.count > 3 {
+                                            Text("+\(dayEvents.count - 3) more")
+                                                .font(DesignSystem.Typography.caption)
+                                                .foregroundStyle(.secondary)
+                                                .padding(.horizontal, 6)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(6)
+                            .frame(maxWidth: 180, minHeight: 100)
+                            
                             Button {
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     focusedDate = day.date
@@ -614,44 +658,8 @@ private struct MonthCalendarView: View {
                                 MonthDayCell(day: calendarDay)
                             }
                             .buttonStyle(.plain)
-
-                            if !dayEvents.isEmpty {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    ForEach(dayEvents.prefix(3)) { event in
-                                        Button {
-                                            onSelectEvent(event)
-                                        } label: {
-                                            HStack(spacing: 6) {
-                                                Circle()
-                                                    .fill(event.category.color)
-                                                    .frame(width: 8, height: 8)
-                                                Text(event.category.rawValue)
-                                                    .font(DesignSystem.Typography.caption)
-                                                    .foregroundStyle(.secondary)
-                                                Text(event.title)
-                                                    .font(DesignSystem.Typography.caption)
-                                                    .foregroundStyle(.primary)
-                                                    .lineLimit(1)
-                                                Spacer(minLength: 0)
-                                            }
-                                            .padding(.horizontal, 6)
-                                            .padding(.vertical, 3)
-                                            .background(
-                                                RoundedRectangle(cornerRadius: 4, style: .continuous)
-                                                    .fill(event.category.color.opacity(0.08))
-                                            )
-                                        }
-                                        .buttonStyle(.plain)
-                                    }
-                                    if dayEvents.count > 3 {
-                                        Text("+\(dayEvents.count - 3) more")
-                                            .font(DesignSystem.Typography.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                }
-                            }
+                            .frame(height: 36)
                         }
-                        .padding(6)
                         .frame(maxWidth: 180)
                         .background(
                             RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusSmall, style: .continuous)
@@ -1911,29 +1919,23 @@ private struct MonthDayCell: View {
     @State private var hovering = false
 
     var body: some View {
-        VStack(spacing: 7) {
+        HStack {
+            Spacer()
             Text(dayNumber)
                 .font(DesignSystem.Typography.body)
-                .frame(width: 32, height: 32)
                 .foregroundColor(textColor)
+                .frame(width: 28, height: 28)
                 .background(
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(DesignSystem.Materials.hud)
-                        
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .fill(backgroundFill)
-                            .padding(2)
-                    }
-                    .shadow(color: shadowColor, radius: shadowRadius, x: 0, y: shadowY)
+                    Circle()
+                        .fill(backgroundFill)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .strokeBorder(outlineColor, lineWidth: outlineWidth)
+                    Circle()
+                        .strokeBorder(day.isToday && !day.isSelected ? Color.accentColor.opacity(0.5) : Color.clear, lineWidth: 1.5)
                 )
-
+                .padding(DesignSystem.Layout.spacing.small)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .contentShape(Rectangle())
         .scaleEffect(hovering ? 1.01 : 1.0)
         .animation(.easeInOut(duration: 0.12), value: hovering)
@@ -1953,29 +1955,6 @@ private struct MonthDayCell: View {
         if day.isSelected { return .accentColor }
         if day.isToday { return .accentColor.opacity(0.12) }
         return .clear
-    }
-
-    private var outlineColor: Color {
-        if day.isSelected { return Color.accentColor.opacity(0.3) }
-        if day.isToday { return Color.accentColor.opacity(0.4) }
-        return .clear
-    }
-    
-    private var outlineWidth: CGFloat {
-        day.isSelected ? 2.5 : 1
-    }
-    
-    private var shadowColor: Color {
-        if day.isSelected { return Color.accentColor.opacity(0.4) }
-        return .clear
-    }
-    
-    private var shadowRadius: CGFloat {
-        day.isSelected ? 6 : 0
-    }
-    
-    private var shadowY: CGFloat {
-        day.isSelected ? 3 : 0
     }
 }
 
