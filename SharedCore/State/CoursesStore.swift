@@ -204,6 +204,26 @@ final class CoursesStore: ObservableObject {
         var outlineNodes: [CourseOutlineNode]
         var courseFiles: [CourseFile]
         var currentSemesterId: UUID?
+        
+        // Custom decoding to handle backward compatibility
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            semesters = try container.decode([Semester].self, forKey: .semesters)
+            courses = try container.decode([Course].self, forKey: .courses)
+            // Provide default empty array if outlineNodes is missing (backward compatibility)
+            outlineNodes = try container.decodeIfPresent([CourseOutlineNode].self, forKey: .outlineNodes) ?? []
+            courseFiles = try container.decodeIfPresent([CourseFile].self, forKey: .courseFiles) ?? []
+            currentSemesterId = try container.decodeIfPresent(UUID.self, forKey: .currentSemesterId)
+        }
+        
+        // Memberwise init for encoding
+        init(semesters: [Semester], courses: [Course], outlineNodes: [CourseOutlineNode], courseFiles: [CourseFile], currentSemesterId: UUID?) {
+            self.semesters = semesters
+            self.courses = courses
+            self.outlineNodes = outlineNodes
+            self.courseFiles = courseFiles
+            self.currentSemesterId = currentSemesterId
+        }
     }
 
     private func load() {
