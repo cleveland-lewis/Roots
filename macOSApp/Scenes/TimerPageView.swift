@@ -862,46 +862,86 @@ struct TimerCoreCard: View {
     var onReset: () -> Void
     var onSkip: () -> Void
     var onOpenFocus: () -> Void
+    
+    @State private var showingModeMenu = false
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            VStack(spacing: 16) {
-                if isRunning {
-                    FocusSessionView(
-                        mode: mode,
-                        timeText: timeDisplay,
-                        pomodoroSessions: pomodoroSessions,
-                        completedPomodoroSessions: completedPomodoroSessions,
-                        isPomodorBreak: isPomodorBreak,
-                        onPause: onPause,
-                        onStop: onReset
-                    )
-                } else {
-                    TimerSetupView(
-                        mode: $mode,
-                        timeText: timeDisplay,
-                        pomodoroSessions: pomodoroSessions,
-                        completedPomodoroSessions: completedPomodoroSessions,
-                        isPomodorBreak: isPomodorBreak,
-                        onStart: onStart,
-                        onOpenFocus: onOpenFocus,
-                        onReset: onReset,
-                        settingsCoordinator: settingsCoordinator
-                    )
+        VStack(spacing: 16) {
+            // Top bar with expand button and ellipsis menu
+            HStack(alignment: .center) {
+                Button(action: onOpenFocus) {
+                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                
+                Spacer()
+                
+                if !isRunning {
+                    Button(action: { showingModeMenu = true }) {
+                        Image(systemName: "ellipsis.circle")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .contentShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .popover(isPresented: $showingModeMenu, arrowEdge: .bottom) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(LocalTimerMode.allCases, id: \.self) { timerMode in
+                                Button(action: {
+                                    mode = timerMode
+                                    showingModeMenu = false
+                                }) {
+                                    HStack {
+                                        if mode == timerMode {
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(.accentColor)
+                                        }
+                                        Text(timerMode.label)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .padding(8)
+                        .frame(minWidth: 150)
+                    }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-
-            Button(action: onOpenFocus) {
-                Image(systemName: "arrow.up.left.and.arrow.down.right")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.secondary)
-                    .padding(8)
-                    .contentShape(Rectangle())
+            .frame(height: 36)
+            
+            if isRunning {
+                FocusSessionView(
+                    mode: mode,
+                    timeText: timeDisplay,
+                    pomodoroSessions: pomodoroSessions,
+                    completedPomodoroSessions: completedPomodoroSessions,
+                    isPomodorBreak: isPomodorBreak,
+                    onPause: onPause,
+                    onStop: onReset
+                )
+            } else {
+                TimerSetupView(
+                    mode: $mode,
+                    timeText: timeDisplay,
+                    pomodoroSessions: pomodoroSessions,
+                    completedPomodoroSessions: completedPomodoroSessions,
+                    isPomodorBreak: isPomodorBreak,
+                    onStart: onStart,
+                    onOpenFocus: onOpenFocus,
+                    onReset: onReset,
+                    settingsCoordinator: settingsCoordinator
+                )
             }
-            .buttonStyle(.plain)
-            .padding(12)
         }
+        .frame(maxWidth: .infinity, alignment: .center)
     }
 
     private var timeDisplay: String {
@@ -956,33 +996,6 @@ private struct TimerSetupView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 14) {
-            // Menu placeholder - keeps consistent height
-            HStack(alignment: .center) {
-                Spacer()
-                Menu {
-                    ForEach(LocalTimerMode.allCases) { m in
-                        Button {
-                            mode = m
-                        } label: {
-                            HStack {
-                                if mode == m {
-                                    Image(systemName: "checkmark")
-                                }
-                                Text(m.label)
-                            }
-                        }
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .font(.title2)
-                        .foregroundStyle(.secondary)
-                        .padding(8)
-                        .contentShape(Circle())
-                }
-                .menuStyle(.borderlessButton)
-                .menuIndicator(.hidden)
-            }
-            .frame(height: 36)
 
             VStack(spacing: 8) {
                 if mode == .pomodoro {
@@ -1051,13 +1064,6 @@ private struct FocusSessionView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 14) {
-            // Empty menu placeholder to match TimerSetupView height
-            HStack(alignment: .center) {
-                Spacer()
-            }
-            .frame(height: 36)
-            .opacity(0)
-            
             VStack(spacing: 8) {
                 if mode == .pomodoro {
                     Text(isPomodorBreak ? "Break" : "Work")
