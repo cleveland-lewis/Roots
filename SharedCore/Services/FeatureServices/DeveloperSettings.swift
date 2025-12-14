@@ -3,6 +3,7 @@ import Foundation
 final class DeveloperSettingsSynchronizer {
     static let shared = DeveloperSettingsSynchronizer()
     private var defaultsObserver: NSObjectProtocol?
+    private var isUpdating = false
 
     private init() {
         defaultsObserver = NotificationCenter.default.addObserver(
@@ -16,6 +17,11 @@ final class DeveloperSettingsSynchronizer {
     }
 
     private func refreshDiagnostics() {
+        // Prevent infinite recursion
+        guard !isUpdating else { return }
+        isUpdating = true
+        defer { isUpdating = false }
+        
         let diag = Diagnostics.shared
         let settings = AppSettingsModel.shared
         diag.isDeveloperModeEnabled = settings.devModeEnabled
