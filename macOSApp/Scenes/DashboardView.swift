@@ -44,6 +44,10 @@ struct DashboardView: View {
                         .frame(maxWidth: .infinity, alignment: .top)
                         .animateEntry(isLoaded: isLoaded, index: 3)
                         .frame(minHeight: 160)
+                    
+                    calendarCard
+                        .frame(maxWidth: 280)
+                        .animateEntry(isLoaded: isLoaded, index: 2)
                 }
 
                 HStack(alignment: .top, spacing: columnSpacing) {
@@ -57,10 +61,6 @@ struct DashboardView: View {
                 }
 
                 HStack(alignment: .top, spacing: columnSpacing) {
-                    calendarCard
-                        .frame(maxWidth: .infinity, alignment: .top)
-                        .animateEntry(isLoaded: isLoaded, index: 2)
-
                     energyCard
                         .frame(maxWidth: .infinity, alignment: .top)
                         .animateEntry(isLoaded: isLoaded, index: 5)
