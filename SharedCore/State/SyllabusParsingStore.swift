@@ -77,6 +77,12 @@ final class SyllabusParsingStore: ObservableObject {
         persist()
     }
     
+    func updateParsedAssignment(_ assignment: ParsedAssignment) {
+        guard let index = parsedAssignments.firstIndex(where: { $0.id == assignment.id }) else { return }
+        parsedAssignments[index] = assignment
+        persist()
+    }
+    
     // MARK: - Parsing Logic
     
     func startParsing(job: SyllabusParsingJob, fileURL: URL?) {

@@ -69,6 +69,7 @@ struct CoursesPageView: View {
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var gradesStore: GradesStore
     @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
+    @EnvironmentObject private var parsingStore: SyllabusParsingStore
 
     @State private var showingAddTaskSheet = false
     @State private var addTaskType: TaskType = .practiceHomework
@@ -76,6 +77,7 @@ struct CoursesPageView: View {
     @State private var showingGradeSheet = false
     @State private var gradePercentInput: Double = 90
     @State private var gradeLetterInput: String = "A"
+    @State private var showingParsedAssignmentsReview = false
 
     @State private var selectedCourseId: UUID? = nil
     @State private var searchText: String = ""
@@ -140,6 +142,14 @@ struct CoursesPageView: View {
         .sheet(isPresented: $showingGradeSheet) {
             gradeEntrySheet
         }
+        .sheet(isPresented: $showingParsedAssignmentsReview) {
+            if let courseId = selectedCourseId {
+                ParsedAssignmentsReviewView(courseId: courseId)
+                    .environmentObject(parsingStore)
+                    .environmentObject(assignmentsStore)
+                    .environmentObject(coursesStore)
+            }
+        }
         .onAppear {
             if selectedCourseId == nil {
                 selectedCourseId = filteredCourses.first?.id
@@ -186,7 +196,10 @@ struct CoursesPageView: View {
                     },
                     onViewPlanner: {
                         openPlanner(for: course)
-                    }
+                    },
+                    onReviewParsedAssignments: hasParsedAssignments(for: course) ? {
+                        showingParsedAssignmentsReview = true
+                    } : nil
                 )
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             } else {
@@ -351,6 +364,10 @@ struct CoursesPageView: View {
         selectedCourseId = course.id
         plannerCoordinator.openPlanner(with: course.id)
     }
+    
+    private func hasParsedAssignments(for course: CoursePageCourse) -> Bool {
+        return !parsingStore.parsedAssignmentsByCourse(course.id).isEmpty
+    }
 
     private var emptyDetailState: some View {
         VStack(spacing: 12) {
@@ -508,6 +525,7 @@ struct CoursesPageDetailView: View {
     var onAddExam: () -> Void
     var onAddGrade: () -> Void
     var onViewPlanner: () -> Void
+    var onReviewParsedAssignments: (() -> Void)? = nil
 
     private let cardCorner: CGFloat = 24
 
@@ -682,6 +700,15 @@ struct CoursesPageDetailView: View {
                     systemImage: "list.bullet.rectangle",
                     action: onViewPlanner
                 )
+                
+                if let reviewAction = onReviewParsedAssignments {
+                    quickActionTile(
+                        title: "Review Parsed Assignments",
+                        subtitle: "Import assignments from syllabus parsing",
+                        systemImage: "doc.text.magnifyingglass",
+                        action: reviewAction
+                    )
+                }
             }
         }
     }
