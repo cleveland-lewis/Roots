@@ -317,32 +317,20 @@ struct DashboardView: View {
                     }
                 }
 
-                // Main content: CLOCK + Study graph + Calendar in HStack
-                let clockGraphSize: CGFloat = 180
-                HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.large) {
-                    // Left: Clock
-                    RootsAnalogClock(diameter: clockGraphSize, showSecondHand: true, accentColor: settings.activeAccentColor)
-                        .frame(width: clockGraphSize, height: clockGraphSize)
-
-                    // Middle: Build samples from analytics service (last 7 days)
-                    let raw = AnalyticsService.shared.getStudyTrends(range: .last7Days)
-                    let studySamples = raw.map { StudySample(date: $0.date, minutes: $0.seconds / 60.0) }
-
-                    StudyTimeLineGraphView(samples: studySamples, accentColor: settings.activeAccentColor)
-                        .frame(width: clockGraphSize, height: clockGraphSize)
+                // Main content: Two-column grid layout (Clock | Calendar)
+                let clockSize: CGFloat = 160
+                HStack(alignment: .center, spacing: DesignSystem.Layout.spacing.large) {
+                    // Column 1: Clock
+                    RootsAnalogClock(diameter: clockSize, showSecondHand: true, accentColor: settings.activeAccentColor)
+                        .frame(width: clockSize, height: clockSize)
                     
-                    // Right: Calendar
-                    VStack(alignment: .leading, spacing: RootsSpacing.s) {
-                        Text("Calendar")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.secondary)
-                        DashboardCalendarColumn(selectedDate: $selectedDate, events: events)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    // Column 2: Calendar (integrated, no nested card)
+                    DashboardCalendarGrid(selectedDate: $selectedDate, events: events)
+                        .frame(maxWidth: .infinity)
                 }
+                .padding(.vertical, DesignSystem.Layout.spacing.medium)
             }
-            .padding(12)
+            .padding(DesignSystem.Layout.padding.card)
         }
     }
 
@@ -549,7 +537,6 @@ private struct DashboardCalendarColumn: View {
     }
 
     private var days: [Date] {
-        // Safe generator that yields unique start-of-day Dates covering the month grid
         guard let monthInterval = calendar.dateInterval(of: .month, for: selectedDate) else { return [] }
         let monthStart = calendar.startOfDay(for: monthInterval.start)
         guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: monthStart)) else { return [] }
@@ -572,7 +559,6 @@ private struct DashboardCalendarColumn: View {
             current = next
         }
 
-        // ensure full week rows
         while items.count % 7 != 0 {
             if let last = items.last, let next = calendar.date(byAdding: .day, value: 1, to: last) {
                 let s = calendar.startOfDay(for: next)
@@ -586,6 +572,104 @@ private struct DashboardCalendarColumn: View {
         return items
     }
 
+    private func monthHeader(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "LLLL yyyy"
+        return formatter.string(from: date)
+    }
+}
+
+// MARK: - Integrated Calendar Grid (no nested card)
+private struct DashboardCalendarGrid: View {
+    @Binding var selectedDate: Date
+    var events: [DashboardEvent]
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
+            // Month/year header
+            Text(monthHeader(for: selectedDate))
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.secondary)
+            
+            // Calendar grid - no nested card background
+            LazyVGrid(columns: columns, spacing: 4) {
+                ForEach(dayItems) { item in
+                    let day = item.date
+                    let isInMonth = calendar.isDate(day, equalTo: selectedDate, toGranularity: .month)
+                    let isSelected = calendar.isDate(day, inSameDayAs: selectedDate)
+                    let normalized = calendar.startOfDay(for: day)
+                    let count = eventsByDate[normalized] ?? 0
+
+                    Button {
+                        selectedDate = day
+                    } label: {
+                        CalendarDayCell(
+                            date: day,
+                            isInCurrentMonth: isInMonth,
+                            isSelected: isSelected,
+                            eventCount: count,
+                            calendar: calendar
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+    
+    private var eventsByDate: [Date: Int] {
+        Dictionary(grouping: events, by: { calendar.startOfDay(for: $0.date) })
+            .mapValues { $0.count }
+    }
+    
+    private struct DayItem: Identifiable, Hashable {
+        let id = UUID()
+        let date: Date
+        let isCurrentMonth: Bool
+    }
+    
+    private var dayItems: [DayItem] {
+        days.map { DayItem(date: $0, isCurrentMonth: calendar.isDate($0, equalTo: selectedDate, toGranularity: .month)) }
+    }
+    
+    private var days: [Date] {
+        guard let monthInterval = calendar.dateInterval(of: .month, for: selectedDate) else { return [] }
+        let monthStart = calendar.startOfDay(for: monthInterval.start)
+        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: monthStart)) else { return [] }
+
+        let lastOfMonth = calendar.date(byAdding: .second, value: -1, to: monthInterval.end) ?? monthInterval.end
+        guard let endOfWeekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: lastOfMonth)),
+              let endOfWeek = calendar.date(byAdding: .day, value: 7, to: endOfWeekStart) else { return [] }
+
+        var items: [Date] = []
+        var seen = Set<Date>()
+        var current = startOfWeek
+
+        while current < endOfWeek && items.count < 42 {
+            let s = calendar.startOfDay(for: current)
+            if !seen.contains(s) {
+                items.append(s)
+                seen.insert(s)
+            }
+            guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
+            current = next
+        }
+
+        while items.count % 7 != 0 {
+            if let last = items.last, let next = calendar.date(byAdding: .day, value: 1, to: last) {
+                let s = calendar.startOfDay(for: next)
+                if !seen.contains(s) {
+                    items.append(s)
+                    seen.insert(s)
+                } else { break }
+            } else { break }
+        }
+
+        return items
+    }
+    
     private func monthHeader(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "LLLL yyyy"
