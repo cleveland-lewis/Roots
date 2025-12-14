@@ -82,6 +82,7 @@ final class CoursesStore: ObservableObject {
     func addCourse(title: String, code: String, to semester: Semester) {
         let newCourse = Course(title: title, code: code, semesterId: semester.id, isArchived: false)
         courses.append(newCourse)
+        LOG_COURSES(.info, "CourseAdded", "Course added: \(title)", metadata: ["courseId": newCourse.id.uuidString, "semesterId": semester.id.uuidString])
         persist()
         recalcGPA(tasks: AssignmentsStore.shared.tasks)
     }
@@ -227,7 +228,10 @@ final class CoursesStore: ObservableObject {
     }
 
     private func load() {
-        guard FileManager.default.fileExists(atPath: storageURL.path) else { return }
+        guard FileManager.default.fileExists(atPath: storageURL.path) else {
+            LOG_PERSISTENCE(.info, "CoursesLoad", "No persisted courses data found")
+            return
+        }
         do {
             let data = try Data(contentsOf: storageURL)
             let decoded = try JSONDecoder().decode(PersistedData.self, from: data)
@@ -236,13 +240,17 @@ final class CoursesStore: ObservableObject {
             self.outlineNodes = decoded.outlineNodes
             self.courseFiles = decoded.courseFiles
             self.currentSemesterId = decoded.currentSemesterId
+            LOG_PERSISTENCE(.info, "CoursesLoad", "Loaded courses data", metadata: ["semesters": "\(semesters.count)", "courses": "\(courses.count)"])
         } catch {
-            print("Failed to decode courses data: \(error)")
+            LOG_PERSISTENCE(.error, "CoursesLoad", "Failed to decode courses data: \(error.localizedDescription)")
         }
     }
 
     private func loadCache() {
-        guard FileManager.default.fileExists(atPath: cacheURL.path) else { return }
+        guard FileManager.default.fileExists(atPath: cacheURL.path) else {
+            LOG_PERSISTENCE(.debug, "CoursesCache", "No cache file found")
+            return
+        }
         do {
             let data = try Data(contentsOf: cacheURL)
             let decoded = try JSONDecoder().decode(PersistedData.self, from: data)
@@ -251,8 +259,9 @@ final class CoursesStore: ObservableObject {
             self.outlineNodes = decoded.outlineNodes
             self.courseFiles = decoded.courseFiles
             self.currentSemesterId = decoded.currentSemesterId
+            LOG_PERSISTENCE(.debug, "CoursesCache", "Loaded cache", metadata: ["semesters": "\(semesters.count)", "courses": "\(courses.count)"])
         } catch {
-            print("Failed to load courses cache: \(error)")
+            LOG_PERSISTENCE(.error, "CoursesCache", "Failed to load cache: \(error.localizedDescription)")
         }
     }
 
@@ -268,8 +277,9 @@ final class CoursesStore: ObservableObject {
             let data = try JSONEncoder().encode(snapshot)
             try data.write(to: storageURL, options: [.atomic, .completeFileProtection])
             try data.write(to: cacheURL, options: [.atomic, .completeFileProtection])
+            LOG_PERSISTENCE(.debug, "CoursesSave", "Persisted courses data", metadata: ["semesters": "\(semesters.count)", "courses": "\(courses.count)", "size": "\(data.count)"])
         } catch {
-            print("Failed to persist courses data: \(error)")
+            LOG_PERSISTENCE(.error, "CoursesSave", "Failed to persist courses data: \(error.localizedDescription)")
         }
     }
 

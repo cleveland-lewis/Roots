@@ -81,6 +81,8 @@ struct SettingsRootView: View {
                     NotificationsSettingsView()
                 case .privacy:
                     PrivacySettingsView()
+                case .developer:
+                    DeveloperSettingsView()
                 }
             }
             .id(selectedPane)
