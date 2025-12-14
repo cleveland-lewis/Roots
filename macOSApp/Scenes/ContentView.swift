@@ -199,6 +199,7 @@ struct ContentView: View {
     }
 
     private func handleTabSelection(_ tab: RootTab) {
+        LOG_NAVIGATION(.info, "TabSelection", "User navigated to tab: \(tab.rawValue)")
         selectedTab = tab
         if let page = AppPage(rawValue: tab.rawValue), appModel.selectedPage != page {
             appModel.selectedPage = page

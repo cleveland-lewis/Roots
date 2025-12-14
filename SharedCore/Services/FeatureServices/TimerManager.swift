@@ -12,6 +12,7 @@ final class TimerManager: ObservableObject {
 
     func start() {
         guard !isRunning else { return }
+        LOG_TIMER(.info, "TimerStart", "Timer starting with \(secondsRemaining)s")
         isRunning = true
         // Throttled to 1s
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -26,6 +27,7 @@ final class TimerManager: ObservableObject {
     }
 
     func stop() {
+        LOG_TIMER(.info, "TimerStop", "Timer stopped with \(secondsRemaining)s remaining")
         isRunning = false
         timer?.invalidate()
         timer = nil
@@ -33,6 +35,7 @@ final class TimerManager: ObservableObject {
 
     private func tick() {
         guard secondsRemaining > 0 else {
+            LOG_TIMER(.info, "TimerComplete", "Timer completed")
             stop()
             // Notify finished
             return
@@ -42,26 +45,28 @@ final class TimerManager: ObservableObject {
 
     func checkNotificationPermissions() {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
+            LOG_NOTIFICATIONS(.info, "Permissions", "Notification auth status: \(settings.authorizationStatus.rawValue)")
             if settings.authorizationStatus == .notDetermined {
                 DispatchQueue.main.async {
                     self.requestNotificationPermission()
                 }
             } else if settings.authorizationStatus == .denied {
-                print("Notifications denied")
+                LOG_NOTIFICATIONS(.warn, "Permissions", "Notification permissions denied by user")
             }
         }
     }
 
     private func requestNotificationPermission() {
         DispatchQueue.main.async {
+            LOG_NOTIFICATIONS(.info, "Permissions", "Requesting notification authorization")
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
                 if granted {
-                    LOG_UI(.info, "Notifications", "Permission granted")
+                    LOG_NOTIFICATIONS(.info, "Permissions", "Notification permission granted")
                 } else if let error {
                     // Non-fatal: permissions can be denied in sandboxed or user-blocked environments.
-                    LOG_UI(.warn, "Notifications", "Permission request failed: \(error.localizedDescription)")
+                    LOG_NOTIFICATIONS(.error, "Permissions", "Permission request failed: \(error.localizedDescription)")
                 } else {
-                    LOG_UI(.info, "Notifications", "Permission denied")
+                    LOG_NOTIFICATIONS(.info, "Permissions", "Notification permission denied by user")
                 }
             }
         }

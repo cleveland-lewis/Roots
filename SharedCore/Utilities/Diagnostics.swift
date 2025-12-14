@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import OSLog
 
 enum LogSeverity: String {
     case fatal  = "FATAL"
@@ -8,16 +9,43 @@ enum LogSeverity: String {
     case warn   = "WARN"
     case info   = "INFO"
     case debug  = "DEBUG"
+    
+    var osLogType: OSLogType {
+        switch self {
+        case .fatal: return .fault
+        case .error: return .error
+        case .warn: return .default
+        case .info: return .info
+        case .debug: return .debug
+        }
+    }
 }
 
-enum LogSubsystem: String {
-    case ui          = "UI"
-    case scheduler   = "Scheduler"
-    case practice    = "Practice"
-    case data        = "Data"
-    case sync        = "Sync"
-    case settings    = "Settings"
-    case performance = "Performance"
+enum LogSubsystem: String, CaseIterable {
+    case appLifecycle = "AppLifecycle"
+    case navigation   = "Navigation"
+    case persistence  = "Persistence"
+    case scheduler    = "Scheduler"
+    case planner      = "Planner"
+    case calendar     = "Calendar"
+    case eventKit     = "EventKit"
+    case grades       = "Grades"
+    case courses      = "Courses"
+    case timer        = "Timer"
+    case focus        = "Focus"
+    case notifications = "Notifications"
+    case networking   = "Networking"
+    case integrations = "Integrations"
+    case ui           = "UI"
+    case practice     = "Practice"
+    case data         = "Data"
+    case sync         = "Sync"
+    case settings     = "Settings"
+    case performance  = "Performance"
+    
+    var logger: Logger {
+        Logger(subsystem: "com.roots.app", category: self.rawValue)
+    }
 }
 
 struct LogEvent {
@@ -36,7 +64,7 @@ struct LogEvent {
 final class Diagnostics: ObservableObject {
     static let shared = Diagnostics()
 
-    @Published var isDeveloperModeEnabled: Bool = false
+    @AppStorage("developer.mode.enabled") var isDeveloperModeEnabled: Bool = false
     @Published var enableUILogging: Bool = false
     @Published var enableDataLogging: Bool = false
     @Published var enableSchedulerLogging: Bool = false
@@ -49,6 +77,10 @@ final class Diagnostics: ObservableObject {
         f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return f
     }()
+    
+    private var errorCounts: [String: (count: Int, lastLogged: Date)] = [:]
+    private let errorRateLimitWindow: TimeInterval = 5.0
+    private let maxErrorsPerWindow = 3
 
     private init() {}
 
@@ -85,6 +117,28 @@ final class Diagnostics: ObservableObject {
                 break
             }
         }
+        
+        // Rate limiting for errors
+        if severity == .error {
+            let errorKey = "\(subsystem.rawValue).\(category).\(msg)"
+            let now = Date()
+            
+            if let existing = errorCounts[errorKey] {
+                let timeSinceLastLog = now.timeIntervalSince(existing.lastLogged)
+                if timeSinceLastLog < errorRateLimitWindow {
+                    if existing.count >= maxErrorsPerWindow {
+                        // Skip this error, too many in window
+                        return
+                    }
+                    errorCounts[errorKey] = (existing.count + 1, existing.lastLogged)
+                } else {
+                    // Reset window
+                    errorCounts[errorKey] = (1, now)
+                }
+            } else {
+                errorCounts[errorKey] = (1, now)
+            }
+        }
 
         let event = LogEvent(timestamp: Date(), severity: severity, subsystem: subsystem, category: category, message: msg, metadata: metadata, file: fileStr, function: functionStr, line: lineInt)
 
@@ -92,19 +146,32 @@ final class Diagnostics: ObservableObject {
         recentEvents.append(event)
         if recentEvents.count > maxEvents { recentEvents.removeFirst(recentEvents.count - maxEvents) }
 
-        // Format
-        let ts = iso8601.string(from: event.timestamp)
+        // Format metadata
         var metaStr = ""
         if let md = metadata, !md.isEmpty {
             metaStr = " | " + md.map { "\($0.key)=\($0.value)" }.joined(separator: ", ")
         }
-        let console = "[\(event.severity.rawValue)][\(event.subsystem.rawValue)][\(category)][\(ts)] \(event.message)\(metaStr)  (\(event.file):\(event.line) \(event.function))"
-
-        print(console)
+        
+        // Use OSLog for structured logging
+        let logger = subsystem.logger
+        let logMessage = "\(category): \(msg)\(metaStr)"
+        
+        switch severity {
+        case .fatal:
+            logger.fault("[\(category)] \(msg)\(metaStr)")
+        case .error:
+            logger.error("[\(category)] \(msg)\(metaStr)")
+        case .warn:
+            logger.warning("[\(category)] \(msg)\(metaStr)")
+        case .info:
+            logger.info("[\(category)] \(msg)\(metaStr)")
+        case .debug:
+            logger.debug("[\(category)] \(msg)\(metaStr)")
+        }
 
         #if DEBUG
         if severity == .fatal || severity == .error {
-            assertionFailure("\(severity.rawValue): \(event.message)")
+            assertionFailure("\(severity.rawValue): \(msg)")
         }
         #endif
     }
@@ -199,4 +266,134 @@ func LOG_PERF(_ severity: LogSeverity = .warn,
               function: StaticString = #function,
               line: UInt = #line) {
     Diagnostics.shared.log(severity, subsystem: .performance, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_LIFECYCLE(_ severity: LogSeverity = .info,
+                   _ category: String,
+                   _ message: @autoclosure () -> String,
+                   metadata: [String: String]? = nil,
+                   file: StaticString = #fileID,
+                   function: StaticString = #function,
+                   line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .appLifecycle, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_NAVIGATION(_ severity: LogSeverity = .info,
+                    _ category: String,
+                    _ message: @autoclosure () -> String,
+                    metadata: [String: String]? = nil,
+                    file: StaticString = #fileID,
+                    function: StaticString = #function,
+                    line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .navigation, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_PERSISTENCE(_ severity: LogSeverity = .info,
+                     _ category: String,
+                     _ message: @autoclosure () -> String,
+                     metadata: [String: String]? = nil,
+                     file: StaticString = #fileID,
+                     function: StaticString = #function,
+                     line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .persistence, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_PLANNER(_ severity: LogSeverity = .info,
+                 _ category: String,
+                 _ message: @autoclosure () -> String,
+                 metadata: [String: String]? = nil,
+                 file: StaticString = #fileID,
+                 function: StaticString = #function,
+                 line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .planner, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_CALENDAR(_ severity: LogSeverity = .info,
+                  _ category: String,
+                  _ message: @autoclosure () -> String,
+                  metadata: [String: String]? = nil,
+                  file: StaticString = #fileID,
+                  function: StaticString = #function,
+                  line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .calendar, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_EVENTKIT(_ severity: LogSeverity = .info,
+                  _ category: String,
+                  _ message: @autoclosure () -> String,
+                  metadata: [String: String]? = nil,
+                  file: StaticString = #fileID,
+                  function: StaticString = #function,
+                  line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .eventKit, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_GRADES(_ severity: LogSeverity = .info,
+                _ category: String,
+                _ message: @autoclosure () -> String,
+                metadata: [String: String]? = nil,
+                file: StaticString = #fileID,
+                function: StaticString = #function,
+                line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .grades, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_COURSES(_ severity: LogSeverity = .info,
+                 _ category: String,
+                 _ message: @autoclosure () -> String,
+                 metadata: [String: String]? = nil,
+                 file: StaticString = #fileID,
+                 function: StaticString = #function,
+                 line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .courses, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_TIMER(_ severity: LogSeverity = .info,
+               _ category: String,
+               _ message: @autoclosure () -> String,
+               metadata: [String: String]? = nil,
+               file: StaticString = #fileID,
+               function: StaticString = #function,
+               line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .timer, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_FOCUS(_ severity: LogSeverity = .info,
+               _ category: String,
+               _ message: @autoclosure () -> String,
+               metadata: [String: String]? = nil,
+               file: StaticString = #fileID,
+               function: StaticString = #function,
+               line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .focus, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_NOTIFICATIONS(_ severity: LogSeverity = .info,
+                       _ category: String,
+                       _ message: @autoclosure () -> String,
+                       metadata: [String: String]? = nil,
+                       file: StaticString = #fileID,
+                       function: StaticString = #function,
+                       line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .notifications, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_NETWORKING(_ severity: LogSeverity = .info,
+                    _ category: String,
+                    _ message: @autoclosure () -> String,
+                    metadata: [String: String]? = nil,
+                    file: StaticString = #fileID,
+                    function: StaticString = #function,
+                    line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .networking, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_INTEGRATIONS(_ severity: LogSeverity = .info,
+                      _ category: String,
+                      _ message: @autoclosure () -> String,
+                      metadata: [String: String]? = nil,
+                      file: StaticString = #fileID,
+                      function: StaticString = #function,
+                      line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .integrations, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
 }

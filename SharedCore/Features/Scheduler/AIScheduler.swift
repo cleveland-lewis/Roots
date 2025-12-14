@@ -138,10 +138,12 @@ struct AIScheduler {
         constraints: Constraints,
         preferences: SchedulerPreferences = SchedulerPreferences.default()
     ) -> ScheduleResult {
+        LOG_SCHEDULER(.info, "ScheduleGeneration", "Starting schedule generation", metadata: ["tasks": "\(inputTasks.count)", "fixedEvents": "\(fixedEvents.count)"])
         var log: [String] = []
 
         // 1. Build free intervals per day
         let dayIntervals = buildFreeIntervalsPerDay(fixedEvents: fixedEvents, constraints: constraints)
+        LOG_SCHEDULER(.debug, "ScheduleGeneration", "Built free intervals", metadata: ["days": "\(dayIntervals.count)"])
 
         // 2. Compute task priorities
         var tasks = inputTasks // include locked tasks; they can be forced to due date
@@ -304,6 +306,10 @@ struct AIScheduler {
         scheduledBlocks.sort { $0.start < $1.start }
         scheduledBlocks = mergeAdjacentBlocks(blocks: scheduledBlocks, maxBlockMinutes: constraints.maxStudyMinutesPerBlock, minGap: constraints.minGapBetweenBlocksMinutes)
 
+        LOG_SCHEDULER(.info, "ScheduleGeneration", "Schedule generation complete", metadata: ["scheduled": "\(scheduledBlocks.count)", "unscheduled": "\(unscheduled.count)"])
+        if !unscheduled.isEmpty {
+            LOG_SCHEDULER(.warn, "ScheduleGeneration", "Some tasks could not be scheduled", metadata: ["count": "\(unscheduled.count)"])
+        }
         return ScheduleResult(blocks: scheduledBlocks, unscheduledTasks: unscheduled, log: log)
     }
 
