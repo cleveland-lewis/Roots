@@ -186,8 +186,11 @@ final class Diagnostics: ObservableObject {
         }
 
         #if DEBUG
-        if severity == .fatal || severity == .error {
+        if severity == .fatal {
             assertionFailure("\(severity.rawValue): \(msg)")
+        } else if severity == .error {
+            // Don't crash on errors - just print to console
+            print("⚠️ ERROR: \(msg)")
         }
         #endif
     }
