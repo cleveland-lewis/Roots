@@ -27,6 +27,14 @@ struct SensoryFeedbackModifier: ViewModifier {
     }
 
     private func performFeedback() {
+        // Respect user preferences via UserDefaults
+        let enableHaptics = UserDefaults.standard.bool(forKey: "preferences.enableHaptics")
+        guard enableHaptics || !UserDefaults.standard.dictionaryRepresentation().keys.contains("preferences.enableHaptics") else { return }
+        
+        // Respect Reduce Motion accessibility setting
+        let reduceMotion = UserDefaults.standard.bool(forKey: "preferences.reduceMotion")
+        guard !reduceMotion else { return }
+        
         #if os(iOS)
         switch feedback {
         case .success:

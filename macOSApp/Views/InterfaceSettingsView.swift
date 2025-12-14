@@ -97,15 +97,29 @@ struct InterfaceSettingsView: View {
                     .onChange(of: settings.compactMode) { _, _ in settings.save() }
             }
 
-            Section("Interactions") {
+            Section {
                 Toggle("Show Animations", isOn: $settings.showAnimations)
                     .onChange(of: settings.showAnimations) { _, _ in settings.save() }
 
-                Toggle("Haptics", isOn: $settings.enableHaptics)
-                    .onChange(of: settings.enableHaptics) { _, _ in settings.save() }
+                VStack(alignment: .leading, spacing: 4) {
+                    Toggle("Enable Haptic Feedback", isOn: $settings.enableHaptics)
+                        .onChange(of: settings.enableHaptics) { _, _ in settings.save() }
+                    
+                    if preferences.reduceMotion {
+                        Text("Haptic feedback is disabled when Reduce Motion is enabled")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
 
                 Toggle("Show Tooltips", isOn: $settings.showTooltips)
                     .onChange(of: settings.showTooltips) { _, _ in settings.save() }
+            } header: {
+                Text("Interactions")
+            } footer: {
+                Text("Haptic feedback respects accessibility settings")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)

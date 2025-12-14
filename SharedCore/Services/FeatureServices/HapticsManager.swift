@@ -39,7 +39,17 @@ final class HapticsManager {
         }
     }
 
+    /// Plays haptic feedback respecting user preferences and accessibility settings
+    /// - Parameter kind: The type of haptic feedback to play
     func play(_ kind: HapticEventKind) {
+        // Respect user preferences via UserDefaults
+        let enableHaptics = UserDefaults.standard.bool(forKey: "preferences.enableHaptics")
+        guard enableHaptics || !UserDefaults.standard.dictionaryRepresentation().keys.contains("preferences.enableHaptics") else { return }
+        
+        // Respect Reduce Motion accessibility setting
+        let reduceMotion = UserDefaults.standard.bool(forKey: "preferences.reduceMotion")
+        guard !reduceMotion else { return }
+        
         if supportsHaptics {
             switch kind {
             case .warning: playWarningPattern()
