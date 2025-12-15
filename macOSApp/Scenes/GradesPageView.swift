@@ -60,8 +60,6 @@ struct GradesPageView: View {
                     header
 
                     adaptiveColumns(width: proxy.size.width)
-
-                    footer
                 }
                 .padding(16)
             }
@@ -134,13 +132,8 @@ struct GradesPageView: View {
 
     private var header: some View {
         HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Grades")
-                    .font(.title2.weight(.semibold))
-                Text("Synced from Courses and Assignments")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-            }
+            Text("Grades")
+                .font(.title2.weight(.semibold))
 
             Spacer()
 
@@ -304,12 +297,7 @@ struct GradesPageView: View {
         .overlay(cardStroke)
     }
 
-    private var footer: some View {
-        Text("Grades are approximations and may differ from your institution's official system.")
-            .font(.footnote)
-            .foregroundColor(.secondary)
-            .frame(maxWidth: .infinity, alignment: .leading)
-    }
+
 
     // MARK: Helpers
 
@@ -676,9 +664,6 @@ struct GradeDetailCard: View {
                 header(detail.course)
                 components(detail.components)
                 notes(detail)
-                Text("Grades are approximations and may differ from your institution's official system.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
             }
         } else {
             VStack(spacing: 12) {
