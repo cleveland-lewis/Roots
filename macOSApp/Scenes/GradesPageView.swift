@@ -153,7 +153,7 @@ struct GradesPageView: View {
                 // stub export/share functionality
             } label: {
                 Image(systemName: "square.and.arrow.up")
-                    .font(.system(size: 16))
+                    .font(.body)
                     .frame(width: 32, height: 32)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
@@ -205,7 +205,7 @@ struct GradesPageView: View {
                     showAddGradeSheet = true
                 } label: {
                     Label("Add Grade", systemImage: "plus.circle")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
                         .frame(maxWidth: .infinity)
@@ -218,7 +218,7 @@ struct GradesPageView: View {
                     print("Analytics tapped")
                 } label: {
                     Label("Analytics", systemImage: "chart.bar.xaxis")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
                         .frame(maxWidth: .infinity)
@@ -232,7 +232,7 @@ struct GradesPageView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Courses")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.subheadline.weight(.semibold))
                 Spacer()
                 Picker("Sort", selection: .constant(0)) {
                     Text("Course").tag(0)
@@ -513,10 +513,10 @@ struct OverallStatusCard: View {
         let gpa = gpaValue(overallPercent: overallPercent)
         VStack(alignment: .leading, spacing: 10) {
             Text("Overall Status")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.subheadline.weight(.semibold))
 
             Text("GPA \(String(format: "%.2f", gpa)) / \(String(format: "%.1f", gpaScale))")
-                .font(.system(size: emphasize ? 28 : 24, weight: .bold))
+                .font(emphasize ? .title : .title2)
 
             Text("Weighted \(String(format: "%.1f", overallPercent))% • \(courses.count) courses")
                 .font(.footnote)
@@ -589,7 +589,7 @@ struct CourseGradeRow: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(course.courseCode) · \(course.courseTitle)")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.caption.weight(.semibold))
                         .foregroundColor(.primary)
                         .lineLimit(1)
                     HStack(spacing: 6) {
@@ -697,7 +697,7 @@ struct GradeDetailCard: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text("Grade Components – \(course.courseCode)")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.subheadline.weight(.semibold))
                 Spacer()
                 Text("GPA Scale: \(String(format: "%.1f", gpaScale))")
                     .font(.footnote.weight(.semibold))
@@ -731,7 +731,7 @@ struct GradeDetailCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(comp.name)
-                            .font(.system(size: 13, weight: .semibold))
+                            .font(.caption.weight(.semibold))
                         Spacer()
                         if let earned = comp.earnedPercent {
                             Text("\(Int(earned))%")
@@ -768,7 +768,7 @@ struct GradeDetailCard: View {
     private func whatIf(_ detail: CourseGradeDetail) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("What-If Scenario")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.subheadline.weight(.semibold))
             Slider(value: $whatIfInput, in: 50...100, step: 1) {
                 Text("Expected average on remaining work")
             }
@@ -793,7 +793,7 @@ struct GradeDetailCard: View {
     private func notes(_ detail: CourseGradeDetail) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Notes")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.subheadline.weight(.semibold))
             TextEditor(text: Binding(
                 get: { detail.notes },
                 set: { newValue in

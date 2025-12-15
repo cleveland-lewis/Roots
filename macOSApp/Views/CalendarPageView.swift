@@ -105,7 +105,7 @@ struct CalendarPageView: View {
                     showingNewEventSheet = true
                 } label: {
                     Image(systemName: "plus")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.subheadline.weight(.semibold))
                         .frame(width: 36, height: 36)
                         .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
                 }
@@ -126,7 +126,7 @@ struct CalendarPageView: View {
                             Text(String(Calendar.current.component(.year, from: focusedDate)))
                         }
                     }
-                    .font(.system(size: 34, weight: .semibold))
+                    .font(.largeTitle.weight(.semibold))
                     .lineLimit(1)
 
                     // Subtitle / small metadata

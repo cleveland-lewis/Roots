@@ -66,7 +66,7 @@ struct ChartViewVerticalStacked: View {
                 Spacer()
                 Button(action: { withAnimation(.easeInOut(duration: 0.2)) { isLegendExpanded.toggle() } }) {
                     Image(systemName: isLegendExpanded ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .symbolRenderingMode(.hierarchical)
                 }

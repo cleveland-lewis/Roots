@@ -57,7 +57,7 @@ struct CourseOutlineEditorView: View {
     private var emptyState: some View {
         VStack(spacing: 16) {
             Image(systemName: "list.bullet.indent")
-                .font(.system(size: 48))
+                .font(.largeTitle)
                 .foregroundStyle(.tertiary)
             
             Text("No Outline Yet")
@@ -125,7 +125,7 @@ private struct OutlineNodeRow: View {
                         }
                     } label: {
                         Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
-                            .font(.system(size: 10, weight: .semibold))
+                            .font(.caption2.weight(.semibold))
                             .foregroundStyle(.secondary)
                             .frame(width: 16, height: 16)
                     }
@@ -138,18 +138,18 @@ private struct OutlineNodeRow: View {
                 
                 // Type icon
                 Image(systemName: iconForType(node.type))
-                    .font(.system(size: 12))
+                    .font(.caption2)
                     .foregroundStyle(.secondary)
                 
                 // Title
                 Text(node.title)
-                    .font(.system(size: 13))
+                    .font(.caption)
                 
                 Spacer()
                 
                 // Type label
                 Text(node.type.rawValue)
-                    .font(.system(size: 10))
+                    .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
             .padding(.vertical, 4)

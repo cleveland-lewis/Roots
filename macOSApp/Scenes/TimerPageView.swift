@@ -871,7 +871,7 @@ struct TimerCoreCard: View {
             HStack(alignment: .center) {
                 Button(action: onOpenFocus) {
                     Image(systemName: "arrow.up.left.and.arrow.down.right")
-                        .font(.system(size: 13))
+                        font(.caption)
                         .foregroundStyle(.secondary)
                         .padding(8)
                         .contentShape(Rectangle())
@@ -1000,19 +1000,19 @@ private struct TimerSetupView: View {
             VStack(spacing: 8) {
                 if mode == .pomodoro {
                     Text(isPomodorBreak ? "Break" : "Work")
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                         .frame(height: 18)
                 } else {
                     Text(mode.label)
-                        .font(.system(size: 17, weight: .medium))
+                        .font(.headline.weight(.medium))
                         .foregroundStyle(.primary)
                         .frame(height: 18)
                 }
                 
                 Text(timeText)
-                    .font(.system(size: 60, weight: .light, design: .monospaced))
+                    .font(.system(.largeTitle, design: .monospaced).weight(.light))
                     .monospacedDigit()
                     .frame(height: 72)
             }
@@ -1067,19 +1067,19 @@ private struct FocusSessionView: View {
             VStack(spacing: 8) {
                 if mode == .pomodoro {
                     Text(isPomodorBreak ? "Break" : "Work")
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                         .frame(height: 18)
                 } else {
                     Text(mode.label)
-                        .font(.system(size: 17, weight: .medium))
+                        .font(.headline.weight(.medium))
                         .foregroundStyle(.primary)
                         .frame(height: 18)
                 }
                 
                 Text(timeText)
-                    .font(.system(size: 60, weight: .light, design: .monospaced))
+                    .font(.system(.largeTitle, design: .monospaced).weight(.light))
                     .monospacedDigit()
                     .frame(height: 72)
             }
@@ -1147,13 +1147,13 @@ private struct FocusWindowView: View {
             VStack(spacing: 8) {
                 if mode == .pomodoro {
                     Text(isPomodorBreak ? "Break" : "Work")
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                 }
                 
                 Text(timeText)
-                    .font(.system(size: 48, weight: .light, design: .monospaced))
+                    .font(.system(.title, design: .monospaced).weight(.light))
                     .monospacedDigit()
                     
                 if mode == .pomodoro {

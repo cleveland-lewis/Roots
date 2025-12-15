@@ -82,7 +82,8 @@ struct ParsedAssignmentsReviewView: View {
     private var emptyStateView: some View {
         VStack(spacing: 12) {
             Image(systemName: "doc.text.magnifyingglass")
-                .font(.system(size: 48))
+                .font(.largeTitle)
+                .imageScale(.large)
                 .foregroundStyle(.secondary)
             Text("No Parsed Assignments")
                 .font(.title3.weight(.semibold))

@@ -307,7 +307,7 @@ struct DashboardView: View {
                         }
                         .overlay {
                             Image(systemName: "plus")
-                                .font(.system(size: 14, weight: .semibold))
+                                .font(.body.weight(.semibold))
                                 .rotationEffect(.degrees(quickActionsExpanded ? 360 : 0))
                                 .animation(.easeInOut(duration: 0.35), value: quickActionsExpanded)
                                 .frame(width: 36, height: 36)
