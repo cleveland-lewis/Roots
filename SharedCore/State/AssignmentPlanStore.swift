@@ -97,6 +97,67 @@ final class AssignmentPlanStore: ObservableObject {
         }
     }
     
+    // MARK: - Dependency Management
+    
+    /// Toggle sequence enforcement for a plan
+    func toggleSequenceEnforcement(for assignmentId: UUID) {
+        guard var plan = plans[assignmentId] else { return }
+        
+        plan.sequenceEnforcementEnabled.toggle()
+        
+        // If enabling and no dependencies exist, set up linear chain
+        if plan.sequenceEnforcementEnabled && !plan.steps.contains(where: { $0.hasPrerequisites }) {
+            plan.setupLinearChain()
+        }
+        
+        plans[assignmentId] = plan
+        saveCache()
+        
+        LOG_DATA(.info, "PlanStore", "Toggled sequence enforcement to \(plan.sequenceEnforcementEnabled) for assignment \(assignmentId)")
+    }
+    
+    /// Update step dependencies
+    func updateStepDependencies(_ stepId: UUID, prerequisiteIds: [UUID], in assignmentId: UUID) {
+        guard var plan = plans[assignmentId] else { return }
+        
+        if let index = plan.steps.firstIndex(where: { $0.id == stepId }) {
+            plan.steps[index].prerequisiteIds = prerequisiteIds
+            
+            // Check for cycles
+            if let cycle = plan.detectCycle() {
+                LOG_DATA(.error, "PlanStore", "Dependency cycle detected: \(cycle). Reverting change.")
+                return
+            }
+            
+            plans[assignmentId] = plan
+            saveCache()
+            
+            LOG_DATA(.debug, "PlanStore", "Updated dependencies for step \(stepId) in assignment \(assignmentId)")
+        }
+    }
+    
+    /// Setup linear chain dependencies for a plan
+    func setupLinearChain(for assignmentId: UUID) {
+        guard var plan = plans[assignmentId] else { return }
+        
+        plan.setupLinearChain()
+        plans[assignmentId] = plan
+        saveCache()
+        
+        LOG_DATA(.info, "PlanStore", "Setup linear chain for assignment \(assignmentId)")
+    }
+    
+    /// Clear all dependencies for a plan
+    func clearAllDependencies(for assignmentId: UUID) {
+        guard var plan = plans[assignmentId] else { return }
+        
+        plan.clearAllDependencies()
+        plans[assignmentId] = plan
+        saveCache()
+        
+        LOG_DATA(.info, "PlanStore", "Cleared all dependencies for assignment \(assignmentId)")
+    }
+    
     // MARK: - Persistence
     
     private func saveCache() {

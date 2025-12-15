@@ -9,6 +9,7 @@ struct AssignmentPlan: Codable, Identifiable, Equatable {
     var version: Int
     var status: PlanStatus
     var steps: [PlanStep]
+    var sequenceEnforcementEnabled: Bool  // NEW: Toggle for dependency enforcement
     
     init(
         id: UUID = UUID(),
@@ -16,7 +17,8 @@ struct AssignmentPlan: Codable, Identifiable, Equatable {
         generatedAt: Date = Date(),
         version: Int = 1,
         status: PlanStatus = .draft,
-        steps: [PlanStep] = []
+        steps: [PlanStep] = [],
+        sequenceEnforcementEnabled: Bool = false
     ) {
         self.id = id
         self.assignmentId = assignmentId
@@ -24,6 +26,7 @@ struct AssignmentPlan: Codable, Identifiable, Equatable {
         self.version = version
         self.status = status
         self.steps = steps
+        self.sequenceEnforcementEnabled = sequenceEnforcementEnabled
     }
     
     enum PlanStatus: String, Codable {
@@ -47,6 +50,7 @@ struct PlanStep: Codable, Identifiable, Equatable {
     var isCompleted: Bool
     var completedAt: Date?
     var notes: String?
+    var prerequisiteIds: [UUID]  // NEW: Steps that must be completed before this one
     
     init(
         id: UUID = UUID(),
@@ -59,7 +63,8 @@ struct PlanStep: Codable, Identifiable, Equatable {
         stepType: StepType = .task,
         isCompleted: Bool = false,
         completedAt: Date? = nil,
-        notes: String? = nil
+        notes: String? = nil,
+        prerequisiteIds: [UUID] = []
     ) {
         self.id = id
         self.planId = planId
@@ -72,6 +77,7 @@ struct PlanStep: Codable, Identifiable, Equatable {
         self.isCompleted = isCompleted
         self.completedAt = completedAt
         self.notes = notes
+        self.prerequisiteIds = prerequisiteIds
     }
     
     enum StepType: String, Codable {
@@ -138,5 +144,153 @@ extension PlanStep {
         let now = Date()
         let oneDayFromNow = now.addingTimeInterval(24 * 60 * 60)
         return recommendedStart <= oneDayFromNow
+    }
+    
+    /// Whether this step has prerequisites
+    var hasPrerequisites: Bool {
+        !prerequisiteIds.isEmpty
+    }
+}
+
+// MARK: - Dependency Management
+
+extension AssignmentPlan {
+    /// Check if a step is blocked by incomplete prerequisites
+    func isStepBlocked(_ step: PlanStep) -> Bool {
+        guard sequenceEnforcementEnabled else { return false }
+        guard step.hasPrerequisites else { return false }
+        
+        // Step is blocked if any prerequisite is not completed
+        for prereqId in step.prerequisiteIds {
+            if let prereq = steps.first(where: { $0.id == prereqId }) {
+                if !prereq.isCompleted {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
+    /// Get all prerequisites for a given step
+    func getPrerequisites(for step: PlanStep) -> [PlanStep] {
+        step.prerequisiteIds.compactMap { prereqId in
+            steps.first(where: { $0.id == prereqId })
+        }
+    }
+    
+    /// Get all steps that depend on the given step (dependents)
+    func getDependents(for step: PlanStep) -> [PlanStep] {
+        steps.filter { $0.prerequisiteIds.contains(step.id) }
+    }
+    
+    /// Detect cycles in the dependency graph
+    /// Returns nil if no cycle, or array of step IDs forming a cycle
+    func detectCycle() -> [UUID]? {
+        var visited = Set<UUID>()
+        var recursionStack = Set<UUID>()
+        var cyclePath: [UUID] = []
+        
+        func hasCycle(stepId: UUID, path: [UUID]) -> Bool {
+            guard let step = steps.first(where: { $0.id == stepId }) else { return false }
+            
+            if recursionStack.contains(stepId) {
+                // Found cycle - capture the cycle path
+                if let cycleStart = path.firstIndex(of: stepId) {
+                    cyclePath = Array(path[cycleStart...]) + [stepId]
+                }
+                return true
+            }
+            
+            if visited.contains(stepId) {
+                return false
+            }
+            
+            visited.insert(stepId)
+            recursionStack.insert(stepId)
+            
+            for prereqId in step.prerequisiteIds {
+                if hasCycle(stepId: prereqId, path: path + [stepId]) {
+                    return true
+                }
+            }
+            
+            recursionStack.remove(stepId)
+            return false
+        }
+        
+        for step in steps {
+            if !visited.contains(step.id) {
+                if hasCycle(stepId: step.id, path: []) {
+                    return cyclePath
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    /// Perform topological sort of steps based on dependencies
+    /// Returns sorted steps or nil if cycle detected
+    func topologicalSort() -> [PlanStep]? {
+        // Check for cycles first
+        if detectCycle() != nil {
+            return nil
+        }
+        
+        var result: [PlanStep] = []
+        var visited = Set<UUID>()
+        
+        func visit(stepId: UUID) {
+            guard let step = steps.first(where: { $0.id == stepId }) else { return }
+            
+            if visited.contains(stepId) {
+                return
+            }
+            
+            visited.insert(stepId)
+            
+            // Visit all prerequisites first (depth-first)
+            for prereqId in step.prerequisiteIds {
+                visit(stepId: prereqId)
+            }
+            
+            result.append(step)
+        }
+        
+        // Visit all steps
+        for step in steps {
+            visit(stepId: step.id)
+        }
+        
+        return result
+    }
+    
+    /// Set up linear chain dependencies based on sequence index
+    /// This creates a simple A→B→C→D dependency chain
+    mutating func setupLinearChain() {
+        let sorted = sortedSteps
+        
+        for (index, var step) in sorted.enumerated() {
+            if index > 0 {
+                // Each step depends on the previous one
+                step.prerequisiteIds = [sorted[index - 1].id]
+            } else {
+                // First step has no prerequisites
+                step.prerequisiteIds = []
+            }
+            
+            // Update the step in the array
+            if let stepIndex = steps.firstIndex(where: { $0.id == step.id }) {
+                steps[stepIndex] = step
+            }
+        }
+    }
+    
+    /// Clear all dependencies
+    mutating func clearAllDependencies() {
+        for index in steps.indices {
+            steps[index].prerequisiteIds = []
+        }
     }
 }
