@@ -91,16 +91,10 @@ struct GradesPageView: View {
             )
         }
         .sheet(isPresented: $gradeAnalyticsWindowOpen) {
-            VStack(spacing: 16) {
-                Text("Grade Analytics")
-                    .font(.title2.weight(.semibold))
-                Text("Placeholder window. Integrate analytics dashboard here.")
-                    .foregroundStyle(.secondary)
-                Button("Close") { gradeAnalyticsWindowOpen = false }
-                    .buttonStyle(.borderedProminent)
-            }
-            .padding(24)
-            .frame(minWidth: 360, minHeight: 240)
+            GradesAnalyticsView()
+                .environmentObject(settings)
+                .environmentObject(assignmentsStore)
+                .environmentObject(coursesStore)
         }
         .onAppear {
             refreshCourses()
