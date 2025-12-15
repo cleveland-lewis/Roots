@@ -364,7 +364,11 @@ struct AddEventPopup: View {
                 if !builtAlarms.isEmpty { alarms = builtAlarms }
                 let urlVal = URL(string: urlString)
                 let rule = buildRecurrenceRule(option: recurrence, interval: recurrenceInterval, weekdays: weekdaySelection, endCount: recurrenceEndCount, endDate: recurrenceEndDate)
-                try await calendarManager.saveEvent(title: title, startDate: startDate, endDate: endDate, isAllDay: isAllDay, location: location, notes: notes, url: urlVal, alarms: alarms, recurrenceRule: rule, calendar: nil)
+                
+                // Use selected school calendar if available, otherwise fallback to default
+                let targetCalendar = getSelectedSchoolCalendar()
+                
+                try await calendarManager.saveEvent(title: title, startDate: startDate, endDate: endDate, isAllDay: isAllDay, location: location, notes: notes, url: urlVal, alarms: alarms, recurrenceRule: rule, calendar: targetCalendar)
                 // refresh device events
                 await DeviceCalendarManager.shared.refreshEventsForVisibleRange()
             } catch {
@@ -373,6 +377,40 @@ struct AddEventPopup: View {
             isSaving = false
             dismiss()
         }
+    }
+    
+    /// Get the selected school calendar for new events
+    /// Returns the calendar if found and writable, otherwise nil (will fallback to default)
+    private func getSelectedSchoolCalendar() -> EKCalendar? {
+        let selectedID = calendarManager.selectedCalendarID
+        guard !selectedID.isEmpty else {
+            Task { @MainActor in
+                Diagnostics.shared.log(.info, subsystem: .calendar, category: "AddEvent", message: "No school calendar selected, will use system default")
+            }
+            return nil
+        }
+        
+        let store = DeviceCalendarManager.shared.store
+        let calendars = store.calendars(for: .event)
+        
+        guard let calendar = calendars.first(where: { $0.calendarIdentifier == selectedID }) else {
+            Task { @MainActor in
+                Diagnostics.shared.log(.warn, subsystem: .calendar, category: "AddEvent", message: "Selected school calendar (ID: \(selectedID)) not found, will use system default")
+            }
+            return nil
+        }
+        
+        guard calendar.allowsContentModifications else {
+            Task { @MainActor in
+                Diagnostics.shared.log(.warn, subsystem: .calendar, category: "AddEvent", message: "Selected school calendar '\(calendar.title)' is read-only, will use system default")
+            }
+            return nil
+        }
+        
+        Task { @MainActor in
+            Diagnostics.shared.log(.info, subsystem: .calendar, category: "AddEvent", message: "Using selected school calendar: \(calendar.title)")
+        }
+        return calendar
     }
 }
 
