@@ -275,48 +275,8 @@ struct DashboardView: View {
     }
 
     private var clockAndCalendarCard: some View {
-        // quickActionsExpanded controls fan-out
-        @State var quickActionsExpanded: Bool = false
-
         return RootsCard {
             VStack(alignment: .leading, spacing: RootsSpacing.m) {
-                // Header with title and plus launcher
-                HStack(spacing: 12) {
-                    Text("Quick Actions")
-                        .rootsSectionHeader()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    ZStack(alignment: .trailing) {
-                        HStack(spacing: 10) {
-                            if quickActionsExpanded {
-                                ForEach(Array(quickActionList.enumerated()), id: \.offset) { idx, action in
-                                    quickActionButton(action.label, systemImage: action.icon, action: action.handler)
-                                        .scaleEffect(quickActionsExpanded ? 1 : 0.92)
-                                        .opacity(quickActionsExpanded ? 1 : 0)
-                                        .offset(x: quickActionsExpanded ? 0 : 8)
-                                        .animation(.spring(response: 0.34, dampingFraction: 0.78).delay(Double(idx) * 0.035), value: quickActionsExpanded)
-                                }
-                            }
-                        }
-                        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .trailing).combined(with: .opacity)))
-
-                        GlassIconButton(systemName: "plus", accessibilityLabel: "Quick Actions") {
-                            withAnimation(.spring(response: 0.36, dampingFraction: 0.75)) {
-                                quickActionsExpanded.toggle()
-                            }
-                        }
-                        .overlay {
-                            Image(systemName: "plus")
-                                .font(.body.weight(.semibold))
-                                .rotationEffect(.degrees(quickActionsExpanded ? 360 : 0))
-                                .animation(.easeInOut(duration: 0.35), value: quickActionsExpanded)
-                                .frame(width: 36, height: 36)
-                        }
-                        .controlSize(.regular)
-                        .accessibilityLabel("Quick Actions")
-                    }
-                }
-
                 // Main content: Two-column grid layout (Clock | Calendar)
                 let clockSize: CGFloat = 160
                 HStack(alignment: .center, spacing: DesignSystem.Layout.spacing.large) {
