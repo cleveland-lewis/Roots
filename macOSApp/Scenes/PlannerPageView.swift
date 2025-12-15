@@ -77,18 +77,18 @@ struct OverdueTaskRow: View {
 
     private var pillText: String {
         switch daysLate {
-        case 0: return "Today"
-        case 1: return "1 day overdue"
-        default: return "\(daysLate) days overdue"
+        case 0: return NSLocalizedString("planner.overdue.today", comment: "Label for tasks due today")
+        case 1: return NSLocalizedString("planner.overdue.one_day", comment: "Label for tasks 1 day overdue")
+        default: return String(format: NSLocalizedString("planner.overdue.days", comment: "Label for tasks multiple days overdue"), daysLate)
         }
     }
 
     private func dueText(from date: Date) -> String {
         let now = Date()
         let days = Calendar.current.dateComponents([.day], from: date, to: now).day ?? 0
-        if days == 0 { return "Due today" }
-        if days == 1 { return "Due 1 day ago" }
-        return "Due \(days) days ago"
+        if days == 0 { return NSLocalizedString("planner.due.today", comment: "Due date label for today") }
+        if days == 1 { return NSLocalizedString("planner.due.one_day_ago", comment: "Due date label for 1 day ago") }
+        return String(format: NSLocalizedString("planner.due.days_ago", comment: "Due date label for multiple days ago"), days)
     }
 
     var body: some View {
@@ -350,7 +350,7 @@ private extension PlannerPageView {
                 Button {
                     showNewTaskSheet()
                 } label: {
-                    Label("New Task", systemImage: "plus")
+                    Label(NSLocalizedString("planner.action.new_task", comment: "Button label for creating new task"), systemImage: "plus")
                         .font(DesignSystem.Typography.body)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
@@ -363,7 +363,7 @@ private extension PlannerPageView {
                 Button {
                     runAIScheduler()
                 } label: {
-                    Text(isRunningPlanner ? "Planning..." : "Plan Day")
+                    Text(isRunningPlanner ? NSLocalizedString("planner.action.planning", comment: "Button label while AI is planning") : NSLocalizedString("planner.action.plan_day", comment: "Button label to trigger AI planning"))
                         .font(DesignSystem.Typography.body)
                         .frame(height: 36)
                         .frame(minWidth: 120)
@@ -521,10 +521,10 @@ private extension PlannerPageView {
     var timelineCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                Text("Planner Timeline")
+                Text(NSLocalizedString("planner.timeline.title", comment: "Title for planner timeline section"))
                     .font(DesignSystem.Typography.subHeader)
                 if !unscheduledTasks.isEmpty {
-                    Text("• \(unscheduledTasks.count) overflow")
+                    Text("• \(unscheduledTasks.count) \(NSLocalizedString("planner.timeline.overflow", comment: "Label for overflow tasks count"))")
                         .font(.caption.weight(.semibold))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
@@ -575,7 +575,7 @@ private extension PlannerPageView {
                         )
                         .frame(height: 34)
                         .overlay(
-                            HStack { Text("Free").font(.caption).foregroundStyle(.secondary); Spacer() }
+                            HStack { Text(NSLocalizedString("planner.timeline.free", comment: "Label for free time slot")).font(.caption).foregroundStyle(.secondary); Spacer() }
                                 .padding(.horizontal, 10)
                         )
                 } else {
@@ -630,7 +630,7 @@ private extension PlannerPageView {
     var unscheduledTasksCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Unscheduled Tasks")
+                Text(NSLocalizedString("planner.unscheduled.title", comment: "Title for unscheduled tasks section"))
                     .font(DesignSystem.Typography.body)
                 Spacer()
                 if !unscheduledTasks.isEmpty {
@@ -666,7 +666,7 @@ private extension PlannerPageView {
                 plannerLoadingState
                     .padding(.vertical, 4)
             } else if unscheduledTasks.isEmpty && plannerStore.overflow.isEmpty {
-                Text("No overflow tasks from the planner right now.")
+                Text(NSLocalizedString("planner.unscheduled.empty", comment: "Message when there are no unscheduled tasks"))
                     .font(.footnote)
                     .foregroundColor(.secondary)
                     .padding(.vertical, 12)
@@ -702,7 +702,7 @@ private extension PlannerPageView {
     var overdueTasksCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Overdue Tasks")
+                Text(NSLocalizedString("planner.overdue.title", comment: "Title for overdue tasks section"))
                     .font(DesignSystem.Typography.body)
                 Spacer()
                 if !overdueTasks.isEmpty {
@@ -967,7 +967,7 @@ struct PlannerBlockRow: View {
     }
 
     private var metadataText: String {
-        let courseText = block.course ?? "Course"
+        let courseText = block.course ?? NSLocalizedString("planner.course.default", comment: "Default course label")
         return "\(courseText) · \(block.source)"
     }
 }
@@ -993,9 +993,9 @@ struct PlannerTaskRow: View {
                         .lineLimit(1)
 
                     HStack(spacing: 6) {
-                        Text(task.course ?? "Course")
-                        Text("· ~\(task.estimatedMinutes) min")
-                        Text("· Due \(PlannerTaskRow.dateFormatter.string(from: task.dueDate))")
+                        Text(task.course ?? NSLocalizedString("planner.course.default", comment: "Default course label"))
+                        Text("· ~\(task.estimatedMinutes) \(NSLocalizedString("planner.task.minutes_short", comment: "Short label for minutes"))")
+                        Text("· \(NSLocalizedString("planner.task.due", comment: "Due date prefix")) \(PlannerTaskRow.dateFormatter.string(from: task.dueDate))")
                         if task.isLockedToDueDate {
                             Image(systemName: "lock.fill")
                         }
@@ -1057,8 +1057,8 @@ struct NewTaskSheet: View {
 
     var body: some View {
         RootsPopupContainer(
-            title: isNew ? "New Task" : "Edit Task",
-            subtitle: "Tasks are auto-scheduled into the Planner timeline."
+            title: isNew ? NSLocalizedString("planner.task_sheet.new_title", comment: "Title for new task sheet") : NSLocalizedString("planner.task_sheet.edit_title", comment: "Title for edit task sheet"),
+            subtitle: NSLocalizedString("planner.task_sheet.subtitle", comment: "Subtitle explaining task auto-scheduling")
         ) {
             VStack(alignment: .leading, spacing: RootsSpacing.l) {
                 taskSection
@@ -1081,12 +1081,12 @@ struct NewTaskSheet: View {
     // Sections
     private var taskSection: some View {
         VStack(alignment: .leading, spacing: RootsSpacing.m) {
-            Text("Task").rootsSectionHeader()
-            RootsFormRow(label: "Title") {
-                TextField("Title", text: $draft.title)
+            Text(NSLocalizedString("planner.task_sheet.section.task", comment: "Task section header")).rootsSectionHeader()
+            RootsFormRow(label: NSLocalizedString("planner.task_sheet.field.title", comment: "Title field label")) {
+                TextField(NSLocalizedString("planner.task_sheet.field.title", comment: "Title field placeholder"), text: $draft.title)
                     .textFieldStyle(.roundedBorder)
             }
-            RootsFormRow(label: "Priority") {
+            RootsFormRow(label: NSLocalizedString("planner.task_sheet.field.priority", comment: "Priority field label")) {
                 Picker("", selection: $draft.priority) {
                     ForEach(PlannerTaskPriority.allCases) { p in
                         Text(p.rawValue.capitalized).tag(p)
@@ -1100,10 +1100,10 @@ struct NewTaskSheet: View {
 
     private var courseSection: some View {
         VStack(alignment: .leading, spacing: RootsSpacing.m) {
-            Text("Course").rootsSectionHeader()
-            RootsFormRow(label: "Course") {
-                Picker("Course", selection: courseSelection) {
-                    Text("None").tag(UUID?.none)
+            Text(NSLocalizedString("planner.task_sheet.section.course", comment: "Course section header")).rootsSectionHeader()
+            RootsFormRow(label: NSLocalizedString("planner.task_sheet.field.course", comment: "Course field label")) {
+                Picker(NSLocalizedString("planner.task_sheet.field.course", comment: "Course picker label"), selection: courseSelection) {
+                    Text(NSLocalizedString("planner.task_sheet.field.course_none", comment: "None option for course picker")).tag(UUID?.none)
                     ForEach(availableCourses) { course in
                         Text("\(course.code) · \(course.title)").tag(Optional(course.id))
                     }
@@ -1111,9 +1111,9 @@ struct NewTaskSheet: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            RootsFormRow(label: "Assignment") {
-                TextField("Assignment link (optional)", text: Binding(
-                    get: { draft.assignmentID == nil ? "" : "Linked" },
+            RootsFormRow(label: NSLocalizedString("planner.task_sheet.field.assignment", comment: "Assignment field label")) {
+                TextField(NSLocalizedString("planner.task_sheet.field.assignment_placeholder", comment: "Assignment field placeholder"), text: Binding(
+                    get: { draft.assignmentID == nil ? "" : NSLocalizedString("planner.task_sheet.field.assignment_linked", comment: "Text shown when assignment is linked") },
                     set: { _ in /* hook later */ }
                 ))
                 .textFieldStyle(.roundedBorder)
@@ -1123,21 +1123,21 @@ struct NewTaskSheet: View {
 
     private var timingSection: some View {
         VStack(alignment: .leading, spacing: RootsSpacing.m) {
-            Text("Timing").rootsSectionHeader()
-            RootsFormRow(label: "Due date") {
+            Text(NSLocalizedString("planner.task_sheet.section.timing", comment: "Timing section header")).rootsSectionHeader()
+            RootsFormRow(label: NSLocalizedString("planner.task_sheet.field.due_date", comment: "Due date field label")) {
                 DatePicker("", selection: $draft.dueDate, in: Date()..., displayedComponents: .date)
                     .labelsHidden()
             }
-            RootsFormRow(label: "Focus estimate") {
+            RootsFormRow(label: NSLocalizedString("planner.task_sheet.field.focus_estimate", comment: "Focus estimate field label")) {
                 Stepper(value: $draft.estimatedMinutes, in: 15...480, step: 15) {
-                    Text("\(draft.estimatedMinutes) min")
+                    Text("\(draft.estimatedMinutes) \(NSLocalizedString("planner.task_sheet.field.minutes", comment: "Minutes unit label"))")
                 }
                 .frame(maxWidth: 220, alignment: .leading)
             }
             RootsFormRow(label: "") {
                 VStack(alignment: .leading, spacing: 4) {
-                    Toggle("Lock to exact due date", isOn: $draft.lockToDueDate)
-                    Text("When locked, the AI planner schedules this block only on the due date.")
+                    Toggle(NSLocalizedString("planner.task_sheet.field.lock_due_date", comment: "Lock to due date toggle label"), isOn: $draft.lockToDueDate)
+                    Text(NSLocalizedString("planner.task_sheet.field.lock_due_date_help", comment: "Help text for lock to due date toggle"))
                         .rootsCaption()
                 }
             }
@@ -1147,8 +1147,8 @@ struct NewTaskSheet: View {
     private var footer: some View {
         HStack {
             Spacer()
-            Button("Cancel") { dismiss() }
-            Button(isNew ? "Create" : "Save") {
+            Button(NSLocalizedString("planner.task_sheet.action.cancel", comment: "Cancel button label")) { dismiss() }
+            Button(isNew ? NSLocalizedString("planner.task_sheet.action.create", comment: "Create button label") : NSLocalizedString("planner.task_sheet.action.save", comment: "Save button label")) {
                 onSave(draft)
                 dismiss()
             }

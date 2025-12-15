@@ -19,6 +19,99 @@
 
 /* Planner */
 
+/* Overdue Tasks */
+"planner.overdue.today" = "Today";
+"planner.overdue.one_day" = "1 day overdue";
+"planner.overdue.days" = "%d days overdue";
+"planner.overdue.title" = "Overdue Tasks";
+
+/* Due Dates */
+"planner.due.today" = "Due today";
+"planner.due.one_day_ago" = "Due 1 day ago";
+"planner.due.days_ago" = "Due %d days ago";
+
+/* Actions */
+"planner.action.new_task" = "New Task";
+"planner.action.planning" = "Planning...";
+"planner.action.plan_day" = "Plan Day";
+"planner.action.schedule" = "Schedule";
+
+/* Timeline */
+"planner.timeline.title" = "Planner Timeline";
+"planner.timeline.overflow" = "overflow";
+"planner.timeline.free" = "Free";
+
+/* Unscheduled Tasks */
+"planner.unscheduled.title" = "Unscheduled Tasks";
+"planner.unscheduled.empty" = "No overflow tasks from the planner right now.";
+
+/* Course */
+"planner.course.default" = "Course";
+
+/* Task */
+"planner.task.minutes_short" = "min";
+"planner.task.due" = "Due";
+
+/* Task Sheet */
+"planner.task_sheet.new_title" = "New Task";
+"planner.task_sheet.edit_title" = "Edit Task";
+"planner.task_sheet.subtitle" = "Tasks are auto-scheduled into the Planner timeline.";
+"planner.task_sheet.section.task" = "Task";
+"planner.task_sheet.section.course" = "Course";
+"planner.task_sheet.section.timing" = "Timing";
+"planner.task_sheet.field.title" = "Title";
+"planner.task_sheet.field.priority" = "Priority";
+"planner.task_sheet.field.course" = "Course";
+"planner.task_sheet.field.course_none" = "None";
+"planner.task_sheet.field.assignment" = "Assignment";
+"planner.task_sheet.field.assignment_placeholder" = "Assignment link (optional)";
+"planner.task_sheet.field.assignment_linked" = "Linked";
+"planner.task_sheet.field.due_date" = "Due date";
+"planner.task_sheet.field.focus_estimate" = "Focus estimate";
+"planner.task_sheet.field.minutes" = "min";
+"planner.task_sheet.field.lock_due_date" = "Lock to exact due date";
+"planner.task_sheet.field.lock_due_date_help" = "When locked, the AI planner schedules this block only on the due date.";
+"planner.task_sheet.action.cancel" = "Cancel";
+"planner.task_sheet.action.create" = "Create";
+"planner.task_sheet.action.save" = "Save";
+
+/* Settings */
+"planner.settings.section.title" = "Planner";
+"planner.settings.enable_ai" = "Enable AI Planner";
+"planner.settings.horizon" = "Default Planning Horizon";
+"planner.settings.horizon.one_week" = "1 Week";
+"planner.settings.horizon.two_weeks" = "2 Weeks";
+"planner.settings.horizon.one_month" = "1 Month";
+
+/* Mode */
+"planner.mode.picker_label" = "Mode";
+"planner.mode.today" = "Today";
+"planner.mode.this_week" = "This Week";
+"planner.mode.upcoming" = "Upcoming";
+
+/* Scheduler */
+"planner.scheduler.min_block" = "Min block";
+"planner.scheduler.max_block" = "Max block";
+"planner.scheduler.horizon_days" = "Horizon (days)";
+"planner.scheduler.minutes_short" = "min";
+"planner.scheduler.weights" = "Weights";
+"planner.scheduler.weight.urgency" = "Urgency";
+"planner.scheduler.weight.importance" = "Importance";
+"planner.scheduler.weight.difficulty" = "Difficulty";
+"planner.scheduler.weight.size" = "Size";
+
+/* Reminders */
+"planner.reminders.access_off" = "Reminders access is turned off";
+"planner.reminders.enable_instructions" = "Enable Reminders access in System Settings → Privacy so Roots can show your tasks.";
+"planner.reminders.open_settings" = "Open System Settings";
+
+/* Sections */
+"planner.section.this_week" = "This Week";
+"planner.section.unscheduled" = "Unscheduled Tasks";
+
+/* Schedule Result */
+"planner.schedule_result.none" = "No schedule result";
+
 /* Settings */
 
 /* Grades */
