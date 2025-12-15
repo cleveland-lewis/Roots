@@ -163,7 +163,7 @@ struct SemesterSettingsRow: View {
             // Actions
             HStack(spacing: DesignSystem.Layout.spacing.small) {
                 Button {
-                    withAnimation(.easeInOut(duration: 0.15)) {
+                    withAnimation(DesignSystem.Motion.interactiveSpring) {
                         onToggleCurrent(semester)
                     }
                 } label: {

@@ -309,7 +309,7 @@ struct DashboardView: View {
         .buttonStyle(.borderedProminent)
         .tint(settings.activeAccentColor)
         .controlSize(.small)
-        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .move(edge: .trailing).combined(with: .opacity)))
+        .transition(DesignSystem.Motion.slideTrailingTransition)
     }
 
     private var quickActionList: [(label: String, icon: String, handler: () -> Void)] {

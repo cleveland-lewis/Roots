@@ -36,9 +36,9 @@ struct ChartViewVerticalStacked: View {
                     .background(Color(.windowBackgroundColor).opacity(0.95))
                     .cornerRadius(8)
                     .shadow(radius: 6)
-                    .transition(.opacity)
+                    .transition(DesignSystem.Motion.fadeTransition)
                     .offset(x: (hoveredPointLocation?.x ?? 0) > 120 ? -140 : 0, y: 0)
-                    .animation(.easeInOut, value: hoveredPointLocation)
+                    .animation(DesignSystem.Motion.snappyEase, value: hoveredPointLocation)
                 }
             }.padding(DesignSystem.Layout.padding.card), alignment: Alignment.topTrailing)
             .focusable(true)
@@ -64,7 +64,7 @@ struct ChartViewVerticalStacked: View {
                     .font(DesignSystem.Typography.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Button(action: { withAnimation(.easeInOut(duration: 0.2)) { isLegendExpanded.toggle() } }) {
+                Button(action: { withAnimation(DesignSystem.Motion.interactiveSpring) { isLegendExpanded.toggle() } }) {
                     Image(systemName: isLegendExpanded ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -95,7 +95,7 @@ struct ChartViewVerticalStacked: View {
                         )
                     }
                 }
-                .transition(.opacity.combined(with: .scale(scale: 0.95, anchor: .top)))
+                .transition(DesignSystem.Motion.scaleTransition)
             }
         }
         .padding(.horizontal, DesignSystem.Layout.padding.card)
@@ -142,7 +142,7 @@ private struct HoverHighlightModifier: ViewModifier {
         content
             .opacity(isHighlighted ? 1.0 : 0.45)
             .scaleEffect(isHighlighted ? 1.0 : 0.98)
-            .animation(.easeInOut(duration: 0.18), value: isHighlighted)
+            .animation(DesignSystem.Motion.snappyEase, value: isHighlighted)
     }
 }
 
@@ -178,7 +178,7 @@ private struct ManualStackedView: View {
                                     .offset(y: offsetY)
                                     .opacity(isHighlight ? 1.0 : 0.45)
                                     .scaleEffect(isHighlight ? 1.0 : 0.98)
-                                    .animation(.easeInOut(duration: 0.18), value: hoveredPoint?.id)
+                                    .animation(DesignSystem.Motion.snappyEase, value: hoveredPoint?.id)
                             }
                         }
                         .cornerRadius(6)

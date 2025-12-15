@@ -216,7 +216,7 @@ struct CalendarPageView: View {
         // Present event detail without resizing layout
         .sheet(item: $selectedEvent, onDismiss: {
             // restore sidebar when the detail sheet is dismissed
-            withAnimation(.easeInOut(duration: 0.22)) { selectedDate = calendarManager.selectedDate ?? focusedDate }
+            withAnimation(DesignSystem.Motion.standardEase) { selectedDate = calendarManager.selectedDate ?? focusedDate }
             selectedEvent = nil
         }, content: { event in
             // Add a subtle presentation animation inside the sheet
@@ -606,7 +606,7 @@ private struct MonthCalendarView: View {
                         let dayEvents = events(for: day.date).sorted { $0.startDate < $1.startDate }
                         VStack(alignment: .leading, spacing: 6) {
                             Button {
-                                withAnimation(.easeInOut(duration: 0.2)) {
+                                withAnimation(DesignSystem.Motion.snappyEase) {
                                     focusedDate = day.date
                                 }
                                 onSelectDate(day.date)
@@ -978,7 +978,7 @@ private struct EventRow: View {
                 .fill(isHovered ? Color(nsColor: .controlBackgroundColor).opacity(0.15) : Color.clear)
         )
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.15)) {
+            withAnimation(DesignSystem.Motion.snappyEase) {
                 isHovered = hovering
             }
         }
@@ -1495,7 +1495,7 @@ private struct WeekHeaderView: View {
                     isInCurrentMonth: true
                 )
                 Button {
-                    withAnimation(.easeInOut(duration: 0.15)) {
+                    withAnimation(DesignSystem.Motion.snappyEase) {
                         focusedDate = date
                     }
                 } label: {
@@ -2041,8 +2041,8 @@ private struct MetricsRow: View {
             MetricCard(title: "Total This Month", value: "\(metrics.totalItems)", subtitle: "Calendar items", systemImage: "calendar")
             MetricCard(title: "Busiest Day", value: metrics.busiestDayName, subtitle: busiestSubtitle, systemImage: "flame")
         }
-        .transition(.opacity.combined(with: .move(edge: .bottom)))
-        .animation(.easeInOut, value: metrics.totalItems)
+        .transition(DesignSystem.Motion.slideUpTransition)
+        .animation(DesignSystem.Motion.standardEase, value: metrics.totalItems)
     }
 
     private var busiestSubtitle: String {

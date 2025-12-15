@@ -170,7 +170,7 @@ struct AddAssignmentView: View {
                 // Placeholder for actual add-course UI
                 AddCourseSheet()
                     .frame(maxWidth: 520)
-                    .transition(.scale(scale: 0.9).combined(with: .opacity))
+                    .transition(DesignSystem.Motion.scaleTransition)
                     .zIndex(1)
             }
         }

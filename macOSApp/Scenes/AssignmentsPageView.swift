@@ -1447,7 +1447,7 @@ private extension AssignmentsPageView {
                 if let menuPoint = selectionMenuLocation, !selectedIDs.isEmpty {
                     selectionMenu
                         .position(menuPoint)
-                        .transition(.opacity.combined(with: .scale))
+                        .transition(DesignSystem.Motion.scaleTransition)
                 }
             }
             .onPreferenceChange(AssignmentFramePreference.self) { frames in

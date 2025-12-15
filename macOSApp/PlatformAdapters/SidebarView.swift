@@ -96,7 +96,7 @@ private struct SidebarTooltipModifier: ViewModifier {
                         .background(DesignSystem.Materials.hud, in: Capsule())
                         .shadow(radius: 4, y: 2)
                         .offset(y: -40)
-                        .transition(.scale.combined(with: .opacity))
+                        .transition(DesignSystem.Motion.scaleTransition)
                 }
             }
     }
