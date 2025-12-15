@@ -1178,7 +1178,8 @@ private struct EventDetailView: View {
                             primaryAlert: updated.primaryAlert,
                             secondaryAlert: updated.secondaryAlert,
                             travelTime: updated.travelTime.timeInterval,
-                            recurrence: updated.recurrence
+                            recurrence: updated.recurrence,
+                            category: updated.category
                         )
                         await MainActor.run {
                             isPresented = false
@@ -1265,6 +1266,7 @@ private struct EventEditSheet: View {
     var onSave: (EditableEvent) -> Void
 
     @State private var title: String
+    @State private var category: EventCategory
     @State private var startDate: Date
     @State private var endDate: Date
     @State private var isAllDay: Bool
@@ -1281,6 +1283,7 @@ private struct EventEditSheet: View {
         self.item = item
         self.onSave = onSave
         _title = State(initialValue: item.title)
+        _category = State(initialValue: item.category)
         _startDate = State(initialValue: item.startDate)
         _endDate = State(initialValue: item.endDate)
         _isAllDay = State(initialValue: false)
@@ -1312,6 +1315,13 @@ private struct EventEditSheet: View {
             TextField("Title", text: $title)
                 .textFieldStyle(.roundedBorder)
                 .font(.body.weight(.medium))
+
+            Picker("Category", selection: $category) {
+                ForEach(EventCategory.allCases) { cat in
+                    Text(cat.rawValue).tag(cat)
+                }
+            }
+            .pickerStyle(.segmented)
 
             Divider()
 
@@ -1405,6 +1415,7 @@ private struct EventEditSheet: View {
                 Button("Save") {
                     let updated = EditableEvent(
                         title: title.isEmpty ? item.title : title,
+                        category: category,
                         startDate: startDate,
                         endDate: endDate,
                         isAllDay: isAllDay,
@@ -1430,6 +1441,7 @@ private struct EventEditSheet: View {
 
     struct EditableEvent {
         var title: String
+        var category: EventCategory
         var startDate: Date
         var endDate: Date
         var isAllDay: Bool
@@ -1755,7 +1767,8 @@ struct CalendarView: View {
     }
 
     private func mapEvent(_ ek: EKEvent) -> CalendarEvent {
-        CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false)
+        let (cleanNotes, storedCategory) = calendarManager.decodeNotesWithCategory(notes: ek.notes)
+        return CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: cleanNotes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false, category: storedCategory)
     }
 
     private func eventCategoryLabel(for title: String) -> String {

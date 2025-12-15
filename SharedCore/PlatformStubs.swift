@@ -183,7 +183,8 @@ public struct CalendarEvent: Identifiable, Hashable {
     public var location: String?
     public var notes: String?
     public var url: URL?
-    public init(id: UUID = UUID(), title: String = "", startDate: Date = Date(), endDate: Date = Date(), location: String? = nil, notes: String? = nil, url: URL? = nil) {
+    public var category: EventCategory?
+    public init(id: UUID = UUID(), title: String = "", startDate: Date = Date(), endDate: Date = Date(), location: String? = nil, notes: String? = nil, url: URL? = nil, category: EventCategory? = nil) {
         self.id = id
         self.title = title
         self.startDate = startDate
@@ -191,6 +192,7 @@ public struct CalendarEvent: Identifiable, Hashable {
         self.location = location
         self.notes = notes
         self.url = url
+        self.category = category
     }
 }
 
