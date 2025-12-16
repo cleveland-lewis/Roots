@@ -247,6 +247,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         case assignmentLeadTimeStorage
         case dailyOverviewTimeStorage
         case showOnlySchoolCalendarStorage
+        case lockCalendarPickerToSchoolStorage
     }
 
 
@@ -412,6 +413,9 @@ final class AppSettingsModel: ObservableObject, Codable {
 
     // Calendar UI filter setting
     var showOnlySchoolCalendarStorage: Bool = false
+    
+    // Calendar picker admin-lock setting
+    var lockCalendarPickerToSchoolStorage: Bool = false
     
     // Event load thresholds (persisted)
     var loadLowThresholdStorage: Int = 1
@@ -703,6 +707,12 @@ final class AppSettingsModel: ObservableObject, Codable {
         get { showOnlySchoolCalendarStorage }
         set { showOnlySchoolCalendarStorage = newValue }
     }
+    
+    // Calendar picker admin-lock setting exposed to views
+    var lockCalendarPickerToSchool: Bool {
+        get { lockCalendarPickerToSchoolStorage }
+        set { lockCalendarPickerToSchoolStorage = newValue }
+    }
 
     var defaultWorkdayStart: DateComponents {
         get { DateComponents(hour: workdayStartHourStorage, minute: workdayStartMinuteStorage) }
@@ -954,6 +964,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         try container.encode(assignmentLeadTimeStorage, forKey: .assignmentLeadTimeStorage)
         try container.encode(dailyOverviewTimeStorage, forKey: .dailyOverviewTimeStorage)
         try container.encode(showOnlySchoolCalendarStorage, forKey: .showOnlySchoolCalendarStorage)
+        try container.encode(lockCalendarPickerToSchoolStorage, forKey: .lockCalendarPickerToSchoolStorage)
     }
 
     required init(from decoder: Decoder) throws {
@@ -1005,6 +1016,7 @@ final class AppSettingsModel: ObservableObject, Codable {
             return Calendar.current.date(from: components) ?? Date()
         }()
         showOnlySchoolCalendarStorage = try container.decodeIfPresent(Bool.self, forKey: .showOnlySchoolCalendarStorage) ?? false
+        lockCalendarPickerToSchoolStorage = try container.decodeIfPresent(Bool.self, forKey: .lockCalendarPickerToSchoolStorage) ?? false
     }
 
     func resetUserDefaults() {

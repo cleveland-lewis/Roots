@@ -76,6 +76,15 @@ struct CalendarSettingsView: View {
                         .font(DesignSystem.Typography.caption)
                         .foregroundStyle(.secondary)
                 }
+                
+                Section("Calendar Picker Lock") {
+                    Toggle("Lock Calendar Picker to School", isOn: $settings.lockCalendarPickerToSchool)
+                        .toggleStyle(.switch)
+                    
+                    Text(settings.lockCalendarPickerToSchool ? "New events will always be saved to the school calendar. Users cannot select a different calendar." : "Users can choose which calendar to save new events to.")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .listStyle(.sidebar)

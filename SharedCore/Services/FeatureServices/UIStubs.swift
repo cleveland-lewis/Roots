@@ -215,6 +215,7 @@ extension EventCategory {
 // New shared Add Event popup used throughout the app
 struct AddEventPopup: View {
     @EnvironmentObject var calendarManager: CalendarManager
+    @EnvironmentObject var settings: AppSettingsModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var title: String = ""
@@ -234,6 +235,11 @@ struct AddEventPopup: View {
     @State private var primaryAlertMinutes: Int? = nil
     @State private var secondaryAlertMinutes: Int? = nil
     @State private var isSaving: Bool = false
+    @State private var selectedCalendarID: String = ""
+
+    private var availableCalendars: [EKCalendar] {
+        DeviceCalendarManager.shared.store.calendars(for: .event).filter { $0.allowsContentModifications }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -256,6 +262,30 @@ struct AddEventPopup: View {
                             }
                         }
                     }
+
+                // Calendar picker
+                VStack(alignment: .leading, spacing: 4) {
+                    Picker("Calendar", selection: $selectedCalendarID) {
+                        ForEach(availableCalendars, id: \.calendarIdentifier) { calendar in
+                            HStack {
+                                if let cgColor = calendar.cgColor {
+                                    Circle()
+                                        .fill(Color(cgColor: cgColor))
+                                        .frame(width: 8, height: 8)
+                                }
+                                Text(calendar.title)
+                            }
+                            .tag(calendar.calendarIdentifier)
+                        }
+                    }
+                    .disabled(settings.lockCalendarPickerToSchool)
+                    
+                    if settings.lockCalendarPickerToSchool {
+                        Text("Calendar locked to school calendar by administrator")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
 
                 Picker("Category", selection: Binding(get: { category }, set: { v in category = v; userSelectedCategory = true })) {
                     ForEach(EventCategory.allCases) { c in
@@ -315,6 +345,16 @@ struct AddEventPopup: View {
         }
         .padding(16)
         .frame(minWidth: 520, minHeight: 360)
+        .onAppear {
+            // Initialize calendar selection to school calendar or default
+            if let schoolCalendar = getSelectedSchoolCalendar() {
+                selectedCalendarID = schoolCalendar.calendarIdentifier
+            } else if let defaultCalendar = DeviceCalendarManager.shared.store.defaultCalendarForNewEvents {
+                selectedCalendarID = defaultCalendar.calendarIdentifier
+            } else if let firstCalendar = availableCalendars.first {
+                selectedCalendarID = firstCalendar.calendarIdentifier
+            }
+        }
     }
 
     private func parseCategory(from title: String) -> EventCategory? {
@@ -365,8 +405,8 @@ struct AddEventPopup: View {
                 let urlVal = URL(string: urlString)
                 let rule = buildRecurrenceRule(option: recurrence, interval: recurrenceInterval, weekdays: weekdaySelection, endCount: recurrenceEndCount, endDate: recurrenceEndDate)
                 
-                // Use selected school calendar if available, otherwise fallback to default
-                let targetCalendar = getSelectedSchoolCalendar()
+                // Use selected calendar from picker
+                let targetCalendar = availableCalendars.first(where: { $0.calendarIdentifier == selectedCalendarID })
                 
                 try await calendarManager.saveEvent(title: title, startDate: startDate, endDate: endDate, isAllDay: isAllDay, location: location, notes: notes, url: urlVal, alarms: alarms, recurrenceRule: rule, calendar: targetCalendar, category: category)
                 // refresh device events
