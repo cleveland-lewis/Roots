@@ -379,7 +379,8 @@ struct CoursesSidebarView: View {
     var onNewCourse: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 0) {
+            // Header Section
             VStack(alignment: .leading, spacing: 4) {
                 Text("Courses")
                     .font(DesignSystem.Typography.body)
@@ -388,12 +389,15 @@ struct CoursesSidebarView: View {
                     .foregroundStyle(.secondary)
             }
             .padding(.horizontal, 12)
-            .padding(.top, 6)
+            .padding(.top, 14)
+            .padding(.bottom, 8)
 
             TextField("Search courses", text: $searchText)
                 .textFieldStyle(.roundedBorder)
                 .padding(.horizontal, 12)
+                .padding(.bottom, 8)
 
+            // Scrollable Course List
             ScrollView {
                 VStack(spacing: DesignSystem.Layout.spacing.small) {
                     ForEach(courses) { course in
@@ -405,37 +409,43 @@ struct CoursesSidebarView: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
             }
+            .frame(maxHeight: .infinity) // Allow scroll to expand
 
-            HStack(spacing: RootsSpacing.s) {
-                Button {
-                    onNewCourse()
-                } label: {
-                    Label("New Course", systemImage: "plus")
-                        .font(DesignSystem.Typography.body)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                        .glassChrome(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
-                }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity)
+            // Bottom Action Buttons (Pinned)
+            VStack(spacing: 0) {
+                Divider()
+                    .padding(.vertical, 8)
+                
+                HStack(spacing: RootsSpacing.s) {
+                    Button {
+                        onNewCourse()
+                    } label: {
+                        Label("New Course", systemImage: "plus")
+                            .font(DesignSystem.Typography.body)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .glassChrome(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
 
-                Button {
-                    settingsCoordinator.show(selecting: .courses)
-                } label: {
-                    Label("Edit Courses", systemImage: "pencil")
-                        .font(DesignSystem.Typography.body)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
-                        .glassChrome(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
+                    Button {
+                        settingsCoordinator.show(selecting: .courses)
+                    } label: {
+                        Label("Edit Courses", systemImage: "pencil")
+                            .font(DesignSystem.Typography.body)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .glassChrome(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.plain)
-                .frame(maxWidth: .infinity)
+                .padding(.horizontal, RootsSpacing.m)
+                .padding(.bottom, RootsSpacing.m)
             }
-            .padding(.horizontal, RootsSpacing.m)
-            .padding(.bottom, RootsSpacing.m)
         }
-        .padding(.vertical, 8)
-        .frame(maxHeight: .infinity, alignment: .top)
+        .frame(maxHeight: .infinity)
         .glassCard(cornerRadius: 22)
     }
 
