@@ -4,6 +4,7 @@ import EventKit
 
 struct CalendarSettingsView: View {
     @EnvironmentObject var calendarManager: CalendarManager
+    @EnvironmentObject var settings: AppSettingsModel
     @State private var showingRevokeAlert = false
 
     private var isAuthorized: Bool {
@@ -62,7 +63,16 @@ struct CalendarSettingsView: View {
                         _Concurrency.Task { await calendarManager.refreshAll() }
                     }
 
-                    Text("Only events from this calendar will appear in Roots.")
+                    Text("Select the calendar used for school/academic events.")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Section("Calendar View Filter") {
+                    Toggle("Show Only School Calendar", isOn: $settings.showOnlySchoolCalendar)
+                        .toggleStyle(.switch)
+                    
+                    Text(settings.showOnlySchoolCalendar ? "Calendar UI will only show events from your school calendar." : "Calendar UI will show events from all calendars.")
                         .font(DesignSystem.Typography.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -87,6 +97,7 @@ struct CalendarSettingsView: View {
 #Preview {
     CalendarSettingsView()
         .environmentObject(CalendarManager.shared)
+        .environmentObject(AppSettingsModel.shared)
         .frame(width: 500, height: 600)
 }
 #endif

@@ -97,6 +97,14 @@ struct CalendarPageView: View {
     @State private var chevronRightHover = false
     @State private var todayHover = false
 
+    // Computed property to filter events based on settings
+    private var filteredEvents: [EKEvent] {
+        let allEvents = deviceCalendar.events
+        guard settings.showOnlySchoolCalendar else { return allEvents }
+        guard !calendarManager.selectedCalendarID.isEmpty else { return allEvents }
+        return allEvents.filter { $0.calendar.calendarIdentifier == calendarManager.selectedCalendarID }
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             // Header: Add button, Title, View selector, Navigation
@@ -250,7 +258,7 @@ struct CalendarPageView: View {
         case .week:
             WeekCalendarView(focusedDate: $focusedDate, events: effectiveEvents)
         case .day:
-            CalendarDayView(date: focusedDate, events: deviceCalendar.events)
+            CalendarDayView(date: focusedDate, events: filteredEvents)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         case .year:
             CalendarYearView(currentYear: focusedDate)
@@ -433,7 +441,7 @@ struct CalendarPageView: View {
 
     private func updateMetrics() {
         // CalendarStats.calculate expects [EKEvent]
-        metrics = CalendarStats.calculate(from: deviceCalendar.events, for: focusedDate)
+        metrics = CalendarStats.calculate(from: filteredEvents, for: focusedDate)
     }
 }
 
@@ -1538,10 +1546,19 @@ struct CalendarView: View {
     }()
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var deviceCalendar: DeviceCalendarManager
+    @EnvironmentObject private var settings: AppSettingsModel
     @State private var viewMode: CalendarViewMode = .month
     @State private var currentMonth: Date = Date()
     @State private var selectedEvent: CalendarEvent? = nil
     @State private var keyMonitor: Any?
+
+    // Computed property to filter events based on settings
+    private var filteredEvents: [EKEvent] {
+        let allEvents = deviceCalendar.events
+        guard settings.showOnlySchoolCalendar else { return allEvents }
+        guard !calendarManager.selectedCalendarID.isEmpty else { return allEvents }
+        return allEvents.filter { $0.calendar.calendarIdentifier == calendarManager.selectedCalendarID }
+    }
 
     private var monthEvents: [EKEvent] {
         displayEKEvents
@@ -1554,9 +1571,7 @@ struct CalendarView: View {
     }
 
     private var displayEKEvents: [EKEvent] {
-        let selectedId = calendarManager.selectedCalendarID
-        guard !selectedId.isEmpty else { return [] }
-        return deviceCalendar.events.filter { $0.calendar.calendarIdentifier == selectedId }
+        return filteredEvents
     }
 
     private var isLoading: Bool {
