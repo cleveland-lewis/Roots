@@ -390,8 +390,8 @@ struct TimerPageView: View {
                 assignmentsStore.updateTask(updated)
             }
         )
-        let hosting = NSHostingController(rootView: focusView)
-        hosting.rootView.environmentObject(assignmentsStore)
+        let focusViewWithEnv = focusView.environmentObject(assignmentsStore)
+        let hosting = NSHostingController(rootView: focusViewWithEnv)
         let window = NSWindow(contentViewController: hosting)
         window.styleMask = NSWindow.StyleMask([.titled, .closable, .miniaturizable, .resizable])
         window.setContentSize(NSSize(width: 640, height: 480))

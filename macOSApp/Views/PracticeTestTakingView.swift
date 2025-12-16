@@ -139,7 +139,7 @@ struct PracticeTestTakingView: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                     
-                    if let answer = userAnswers[question.id] {
+                    if userAnswers[question.id] != nil {
                         Text("Answered")
                             .font(.caption2.bold())
                             .foregroundStyle(.green)

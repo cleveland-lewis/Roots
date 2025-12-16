@@ -60,11 +60,10 @@ struct LogEvent {
     let line: Int
 }
 
-@MainActor
 final class Diagnostics: ObservableObject {
     static let shared = Diagnostics()
 
-    @Published private(set) var recentEvents: [LogEvent] = []
+    @MainActor @Published private(set) var recentEvents: [LogEvent] = []
     private let maxEvents = 500
     private let iso8601: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
@@ -158,9 +157,11 @@ final class Diagnostics: ObservableObject {
 
         let event = LogEvent(timestamp: Date(), severity: severity, subsystem: subsystem, category: category, message: msg, metadata: metadata, file: fileStr, function: functionStr, line: lineInt)
 
-        // Store
-        recentEvents.append(event)
-        if recentEvents.count > maxEvents { recentEvents.removeFirst(recentEvents.count - maxEvents) }
+        // Store (async to respect MainActor isolation)
+        Task { @MainActor in
+            recentEvents.append(event)
+            if recentEvents.count > maxEvents { recentEvents.removeFirst(recentEvents.count - maxEvents) }
+        }
 
         // Format metadata
         var metaStr = ""
@@ -170,7 +171,6 @@ final class Diagnostics: ObservableObject {
         
         // Use OSLog for structured logging
         let logger = subsystem.logger
-        let logMessage = "\(category): \(msg)\(metaStr)"
         
         switch severity {
         case .fatal:
@@ -195,6 +195,7 @@ final class Diagnostics: ObservableObject {
         #endif
     }
 
+    @MainActor
     func clearBuffer() {
         recentEvents.removeAll()
     }
