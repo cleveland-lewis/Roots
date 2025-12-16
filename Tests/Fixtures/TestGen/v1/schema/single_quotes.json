@@ -1,0 +1,12 @@
+{
+  "name": "single_quotes",
+  "category": "schema",
+  "input": "{'prompt': 'What is DNA?', 'choices': ['A', 'B', 'C', 'D'], 'correctAnswer': 'A', 'correctIndex': 0, 'rationale': 'Genetic material', 'topic': 'Biology', 'bloomLevel': 'Remember', 'difficulty': 'Easy', 'templateType': 'concept_id'}",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["INVALID_JSON"],
+    "errorFields": null,
+    "severity": "error"
+  },
+  "notes": "Single quotes instead of double quotes - must reject"
+}

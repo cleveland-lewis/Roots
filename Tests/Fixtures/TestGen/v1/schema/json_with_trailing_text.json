@@ -1,0 +1,12 @@
+{
+  "name": "json_with_trailing_text",
+  "category": "schema",
+  "input": "{\"prompt\": \"What is mitosis?\", \"choices\": [\"A\", \"B\", \"C\", \"D\"], \"correctAnswer\": \"A\", \"correctIndex\": 0, \"rationale\": \"This is correct\", \"topic\": \"Biology\", \"bloomLevel\": \"Remember\", \"difficulty\": \"Easy\", \"templateType\": \"concept_id\"}\nSome extra text here that should not be present",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["INVALID_JSON", "TRAILING_TEXT"],
+    "errorFields": null,
+    "severity": "error"
+  },
+  "notes": "JSON followed by non-JSON text - some parsers might accept this, we should reject"
+}

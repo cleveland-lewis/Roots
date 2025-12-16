@@ -1,0 +1,12 @@
+{
+  "name": "non_json_text",
+  "category": "schema",
+  "input": "This is not JSON at all. It's just plain text that the LLM might output when confused.",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["INVALID_JSON"],
+    "errorFields": null,
+    "severity": "error"
+  },
+  "notes": "Tests that non-JSON text is rejected immediately at parse stage"
+}

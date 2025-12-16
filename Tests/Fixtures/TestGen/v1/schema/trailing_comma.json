@@ -1,0 +1,12 @@
+{
+  "name": "trailing_comma",
+  "category": "schema",
+  "input": "{\"prompt\": \"Test\", \"choices\": [\"A\", \"B\", \"C\", \"D\"], \"correctAnswer\": \"A\", \"correctIndex\": 0, \"rationale\": \"Test\", \"topic\": \"Biology\", \"bloomLevel\": \"Remember\", \"difficulty\": \"Easy\", \"templateType\": \"concept_id\",}",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["INVALID_JSON"],
+    "errorFields": null,
+    "severity": "error"
+  },
+  "notes": "Trailing comma after last field - invalid JSON"
+}

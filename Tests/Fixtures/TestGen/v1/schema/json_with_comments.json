@@ -1,0 +1,12 @@
+{
+  "name": "json_with_comments",
+  "category": "schema",
+  "input": "{\n  // This is a comment\n  \"prompt\": \"What is photosynthesis?\",\n  \"choices\": [\"A\", \"B\", \"C\", \"D\"],\n  \"correctAnswer\": \"A\",\n  \"correctIndex\": 0,\n  \"rationale\": \"Plants convert light to energy\",\n  \"topic\": \"Biology\",\n  \"bloomLevel\": \"Understand\",\n  \"difficulty\": \"Medium\",\n  \"templateType\": \"concept_id\"\n}",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["INVALID_JSON"],
+    "errorFields": null,
+    "severity": "error"
+  },
+  "notes": "JSON with // comments is not valid JSON - must be rejected"
+}
