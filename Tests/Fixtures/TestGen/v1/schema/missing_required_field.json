@@ -1,0 +1,12 @@
+{
+  "name": "missing_required_field",
+  "category": "schema",
+  "input": "{\"prompt\": \"What is RNA?\", \"choices\": [\"A\", \"B\", \"C\", \"D\"], \"correctAnswer\": \"A\", \"correctIndex\": 0, \"topic\": \"Biology\", \"bloomLevel\": \"Remember\", \"difficulty\": \"Easy\", \"templateType\": \"concept_id\"}",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["MISSING_FIELD"],
+    "errorFields": ["rationale"],
+    "severity": "error"
+  },
+  "notes": "Missing required 'rationale' field"
+}

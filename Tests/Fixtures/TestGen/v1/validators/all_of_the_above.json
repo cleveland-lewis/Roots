@@ -1,0 +1,12 @@
+{
+  "name": "all_of_the_above",
+  "category": "validators",
+  "input": "{\"prompt\": \"Which of the following is true about cells?\", \"choices\": [\"They have DNA\", \"They have membranes\", \"They use energy\", \"All of the above\"], \"correctAnswer\": \"All of the above\", \"correctIndex\": 3, \"rationale\": \"All three statements are correct characteristics of cells\", \"topic\": \"Cell Biology\", \"bloomLevel\": \"Understand\", \"difficulty\": \"Easy\", \"templateType\": \"concept_id\"}",
+  "expected": {
+    "shouldPass": false,
+    "errorCodes": ["BANNED_PHRASE"],
+    "errorFields": ["choices"],
+    "severity": "error"
+  },
+  "notes": "Contains banned phrase 'all of the above' in choices"
+}

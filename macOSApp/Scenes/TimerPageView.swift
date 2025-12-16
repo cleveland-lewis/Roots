@@ -57,7 +57,8 @@ struct TimerPageView: View {
     @State private var focusWindowDelegate: FocusWindowDelegate? = nil
 
     private let cardCorner: CGFloat = 24
-    private var timerCancellable: AnyCancellable?
+    @State private var timerCancellable: AnyCancellable?
+    @State private var notificationObservers: [NSObjectProtocol] = []
 
     var body: some View {
         ScrollView {
@@ -99,6 +100,15 @@ struct TimerPageView: View {
                 loadedSessions = true
             }
             syncTimerWithAssignment()
+        }
+        .onDisappear {
+            // Clean up notification observers to prevent dangling references
+            notificationObservers.forEach { NotificationCenter.default.removeObserver($0) }
+            notificationObservers.removeAll()
+            
+            // Cancel any active timer
+            timerCancellable?.cancel()
+            timerCancellable = nil
         }
         .onChange(of: sessions) { _, _ in
             persistSessions()
@@ -635,17 +645,25 @@ struct TimerPageView: View {
     }
     
     private func setupTimerNotificationObservers() {
-        NotificationCenter.default.addObserver(forName: .timerStartRequested, object: nil, queue: .main) { _ in
+        // Remove any existing observers first
+        notificationObservers.forEach { NotificationCenter.default.removeObserver($0) }
+        notificationObservers.removeAll()
+        
+        // Add observers and store their tokens for cleanup
+        let startObserver = NotificationCenter.default.addObserver(forName: .timerStartRequested, object: nil, queue: .main) { _ in
             self.startTimer()
         }
+        notificationObservers.append(startObserver)
         
-        NotificationCenter.default.addObserver(forName: .timerStopRequested, object: nil, queue: .main) { _ in
+        let stopObserver = NotificationCenter.default.addObserver(forName: .timerStopRequested, object: nil, queue: .main) { _ in
             self.pauseTimer()
         }
+        notificationObservers.append(stopObserver)
         
-        NotificationCenter.default.addObserver(forName: .timerEndRequested, object: nil, queue: .main) { _ in
+        let endObserver = NotificationCenter.default.addObserver(forName: .timerEndRequested, object: nil, queue: .main) { _ in
             self.endTimerSession()
         }
+        notificationObservers.append(endObserver)
     }
 
     private func assignmentForCurrentActivity() -> AppTask? {
