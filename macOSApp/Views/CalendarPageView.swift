@@ -195,13 +195,21 @@ struct CalendarPageView: View {
             .padding(.horizontal, DesignSystem.Layout.padding.window)
             .padding(.vertical, 4)
 
-            // Main content: single glass area without sidebars
-            VStack(spacing: 12) {
-                gridContent
+            // Main content: sidebar + calendar grid
+            HStack(alignment: .top, spacing: 16) {
+                // Left sidebar showing events for selected date
+                eventSidebarView
+                    .frame(width: 280)
+                
+                // Main calendar grid
+                VStack(spacing: 12) {
+                    gridContent
+                }
+                .padding()
+                .background(DesignSystem.Materials.card)
+                .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .padding()
-            .background(DesignSystem.Materials.card)
-            .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(20)
@@ -231,6 +239,162 @@ struct CalendarPageView: View {
             EventDetailView(item: event, isPresented: Binding(get: { selectedEvent != nil }, set: { if !$0 { selectedEvent = nil } }))
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         })
+    }
+    
+    // MARK: - Event Sidebar
+    
+    @ViewBuilder
+    private var eventSidebarView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // Header with selected date
+            VStack(alignment: .leading, spacing: 4) {
+                Text(sidebarDateTitle)
+                    .font(.title3.weight(.semibold))
+                    .lineLimit(1)
+                
+                Text(sidebarDateSubtitle)
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
+            
+            Divider()
+            
+            // Event list
+            let dayEvents = events(on: selectedDate ?? focusedDate)
+            
+            if dayEvents.isEmpty {
+                // Empty state
+                VStack(spacing: 12) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.system(size: 48))
+                        .foregroundStyle(.tertiary)
+                    
+                    Text("No Events")
+                        .font(DesignSystem.Typography.body)
+                    
+                    Text("No events scheduled for this day")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding()
+            } else {
+                ScrollView {
+                    VStack(spacing: 8) {
+                        ForEach(dayEvents) { event in
+                            sidebarEventRow(event: event)
+                        }
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 12)
+                }
+            }
+        }
+        .frame(maxHeight: .infinity)
+        .background(DesignSystem.Materials.card)
+        .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
+    }
+    
+    private func sidebarEventRow(event: CalendarEvent) -> some View {
+        Button {
+            selectedEvent = event
+        } label: {
+            HStack(alignment: .top, spacing: 12) {
+                // Time or "All-day"
+                VStack(alignment: .leading, spacing: 2) {
+                    if calendar.isDateInToday(event.startDate) && event.startDate.timeIntervalSinceNow < 0 && event.endDate.timeIntervalSinceNow > 0 {
+                        Text("Now")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(settings.activeAccentColor)
+                    } else if isAllDay(event: event) {
+                        Text("All-day")
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text(event.startDate.formatted(date: .omitted, time: .shortened))
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .frame(width: 50, alignment: .leading)
+                
+                // Category color indicator (outline SF Symbol)
+                Image(systemName: categoryIcon(for: event.category))
+                    .font(.system(size: 16))
+                    .foregroundStyle(settings.activeAccentColor)
+                    .frame(width: 20)
+                
+                // Event details
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(event.title)
+                        .font(DesignSystem.Typography.body)
+                        .lineLimit(2)
+                    
+                    if let location = event.location, !location.isEmpty {
+                        HStack(spacing: 4) {
+                            Image(systemName: "mappin")
+                                .font(.caption2)
+                            Text(location)
+                                .font(.caption)
+                        }
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(DesignSystem.Materials.hud.opacity(0.5))
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .rootsStandardInteraction()
+    }
+    
+    private var sidebarDateTitle: String {
+        let date = selectedDate ?? focusedDate
+        if calendar.isDateInToday(date) {
+            return "Today"
+        } else if calendar.isDateInTomorrow(date) {
+            return "Tomorrow"
+        } else if calendar.isDateInYesterday(date) {
+            return "Yesterday"
+        } else {
+            return date.formatted(.dateTime.weekday(.wide).month().day())
+        }
+    }
+    
+    private var sidebarDateSubtitle: String {
+        let date = selectedDate ?? focusedDate
+        let dayEvents = events(on: date)
+        let count = dayEvents.count
+        return count == 0 ? "No events" : "\(count) event\(count == 1 ? "" : "s")"
+    }
+    
+    private func isAllDay(event: CalendarEvent) -> Bool {
+        let duration = event.endDate.timeIntervalSince(event.startDate)
+        return duration >= 86400 - 60 // Consider >= 23h59m as all-day
+    }
+    
+    private func categoryIcon(for category: EventCategory) -> String {
+        switch category {
+        case .study: return "book"
+        case .homework: return "pencil"
+        case .exam: return "doc.text"
+        case .lab: return "flask"
+        case .class: return "graduationcap"
+        case .reading: return "book.pages"
+        case .review: return "checkmark.circle"
+        case .other: return "calendar"
+        }
     }
 
     @ViewBuilder
