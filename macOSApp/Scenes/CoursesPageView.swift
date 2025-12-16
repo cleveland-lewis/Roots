@@ -732,11 +732,9 @@ struct CoursesPageDetailView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(RootsSpacing.m)
-            .rootsCardBackground(radius: 14)
             .contentShape(Rectangle())
         }
-        .buttonStyle(RootsLiquidButtonStyle())
+        .buttonStyle(RootsLiquidButtonStyle(cornerRadius: 14, verticalPadding: RootsSpacing.m, horizontalPadding: RootsSpacing.m))
     }
 
 
