@@ -246,6 +246,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         case pomodoroAlertsEnabledStorage
         case assignmentLeadTimeStorage
         case dailyOverviewTimeStorage
+        case showOnlySchoolCalendarStorage
     }
 
 
@@ -409,6 +410,9 @@ final class AppSettingsModel: ObservableObject, Codable {
         return Calendar.current.date(from: components) ?? Date()
     }()
 
+    // Calendar UI filter setting
+    var showOnlySchoolCalendarStorage: Bool = false
+    
     // Event load thresholds (persisted)
     var loadLowThresholdStorage: Int = 1
     var loadMediumThresholdStorage: Int = 3
@@ -693,6 +697,12 @@ final class AppSettingsModel: ObservableObject, Codable {
         get { loadHighThresholdStorage }
         set { loadHighThresholdStorage = newValue }
     }
+    
+    // Calendar UI filter setting exposed to views
+    var showOnlySchoolCalendar: Bool {
+        get { showOnlySchoolCalendarStorage }
+        set { showOnlySchoolCalendarStorage = newValue }
+    }
 
     var defaultWorkdayStart: DateComponents {
         get { DateComponents(hour: workdayStartHourStorage, minute: workdayStartMinuteStorage) }
@@ -943,6 +953,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         try container.encode(pomodoroAlertsEnabledStorage, forKey: .pomodoroAlertsEnabledStorage)
         try container.encode(assignmentLeadTimeStorage, forKey: .assignmentLeadTimeStorage)
         try container.encode(dailyOverviewTimeStorage, forKey: .dailyOverviewTimeStorage)
+        try container.encode(showOnlySchoolCalendarStorage, forKey: .showOnlySchoolCalendarStorage)
     }
 
     required init(from decoder: Decoder) throws {
@@ -993,6 +1004,7 @@ final class AppSettingsModel: ObservableObject, Codable {
             components.minute = 0
             return Calendar.current.date(from: components) ?? Date()
         }()
+        showOnlySchoolCalendarStorage = try container.decodeIfPresent(Bool.self, forKey: .showOnlySchoolCalendarStorage) ?? false
     }
 
     func resetUserDefaults() {
