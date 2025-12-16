@@ -176,6 +176,8 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        case .practice:
+            PracticeTestPageView()
         }
     }
 

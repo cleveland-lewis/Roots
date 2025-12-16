@@ -154,7 +154,7 @@ struct CourseListRow: View {
         HStack(spacing: 12) {
             // Color Indicator
             Circle()
-                .fill(course.color)
+                .fill(course.color.opacity(0.9))
                 .frame(width: 10, height: 10)
 
             // Course Info
