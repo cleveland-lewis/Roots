@@ -111,7 +111,7 @@ final class SyllabusParsingStore: ObservableObject {
         // Simple algorithmic parser (no LLM)
         // This is a placeholder - real implementation would parse PDF/text
         
-        guard let fileURL = fileURL else {
+        guard fileURL != nil else {
             throw NSError(domain: "SyllabusParser", code: 1, userInfo: [NSLocalizedDescriptionKey: "File URL not provided"])
         }
         

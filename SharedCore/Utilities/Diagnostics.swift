@@ -78,24 +78,23 @@ final class Diagnostics: ObservableObject {
     private init() {}
     
     // Read settings directly from AppSettingsModel to avoid recursion
-    // nonisolated to allow access from any thread
-    nonisolated var isDeveloperModeEnabled: Bool {
+    var isDeveloperModeEnabled: Bool {
         AppSettingsModel.shared.devModeEnabled
     }
     
-    nonisolated var enableUILogging: Bool {
+    var enableUILogging: Bool {
         AppSettingsModel.shared.devModeUILogging
     }
     
-    nonisolated var enableDataLogging: Bool {
+    var enableDataLogging: Bool {
         AppSettingsModel.shared.devModeDataLogging
     }
     
-    nonisolated var enableSchedulerLogging: Bool {
+    var enableSchedulerLogging: Bool {
         AppSettingsModel.shared.devModeSchedulerLogging
     }
     
-    nonisolated var enablePerformanceWarnings: Bool {
+    var enablePerformanceWarnings: Bool {
         AppSettingsModel.shared.devModePerformance
     }
 

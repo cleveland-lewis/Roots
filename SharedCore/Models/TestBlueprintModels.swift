@@ -159,7 +159,7 @@ struct QuestionValidated: Identifiable, Codable {
 }
 
 /// Validation error details
-struct ValidationError: Codable, CustomStringConvertible {
+struct ValidationError: Codable, Sendable, CustomStringConvertible {
     enum Category: String, Codable {
         case schema = "Schema"
         case content = "Content"

@@ -45,7 +45,7 @@ extension Semester: StorageListable {
     public var displayTitle: String {
         // Compute from term and year
         let termName = semesterTerm.rawValue
-        return "\(termName) \(academicYear)"
+        return "\(termName) \(academicYear ?? "")"
     }
     
     public var entityType: StorageEntityType {

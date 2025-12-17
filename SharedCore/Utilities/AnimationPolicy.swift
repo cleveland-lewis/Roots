@@ -22,8 +22,9 @@ public final class AnimationPolicy: ObservableObject {
             object: nil,
             queue: .main
         ) { [weak self] _ in
+            guard let self else { return }
             Task { @MainActor in
-                self?.updateReduceMotionStatus()
+                self.updateReduceMotionStatus()
             }
         }
     }
