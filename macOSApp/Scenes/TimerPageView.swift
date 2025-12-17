@@ -59,6 +59,9 @@ struct TimerPageView: View {
     private let cardCorner: CGFloat = 24
     @State private var timerCancellable: AnyCancellable?
     @State private var notificationObservers: [NSObjectProtocol] = []
+    private let tickPublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private let maxSessionHistoryDays = 400
+    private let maxSessionCount = 20000
 
     var body: some View {
         ScrollView {
@@ -80,7 +83,7 @@ struct TimerPageView: View {
             onStop: pauseTimer,
             onEnd: endTimerSession
         )
-        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in
+        .onReceive(tickPublisher) { _ in
             tick()
         }
         .sheet(isPresented: $showActivityEditor) {
@@ -180,8 +183,27 @@ struct TimerPageView: View {
             do {
                 let data = try Data(contentsOf: url)
                 let decoded = try JSONDecoder().decode([LocalTimerSession].self, from: data)
+                let cutoff = Calendar.current.date(byAdding: .day, value: -maxSessionHistoryDays, to: Date()) ?? .distantPast
+                var trimmed = decoded.filter { session in
+                    let anchor = session.endDate ?? session.startDate
+                    return anchor >= cutoff
+                }
+                if trimmed.count > maxSessionCount {
+                    trimmed.sort { ($0.endDate ?? $0.startDate) > ($1.endDate ?? $1.startDate) }
+                    trimmed = Array(trimmed.prefix(maxSessionCount)).sorted { $0.startDate < $1.startDate }
+                }
                 DispatchQueue.main.async {
-                    self.sessions = decoded
+                    self.sessions = trimmed
+                }
+                if trimmed.count != decoded.count {
+                    DispatchQueue.global(qos: .utility).async {
+                        do {
+                            let data = try JSONEncoder().encode(trimmed)
+                            try data.write(to: url, options: .atomic)
+                        } catch {
+                            print("Failed to compact timer sessions: \(error)")
+                        }
+                    }
                 }
             } catch {
                 // OK if first run or missing file
