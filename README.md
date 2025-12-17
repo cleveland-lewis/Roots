@@ -1,5 +1,12 @@
 # Roots
 
+> ⚠️ **SOURCE-VISIBLE FOR INSPECTION ONLY**  
+> This repository is **NOT open source**. The code is made available for security auditing, 
+> educational review, and inspection purposes only. You may NOT copy, modify, fork, redistribute, 
+> reimplement, or use this code in any capacity. All rights reserved. See [LICENSE](LICENSE) for details.
+
+---
+
 Roots is a macOS-native study planner and academic dashboard built with SwiftUI.  
 It centralizes courses, assignments, exams, and an automatic scheduler into a single Apple-native interface.
 Any LLM usage is limited or allowed by the user and is built to work offline with local LLMs; however, users can utilize their API Keys.
@@ -89,80 +96,46 @@ Key pieces (high-level):
 
 ---
 
-## Getting Started (Local Development)
+## Viewing the Code
 
-### Requirements
+This repository is available for inspection only. You may browse the source code 
+for security review, educational purposes, or to understand the implementation.
 
-- macOS (recent version; same as current Xcode support target)
-- Xcode (latest stable; Swift and SwiftUI toolchain)
-- Git
+**You may NOT:**
+- Clone, fork, or download this repository for any purpose other than temporary inspection
+- Build, compile, or run the software
+- Modify, adapt, or create derivative works
+- Use any portion of this code in other projects
+- Reimplement features or algorithms observed in this codebase
 
-### Clone and Open
+The software is distributed as a paid product. This source visibility does not 
+grant you permission to use, modify, or redistribute the code.
 
-```bash
-git clone git@github.com:cleveland-lewis/Roots.git
-cd Roots
-open TreyDashboard.xcodeproj    # or the main .xcodeproj/.xcworkspace for the app
-```
 
-Then:
-	1.	Select the Roots (or equivalent) scheme in Xcode.
-	2.	Choose a target (Mac app).
-	3.	Build & run (⌘R).
 
-If you use Swift Package Manager dependencies, Xcode will resolve them on first open.
+---
 
-⸻
+## Security
 
-Running Tests
+If you discover a security vulnerability through code inspection, please report it 
+responsibly. See [SECURITY.md](SECURITY.md) for reporting procedures.
 
-Once test targets are added and wired:
+---
 
-cd Roots
-xcodebuild \
-  -project TreyDashboard.xcodeproj \
-  -scheme Roots \
-  -destination 'platform=macOS' \
-  test
+## License
 
-This same command (or a similar one) is used in CI workflows to run the test suite on each push / PR.
+This software is licensed under a **Proprietary Source-Available License**.
 
-⸻
+**Key Terms:**
+- ✅ **Permitted:** Viewing source code for inspection, security review, or educational purposes
+- ❌ **Prohibited:** Copying, modification, forking, redistribution, reuse, reimplementation, or any commercial or non-commercial use
 
-Security
+**This is NOT open source software.** The code is visible for transparency and security 
+auditing only. No permission is granted to use, modify, or distribute this software 
+in any form.
 
-Security for this project is handled with:
-	•	GitHub CodeQL code scanning for Swift.
-	•	Dependency review on pull requests.
-	•	Dependabot for updating:
-	•	GitHub Actions
-	•	Swift dependencies
+See [LICENSE](LICENSE) for complete terms.
 
-See SECURITY.md￼ for how to report vulnerabilities.
-
-⸻
-
-Contributing
-
-This repository is primarily open for:
-	•	Issue reporting
-	•	Suggestions
-	•	Code review of specific changes
-
-The core app is intended to be a paid product (e.g., via the Mac App Store), so contributions may be selectively merged. If you open a PR:
-	1.	Keep changes small and focused.
-	2.	Do not introduce additional third-party dependencies without discussion.
-	3. 	Ensure all tests pass and CI workflows are green.
-
-⸻
-
-License
-
-This project is licensed under the Business Source License (BUSL-1.1).
-	•	Source code is available for review, learning, and internal use under BUSL terms.
-	•	Commercial redistribution or competing SaaS/hosted services are restricted as per the license.
-	•	See LICENSE￼ for full details.
-
-If you are unsure whether your intended use is permitted under BUSL-1.1, consult a legal professional.
+For licensing inquiries or commercial use requests, contact Cleveland Lewis.
 
 ---
