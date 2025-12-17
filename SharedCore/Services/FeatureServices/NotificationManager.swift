@@ -10,18 +10,65 @@ import AppKit
 final class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
 
+    enum AuthorizationState: Equatable {
+        case notRequested
+        case granted
+        case denied
+        case error(String)
+
+        var isAuthorized: Bool {
+            if case .granted = self { return true }
+            return false
+        }
+    }
+
     @Published var isAuthorized: Bool = false
+    @Published var authorizationState: AuthorizationState = .notRequested
 
     private init() {}
 
     func requestAuthorization() {
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             DispatchQueue.main.async {
-                self.isAuthorized = granted
+                if granted {
+                    self.authorizationState = .granted
+                } else if let error {
+                    self.authorizationState = .error(error.localizedDescription)
+                } else {
+                    self.authorizationState = .denied
+                }
+                self.isAuthorized = self.authorizationState.isAuthorized
             }
         }
     }
+
+    func refreshAuthorizationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            let state: AuthorizationState
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                state = .notRequested
+            case .authorized, .provisional, .ephemeral:
+                state = .granted
+            case .denied:
+                state = .denied
+            @unknown default:
+                state = .error("Unknown authorization status")
+            }
+            DispatchQueue.main.async {
+                self.authorizationState = state
+                self.isAuthorized = state.isAuthorized
+            }
+        }
+    }
+
+#if os(macOS)
+    func openNotificationSettings() {
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") else { return }
+        NSWorkspace.shared.open(url)
+    }
+#endif
 
     func scheduleTimerNotification(seconds: TimeInterval, title: String) {
         let content = UNMutableNotificationContent()

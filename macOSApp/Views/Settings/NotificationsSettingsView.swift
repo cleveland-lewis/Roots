@@ -37,6 +37,9 @@ struct NotificationsSettingsView: View {
             .padding(24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .onAppear {
+            notificationManager.refreshAuthorizationStatus()
+        }
     }
     
     private var headerSection: some View {
@@ -66,14 +69,30 @@ struct NotificationsSettingsView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundStyle(.orange)
-                    Text("Notifications may be disabled in System Settings. Please enable them to receive alerts.")
+                    Text(notificationWarningText)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 .padding(12)
                 .background(Color.orange.opacity(0.1))
                 .cornerRadius(8)
+
+                Button("Open System Settings") {
+                    notificationManager.openNotificationSettings()
+                }
+                .buttonStyle(.bordered)
             }
+        }
+    }
+
+    private var notificationWarningText: String {
+        switch notificationManager.authorizationState {
+        case .denied:
+            return "Notifications are disabled. Enable them in System Settings to receive alerts."
+        case .error(let message):
+            return "Notifications could not be enabled (\(message)). You can enable them in System Settings."
+        case .notRequested, .granted:
+            return "Notifications may be disabled in System Settings. Please enable them to receive alerts."
         }
     }
     
