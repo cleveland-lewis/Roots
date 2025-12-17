@@ -198,7 +198,7 @@ struct TimerPageView: View {
         let maxDays = maxSessionHistoryDays
         let maxCount = maxSessionCount
         
-        Task {
+        Task { @MainActor in
             // Perform heavy I/O and processing on background thread
             let finalSessions = await Task.detached(priority: .userInitiated) { () -> [LocalTimerSession] in
                 let loadedData: [LocalTimerSession]
@@ -234,7 +234,7 @@ struct TimerPageView: View {
                 return trimmed
             }.value
             
-            // Update UI on main actor - Task in view context is already on MainActor
+            // Update UI on main actor - explicitly guaranteed by @MainActor annotation above
             self.sessions = finalSessions
         }
     }
