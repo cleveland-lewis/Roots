@@ -59,7 +59,7 @@ struct TimerPageView: View {
     private let cardCorner: CGFloat = 24
     @State private var timerCancellable: AnyCancellable?
     @State private var notificationObservers: [NSObjectProtocol] = []
-    private let tickPublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var tickCancellable: AnyCancellable?
     private let maxSessionHistoryDays = 400
     private let maxSessionCount = 20000
 
@@ -83,9 +83,6 @@ struct TimerPageView: View {
             onStop: pauseTimer,
             onEnd: endTimerSession
         )
-        .onReceive(tickPublisher) { _ in
-            tick()
-        }
         .sheet(isPresented: $showActivityEditor) {
             ActivityEditorSheet(activity: editingActivity) { updated in
                 upsertActivity(updated)
@@ -93,6 +90,10 @@ struct TimerPageView: View {
         }
         .onAppear {
             print("[TimerPageView] onAppear START")
+            
+            // Start the tick timer
+            startTickTimer()
+            
             updateCachedValues()  // Cache computed values to avoid repeated filtering
             pomodoroSessions = settings.pomodoroIterations
             // Initialize timer duration from settings
@@ -117,6 +118,9 @@ struct TimerPageView: View {
         .onChange(of: searchText) { updateCachedValues() }
         .onChange(of: selectedCollection) { updateCachedValues() }
         .onDisappear {
+            // Stop the tick timer
+            stopTickTimer()
+            
             // Clean up notification observers to prevent dangling references
             notificationObservers.forEach { NotificationCenter.default.removeObserver($0) }
             notificationObservers.removeAll()
@@ -638,6 +642,23 @@ struct TimerPageView: View {
     }
 
     // MARK: Timer Logic Skeleton
+    
+    private func startTickTimer() {
+        // Cancel any existing timer first
+        stopTickTimer()
+        
+        // Create a new timer publisher and subscribe to it
+        tickCancellable = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { _ in
+                self.tick()
+            }
+    }
+    
+    private func stopTickTimer() {
+        tickCancellable?.cancel()
+        tickCancellable = nil
+    }
 
     private func postTimerStateChangeNotification() {
         var userInfo: [String: Any] = [
