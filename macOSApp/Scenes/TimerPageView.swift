@@ -275,35 +275,32 @@ struct TimerPageView: View {
     // MARK: Main Grid
 
     private var mainGrid: some View {
-        GeometryReader { proxy in
-            let width = proxy.size.width
-            let isCompact = width < 1100
-
-            if isCompact {
-                VStack(spacing: 16) {
+        ViewThatFits {
+            // Wide layout
+            HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.medium) {
+                // LEFT: existing timer UI (activities + center stack)
+                HStack(alignment: .top, spacing: 16) {
                     activitiesColumn
-                    timerCoreCard
-                    activityDetailPanel
-                    analyticsCard
-                }
-            } else {
-                HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.medium) {
-                    // LEFT: existing timer UI (activities + center stack)
-                    HStack(alignment: .top, spacing: 16) {
-                        activitiesColumn
-                            .frame(width: width * 0.30)
-                        VStack(spacing: 16) {
-                            timerCoreCard
-                            activityDetailPanel
-                        }
-                        .frame(width: width * 0.38)
+                        .frame(minWidth: 250, idealWidth: 350, maxWidth: 450)
+                    VStack(spacing: 16) {
+                        timerCoreCard
+                        activityDetailPanel
                     }
-                    .frame(maxWidth: .infinity)
-
-                    // RIGHT: new study summary pane
-                    TimerRightPane(activities: activities)
-                        .frame(width: 420, alignment: .top)
+                    .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
                 }
+                .frame(maxWidth: .infinity)
+
+                // RIGHT: new study summary pane
+                TimerRightPane(activities: activities)
+                    .frame(width: 420, alignment: .top)
+            }
+            
+            // Compact layout
+            VStack(spacing: 16) {
+                activitiesColumn
+                timerCoreCard
+                activityDetailPanel
+                analyticsCard
             }
         }
         .frame(maxHeight: .infinity)
