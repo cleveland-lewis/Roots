@@ -160,7 +160,7 @@ struct QuestionValidated: Identifiable, Codable {
 
 /// Validation error details
 struct ValidationError: Codable, Sendable, CustomStringConvertible {
-    enum Category: String, Codable {
+    enum Category: String, Codable, Sendable {
         case schema = "Schema"
         case content = "Content"
         case distribution = "Distribution"
@@ -172,7 +172,7 @@ struct ValidationError: Codable, Sendable, CustomStringConvertible {
     var message: String
     var severity: String // "error" or "warning"
     
-    var description: String {
+    nonisolated var description: String {
         if let field = field {
             return "[\(category.rawValue)] \(field): \(message)"
         }
@@ -181,14 +181,14 @@ struct ValidationError: Codable, Sendable, CustomStringConvertible {
 }
 
 /// Generation failure state
-struct GenerationFailure: Codable, Error, CustomStringConvertible {
+struct GenerationFailure: Codable, Error, CustomStringConvertible, Sendable {
     var reason: String
     var slotId: String?
     var errors: [ValidationError]
     var attemptsMade: Int
     var timestamp: Date
     
-    var description: String {
+    nonisolated var description: String {
         var desc = "Generation failed: \(reason)"
         if let slotId = slotId {
             desc += " (slot: \(slotId))"
