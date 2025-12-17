@@ -179,26 +179,34 @@ struct TimerPageView: View {
 
     private func loadSessions() {
         let url = sessionsURL
-        DispatchQueue.global(qos: .userInitiated).async {
+        let maxDays = maxSessionHistoryDays
+        let maxCount = maxSessionCount
+        
+        Task.detached(priority: .userInitiated) {
             do {
                 let data = try Data(contentsOf: url)
                 let decoded = try JSONDecoder().decode([LocalTimerSession].self, from: data)
-                let cutoff = Calendar.current.date(byAdding: .day, value: -maxSessionHistoryDays, to: Date()) ?? .distantPast
+                let cutoff = Calendar.current.date(byAdding: .day, value: -maxDays, to: Date()) ?? .distantPast
                 var trimmed = decoded.filter { session in
                     let anchor = session.endDate ?? session.startDate
                     return anchor >= cutoff
                 }
-                if trimmed.count > maxSessionCount {
+                if trimmed.count > maxCount {
                     trimmed.sort { ($0.endDate ?? $0.startDate) > ($1.endDate ?? $1.startDate) }
-                    trimmed = Array(trimmed.prefix(maxSessionCount)).sorted { $0.startDate < $1.startDate }
+                    trimmed = Array(trimmed.prefix(maxCount)).sorted { $0.startDate < $1.startDate }
                 }
-                DispatchQueue.main.async {
-                    self.sessions = trimmed
+                
+                let finalSessions = trimmed
+                let shouldCompact = trimmed.count != decoded.count
+                
+                await MainActor.run {
+                    self.sessions = finalSessions
                 }
-                if trimmed.count != decoded.count {
-                    DispatchQueue.global(qos: .utility).async {
+                
+                if shouldCompact {
+                    Task.detached(priority: .utility) {
                         do {
-                            let data = try JSONEncoder().encode(trimmed)
+                            let data = try JSONEncoder().encode(finalSessions)
                             try data.write(to: url, options: .atomic)
                         } catch {
                             print("Failed to compact timer sessions: \(error)")
