@@ -173,6 +173,7 @@ extension View {
 
 // MARK: - Environment Key
 
+@MainActor
 private struct AnimationPolicyKey: EnvironmentKey {
     static let defaultValue = AnimationPolicy.shared
 }
