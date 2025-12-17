@@ -64,7 +64,9 @@ struct TimerPageView: View {
     private let maxSessionCount = 20000
 
     var body: some View {
-        ScrollView {
+        debugMainThread("[TimerPageView] body rendering START")
+        
+        return ScrollView {
             ZStack {
                 Color(nsColor: .windowBackgroundColor).ignoresSafeArea()
 
@@ -89,30 +91,40 @@ struct TimerPageView: View {
             }
         }
         .onAppear {
-            print("[TimerPageView] onAppear START")
+            debugMainThread("[TimerPageView] onAppear START")
             
             // Start the tick timer
-            startTickTimer()
+            measureOperation("startTickTimer") {
+                startTickTimer()
+            }
             
-            updateCachedValues()  // Cache computed values to avoid repeated filtering
+            // Cache computed values to avoid repeated filtering
+            measureOperation("updateCachedValues") {
+                updateCachedValues()
+            }
+            
             pomodoroSessions = settings.pomodoroIterations
+            
             // Initialize timer duration from settings
             if remainingSeconds == 0 {
                 remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
             }
-            print("[TimerPageView] setupTimerNotificationObservers START")
-            setupTimerNotificationObservers()
-            print("[TimerPageView] setupTimerNotificationObservers END")
+            
+            measureOperation("setupTimerNotificationObservers") {
+                setupTimerNotificationObservers()
+            }
+            
             if !loadedSessions {
-                print("[TimerPageView] loadSessions START")
+                debugMainThread("[TimerPageView] Loading sessions...")
                 loadSessions()
                 loadedSessions = true
-                print("[TimerPageView] loadSessions END")
             }
-            print("[TimerPageView] syncTimerWithAssignment START")
-            syncTimerWithAssignment()
-            print("[TimerPageView] syncTimerWithAssignment END")
-            print("[TimerPageView] onAppear END")
+            
+            measureOperation("syncTimerWithAssignment") {
+                syncTimerWithAssignment()
+            }
+            
+            debugMainThread("[TimerPageView] onAppear COMPLETE")
         }
         .onChange(of: activities) { updateCachedValues() }
         .onChange(of: searchText) { updateCachedValues() }
@@ -194,13 +206,16 @@ struct TimerPageView: View {
     }
 
     private func loadSessions() {
+        debugMainThread("[TimerPageView] loadSessions() called")
         let url = sessionsURL
         let maxDays = maxSessionHistoryDays
         let maxCount = maxSessionCount
         
         Task { @MainActor in
+            debugMainThread("[TimerPageView] Starting async session load")
             // Perform heavy I/O and processing on background thread
-            let finalSessions = await Task.detached(priority: .userInitiated) { () -> [LocalTimerSession] in
+            let finalSessions = await measureAsyncOperation("loadSessions-FileIO") {
+                await Task.detached(priority: .userInitiated) { () -> [LocalTimerSession] in
                 let loadedData: [LocalTimerSession]
                 do {
                     let data = try Data(contentsOf: url)
@@ -231,9 +246,11 @@ struct TimerPageView: View {
                     }
                 }
                 
-                return trimmed
-            }.value
+                    return trimmed
+                }.value
+            }
             
+            debugMainThread("[TimerPageView] Session load complete: \(finalSessions.count) sessions")
             // Update UI on main actor - explicitly guaranteed by @MainActor annotation above
             self.sessions = finalSessions
         }

@@ -1,88 +1,43 @@
-# Timer Page Freeze - Diagnostic Instructions
+# Main Thread Debugger - Ready to Use
 
-## What You Need To Do NOW
+**Status:** ✅ Built Successfully  
+**Date:** December 17, 2025
 
-### Step 1: Enable All Diagnostics in Xcode
+## Quick Start
 
-1. Open the project in Xcode
-2. Click on the scheme dropdown (near the Play button) → "Edit Scheme..."
-3. Go to "Run" → "Diagnostics" tab
-4. **Enable these checkboxes:**
-   - ✅ **Address Sanitizer** (catches use-after-free, buffer overflows)
-   - ✅ **Thread Sanitizer** (catches data races) - NOTE: Can't use with Address Sanitizer, try separately
-   - ✅ **Undefined Behavior Sanitizer**
-   - ✅ **Main Thread Checker** (should already be on)
-   - ✅ **Malloc Scribble** (catches freed memory access)
-   - ✅ **Malloc Guard Edges**
-   - ✅ **Guard Malloc**
-   - ✅ **Zombie Objects** (catches messages to deallocated objects)
-
-### Step 2: Run the App and Reproduce the Freeze
-
-1. Run the app from Xcode (⌘R)
-2. Click on the Timer tab
-3. **WATCH THE XCODE CONSOLE** - it will show the exact line that causes the crash
-4. Copy the console output and paste it
-
-### Step 3: What to Look For
-
-The console will show something like:
+### 1. Open the Debugger
 ```
-Thread 1: EXC_BAD_ACCESS (code=1, address=0x...)
+Settings (⌘,) → Developer → Main Thread Debugger
 ```
 
-Or with Address Sanitizer:
+### 2. Enable It
 ```
-==12345==ERROR: AddressSanitizer: heap-use-after-free on address 0x...
-```
-
-**This will point to the EXACT line of code** causing the freeze.
-
-## Common Causes (What I Suspect)
-
-Based on the code structure, likely culprits:
-
-### 1. Timer Publisher Issue (Already Fixed)
-The timer auto-connecting before view is ready.
-**Status:** ✅ Fixed in TimerPageView.swift
-
-### 2. EventsCountStore Memory Issue (Already Fixed) 
-Creating new instance instead of @StateObject.
-**Status:** ✅ Fixed in RootsApp.swift
-
-### 3. Background Thread Publishing (LIKELY CULPRIT)
-Look for any of these in Timer-related files:
-```swift
-DispatchQueue.global().async {
-    self.somePublishedProperty = value  // ❌ WRONG - must be on main thread
-}
-
-Task.detached {
-    await someViewModel.update()  // ❌ Check if this publishes @Published properties
-}
+Toggle "Enable Main Thread Debugger" → ON
 ```
 
-### 4. Dangling Timer References
-```swift
-Timer.scheduledTimer(...)  // Not stored, can't be cancelled
+### 3. Try Timer Page
+```
+Click Timer tab → It will crash (expected)
 ```
 
-### 5. Unowned/Weak Capture Issues
-```swift
-.sink { [unowned self] in  // ❌ Can crash if self is deallocated
-    self.doSomething()
-}
+### 4. Get the Stack Trace
+```
+Relaunch → Settings → Developer → Main Thread Debugger
+Check the last event → Copy the stack trace
 ```
 
-## What to Send Me
+## What It Shows
 
-After running with diagnostics enabled, send:
+- ⚠️ Main thread blocks (UI freezes)
+- 🐌 Long operations (slow functions)
+- 💾 Memory usage
+- 📦 Active tasks
+- Full stack traces for every event
 
-1. **Exact console output** when the freeze happens
-2. **Screenshot** of the Xcode debugging view showing the paused thread
-3. **Which diagnostic** (Address Sanitizer, Thread Sanitizer, etc.) caught it
+## Why This Helps
 
-This will tell us the EXACT line causing the issue.
+The stack trace will show **exactly** which line of code crashes, making it trivial to fix.
 
 ---
-**Note:** The fixes I made are good preventative measures, but we need the diagnostic output to find the actual freeze cause.
+
+**Instructions in:** `TIMER_PAGE_MANUAL_TEST_CHECKLIST.md`

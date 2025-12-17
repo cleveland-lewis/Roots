@@ -48,9 +48,12 @@ struct SettingsRootView: View {
     var body: some View {
         NavigationSplitView {
             List(SettingsToolbarIdentifier.allCases, selection: $selectedPane) { pane in
-                NavigationLink(value: pane) {
-                    Label(pane.label, systemImage: pane.systemImageName)
-                }
+                Label(pane.label, systemImage: pane.systemImageName)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation(nil) { selectedPane = pane }
+                    }
+                    .tag(pane)
             }
             .navigationTitle("Settings")
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 250)
@@ -87,6 +90,9 @@ struct SettingsRootView: View {
             }
             .id(selectedPane)
             .frame(minWidth: 400, minHeight: 400)
+        }
+        .transaction { transaction in
+            transaction.animation = nil
         }
         .navigationSplitViewStyle(.balanced)
         .hideSplitViewDivider()

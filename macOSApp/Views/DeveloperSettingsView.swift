@@ -23,6 +23,28 @@ struct DeveloperSettingsView: View {
             
             if diagnostics.isDeveloperModeEnabled {
                 Section {
+                    NavigationLink(destination: MainThreadDebuggerView()) {
+                        HStack {
+                            Image(systemName: "ant.circle.fill")
+                                .foregroundColor(.red)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Main Thread Debugger")
+                                    .font(.headline)
+                                Text("Track UI freezes and performance issues")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Performance Debugging")
+                } footer: {
+                    Text("Advanced tool to detect main thread blocks, long operations, and memory issues.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Section {
                     VStack(alignment: .leading, spacing: 12) {
                         Toggle("UI Logging", isOn: $settings.devModeUILogging)
                         Toggle("Data & Sync Logging", isOn: $settings.devModeDataLogging)
