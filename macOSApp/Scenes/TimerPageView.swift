@@ -349,7 +349,9 @@ struct TimerPageView: View {
                 .frame(height: 36)
                 
                 if isRunning {
-                    clockDisplayContent(isRunningState: true)
+                    clockGlassContainer {
+                        clockDisplayContent(isRunningState: true)
+                    }
                     
                     // POMODORO CIRCLES - FIXED VERSION
                     Group {
@@ -383,7 +385,9 @@ struct TimerPageView: View {
                         .buttonStyle(.bordered)
                     }
                 } else {
-                    clockDisplayContent(isRunningState: false)
+                    clockGlassContainer {
+                        clockDisplayContent(isRunningState: false)
+                    }
                     
                     // POMODORO CIRCLES - FIXED VERSION
                     Group {
@@ -414,6 +418,40 @@ struct TimerPageView: View {
                     .foregroundColor(.secondary)
             }
         }
+    }
+
+    @ViewBuilder
+    private func clockGlassContainer<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        let strokeColor = DesignSystem.Colors.neutralLine(for: colorScheme).opacity(0.55)
+
+        content()
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 18)
+            .background(
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .fill(.ultraThinMaterial)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .stroke(strokeColor, lineWidth: 1)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(colorScheme == .dark ? 0.35 : 0.55),
+                                Color.white.opacity(0.0)
+                            ],
+                            startPoint: .top,
+                            endPoint: .center
+                        ),
+                        lineWidth: 1
+                    )
+            )
+            .shadow(color: Color.black.opacity(0.14), radius: 14, x: 0, y: 10)
+            .shadow(color: Color.black.opacity(0.08), radius: 6, x: 0, y: 2)
     }
 
     @ViewBuilder

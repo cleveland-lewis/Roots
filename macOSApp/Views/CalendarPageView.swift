@@ -58,8 +58,10 @@ public struct CalendarEvent: Identifiable, Hashable {
     var ekIdentifier: String?
     var isReminder: Bool = false
     var category: EventCategory
+    var canEdit: Bool
+    var isRecurring: Bool
 
-    init(id: UUID = UUID(), title: String, startDate: Date, endDate: Date, location: String? = nil, notes: String? = nil, url: URL? = nil, alarms: [EKAlarm]? = nil, travelTime: TimeInterval? = nil, ekIdentifier: String? = nil, isReminder: Bool = false, category: EventCategory? = nil) {
+    init(id: UUID = UUID(), title: String, startDate: Date, endDate: Date, location: String? = nil, notes: String? = nil, url: URL? = nil, alarms: [EKAlarm]? = nil, travelTime: TimeInterval? = nil, ekIdentifier: String? = nil, isReminder: Bool = false, category: EventCategory? = nil, canEdit: Bool = true, isRecurring: Bool = false) {
         self.id = id
         self.title = title
         self.startDate = startDate
@@ -72,6 +74,8 @@ public struct CalendarEvent: Identifiable, Hashable {
         self.ekIdentifier = ekIdentifier
         self.isReminder = isReminder
         self.category = category ?? parseEventCategory(from: title) ?? .other
+        self.canEdit = canEdit
+        self.isRecurring = isRecurring
     }
 }
 
@@ -536,7 +540,21 @@ struct CalendarPageView: View {
         let predicate = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: targetCalendars)
         let ekEvents = eventStore.events(matching: predicate)
         let mapped = ekEvents.map { ek in
-            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false)
+            CalendarEvent(
+                title: ek.title,
+                startDate: ek.startDate,
+                endDate: ek.endDate,
+                location: ek.location,
+                notes: ek.notes,
+                url: ek.url,
+                alarms: ek.alarms,
+                travelTime: nil,
+                ekIdentifier: ek.eventIdentifier,
+                isReminder: false,
+                category: nil,
+                canEdit: ek.calendar.allowsContentModifications,
+                isRecurring: !(ek.recurrenceRules?.isEmpty ?? true)
+            )
         }
         syncedEvents = mapped
         updateMetrics()
@@ -556,7 +574,21 @@ struct CalendarPageView: View {
             guard let reminders else { return }
             let mappedReminders = reminders.compactMap { reminder -> CalendarEvent? in
                 guard let dueDate = reminder.dueDateComponents?.date else { return nil }
-                return CalendarEvent(title: reminder.title, startDate: dueDate, endDate: dueDate, location: reminder.location, notes: reminder.notes, url: nil, alarms: nil, travelTime: nil, ekIdentifier: reminder.calendarItemIdentifier, isReminder: true)
+                return CalendarEvent(
+                    title: reminder.title,
+                    startDate: dueDate,
+                    endDate: dueDate,
+                    location: reminder.location,
+                    notes: reminder.notes,
+                    url: nil,
+                    alarms: nil,
+                    travelTime: nil,
+                    ekIdentifier: reminder.calendarItemIdentifier,
+                    isReminder: true,
+                    category: nil,
+                    canEdit: reminder.calendar.allowsContentModifications,
+                    isRecurring: false
+                )
             }
             DispatchQueue.main.async {
                 self.syncedEvents.append(contentsOf: mappedReminders)
@@ -1298,14 +1330,31 @@ private struct EventDetailView: View {
             Spacer()
 
             if let identifier = item.ekIdentifier {
+                if !item.canEdit {
+                    Divider()
+                    HStack(spacing: 8) {
+                        Image(systemName: "lock.fill")
+                            .foregroundStyle(.secondary)
+                        Text("This calendar is read-only; edits are disabled.")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Divider()
                 HStack {
                     Button {
-                        showEdit = true
+                        if item.canEdit {
+                            showEdit = true
+                        } else {
+                            errorMessage = "This calendar does not allow edits."
+                            showError = true
+                        }
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
                     .buttonStyle(.plain)
+                    .disabled(!item.canEdit)
                     Spacer()
                     Button(role: .destructive) {
                         showDeleteConfirm = true
@@ -1332,7 +1381,7 @@ private struct EventDetailView: View {
         .frame(minWidth: 420, minHeight: 320)
         .glassCard(cornerRadius: DesignSystem.Layout.cornerRadiusStandard)
         .sheet(isPresented: $showEdit) {
-            EventEditSheet(item: item) { updated in
+            EventEditSheet(item: item) { updated, span in
                 _Concurrency.Task {
                     guard let id = item.ekIdentifier else { 
                         await MainActor.run {
@@ -1356,7 +1405,8 @@ private struct EventDetailView: View {
                             secondaryAlert: updated.secondaryAlert,
                             travelTime: updated.travelTime.timeInterval,
                             recurrence: updated.recurrence,
-                            category: updated.category
+                            category: updated.category,
+                            span: span
                         )
                         await MainActor.run {
                             isPresented = false
@@ -1440,7 +1490,7 @@ private struct EventChipsRow: View {
 private struct EventEditSheet: View {
     @Environment(\.dismiss) private var dismiss
     let item: CalendarEvent
-    var onSave: (EditableEvent) -> Void
+    var onSave: (EditableEvent, EKSpan) -> Void
 
     @State private var title: String
     @State private var category: EventCategory
@@ -1455,8 +1505,10 @@ private struct EventEditSheet: View {
     @State private var travelTime: CalendarManager.TravelTimeOption
     @State private var recurrence: CalendarManager.RecurrenceOption = .none
     @State private var urlError: String?
+    @State private var pendingSave: EditableEvent?
+    @State private var showRecurrenceSpanPicker = false
 
-    init(item: CalendarEvent, onSave: @escaping (EditableEvent) -> Void) {
+    init(item: CalendarEvent, onSave: @escaping (EditableEvent, EKSpan) -> Void) {
         self.item = item
         self.onSave = onSave
         _title = State(initialValue: item.title)
@@ -1487,6 +1539,11 @@ private struct EventEditSheet: View {
                 Text("Edit Event")
                     .font(.title2.weight(.semibold))
                 Spacer()
+            }
+            if !item.canEdit {
+                Label("This calendar is read-only; changes cannot be saved.", systemImage: "lock.fill")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.secondary)
             }
 
             TextField("Title", text: $title)
@@ -1604,16 +1661,41 @@ private struct EventEditSheet: View {
                         travelTime: travelTime,
                         recurrence: recurrence
                     )
-                    onSave(updated)
-                    dismiss()
+
+                    if item.isRecurring {
+                        pendingSave = updated
+                        showRecurrenceSpanPicker = true
+                    } else {
+                        onSave(updated, .thisEvent)
+                        dismiss()
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
-                .disabled(!canSave)
+                .disabled(!canSave || !item.canEdit)
             }
         }
         .padding()
         .frame(minWidth: 440)
+        .confirmationDialog("Apply changes to this event or future events?", isPresented: $showRecurrenceSpanPicker, titleVisibility: .visible) {
+            Button("This Event Only") {
+                if let pendingSave {
+                    onSave(pendingSave, .thisEvent)
+                    dismiss()
+                    self.pendingSave = nil
+                }
+            }
+            Button("This and Future Events") {
+                if let pendingSave {
+                    onSave(pendingSave, .futureEvents)
+                    dismiss()
+                    self.pendingSave = nil
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                pendingSave = nil
+            }
+        }
     }
 
     struct EditableEvent {
@@ -1735,7 +1817,21 @@ struct CalendarView: View {
 
     private var calendarEvents: [CalendarEvent] {
         displayEKEvents.map {
-            CalendarEvent(title: $0.title, startDate: $0.startDate, endDate: $0.endDate, location: $0.location, notes: $0.notes, url: $0.url, alarms: $0.alarms, travelTime: nil, ekIdentifier: $0.eventIdentifier, isReminder: false)
+            CalendarEvent(
+                title: $0.title,
+                startDate: $0.startDate,
+                endDate: $0.endDate,
+                location: $0.location,
+                notes: $0.notes,
+                url: $0.url,
+                alarms: $0.alarms,
+                travelTime: nil,
+                ekIdentifier: $0.eventIdentifier,
+                isReminder: false,
+                category: nil,
+                canEdit: $0.calendar.allowsContentModifications,
+                isRecurring: !($0.recurrenceRules?.isEmpty ?? true)
+            )
         }
     }
 
@@ -1952,7 +2048,21 @@ struct CalendarView: View {
 
     private func mapEvent(_ ek: EKEvent) -> CalendarEvent {
         let (cleanNotes, storedCategory) = calendarManager.decodeNotesWithCategory(notes: ek.notes)
-        return CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: cleanNotes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false, category: storedCategory)
+        return CalendarEvent(
+            title: ek.title,
+            startDate: ek.startDate,
+            endDate: ek.endDate,
+            location: ek.location,
+            notes: cleanNotes,
+            url: ek.url,
+            alarms: ek.alarms,
+            travelTime: nil,
+            ekIdentifier: ek.eventIdentifier,
+            isReminder: false,
+            category: storedCategory,
+            canEdit: ek.calendar.allowsContentModifications,
+            isRecurring: !(ek.recurrenceRules?.isEmpty ?? true)
+        )
     }
 
     private func eventCategoryLabel(for title: String) -> String {

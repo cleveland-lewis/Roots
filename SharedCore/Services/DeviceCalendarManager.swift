@@ -49,6 +49,8 @@ final class DeviceCalendarManager: ObservableObject {
         switch status {
         case .fullAccess:
             return true
+        case .writeOnly:
+            return true
         case .notDetermined:
             if #available(macOS 14.0, *) {
                 do {
@@ -61,7 +63,7 @@ final class DeviceCalendarManager: ObservableObject {
                     store.requestAccess(to: .event) { granted, _ in cont.resume(returning: granted) }
                 }
             }
-        case .writeOnly, .denied, .restricted:
+        case .denied, .restricted:
             return false
         @unknown default:
             return false

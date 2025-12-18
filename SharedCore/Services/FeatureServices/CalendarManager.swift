@@ -366,8 +366,28 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
                      secondaryAlert: AlertOption?,
                      travelTime: TimeInterval?,
                      recurrence: RecurrenceOption = .none,
-                     category: EventCategory? = nil) async throws {
-        guard let item = DeviceCalendarManager.shared.store.calendarItem(withIdentifier: identifier) as? EKEvent else { return }
+                     category: EventCategory? = nil,
+                     span: EKSpan = .thisEvent) async throws {
+        enum CalendarUpdateError: LocalizedError {
+            case eventNotFound
+            case readOnlyCalendar
+            case unauthorized
+
+            var errorDescription: String? {
+                switch self {
+                case .eventNotFound: return "Event could not be loaded."
+                case .readOnlyCalendar: return "This calendar is read-only."
+                case .unauthorized: return "Calendar access is not granted."
+                }
+            }
+        }
+
+        guard DeviceCalendarManager.shared.isAuthorized else { throw CalendarUpdateError.unauthorized }
+        guard let item = DeviceCalendarManager.shared.store.event(withIdentifier: identifier) else {
+            throw CalendarUpdateError.eventNotFound
+        }
+        guard item.calendar.allowsContentModifications else { throw CalendarUpdateError.readOnlyCalendar }
+
         item.title = title
         item.startDate = startDate
         item.endDate = endDate
@@ -397,9 +417,14 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
         
         // Handle recurrence
         item.recurrenceRules = recurrence.rule.map { [$0] }
+
+        let effectiveSpan: EKSpan = {
+            guard !(item.recurrenceRules?.isEmpty ?? true) else { return .thisEvent }
+            return span
+        }()
         
-        try DeviceCalendarManager.shared.store.save(item, span: .thisEvent, commit: true)
-        await refreshAll()
+        try DeviceCalendarManager.shared.store.save(item, span: effectiveSpan, commit: true)
+        await DeviceCalendarManager.shared.refreshEventsForVisibleRange(reason: "updateEvent")
     }
 
     // Delete an event or reminder by identifier
