@@ -146,7 +146,21 @@ final class MainThreadDebugger: ObservableObject {
         if elapsed > 0.016 { // 16ms = 60fps threshold
             recordMainThreadBlock(duration: elapsed)
         }
+        
+        // Log periodic status even when not blocked (every 5 seconds)
+        let now = Date()
+        if let last = lastStatusLog, now.timeIntervalSince(last) < 5.0 {
+            return
+        }
+        lastStatusLog = now
+        
+        let timeStr = formatTimestamp(now)
+        let memStr = String(format: "%.1f", performanceMetrics.memoryUsageMB)
+        let blocksStr = performanceMetrics.totalMainThreadBlocks
+        print("🟢 [\(timeStr)] [MainThreadDebugger] STATUS: Memory: \(memStr)MB | Blocks: \(blocksStr) | Active Tasks: \(performanceMetrics.activeTasks)")
     }
+    
+    private var lastStatusLog: Date?
     
     private func updateMemoryUsage() {
         var info = mach_task_basic_info()
@@ -297,20 +311,29 @@ final class MainThreadDebugger: ObservableObject {
         guard isEnabled else { return }
         
         let timestamp = Date()
+        let stack = Thread.callStackSymbols.prefix(8).map { $0 }
         let event = DebugEvent(
             timestamp: timestamp,
             type: .info,
             message: message,
             threadInfo: threadInfo(),
-            stackTrace: []
+            stackTrace: stack
         )
         
         addEvent(event)
         logger.info("ℹ️ \(message)")
         
-        // Console logging when debugger enabled
+        // Console logging when debugger enabled with FULL details
         let timeStr = formatTimestamp(timestamp)
+        let threadDetails = threadInfo()
         print("ℹ️  [\(timeStr)] [MainThreadDebugger] \(message)")
+        print("ℹ️  Thread: \(threadDetails)")
+        print("ℹ️  Call stack:")
+        for (index, frame) in stack.enumerated() {
+            print("ℹ️    [\(index)] \(frame)")
+        }
+        print("ℹ️  Memory: \(String(format: "%.1f", performanceMetrics.memoryUsageMB))MB | Active Tasks: \(performanceMetrics.activeTasks)")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
     
     private func addEvent(_ event: DebugEvent) {
@@ -323,11 +346,27 @@ final class MainThreadDebugger: ObservableObject {
     }
     
     private func threadInfo() -> String {
+        let thread = Thread.current
+        var info = ""
+        
         if Thread.isMainThread {
-            return "Main Thread"
+            info = "🔵 Main Thread"
         } else {
-            return "Background Thread (\(Thread.current.description))"
+            info = "🟣 Background Thread"
+            if let name = thread.name, !name.isEmpty {
+                info += " (\(name))"
+            }
         }
+        
+        info += " | Queue: \(getCurrentQueueName())"
+        info += " | Priority: \(String(format: "%.2f", thread.threadPriority))"
+        
+        return info
+    }
+    
+    private func getCurrentQueueName() -> String {
+        let name = String(cString: __dispatch_queue_get_label(nil), encoding: .utf8) ?? "unknown"
+        return name.isEmpty ? "anonymous" : name
     }
     
     private func log(_ level: OSLogType, _ message: String) {

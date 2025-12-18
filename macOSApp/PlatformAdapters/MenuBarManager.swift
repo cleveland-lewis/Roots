@@ -57,8 +57,12 @@ class MenuBarManager {
             viewModel.completedPomodoroSessions = userInfo["completedPomodoroSessions"] as? Int ?? 0
             viewModel.isPomodorBreak = isPomodorBreak
             viewModel.selectedActivityID = userInfo["selectedActivityID"] as? UUID
-            viewModel.activities = userInfo["activities"] as? [LocalTimerActivity] ?? []
-            viewModel.sessions = userInfo["sessions"] as? [LocalTimerSession] ?? []
+            if let activities = userInfo["activities"] as? [LocalTimerActivity] {
+                viewModel.activities = activities
+            }
+            if let sessions = userInfo["sessions"] as? [LocalTimerSession] {
+                viewModel.sessions = sessions
+            }
         }
     }
     
@@ -104,5 +108,4 @@ class MenuBarManager {
         button.title = timeString
     }
 }
-
 
