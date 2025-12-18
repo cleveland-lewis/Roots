@@ -2,17 +2,66 @@
 import SwiftUI
 
 struct MainThreadDebuggerView: View {
-    @StateObject private var debugger = MainThreadDebugger.shared
+    @ObservedObject private var debugger = MainThreadDebugger.shared
     @State private var selectedEvent: MainThreadDebugger.DebugEvent?
     @State private var autoScroll = true
+    @State private var showActivationToast = false
     
     var body: some View {
+        ZStack {
+            mainContent
+            
+            // Activation Toast
+            if showActivationToast {
+                VStack {
+                    Spacer()
+                    
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title)
+                            .foregroundColor(.green)
+                        
+                        Text("Debugger Activated")
+                            .font(.headline)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(nsColor: .controlBackgroundColor))
+                            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
+                    )
+                    .padding(.bottom, 50)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showActivationToast)
+            }
+        }
+    }
+    
+    private var mainContent: some View {
         VStack(spacing: 0) {
             // Header with controls
             HStack {
                 Toggle("Enable Main Thread Debugger", isOn: Binding(
-                    get: { debugger.isEnabled },
-                    set: { _ in debugger.toggle() }
+                    get: { 
+                        print("🔍 Toggle GET called - debugger.isEnabled = \(debugger.isEnabled)")
+                        return debugger.isEnabled 
+                    },
+                    set: { newValue in
+                        print("🔍 Toggle SET called with newValue = \(newValue)")
+                        print("🔍 About to call debugger.toggle()...")
+                        debugger.toggle()
+                        print("🔍 debugger.toggle() completed")
+                        if newValue {
+                            print("🔍 Showing activation toast")
+                            showActivationToast = true
+                            // Auto-dismiss after 2 seconds
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                showActivationToast = false
+                            }
+                        }
+                    }
                 ))
                 .font(.headline)
                 .toggleStyle(.switch)
@@ -20,6 +69,13 @@ struct MainThreadDebuggerView: View {
                 Spacer()
                 
                 HStack(spacing: 12) {
+                    // TEST BUTTON - to verify enable() works
+                    Button("Test Enable") {
+                        print("🔍 TEST BUTTON clicked - manually calling enable()")
+                        MainThreadDebugger.shared.enable()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    
                     Toggle("Auto-scroll", isOn: $autoScroll)
                         .font(.caption)
                     
@@ -66,6 +122,32 @@ struct MainThreadDebuggerView: View {
                     .padding()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            
+            // Activation Toast
+            if showActivationToast {
+                VStack {
+                    Spacer()
+                    
+                    HStack(spacing: 12) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title)
+                            .foregroundColor(.green)
+                        
+                        Text("Debugger Activated")
+                            .font(.headline)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(nsColor: .controlBackgroundColor))
+                            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
+                    )
+                    .padding(.bottom, 50)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showActivationToast)
             }
         }
     }

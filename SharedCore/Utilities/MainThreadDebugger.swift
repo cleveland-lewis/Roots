@@ -45,7 +45,13 @@ final class MainThreadDebugger: ObservableObject {
     private init() {}
     
     func enable() {
-        guard !isEnabled else { return }
+        guard !isEnabled else { 
+            print("🐜 [MainThreadDebugger] Already enabled - ignoring duplicate enable call")
+            return 
+        }
+        
+        print("🐜 [MainThreadDebugger] enable() called - activating debugger...")
+        
         isEnabled = true
         events.removeAll()
         startMonitoring()
@@ -55,6 +61,7 @@ final class MainThreadDebugger: ObservableObject {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("🐜 [MainThreadDebugger] ENABLED at \(timestamp)")
         print("🐜 All events will be logged to console with full details")
+        print("🐜 Monitoring started: checking main thread every 100ms")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
     
@@ -85,9 +92,12 @@ final class MainThreadDebugger: ObservableObject {
     }
     
     func toggle() {
+        print("🐜 [MainThreadDebugger] toggle() called - current state: \(isEnabled ? "ON" : "OFF")")
         if isEnabled {
+            print("🐜 [MainThreadDebugger] Disabling...")
             disable()
         } else {
+            print("🐜 [MainThreadDebugger] Enabling...")
             enable()
         }
     }
