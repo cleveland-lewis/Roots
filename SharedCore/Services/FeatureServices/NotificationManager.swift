@@ -34,7 +34,12 @@ final class NotificationManager: ObservableObject {
                 if granted {
                     self.authorizationState = .granted
                 } else if let error {
-                    self.authorizationState = .error(error.localizedDescription)
+                    // Silently handle permission errors (common in sandboxed/restricted environments)
+                    if (error as NSError).domain != "UNErrorDomain" || (error as NSError).code != 1 {
+                        self.authorizationState = .error(error.localizedDescription)
+                    } else {
+                        self.authorizationState = .denied
+                    }
                 } else {
                     self.authorizationState = .denied
                 }

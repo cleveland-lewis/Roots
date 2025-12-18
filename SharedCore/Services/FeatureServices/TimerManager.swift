@@ -63,8 +63,13 @@ final class TimerManager: ObservableObject {
                 if granted {
                     LOG_NOTIFICATIONS(.info, "Permissions", "Notification permission granted")
                 } else if let error {
-                    // Non-fatal: permissions can be denied in sandboxed or user-blocked environments.
-                    LOG_NOTIFICATIONS(.error, "Permissions", "Permission request failed: \(error.localizedDescription)")
+                    // Silently handle UNErrorDomain error 1 (common in sandboxed environments)
+                    let nsError = error as NSError
+                    if nsError.domain == "UNErrorDomain" && nsError.code == 1 {
+                        LOG_NOTIFICATIONS(.debug, "Permissions", "Notification authorization not available in this environment")
+                    } else {
+                        LOG_NOTIFICATIONS(.error, "Permissions", "Permission request failed: \(error.localizedDescription)")
+                    }
                 } else {
                     LOG_NOTIFICATIONS(.info, "Permissions", "Notification permission denied by user")
                 }

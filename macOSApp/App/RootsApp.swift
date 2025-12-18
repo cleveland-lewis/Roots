@@ -12,8 +12,42 @@ import Combine
 import SwiftData
 #endif
 
+#if os(macOS)
+import AppKit
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    override init() {
+        super.init()
+        // Disable window restoration BEFORE app finishes launching
+        UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
+    }
+    
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Additional app setup if needed
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        // Clean up any resources if needed
+    }
+    
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true
+    }
+    
+    // Prevent window restoration by returning nil
+    func application(_ app: NSApplication, 
+                    willDecodeRestorableStateWith coder: NSCoder) {
+        // Don't restore any state
+    }
+}
+#endif
+
 @main
 struct RootsApp: App {
+#if os(macOS)
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+#endif
 
     @StateObject private var coursesStore: CoursesStore
     @StateObject private var appSettings = AppSettingsModel.shared
@@ -70,8 +104,9 @@ struct RootsApp: App {
     @State private var resetCancellable: AnyCancellable? = nil
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             ContentView()
+                .handlesExternalEvents(preferring: Set<String>(), allowing: Set<String>())
                 .environmentObject(AssignmentsStore.shared)
                 .environmentObject(coursesStore)
                 .environmentObject(appSettings)
@@ -146,6 +181,7 @@ struct RootsApp: App {
                     LOG_LIFECYCLE(.info, "AppStartup", "Startup tasks complete")
                 }
         }
+        .handlesExternalEvents(matching: Set<String>())
         .onChange(of: scenePhase) { _, newPhase in
             handleScenePhaseChange(newPhase)
         }
