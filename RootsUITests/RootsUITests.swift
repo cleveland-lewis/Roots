@@ -31,6 +31,38 @@ final class RootsUITests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
+    /// Opens each top-level tab and asserts the UI transitions within a short timeout.
+    /// If the app freezes/hangs on a tab switch, this will fail by timing out.
+    @MainActor
+    func testSwitchingAllTabsDoesNotHang() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        // Give the initial render a moment to settle.
+        XCTAssertTrue(app.otherElements["Page.dashboard"].waitForExistence(timeout: 5.0))
+
+        let tabs: [String] = [
+            "dashboard",
+            "calendar",
+            "planner",
+            "assignments",
+            "courses",
+            "grades",
+            "timer",
+            "decks",
+            "practice",
+        ]
+
+        for tab in tabs {
+            let tabButton = app.buttons["TabBar.\(tab)"]
+            XCTAssertTrue(tabButton.waitForExistence(timeout: 5.0), "Missing tab button TabBar.\(tab)")
+            tabButton.click()
+
+            let page = app.otherElements["Page.\(tab)"]
+            XCTAssertTrue(page.waitForExistence(timeout: 5.0), "Page did not appear for tab \(tab)")
+        }
+    }
+
     @MainActor
     func testLaunchPerformance() throws {
         // This measures how long it takes to launch your application.

@@ -25,6 +25,7 @@ struct ContentView: View {
                         .padding(.top, 16)
 
                     currentPageView
+                        .accessibilityIdentifier("Page.\(selectedTab.rawValue)")
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                         .padding(.horizontal, 24)
                         .padding(.top, 12)
@@ -160,6 +161,7 @@ struct ContentView: View {
             GradesPageView()
         case .timer:
             TimerPageView()
+                .environmentObject(settingsCoordinator)
         case .decks:
             if settings.enableFlashcards {
                 FlashcardDashboard()

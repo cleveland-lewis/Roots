@@ -64,9 +64,7 @@ struct TimerPageView: View {
     private let maxSessionCount = 20000
 
     var body: some View {
-        debugMainThread("[TimerPageView] body rendering START")
-        
-        return ScrollView {
+        ScrollView {
             ZStack {
                 Color(nsColor: .windowBackgroundColor).ignoresSafeArea()
 
@@ -77,17 +75,6 @@ struct TimerPageView: View {
                 }
                 .padding(.horizontal, 32)
                 .padding(.vertical, 24)
-            }
-        }
-        .timerContextMenu(
-            isRunning: $isRunning,
-            onStart: startTimer,
-            onStop: pauseTimer,
-            onEnd: endTimerSession
-        )
-        .sheet(isPresented: $showActivityEditor) {
-            ActivityEditorSheet(activity: editingActivity) { updated in
-                upsertActivity(updated)
             }
         }
         .onAppear {
@@ -126,9 +113,8 @@ struct TimerPageView: View {
             
             debugMainThread("[TimerPageView] onAppear COMPLETE")
         }
-        .onChange(of: activities) { updateCachedValues() }
-        .onChange(of: searchText) { updateCachedValues() }
-        .onChange(of: selectedCollection) { updateCachedValues() }
+        .onChange(of: activities) { _, _ in updateCachedValues() }
+        .onChange(of: searchText) { _, _ in updateCachedValues() }
         .onDisappear {
             // Stop the tick timer
             stopTickTimer()
@@ -430,7 +416,6 @@ struct TimerPageView: View {
     // Memoized to avoid recomputing on every render
     @State private var cachedPinnedActivities: [LocalTimerActivity] = []
     @State private var cachedFilteredActivities: [LocalTimerActivity] = []
-    @State private var cachedCollections: [String] = ["All"]
     
     private var pinnedActivities: [LocalTimerActivity] {
         cachedPinnedActivities
@@ -441,7 +426,9 @@ struct TimerPageView: View {
     }
 
     private var collections: [String] {
-        cachedCollections
+        var set: Set<String> = ["All"]
+        set.formUnion(activities.map { $0.category })
+        return Array(set).sorted()
     }
     
     private func updateCachedValues() {
@@ -453,10 +440,6 @@ struct TimerPageView: View {
             (selectedCollection == "All" || activity.category.lowercased().contains(selectedCollection.lowercased())) &&
             (query.isEmpty || activity.name.lowercased().contains(query) || activity.category.lowercased().contains(query) || (activity.courseCode?.lowercased().contains(query) ?? false))
         }
-        
-        var set: Set<String> = ["All"]
-        set.formUnion(activities.map { $0.category })
-        cachedCollections = Array(set).sorted()
     }
 
     private func openFocusWindow() {

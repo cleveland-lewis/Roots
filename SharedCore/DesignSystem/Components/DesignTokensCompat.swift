@@ -227,10 +227,13 @@ struct RootsFloatingTabBar: View {
                         icon: tab.systemImage,
                         title: tab.title,
                         isSelected: isSelected,
-                        displayMode: effectiveMode
+                        displayMode: effectiveMode,
+                        accessibilityID: "TabBar.\(tab.rawValue)"
                     ) {
+                        // Avoid mutating `selected` here. The parent owns the source-of-truth and
+                        // will update the binding inside `onSelect`. Double-writing the same state
+                        // during a view update can trigger SwiftUI's "Publishing changes..." warning.
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                            selected = tab
                             onSelect(tab)
                         }
                     }
@@ -277,6 +280,7 @@ struct RootTabBarItem: View {
     let title: String
     let isSelected: Bool
     let displayMode: TabBarMode
+    let accessibilityID: String
     let action: () -> Void
 
     @State private var isHovering: Bool = false
@@ -310,6 +314,7 @@ struct RootTabBarItem: View {
             .contentShape(Capsule(style: .continuous))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(accessibilityID)
         .onHover { hovering in
             withAnimation(.easeOut(duration: 0.15)) { isHovering = hovering }
         }
