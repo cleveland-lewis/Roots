@@ -10,6 +10,7 @@ struct SettingsView: View {
     @State private var selectedMaterial: DesignMaterial = .regular
     @State private var diagnosticReport: DiagnosticReport? = nil
     @State private var showingHealthCheck = false
+    @State private var saveWorkItem: DispatchWorkItem?
 
     var body: some View {
         NavigationView {
@@ -78,11 +79,11 @@ struct SettingsView: View {
             .listStyle(.plain)
 #endif
             .navigationTitle("Settings")
-            .onChange(of: settings.use24HourTime) { _, _ in settings.save() }
-            .onChange(of: settings.showEnergyPanel) { _, _ in settings.save() }
-            .onChange(of: settings.highContrastMode) { _, _ in settings.save() }
-            .onChange(of: settings.defaultWorkdayStart) { _, _ in settings.save() }
-            .onChange(of: settings.defaultWorkdayEnd) { _, _ in settings.save() }
+            .onChange(of: settings.use24HourTime) { _, _ in scheduleSettingsSave() }
+            .onChange(of: settings.showEnergyPanel) { _, _ in scheduleSettingsSave() }
+            .onChange(of: settings.highContrastMode) { _, _ in scheduleSettingsSave() }
+            .onChange(of: settings.defaultWorkdayStart) { _, _ in scheduleSettingsSave() }
+            .onChange(of: settings.defaultWorkdayEnd) { _, _ in scheduleSettingsSave() }
         }
         .background(DesignSystem.Colors.appBackground)
         .alert("Health Check", isPresented: $showingHealthCheck, presenting: diagnosticReport) { _ in
@@ -94,6 +95,13 @@ struct SettingsView: View {
                 Text(report.formattedSummary)
             }
         }
+    }
+
+    private func scheduleSettingsSave() {
+        saveWorkItem?.cancel()
+        let work = DispatchWorkItem { settings.save() }
+        saveWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: work)
     }
 }
 
