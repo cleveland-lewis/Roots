@@ -28,6 +28,7 @@ struct TimerPageView: View {
     @State private var tickCancellable: AnyCancellable?
     @State private var focusWindowController: NSWindowController? = nil
     @State private var focusWindowDelegate: FocusWindowDelegate? = nil
+    @State private var currentBlockDuration: TimeInterval = 0
     
     private var collections: [String] {
         var set: Set<String> = ["All"]
@@ -463,6 +464,12 @@ struct TimerPageView: View {
         guard !isRunning else { return }
         if mode != .stopwatch && remainingSeconds == 0 {
             remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
+            currentBlockDuration = remainingSeconds
+        } else if mode == .pomodoro || mode == .countdown {
+            currentBlockDuration = max(currentBlockDuration, remainingSeconds)
+        }
+        if mode == .stopwatch {
+            currentBlockDuration = 0
         }
         isRunning = true
     }
@@ -476,6 +483,7 @@ struct TimerPageView: View {
         elapsedSeconds = 0
         remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
         isPomodorBreak = false
+        currentBlockDuration = remainingSeconds
     }
     
     private func completeCurrentBlock() {
@@ -485,30 +493,40 @@ struct TimerPageView: View {
             if isPomodorBreak {
                 isPomodorBreak = false
                 remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
+                currentBlockDuration = remainingSeconds
             } else {
                 isPomodorBreak = true
                 completedPomodoroSessions += 1
                 remainingSeconds = TimeInterval(settings.pomodoroShortBreakMinutes * 60)
+                currentBlockDuration = remainingSeconds
             }
         case .countdown:
             remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
+            currentBlockDuration = remainingSeconds
         case .stopwatch:
             elapsedSeconds = 0
+            currentBlockDuration = 0
         }
     }
     
     private func openFocusWindow() {
+        if let existing = focusWindowController, let win = existing.window {
+            win.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
         let tasks = selectedActivity.flatMap { activityTasks($0.id) } ?? []
         let focusView = FocusWindowView(
             mode: $mode,
             remainingSeconds: $remainingSeconds,
             elapsedSeconds: $elapsedSeconds,
+            currentBlockDuration: $currentBlockDuration,
+            completedPomodoroSessions: $completedPomodoroSessions,
+            isPomodorBreak: $isPomodorBreak,
             accentColor: settings.activeAccentColor,
             activity: selectedActivity,
             tasks: tasks,
             pomodoroSessions: settings.pomodoroIterations,
-            completedPomodoroSessions: $completedPomodoroSessions,
-            isPomodorBreak: $isPomodorBreak,
             toggleTask: { task in
                 var updated = task
                 updated.isCompleted.toggle()
@@ -530,7 +548,7 @@ struct TimerPageView: View {
         window.delegate = delegate
         focusWindowDelegate = delegate
         
-        window.makeKeyAndOrderFront(nil)
+        window.makeKeyAndOrderFront(NSApp)
         focusWindowController = NSWindowController(window: window)
     }
     
@@ -585,12 +603,14 @@ struct TimerPageView: View {
             pomodoroSessions = settings.pomodoroIterations
             if remainingSeconds == 0 {
                 remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
+                currentBlockDuration = remainingSeconds
             }
             if !loadedSessions {
                 loadSessions()
                 loadedSessions = true
             }
             syncTimerWithAssignment()
+            applyFocusDeepLinkIfNeeded()
         }
         .onChange(of: activities) { _, _ in 
             updateCachedValues() 
@@ -618,6 +638,7 @@ private struct FocusWindowView: View {
     @Binding var mode: LocalTimerMode
     @Binding var remainingSeconds: TimeInterval
     @Binding var elapsedSeconds: TimeInterval
+    @Binding var currentBlockDuration: TimeInterval
     @Binding var completedPomodoroSessions: Int
     @Binding var isPomodorBreak: Bool
     
@@ -743,8 +764,8 @@ private struct FocusWindowView: View {
     private var clockOverride: (hours: Double, minutes: Double, seconds: Double) {
         switch mode {
         case .pomodoro, .countdown:
-            let total = max(0, remainingSeconds)
-            return timeComponents(from: total)
+            let elapsed = max(0, currentBlockDuration - remainingSeconds)
+            return timeComponents(from: elapsed)
         case .stopwatch:
             let total = max(0, elapsedSeconds)
             return timeComponents(from: total)
@@ -773,6 +794,22 @@ private struct FocusWindowView: View {
             let m = Int(remainingSeconds) / 60
             let s = Int(remainingSeconds) % 60
             return String(format: "%02d:%02d", m, s)
+        }
+    }
+    
+    private func applyFocusDeepLinkIfNeeded() {
+        if let link = appModel.focusDeepLink {
+            if let newMode = link.mode {
+                mode = newMode
+            }
+            if let activityId = link.activityId {
+                selectedActivityID = activityId
+            }
+            appModel.focusDeepLink = nil
+        }
+        if appModel.focusWindowRequested {
+            appModel.focusWindowRequested = false
+            openFocusWindow()
         }
     }
 }
