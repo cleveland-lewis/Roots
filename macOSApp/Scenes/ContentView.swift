@@ -161,7 +161,6 @@ struct ContentView: View {
             GradesPageView()
         case .timer:
             TimerPageView()
-                .environmentObject(settingsCoordinator)
         case .decks:
             if settings.enableFlashcards {
                 FlashcardDashboard()

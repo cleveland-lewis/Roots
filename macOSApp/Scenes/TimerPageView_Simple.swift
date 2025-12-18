@@ -1,21 +1,23 @@
 #if os(macOS)
 import SwiftUI
 import Combine
-import AppKit
 
-struct TimerPageView: View {
+struct TimerPageView_Simple: View {
+    // Phase 1: Environment Objects ✅ ALL WORK!
     @EnvironmentObject private var settings: AppSettingsModel
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var appModel: AppModel
     @EnvironmentObject private var settingsCoordinator: SettingsCoordinator
     
+    // Phase 2.1: Basic State Variables ✅
     @State private var mode: LocalTimerMode = .pomodoro
     @State private var activities: [LocalTimerActivity] = []
     @State private var selectedActivityID: UUID? = nil
     @State private var showActivityEditor: Bool = false
     @State private var editingActivity: LocalTimerActivity? = nil
     
+    // Phase 2.2: Timer State Variables ✅
     @State private var isRunning: Bool = false
     @State private var remainingSeconds: TimeInterval = 0
     @State private var elapsedSeconds: TimeInterval = 0
@@ -25,20 +27,21 @@ struct TimerPageView: View {
     @State private var sessions: [LocalTimerSession] = []
     @State private var loadedSessions = false
     @State private var tickCancellable: AnyCancellable?
-    @State private var focusWindowController: NSWindowController? = nil
-    @State private var focusWindowDelegate: FocusWindowDelegate? = nil
     
+    // Phase 3.1: Simple Computed Property (collections) ✅
     private var collections: [String] {
         var set: Set<String> = ["All"]
         set.formUnion(activities.map { $0.category })
         return Array(set).sorted()
     }
     
+    // Phase 3.2: Cached Computed Properties
     @State private var cachedPinnedActivities: [LocalTimerActivity] = []
     @State private var cachedFilteredActivities: [LocalTimerActivity] = []
     @State private var searchText: String = ""
     @State private var selectedCollection: String = "All"
     
+    // Phase 6.7: Activity notes
     @State private var activityNotes: [UUID: String] = [:]
     
     private var pinnedActivities: [LocalTimerActivity] {
@@ -60,14 +63,17 @@ struct TimerPageView: View {
         }
     }
     
+    // Minimal timer functions for testing
     private func startTickTimer() {
+        print("⏱️  startTickTimer() called - creating Timer publisher")
         stopTickTimer()
         
         tickCancellable = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { _ in
-                tick()
+                print("⏱️  Timer tick")
             }
+        print("⏱️  Timer started successfully")
     }
     
     private func stopTickTimer() {
@@ -75,17 +81,21 @@ struct TimerPageView: View {
         tickCancellable = nil
     }
     
+    // Phase 6.7: Save notes function
     private func saveNotes(_ notes: String, for activityID: UUID) {
-        // Placeholder for persistence
+        print("💾 Saving notes for activity \(activityID): \(notes.prefix(20))...")
+        // In real implementation, this would save to disk
     }
     
     // Minimal implementations for testing
     private func loadSessions() {
-        // Placeholder for persistence
+        print("💾 loadSessions() - would load from disk asynchronously")
+        // Intentionally empty - just testing if calling it causes freeze
     }
     
     private func syncTimerWithAssignment() {
-        // Placeholder for assignment sync
+        print("🔄 syncTimerWithAssignment() - checking if assignment exists")
+        // Intentionally minimal - just checking call doesn't freeze
     }
     
     // MARK: - Subviews
@@ -96,10 +106,6 @@ struct TimerPageView: View {
     
     private var currentActivity: LocalTimerActivity? {
         activities.first(where: { $0.id == selectedActivityID }) ?? activities.first
-    }
-    
-    private var selectedActivity: LocalTimerActivity? {
-        currentActivity
     }
     
     private func formattedDuration(_ seconds: TimeInterval) -> String {
@@ -113,31 +119,17 @@ struct TimerPageView: View {
         }
     }
     
-    private let cardCorner: CGFloat = DesignSystem.Layout.cornerRadiusStandard
-    private let cardPadding: CGFloat = DesignSystem.Layout.padding.card
-    
     private var topBar: some View {
-        HStack(alignment: .center, spacing: DesignSystem.Layout.spacing.medium) {
+        HStack(alignment: .center, spacing: 16) {
             Spacer()
             // Top spacer only; time/date removed per request
             Spacer()
         }
-        .frame(height: 24)
     }
     
-    private func activityTasks(_ activityId: UUID) -> [AppTask]? {
-        guard let activity = activities.first(where: { $0.id == activityId }) else { return nil }
-        let normName = activity.name.lowercased()
-        let tasks = assignmentsStore.tasks.filter { task in
-            guard !task.isCompleted else { return false }
-            let title = task.title.lowercased()
-            return normName.contains(title) || title.contains(normName)
-        }
-        return tasks.isEmpty ? nil : tasks
-    }
-    
+    // Phase 6.7: FULL three-column layout WITH TextEditor
     private var mainGrid: some View {
-        HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.medium) {
+        HStack(alignment: .top, spacing: 16) {
             activitiesColumn
             timerAndDetailColumn
             rightPane
@@ -146,66 +138,73 @@ struct TimerPageView: View {
     }
     
     private var activitiesColumn: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.medium) {
-            HStack {
-                Text("Activities")
-                    .font(DesignSystem.Typography.subHeader)
-                Spacer()
+        VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Activities")
+                        .font(.body)
+                    Spacer()
+                }
+                
+                collectionsFilter
+                
+                TextField("Search", text: $searchText)
+                    .textFieldStyle(.roundedBorder)
+                
+                activityList
             }
-            
-            collectionsFilter
-            
-            TextField("Search", text: $searchText)
-                .textFieldStyle(.roundedBorder)
-            
-            activityList
-        }
-        .frame(minWidth: 250, idealWidth: 300, maxWidth: 350)
-        .padding(cardPadding)
-        .glassCard(cornerRadius: cardCorner)
+            .frame(minWidth: 250, idealWidth: 300, maxWidth: 350)
+            .padding()
+            .background(Color.gray.opacity(0.05))
+            .cornerRadius(12)
     }
     
     private var timerAndDetailColumn: some View {
-        VStack(spacing: DesignSystem.Layout.spacing.medium) {
-            timerCoreCard
-            
-            // Activity detail panel WITH TextEditor
-            VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
-                if let activity = currentActivity {
-                    Text("Selected: \(activity.name)")
-                        .font(DesignSystem.Typography.body.weight(.semibold))
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Notes")
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(.secondary)
+        VStack(spacing: 16) {
+                timerCoreCard
+                
+                // Activity detail panel WITH TextEditor
+                VStack(alignment: .leading, spacing: 12) {
+                    if let activity = currentActivity {
+                        Text("Selected: \(activity.name)")
+                            .font(.headline)
                         
-                        TextEditor(text: Binding(
-                            get: { activityNotes[activity.id] ?? "" },
-                            set: { newValue in
-                                activityNotes[activity.id] = newValue
-                                saveNotes(newValue, for: activity.id)
-                            })
-                        )
-                        .frame(minHeight: 100)
-                        .padding(10)
-                        .background(DesignSystem.Materials.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Notes")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            
+                            TextEditor(text: Binding(
+                                get: { activityNotes[activity.id] ?? "" },
+                                set: { newValue in
+                                    activityNotes[activity.id] = newValue
+                                    saveNotes(newValue, for: activity.id)
+                                })
+                            )
+                            .frame(minHeight: 80)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                        }
+                        
+                        Text("🔧 Phase 6.7: TextEditor with custom Binding ADDED")
+                            .font(.caption)
+                            .foregroundColor(.green)
+                    } else {
+                        Text("No activity selected")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                } else {
-                    Text("No activity selected")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(.secondary)
                 }
+                .padding()
+                .background(Color.gray.opacity(0.05))
+                .cornerRadius(12)
             }
-            .padding(cardPadding)
-            .glassCard(cornerRadius: cardCorner)
-        }
-        .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
+            .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
     }
     
     private var collectionsFilter: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: DesignSystem.Layout.spacing.small) {
+            HStack(spacing: 8) {
                 ForEach(collections, id: \.self) { collection in
                     let isSelected = selectedCollection == collection
                     Button(action: { selectedCollection = collection }) {
@@ -215,10 +214,7 @@ struct TimerPageView: View {
                             .padding(.vertical, 6)
                             .background(
                                 Capsule()
-                                    .fill(isSelected ? Color.accentColor.opacity(0.2) : Color(nsColor: .controlBackgroundColor))
-                            )
-                            .overlay(
-                                Capsule().stroke(Color(nsColor: .separatorColor), lineWidth: 1)
+                                    .fill(isSelected ? Color.accentColor.opacity(0.2) : Color.gray.opacity(0.1))
                             )
                     }
                     .buttonStyle(.plain)
@@ -233,7 +229,7 @@ struct TimerPageView: View {
             VStack(alignment: .leading, spacing: 8) {
                 if !cachedPinnedActivities.isEmpty {
                     Text("Pinned")
-                        .font(DesignSystem.Typography.caption)
+                        .font(.caption)
                         .foregroundColor(.secondary)
                     
                     ForEach(cachedPinnedActivities) { activity in
@@ -242,7 +238,7 @@ struct TimerPageView: View {
                 }
                 
                 Text("All Activities")
-                    .font(DesignSystem.Typography.caption)
+                    .font(.caption)
                     .foregroundColor(.secondary)
                 
                 ForEach(cachedFilteredActivities) { activity in
@@ -260,7 +256,7 @@ struct TimerPageView: View {
                     .fill(Color.blue)
                     .frame(width: 8, height: 8)
                 Text(activity.name)
-                    .font(DesignSystem.Typography.body)
+                    .font(.body)
                 Spacer()
                 if selectedActivityID == activity.id {
                     Image(systemName: "checkmark")
@@ -268,26 +264,27 @@ struct TimerPageView: View {
                 }
             }
             .padding(8)
-            .background(selectedActivityID == activity.id ? Color.accentColor.opacity(0.12) : Color(nsColor: .controlBackgroundColor))
-            .cornerRadius(8)
+            .background(selectedActivityID == activity.id ? Color.accentColor.opacity(0.1) : Color.clear)
+            .cornerRadius(6)
         }
         .buttonStyle(.plain)
     }
     
     private var rightPane: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
-            Text("Study Summary")
-                .font(DesignSystem.Typography.subHeader)
-            
-            Text("Activities: \(activities.count)")
-                .font(DesignSystem.Typography.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(width: 420, alignment: .top)
-        .padding(cardPadding)
-        .glassCard(cornerRadius: cardCorner)
+        VStack(alignment: .leading, spacing: 12) {
+                Text("Study Summary")
+                    .font(.headline)
+                
+                Text("Activities: \(activities.count)")
+                    .font(.caption)
+            }
+            .frame(width: 420, alignment: .top)
+            .padding()
+            .background(Color.gray.opacity(0.05))
+            .cornerRadius(12)
     }
     
+    // Phase 5.5: Add mode menu button
     @State private var showingModeMenu = false
     
     private var timerCoreCard: some View {
@@ -342,6 +339,7 @@ struct TimerPageView: View {
             }
             .frame(height: 36)
             
+            // Phase 5.7: Add EVERYTHING including pomodoro circles
             if isRunning {
                 VStack(spacing: 8) {
                     if mode == .pomodoro {
@@ -433,12 +431,12 @@ struct TimerPageView: View {
                     .padding(.top, 4)
             }
             
-            Text("Focus on your current activity")
-                .font(DesignSystem.Typography.caption)
-                .foregroundColor(.secondary)
+            Text("🧪 Phase 5.7: FULL TimerCoreCard with FIXED circles")
+                .font(.caption)
         }
-        .padding(cardPadding)
-        .glassCard(cornerRadius: cardCorner)
+        .padding(24)
+        .background(Color.gray.opacity(0.05))
+        .cornerRadius(24)
     }
     
     private var timeDisplay: String {
@@ -460,92 +458,23 @@ struct TimerPageView: View {
     }
     
     private func startTimer() {
-        guard !isRunning else { return }
-        if mode != .stopwatch && remainingSeconds == 0 {
-            remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
-        }
-        isRunning = true
+        print("▶️ Start timer")
     }
     
     private func pauseTimer() {
-        isRunning = false
+        print("⏸️ Pause timer")
     }
     
     private func resetTimer() {
-        isRunning = false
-        elapsedSeconds = 0
-        remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
-        isPomodorBreak = false
+        print("🔄 Reset timer")
     }
     
     private func completeCurrentBlock() {
-        isRunning = false
-        switch mode {
-        case .pomodoro:
-            if isPomodorBreak {
-                isPomodorBreak = false
-                remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
-            } else {
-                isPomodorBreak = true
-                completedPomodoroSessions += 1
-                remainingSeconds = TimeInterval(settings.pomodoroShortBreakMinutes * 60)
-            }
-        case .countdown:
-            remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
-        case .stopwatch:
-            elapsedSeconds = 0
-        }
+        print("⏭️ Skip to next")
     }
     
     private func openFocusWindow() {
-        let tasks = selectedActivity.flatMap { activityTasks($0.id) } ?? []
-        let focusView = FocusWindowView(
-            mode: mode,
-            timeText: timeDisplay,
-            accentColor: settings.activeAccentColor,
-            activity: selectedActivity,
-            tasks: tasks,
-            pomodoroSessions: settings.pomodoroIterations,
-            completedPomodoroSessions: completedPomodoroSessions,
-            isPomodorBreak: isPomodorBreak,
-            toggleTask: { task in
-                var updated = task
-                updated.isCompleted.toggle()
-                assignmentsStore.updateTask(updated)
-            }
-        )
-        let focusViewWithEnv = focusView.environmentObject(assignmentsStore)
-        let hosting = NSHostingController(rootView: focusViewWithEnv)
-        let window = NSWindow(contentViewController: hosting)
-        window.styleMask = NSWindow.StyleMask([.titled, .closable, .miniaturizable, .resizable])
-        window.setContentSize(NSSize(width: 640, height: 480))
-        window.center()
-        window.title = "Focus"
-        window.isReleasedWhenClosed = false
-        
-        let delegate = FocusWindowDelegate {
-            // cleanup handled by controller deinit if needed
-        }
-        window.delegate = delegate
-        focusWindowDelegate = delegate
-        
-        window.makeKeyAndOrderFront(nil)
-        focusWindowController = NSWindowController(window: window)
-    }
-    
-    private func tick() {
-        guard isRunning else { return }
-        
-        switch mode {
-        case .pomodoro, .countdown:
-            if remainingSeconds > 0 {
-                remainingSeconds -= 1
-            } else {
-                completeCurrentBlock()
-            }
-        case .stopwatch:
-            elapsedSeconds += 1
-        }
+        print("🎯 Open focus window")
     }
     
     private var bottomSummary: some View {
@@ -553,13 +482,13 @@ struct TimerPageView: View {
             HStack(spacing: 6) {
                 Circle().fill(Color.accentColor).frame(width: 8, height: 8)
                 Text("Today: \(formattedDuration(totalToday))")
-                    .font(DesignSystem.Typography.caption)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
             }
             Spacer()
             if let activity = currentActivity {
                 Text("Selected: \(activity.name) • \(formattedDuration(activity.todayTrackedSeconds)) today")
-                    .font(DesignSystem.Typography.caption)
+                    .font(.footnote)
                     .foregroundColor(.secondary)
             }
         }
@@ -567,11 +496,18 @@ struct TimerPageView: View {
     }
     
     var body: some View {
+        // Phase 4.2: Add ZStack + Color (matching original structure)
         ScrollView {
             ZStack {
                 Color(nsColor: .windowBackgroundColor).ignoresSafeArea()
                 
                 VStack(spacing: 20) {
+                    Text("🚧 Timer Page - Phase 6.7")
+                        .font(.largeTitle)
+                    
+                    Text("Testing: TextEditor with custom Binding (CRITICAL)")
+                        .foregroundColor(.secondary)
+                    
                     // Add topBar
                     topBar
                     
@@ -586,162 +522,72 @@ struct TimerPageView: View {
             }
         }
         .onAppear {
+            print("✅✅✅ PHASE 4.5 - Testing debugMainThread() call ✅✅✅")
+            
+            // THIS IS THE CRITICAL TEST - debugMainThread was called at START of onAppear
+            print("🔧 Calling debugMainThread('[TimerPageView] onAppear START')")
+            debugMainThread("[TimerPageView] onAppear START")
+            
+            // Operation 0: Start tick timer
+            print("🔧 Step 0: startTickTimer()")
             startTickTimer()
+            
+            // Operation 1: Update cached values
+            print("🔧 Step 1: updateCachedValues()")
             updateCachedValues()
+            
+            // Operation 2: Initialize pomodoro settings
+            print("🔧 Step 2: pomodoroSessions = settings.pomodoroIterations")
             pomodoroSessions = settings.pomodoroIterations
+            
+            // Operation 3: Initialize timer duration
+            print("🔧 Step 3: Initialize remainingSeconds if 0")
             if remainingSeconds == 0 {
                 remainingSeconds = TimeInterval(settings.pomodoroFocusMinutes * 60)
             }
+            
+            // Operation 4: Load sessions (if needed)
+            print("🔧 Step 4: Check loadedSessions flag")
             if !loadedSessions {
+                print("🔧   Calling loadSessions()")
                 loadSessions()
                 loadedSessions = true
             }
+            
+            // Operation 5: Sync with assignment
+            print("🔧 Step 5: syncTimerWithAssignment()")
             syncTimerWithAssignment()
+            
+            print("🔧 Calling debugMainThread('[TimerPageView] onAppear COMPLETE')")
+            debugMainThread("[TimerPageView] onAppear COMPLETE")
+            
+            print("✅ All onAppear operations completed")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         }
+        // Phase 4.3: Add onChange modifiers one by one
         .onChange(of: activities) { _, _ in 
+            print("🔄 onChange(activities) triggered")
             updateCachedValues() 
         }
         .onChange(of: searchText) { _, _ in 
+            print("🔄 onChange(searchText) triggered")
             updateCachedValues() 
         }
         .onChange(of: sessions) { _, _ in
+            print("🔄 onChange(sessions) triggered - would persist")
             // persistSessions() - commented out for testing
         }
         .onChange(of: selectedActivityID) { _, _ in
+            print("🔄 onChange(selectedActivityID) triggered")
             // syncTimerWithAssignment() - commented out for testing
         }
         .onChange(of: settings.pomodoroIterations) { _, newValue in
+            print("🔄 onChange(pomodoroIterations) triggered: \(newValue)")
             pomodoroSessions = newValue
         }
         .onDisappear {
-            stopTickTimer()
-            isRunning = false
+            print("👋 Timer view disappeared")
         }
-    }
-}
-
-private struct FocusWindowView: View {
-    var mode: LocalTimerMode
-    var timeText: String
-    var accentColor: Color
-    var activity: LocalTimerActivity?
-    var tasks: [AppTask]
-    var pomodoroSessions: Int
-    var completedPomodoroSessions: Int
-    var isPomodorBreak: Bool
-    var toggleTask: (AppTask) -> Void
-
-    var body: some View {
-        VStack(spacing: 24) {
-            RootsAnalogClock(diameter: 240, showSecondHand: true, accentColor: accentColor)
-
-            VStack(spacing: 8) {
-                if mode == .pomodoro {
-                    Text(isPomodorBreak ? "Break" : "Work")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.secondary)
-                        .textCase(.uppercase)
-                }
-                
-                Text(timeText)
-                    .font(.system(.title, design: .monospaced).weight(.light))
-                    .monospacedDigit()
-                    
-                if mode == .pomodoro {
-                    HStack(spacing: 8) {
-                        ForEach(Array(0..<max(1, pomodoroSessions)), id: \.self) { index in
-                            Circle()
-                                .fill(index < completedPomodoroSessions ? accentColor : Color.secondary.opacity(0.3))
-                                .frame(width: 8, height: 8)
-                        }
-                    }
-                    .id(pomodoroSessions)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(completedPomodoroSessions) of \(pomodoroSessions) completed")
-                } else {
-                    Text("\(mode.label) running")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            activityCard
-        }
-        .padding(24)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DesignSystem.Materials.card)
-    }
-
-    private var activityCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Current Activity")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-
-            if let activity {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(activity.name)
-                        .font(.title3.weight(.semibold))
-                        .lineLimit(2)
-                    if let course = activity.courseCode {
-                        Text(course)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    if tasks.isEmpty {
-                        Text("No linked tasks yet.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(tasks, id: \.id) { task in
-                                Button {
-                                    toggleTask(task)
-                                } label: {
-                                    HStack {
-                                        Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
-                                            .foregroundStyle(task.isCompleted ? .green : .secondary)
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text(task.title)
-                                                .font(.body)
-                                            if let due = task.due {
-                                                Text(due, style: .date)
-                                                    .font(.caption2)
-                                                    .foregroundStyle(.secondary)
-                                            }
-                                        }
-                                        Spacer()
-                                    }
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                    }
-                }
-            } else {
-                Text("No activity selected.")
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color(nsColor: .controlBackgroundColor))
-        )
-    }
-}
-
-private class FocusWindowDelegate: NSObject, NSWindowDelegate {
-    let onClose: () -> Void
-
-    init(onClose: @escaping () -> Void) {
-        self.onClose = onClose
-    }
-
-    func windowWillClose(_ notification: Notification) {
-        onClose()
     }
 }
 #endif

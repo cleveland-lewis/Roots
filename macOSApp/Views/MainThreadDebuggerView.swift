@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct MainThreadDebuggerView: View {
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject private var debugger = MainThreadDebugger.shared
     @State private var selectedEvent: MainThreadDebugger.DebugEvent?
     @State private var autoScroll = true
@@ -35,6 +36,13 @@ struct MainThreadDebuggerView: View {
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showActivationToast)
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button(action: { dismiss() }) {
+                    Label("Back", systemImage: "chevron.left")
+                }
             }
         }
     }

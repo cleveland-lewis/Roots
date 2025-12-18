@@ -19,12 +19,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     override init() {
         super.init()
-        // Disable window restoration BEFORE app finishes launching
+        // Completely disable window restoration
         UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
+        UserDefaults.standard.set(false, forKey: "ApplePersistenceIgnoreState")
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Additional app setup if needed
+        // Close all windows except the first one (prevents duplicates)
+        let windows = NSApplication.shared.windows
+        if windows.count > 1 {
+            for window in windows.dropFirst() {
+                window.close()
+            }
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -32,13 +39,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
-        return true
+        return false  // Changed to false to completely disable restoration
     }
     
-    // Prevent window restoration by returning nil
-    func application(_ app: NSApplication, 
-                    willDecodeRestorableStateWith coder: NSCoder) {
-        // Don't restore any state
+    // Prevent window restoration
+    func application(_ app: NSApplication, didDecodeRestorableState coder: NSCoder) {
+        // Don't restore any state - do nothing
+    }
+    
+    // Block window restoration attempts
+    func application(_ application: NSApplication, 
+                    willEncodeRestorableStateWith coder: NSCoder) {
+        // Don't encode any state
     }
 }
 #endif
@@ -230,3 +242,4 @@ struct RootsApp: App {
         }
     }
 }
+

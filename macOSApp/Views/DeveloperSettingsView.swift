@@ -11,6 +11,9 @@ struct DeveloperSettingsView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Toggle("Developer Mode", isOn: $settings.devModeEnabled)
                         .font(.headline)
+                        .onChange(of: settings.devModeEnabled) { _, _ in
+                            settings.save()
+                        }
                     
                     Text("When enabled, the app emits structured debug logging to the Xcode console. This helps with debugging, triage, and understanding app behavior at runtime.")
                         .font(.caption)
@@ -47,9 +50,13 @@ struct DeveloperSettingsView: View {
                 Section {
                     VStack(alignment: .leading, spacing: 12) {
                         Toggle("UI Logging", isOn: $settings.devModeUILogging)
+                            .onChange(of: settings.devModeUILogging) { _, _ in settings.save() }
                         Toggle("Data & Sync Logging", isOn: $settings.devModeDataLogging)
+                            .onChange(of: settings.devModeDataLogging) { _, _ in settings.save() }
                         Toggle("Scheduler & Planner Logging", isOn: $settings.devModeSchedulerLogging)
+                            .onChange(of: settings.devModeSchedulerLogging) { _, _ in settings.save() }
                         Toggle("Performance Warnings", isOn: $settings.devModePerformance)
+                            .onChange(of: settings.devModePerformance) { _, _ in settings.save() }
                     }
                 } header: {
                     Text("Subsystem Toggles")
