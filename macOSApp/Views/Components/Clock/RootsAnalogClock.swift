@@ -5,24 +5,35 @@ struct RootsAnalogClock: View {
     var diameter: CGFloat = 200
     var showSecondHand: Bool = true
     var accentColor: Color = .accentColor
+    /// Optional override to drive the clock with a provided time (hours/minutes/seconds) instead of wall time.
+    var overrideTime: (hours: Double, minutes: Double, seconds: Double)? = nil
 
     private var radius: CGFloat { diameter / 2 }
 
     var body: some View {
-        TimelineView(.animation) { timeline in
-            let date = timeline.date
-            let components = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
-            let seconds = Double(components.second ?? 0) + Double(components.nanosecond ?? 0) / 1_000_000_000
-            let minutes = Double(components.minute ?? 0) + seconds / 60
-            let hours = Double(components.hour ?? 0 % 12) + minutes / 60
-
-            ZStack {
-                face
-                ticks
-                hands(hours: hours, minutes: minutes, seconds: seconds)
+        if let override = overrideTime {
+            clockBody(hours: override.hours, minutes: override.minutes, seconds: override.seconds)
+        } else {
+            TimelineView(.animation) { timeline in
+                let date = timeline.date
+                let components = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
+                let seconds = Double(components.second ?? 0) + Double(components.nanosecond ?? 0) / 1_000_000_000
+                let minutes = Double(components.minute ?? 0) + seconds / 60
+                let rawHours = Double(components.hour ?? 0)
+                let hours = rawHours.truncatingRemainder(dividingBy: 12) + minutes / 60
+                clockBody(hours: hours, minutes: minutes, seconds: seconds)
             }
-            .frame(width: diameter, height: diameter)
         }
+    }
+
+    @ViewBuilder
+    private func clockBody(hours: Double, minutes: Double, seconds: Double) -> some View {
+        ZStack {
+            face
+            ticks
+            hands(hours: hours, minutes: minutes, seconds: seconds)
+        }
+        .frame(width: diameter, height: diameter)
     }
 
     private var face: some View {

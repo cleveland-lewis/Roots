@@ -137,12 +137,15 @@ struct TimerPageView: View {
     }
     
     private var mainGrid: some View {
-        HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.medium) {
+        HStack(alignment: .top, spacing: DesignSystem.Layout.spacing.small) {
             activitiesColumn
+                .layoutPriority(1)
             timerAndDetailColumn
+                .layoutPriority(2)
             rightPane
+                .layoutPriority(1)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .top)
     }
     
     private var activitiesColumn: some View {
@@ -160,7 +163,7 @@ struct TimerPageView: View {
             
             activityList
         }
-        .frame(minWidth: 250, idealWidth: 300, maxWidth: 350)
+        .frame(minWidth: 260, idealWidth: 320, maxWidth: .infinity, alignment: .topLeading)
         .padding(cardPadding)
         .glassCard(cornerRadius: cardCorner)
     }
@@ -200,7 +203,7 @@ struct TimerPageView: View {
             .padding(cardPadding)
             .glassCard(cornerRadius: cardCorner)
         }
-        .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
+        .frame(minWidth: 320, idealWidth: 420, maxWidth: .infinity, alignment: .top)
     }
     
     private var collectionsFilter: some View {
@@ -283,7 +286,7 @@ struct TimerPageView: View {
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(.secondary)
         }
-        .frame(width: 420, alignment: .top)
+        .frame(minWidth: 260, idealWidth: 320, maxWidth: .infinity, alignment: .top)
         .padding(cardPadding)
         .glassCard(cornerRadius: cardCorner)
     }
@@ -354,9 +357,15 @@ struct TimerPageView: View {
                             .font(.headline.weight(.medium))
                     }
                     
-                    Text(timeDisplay)
-                        .font(.system(.largeTitle, design: .monospaced).weight(.light))
-                        .monospacedDigit()
+                    GeometryReader { proxy in
+                        let base = min(proxy.size.width, proxy.size.height)
+                        let size = max(72, min(base * 0.35, 180))
+                        Text(timeDisplay)
+                            .font(.system(size: size, weight: .light, design: .monospaced))
+                            .monospacedDigit()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    }
+                    .frame(height: 160)
                 }
                 .padding(.vertical, 12)
                 
@@ -403,9 +412,15 @@ struct TimerPageView: View {
                             .font(.headline.weight(.medium))
                     }
                     
-                    Text(timeDisplay)
-                        .font(.system(.largeTitle, design: .monospaced).weight(.light))
-                        .monospacedDigit()
+                    GeometryReader { proxy in
+                        let base = min(proxy.size.width, proxy.size.height)
+                        let size = max(72, min(base * 0.35, 180))
+                        Text(timeDisplay)
+                            .font(.system(size: size, weight: .light, design: .monospaced))
+                            .monospacedDigit()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    }
+                    .frame(height: 160)
                 }
                 .padding(.vertical, 12)
                 
@@ -500,14 +515,15 @@ struct TimerPageView: View {
     private func openFocusWindow() {
         let tasks = selectedActivity.flatMap { activityTasks($0.id) } ?? []
         let focusView = FocusWindowView(
-            mode: mode,
-            timeText: timeDisplay,
+            mode: $mode,
+            remainingSeconds: $remainingSeconds,
+            elapsedSeconds: $elapsedSeconds,
             accentColor: settings.activeAccentColor,
             activity: selectedActivity,
             tasks: tasks,
             pomodoroSessions: settings.pomodoroIterations,
-            completedPomodoroSessions: completedPomodoroSessions,
-            isPomodorBreak: isPomodorBreak,
+            completedPomodoroSessions: $completedPomodoroSessions,
+            isPomodorBreak: $isPomodorBreak,
             toggleTask: { task in
                 var updated = task
                 updated.isCompleted.toggle()
@@ -550,13 +566,6 @@ struct TimerPageView: View {
     
     private var bottomSummary: some View {
         HStack {
-            HStack(spacing: 6) {
-                Circle().fill(Color.accentColor).frame(width: 8, height: 8)
-                Text("Today: \(formattedDuration(totalToday))")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(.secondary)
-            }
-            Spacer()
             if let activity = currentActivity {
                 Text("Selected: \(activity.name) • \(formattedDuration(activity.todayTrackedSeconds)) today")
                     .font(DesignSystem.Typography.caption)
@@ -621,19 +630,26 @@ struct TimerPageView: View {
 }
 
 private struct FocusWindowView: View {
-    var mode: LocalTimerMode
-    var timeText: String
+    @Binding var mode: LocalTimerMode
+    @Binding var remainingSeconds: TimeInterval
+    @Binding var elapsedSeconds: TimeInterval
+    @Binding var completedPomodoroSessions: Int
+    @Binding var isPomodorBreak: Bool
+    
     var accentColor: Color
     var activity: LocalTimerActivity?
     var tasks: [AppTask]
     var pomodoroSessions: Int
-    var completedPomodoroSessions: Int
-    var isPomodorBreak: Bool
     var toggleTask: (AppTask) -> Void
 
     var body: some View {
         VStack(spacing: 24) {
-            RootsAnalogClock(diameter: 240, showSecondHand: true, accentColor: accentColor)
+            RootsAnalogClock(
+                diameter: 240,
+                showSecondHand: true,
+                accentColor: accentColor,
+                overrideTime: clockOverride
+            )
 
             VStack(spacing: 8) {
                 if mode == .pomodoro {
@@ -643,9 +659,15 @@ private struct FocusWindowView: View {
                         .textCase(.uppercase)
                 }
                 
-                Text(timeText)
-                    .font(.system(.title, design: .monospaced).weight(.light))
-                    .monospacedDigit()
+                GeometryReader { proxy in
+                    let base = min(proxy.size.width, proxy.size.height)
+                    let size = max(96, min(base * 0.45, 220)) // ~3x larger, scales with window
+                    Text(timeText)
+                        .font(.system(size: size, weight: .light, design: .monospaced))
+                        .monospacedDigit()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                }
+                .frame(height: 200)
                     
                 if mode == .pomodoro {
                     HStack(spacing: 8) {
@@ -730,6 +752,42 @@ private struct FocusWindowView: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .fill(Color(nsColor: .controlBackgroundColor))
         )
+    }
+
+    private var clockOverride: (hours: Double, minutes: Double, seconds: Double) {
+        switch mode {
+        case .pomodoro, .countdown:
+            let total = max(0, remainingSeconds)
+            return timeComponents(from: total)
+        case .stopwatch:
+            let total = max(0, elapsedSeconds)
+            return timeComponents(from: total)
+        }
+    }
+
+    private func timeComponents(from totalSeconds: TimeInterval) -> (hours: Double, minutes: Double, seconds: Double) {
+        let hours = (totalSeconds / 3600).truncatingRemainder(dividingBy: 12)
+        let minutes = (totalSeconds / 60).truncatingRemainder(dividingBy: 60)
+        let seconds = totalSeconds.truncatingRemainder(dividingBy: 60)
+        return (hours, minutes, seconds)
+    }
+    
+    private var timeText: String {
+        switch mode {
+        case .stopwatch:
+            let h = Int(elapsedSeconds) / 3600
+            let m = (Int(elapsedSeconds) % 3600) / 60
+            let s = Int(elapsedSeconds) % 60
+            if h > 0 {
+                return String(format: "%02d:%02d:%02d", h, m, s)
+            } else {
+                return String(format: "%02d:%02d", m, s)
+            }
+        case .pomodoro, .countdown:
+            let m = Int(remainingSeconds) / 60
+            let s = Int(remainingSeconds) % 60
+            return String(format: "%02d:%02d", m, s)
+        }
     }
 }
 
