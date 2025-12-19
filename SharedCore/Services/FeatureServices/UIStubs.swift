@@ -236,85 +236,228 @@ struct AddEventPopup: View {
     @State private var isSaving: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(spacing: 0) {
+            // Title bar matching Apple Calendar style
             HStack {
                 Text("New Event")
-                    .font(.title2.weight(.bold))
+                    .font(.headline)
                 Spacer()
-                Button("Close") { dismiss() }
+                Button("Cancel") {
+                    dismiss()
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.secondary)
             }
-
-            Form {
-                TextField("Title", text: $title)
-                    .onChange(of: title) { _, new in
-                        // If user has not explicitly selected category, parse from title
-                        if !userSelectedCategory {
-                            if let parsed = parseCategory(from: new) {
-                                category = parsed
-                            } else {
-                                category = .other
-                            }
-                        }
-                    }
-
-                Picker("Category", selection: Binding(get: { category }, set: { v in category = v; userSelectedCategory = true })) {
-                    ForEach(EventCategory.allCases) { c in
-                        Text(c.rawValue).tag(c)
-                    }
-                }
-                .pickerStyle(.segmented)
-
-                Toggle("All-day", isOn: $isAllDay)
-                DatePicker("Starts", selection: $startDate)
-                DatePicker("Ends", selection: $endDate)
-                TextField("Location", text: $location)
-                TextEditor(text: $notes).frame(height: 120)
-
-                Picker("Repeat", selection: $recurrence) {
-                    ForEach(CalendarManager.RecurrenceOption.allCases, id: \.self) { opt in
-                        Text(opt.rawValue.capitalized).tag(opt)
-                    }
-                }
-
-                // Advanced recurrence controls
-                if recurrence != .none {
-                    HStack(spacing: 12) {
-                        Stepper("Every \(recurrenceInterval)", value: $recurrenceInterval, in: 1...52)
-                        Picker("End", selection: Binding(get: { recurrenceEndCount == nil ? "none" : "count" }, set: { new in
-                            if new == "none" { recurrenceEndCount = nil; recurrenceEndDate = nil }
-                            else { recurrenceEndCount = recurrenceEndCount ?? 1; recurrenceEndDate = nil }
-                        })) {
-                            Text("None").tag("none")
-                            Text("After count").tag("count")
-                        }
-                        .frame(width: 160)
-                    }
-                    if recurrence == .weekly {
-                        VStack(alignment: .leading) {
-                            Text("Weekdays")
-                                .font(.caption)
-                            HStack {
-                                ForEach(1...7, id: \.self) { idx in
-                                    let symbol = Calendar.current.veryShortWeekdaySymbols[(idx - 1 + 7) % 7]
-                                    Toggle(symbol, isOn: Binding(get: { weekdaySelection[idx] ?? false }, set: { weekdaySelection[idx] = $0 }))
-                                        .toggleStyle(.button)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
+            
+            Divider()
+            
+            // Main form content with Apple Calendar-style row layout
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    // Title field - prominent, full-width
+                    TextField("Title", text: $title)
+                        .textFieldStyle(.plain)
+                        .font(.title3)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .onChange(of: title) { _, new in
+                            if !userSelectedCategory {
+                                if let parsed = parseCategory(from: new) {
+                                    category = parsed
+                                } else {
+                                    category = .other
                                 }
                             }
                         }
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // Location field with icon
+                    HStack(spacing: 12) {
+                        Image(systemName: "location")
+                            .foregroundColor(.secondary)
+                            .frame(width: 20)
+                        TextField("Location", text: $location)
+                            .textFieldStyle(.plain)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // All-day toggle with icon
+                    Toggle(isOn: $isAllDay) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "clock")
+                                .foregroundColor(.secondary)
+                                .frame(width: 20)
+                            Text("All-day")
+                        }
+                    }
+                    .toggleStyle(.switch)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // Start date/time with proper spacing
+                    HStack(spacing: 12) {
+                        Image(systemName: "calendar")
+                            .foregroundColor(.secondary)
+                            .frame(width: 20)
+                        Text("Starts")
+                            .frame(width: 60, alignment: .leading)
+                        DatePicker("", selection: $startDate, displayedComponents: isAllDay ? [.date] : [.date, .hourAndMinute])
+                            .labelsHidden()
+                            .datePickerStyle(.compact)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // End date/time with alignment
+                    HStack(spacing: 12) {
+                        Spacer()
+                            .frame(width: 20)
+                        Text("Ends")
+                            .frame(width: 60, alignment: .leading)
+                        DatePicker("", selection: $endDate, displayedComponents: isAllDay ? [.date] : [.date, .hourAndMinute])
+                            .labelsHidden()
+                            .datePickerStyle(.compact)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // Repeat/Recurrence with menu picker
+                    HStack(spacing: 12) {
+                        Image(systemName: "repeat")
+                            .foregroundColor(.secondary)
+                            .frame(width: 20)
+                        Text("Repeat")
+                            .frame(width: 60, alignment: .leading)
+                        Picker("", selection: $recurrence) {
+                            ForEach(CalendarManager.RecurrenceOption.allCases, id: \.self) { opt in
+                                Text(opt.rawValue.capitalized).tag(opt)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.menu)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    
+                    // Advanced recurrence controls - indented and grouped
+                    if recurrence != .none {
+                        Divider()
+                            .padding(.leading, 20)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            // Interval stepper
+                            HStack(spacing: 12) {
+                                Spacer()
+                                    .frame(width: 20)
+                                Stepper("Every \(recurrenceInterval)", value: $recurrenceInterval, in: 1...52)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            
+                            // Weekday selection for weekly recurrence
+                            if recurrence == .weekly {
+                                HStack(spacing: 12) {
+                                    Spacer()
+                                        .frame(width: 20)
+                                    HStack(spacing: 6) {
+                                        ForEach(1...7, id: \.self) { idx in
+                                            let symbol = Calendar.current.veryShortWeekdaySymbols[(idx - 1 + 7) % 7]
+                                            Toggle(symbol, isOn: Binding(get: { weekdaySelection[idx] ?? false }, set: { weekdaySelection[idx] = $0 }))
+                                                .toggleStyle(.button)
+                                                .controlSize(.small)
+                                        }
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                    }
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // Category picker with menu style
+                    HStack(spacing: 12) {
+                        Image(systemName: "tag")
+                            .foregroundColor(.secondary)
+                            .frame(width: 20)
+                        Text("Category")
+                            .frame(width: 60, alignment: .leading)
+                        Picker("", selection: Binding(get: { category }, set: { v in category = v; userSelectedCategory = true })) {
+                            ForEach(EventCategory.allCases) { c in
+                                Text(c.rawValue).tag(c)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.menu)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    
+                    Divider()
+                        .padding(.leading, 20)
+                    
+                    // Notes field with proper grouping
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "note.text")
+                                .foregroundColor(.secondary)
+                                .frame(width: 20)
+                            Text("Notes")
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 10)
+                        
+                        TextEditor(text: $notes)
+                            .frame(height: 100)
+                            .scrollContentBackground(.hidden)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 10)
                     }
                 }
             }
-
-            HStack {
+            
+            Divider()
+            
+            // Bottom action buttons matching Apple style
+            HStack(spacing: 12) {
                 Spacer()
-                Button("Create") {
+                Button("Cancel") {
+                    dismiss()
+                }
+                .keyboardShortcut(.cancelAction)
+                
+                Button("Add") {
                     createEvent()
                 }
+                .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
+                .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
         }
-        .padding(16)
-        .frame(minWidth: 520, minHeight: 360)
+        .frame(width: 480, height: 560)
     }
 
     private func parseCategory(from title: String) -> EventCategory? {

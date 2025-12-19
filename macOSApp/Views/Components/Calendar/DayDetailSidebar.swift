@@ -158,9 +158,11 @@ struct DayDetailSidebar: View {
         switch category {
         case .exam: return "Exam"
         case .class: return "Class"
-        case .assignment: return "Assignment"
-        case .meeting: return "Meeting"
+        case .homework: return "Homework"
+        case .reading: return "Reading"
+        case .review: return "Review"
         case .study: return "Study"
+        case .lab: return "Lab"
         case .other: return "Event"
         }
     }
@@ -169,9 +171,11 @@ struct DayDetailSidebar: View {
         switch category {
         case .exam: return .red
         case .class: return .blue
-        case .assignment: return .orange
-        case .meeting: return .purple
+        case .homework: return .orange
+        case .reading: return .yellow
+        case .review: return .purple
         case .study: return .green
+        case .lab: return .cyan
         case .other: return Color(nsColor: .controlAccentColor)
         }
     }
