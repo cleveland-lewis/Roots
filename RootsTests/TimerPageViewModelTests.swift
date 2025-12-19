@@ -1,4 +1,5 @@
 import XCTest
+@testable import Roots
 
 @MainActor
 final class TimerPageViewModelTests: XCTestCase {

@@ -32,6 +32,33 @@
 "dashboard.events.upcoming" = "TODO";
 "dashboard.events.empty" = "TODO";
 
+/* Calendar */
+"calendar.today" = "TODO";
+"calendar.no_events.title" = "TODO";
+"calendar.no_events.message" = "TODO";
+"calendar.now" = "TODO";
+"calendar.all_day" = "TODO";
+"calendar.selected_date" = "TODO";
+"calendar.no_date_selected" = "TODO";
+"calendar.no_events" = "TODO";
+"calendar.select_day" = "TODO";
+"calendar.details" = "TODO";
+"calendar.location_label" = "TODO";
+"calendar.more_events" = "TODO";
+"calendar.travel_time" = "TODO";
+"calendar.notes" = "TODO";
+"calendar.delete_confirmation" = "TODO";
+"calendar.reminders" = "TODO";
+"calendar.calendar" = "TODO";
+"calendar.no_events_yet" = "TODO";
+"calendar.edit_event" = "TODO";
+"calendar.time" = "TODO";
+"calendar.invalid_url" = "TODO";
+"calendar.options" = "TODO";
+"calendar.loading" = "TODO";
+"calendar.new_event" = "TODO";
+"calendar.readonly" = "TODO";
+
 /* Grades */
 
 /* Notifications */

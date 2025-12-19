@@ -125,6 +125,33 @@
 "dashboard.events.upcoming" = "Upcoming Events";
 "dashboard.events.empty" = "No upcoming events.";
 
+/* Calendar */
+"calendar.today" = "Today";
+"calendar.no_events.title" = "No Events";
+"calendar.no_events.message" = "No events scheduled for this day";
+"calendar.now" = "Now";
+"calendar.all_day" = "All-day";
+"calendar.selected_date" = "Selected Date";
+"calendar.no_date_selected" = "No date selected";
+"calendar.no_events" = "No events";
+"calendar.select_day" = "Select a day in the calendar";
+"calendar.details" = "Details";
+"calendar.location_label" = "Location: %@";
+"calendar.more_events" = "+%d more";
+"calendar.travel_time" = "Travel time: %@";
+"calendar.notes" = "Notes";
+"calendar.delete_confirmation" = "This will remove the item from your %@.";
+"calendar.reminders" = "Reminders";
+"calendar.calendar" = "Calendar";
+"calendar.no_events_yet" = "No events yet.";
+"calendar.edit_event" = "Edit Event";
+"calendar.time" = "Time";
+"calendar.invalid_url" = "Invalid URL format";
+"calendar.options" = "Options";
+"calendar.loading" = "Loading events…";
+"calendar.new_event" = "New Event";
+"calendar.readonly" = "This calendar is read-only; edits are disabled.";
+
 /* Grades */
 
 /* Notifications */
