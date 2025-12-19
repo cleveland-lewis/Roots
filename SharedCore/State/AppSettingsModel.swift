@@ -248,6 +248,10 @@ final class AppSettingsModel: ObservableObject, Codable {
         case dailyOverviewTimeStorage
         case showOnlySchoolCalendarStorage
         case lockCalendarPickerToSchoolStorage
+        case aiModeRaw
+        case byoProviderConfigData
+        case localModelDownloadedMacOS
+        case localModelDownloadediOS
     }
 
 
@@ -416,6 +420,12 @@ final class AppSettingsModel: ObservableObject, Codable {
     
     // Calendar picker admin-lock setting
     var lockCalendarPickerToSchoolStorage: Bool = false
+    
+    // AI Settings
+    var aiModeRaw: String = "auto"
+    var byoProviderConfigData: Data? = nil
+    var localModelDownloadedMacOS: Bool = false
+    var localModelDownloadediOS: Bool = false
     
     // Event load thresholds (persisted)
     var loadLowThresholdStorage: Int = 1
@@ -861,6 +871,25 @@ final class AppSettingsModel: ObservableObject, Codable {
     var enableDeepWorkMode: Bool {
         get { enableDeepWorkModeStorage }
         set { enableDeepWorkModeStorage = newValue }
+    }
+    
+    // AI Settings computed properties
+    var aiMode: AIMode {
+        get { AIMode(rawValue: aiModeRaw) ?? .auto }
+        set { aiModeRaw = newValue.rawValue }
+    }
+    
+    var byoProviderConfig: BYOProviderConfig {
+        get {
+            guard let data = byoProviderConfigData,
+                  let config = try? JSONDecoder().decode(BYOProviderConfig.self, from: data) else {
+                return .default
+            }
+            return config
+        }
+        set {
+            byoProviderConfigData = try? JSONEncoder().encode(newValue)
+        }
     }
 
     // Convenience helpers to convert components to Date and back for bindings
