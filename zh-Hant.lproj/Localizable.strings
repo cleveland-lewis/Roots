@@ -21,6 +21,17 @@
 
 /* Settings */
 
+/* Dashboard */
+"dashboard.calendar.connect" = "TODO";
+"dashboard.calendar.access_denied" = "TODO";
+"dashboard.events.title" = "TODO";
+"dashboard.assignments.title" = "TODO";
+"dashboard.calendar.header" = "TODO";
+"dashboard.assignments.due_today" = "TODO";
+"dashboard.assignments.empty" = "TODO";
+"dashboard.events.upcoming" = "TODO";
+"dashboard.events.empty" = "TODO";
+
 /* Grades */
 
 /* Notifications */

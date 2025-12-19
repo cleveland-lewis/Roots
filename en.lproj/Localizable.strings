@@ -114,6 +114,17 @@
 
 /* Settings */
 
+/* Dashboard */
+"dashboard.calendar.connect" = "Connect Apple Calendar to show events";
+"dashboard.calendar.access_denied" = "Access Denied. Open Settings.";
+"dashboard.events.title" = "Events Today";
+"dashboard.assignments.title" = "Assignments Due Today";
+"dashboard.calendar.header" = "Calendar";
+"dashboard.assignments.due_today" = "Due Today";
+"dashboard.assignments.empty" = "No assignments due today.";
+"dashboard.events.upcoming" = "Upcoming Events";
+"dashboard.events.empty" = "No upcoming events.";
+
 /* Grades */
 
 /* Notifications */
