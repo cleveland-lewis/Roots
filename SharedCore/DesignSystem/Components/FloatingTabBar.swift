@@ -3,6 +3,7 @@ import SwiftUI
 struct FloatingTabBar: View {
     @Binding var selectedTab: RootTab
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var preferences: AppPreferences
     @EnvironmentObject private var settingsCoordinator: SettingsCoordinator
     @Environment(\.colorScheme) private var colorScheme
 
@@ -13,6 +14,8 @@ struct FloatingTabBar: View {
     private var showText: Bool { settings.iconLabelMode != .iconsOnly }
 
     var body: some View {
+        let policy = MaterialPolicy(preferences: preferences)
+        
         HStack(spacing: 12) {
             let tabs = settings.tabOrder.filter { settings.effectiveVisibleTabs.contains($0) }
             ForEach(tabs) { tab in
@@ -23,11 +26,11 @@ struct FloatingTabBar: View {
         .padding(.vertical, 10)
         .background(
             Capsule()
-                .fill(DesignSystem.Materials.hud.opacity(0.28))
+                .fill(policy.hudMaterial(colorScheme: colorScheme).opacity(0.28))
         )
         .overlay(
             Capsule()
-                .stroke(DesignSystem.Colors.neutralLine(for: colorScheme).opacity(colorScheme == .dark ? 0.18 : 0.14), lineWidth: 0.6)
+                .stroke(DesignSystem.Colors.neutralLine(for: colorScheme).opacity(colorScheme == .dark ? policy.borderOpacity * 1.5 : policy.borderOpacity * 1.17), lineWidth: policy.borderWidth * 0.6)
         )
         .shadow(color: DesignSystem.Colors.neutralLine(for: colorScheme).opacity(colorScheme == .dark ? 0.12 : 0.09), radius: 24, x: 0, y: 12)
         .fixedSize(horizontal: true, vertical: true)
@@ -95,16 +98,19 @@ struct FloatingTabBar: View {
 }
 
 private struct FloatingTabButtonStyle: ButtonStyle {
+    @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.colorScheme) private var colorScheme
     let isSelected: Bool
 
     func makeBody(configuration: Configuration) -> some View {
+        let policy = MaterialPolicy(preferences: preferences)
+        
         configuration.label
             .padding(.vertical, 6)
             .padding(.horizontal, isSelected ? 12 : 8)
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(DesignSystem.Materials.hud.opacity(isSelected ? 0.95 : (colorScheme == .dark ? 0.6 : 0.7)))
+                    .fill(policy.hudMaterial(colorScheme: colorScheme).opacity(isSelected ? 0.95 : (colorScheme == .dark ? 0.6 : 0.7)))
                     .background(
                         isSelected ?
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
@@ -113,7 +119,7 @@ private struct FloatingTabButtonStyle: ButtonStyle {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(DesignSystem.Colors.neutralLine(for: colorScheme).opacity(isSelected ? 0.3 : 0.16), lineWidth: 0.6)
+                            .stroke(DesignSystem.Colors.neutralLine(for: colorScheme).opacity(isSelected ? policy.borderOpacity * 2.5 : policy.borderOpacity * 1.33), lineWidth: policy.borderWidth * 0.6)
                     )
             )
                         .scaleEffect(configuration.isPressed ? (isSelected ? 0.96 : 0.97) : 1)

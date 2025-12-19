@@ -1,9 +1,12 @@
 import SwiftUI
 
 struct GlassBlueProminentButtonStyle: ButtonStyle {
+    @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.colorScheme) private var colorScheme
 
     func makeBody(configuration: Configuration) -> some View {
+        let policy = MaterialPolicy(preferences: preferences)
+        
         configuration.label
             .font(DesignSystem.Typography.subHeader)
             .foregroundStyle(.white)
@@ -13,11 +16,13 @@ struct GlassBlueProminentButtonStyle: ButtonStyle {
                 ZStack {
                     RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
                         .fill(LinearGradient(colors: [Color.blue.opacity(0.85), Color.blue], startPoint: .top, endPoint: .bottom))
+                    if !preferences.reduceTransparency {
+                        RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
+                            .fill(DesignSystem.Materials.card)
+                            .opacity(0.15)
+                    }
                     RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
-                        .fill(DesignSystem.Materials.card)
-                        .opacity(0.15)
-                    RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
-                        .strokeBorder(DesignSystem.Colors.neutralLine(for: colorScheme).opacity(0.28), lineWidth: 0.5)
+                        .strokeBorder(DesignSystem.Colors.neutralLine(for: colorScheme).opacity(policy.borderOpacity * 2.3), lineWidth: policy.borderWidth * 0.5)
                 }
             )
             .overlay(
