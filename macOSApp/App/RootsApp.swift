@@ -19,9 +19,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let windows = NSApplication.shared.windows
-        if windows.count > 1 {
-            for window in windows.dropFirst() { window.close() }
+        DispatchQueue.main.async {
+            let windows = NSApplication.shared.windows.filter { window in
+                window.className.contains("SwiftUI") || window.title.isEmpty == false
+            }
+            if windows.count > 1 {
+                for window in windows.dropFirst() {
+                    LOG_LIFECYCLE(.warn, "WindowManagement", "Closing duplicate window: \(window.title)")
+                    window.close()
+                }
+            }
         }
     }
 
@@ -98,7 +105,6 @@ struct RootsApp: App {
         WindowGroup(id: "main") {
             applyUITestOverrides(
                 to: ContentView()
-                    .handlesExternalEvents(preferring: Set<String>(), allowing: Set<String>())
                     .environmentObject(AssignmentsStore.shared)
                     .environmentObject(coursesStore)
                     .environmentObject(appSettings)
