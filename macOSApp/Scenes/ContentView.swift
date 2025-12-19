@@ -185,12 +185,16 @@ struct ContentView: View {
     private func performQuickAction(_ action: QuickAction) {
         switch action {
         case .add_assignment:
-            // open add assignment flow
             LOG_UI(.info, "QuickAction", "Add Assignment")
-            // placeholder: open AddAssignment sheet if implemented
             break
         case .add_course:
             LOG_UI(.info, "QuickAction", "Add Course")
+            break
+        case .add_task:
+            LOG_UI(.info, "QuickAction", "Add Task")
+            break
+        case .add_grade:
+            LOG_UI(.info, "QuickAction", "Add Grade")
             break
         case .quick_note:
             LOG_UI(.info, "QuickAction", "Quick Note")

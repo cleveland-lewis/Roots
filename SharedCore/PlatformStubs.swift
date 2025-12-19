@@ -96,7 +96,7 @@ public class SettingsWindowController {
 // Additional lightweight stubs for shared types referenced by iOS target when macOS sources are excluded
 
 public enum RootTab: String, CaseIterable, Identifiable {
-    case dashboard, calendar, planner, assignments, courses, grades, timer, decks
+    case dashboard, calendar, planner, assignments, courses, grades, timer, decks, practice
     public var id: String { rawValue }
 
     public var title: String {
@@ -109,6 +109,7 @@ public enum RootTab: String, CaseIterable, Identifiable {
         case .grades: return "Grades"
         case .timer: return "Timer"
         case .decks: return "Decks"
+        case .practice: return "Practice"
         }
     }
 
@@ -122,6 +123,7 @@ public enum RootTab: String, CaseIterable, Identifiable {
         case .grades: return "number.circle"
         case .timer: return "timer"
         case .decks: return "rectangle.stack"
+        case .practice: return "list.clipboard"
         }
     }
 
@@ -198,10 +200,6 @@ public struct CalendarEvent: Identifiable, Hashable {
     }
 }
 
-public enum EventCategoryStub: String, Codable, CaseIterable {
-    case homework, classSession, study, exam, meeting, other
-}
-
 // StoredScheduledSession and StoredOverflowSession are defined in SharedCore/State/PlannerStore.swift; avoid duplicating them here.
 
 // Provide LoadableViewModel protocol similar to macOS implementation
@@ -228,3 +226,8 @@ public extension LoadableViewModel {
 }
 
 #endif
+
+// EventCategoryStub is used across platforms for calendar event categorization
+public enum EventCategoryStub: String, Codable, CaseIterable {
+    case homework, classSession, study, exam, meeting, other
+}

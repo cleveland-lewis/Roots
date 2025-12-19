@@ -89,6 +89,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A58C8A92EF5D2760077C827 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				1AD7D4702EDD328800D403F3 /* iOS */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		1AD7D42B2EDD328800D403F3 = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +107,7 @@
 				1AD7D4352EDD328800D403F3 /* Products */,
 				1A6947202EF0891800072BDF /* roots.icon */,
 				1A58B1612EF58EAB0077C827 /* Notification+Names.swift */,
+				1A58C8A92EF5D2760077C827 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -435,6 +444,9 @@
 				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = Config/Roots.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "Config/Roots-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "Config/Roots-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -485,6 +497,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = clewisiii.Roots;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = clelewisiii.Roots;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
@@ -516,6 +529,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
+				CODE_SIGN_ENTITLEMENTS = Config/Roots.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphoneos*]" = "Config/Roots-iOS.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = "Config/Roots-iOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -562,6 +578,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = clewisiii.Roots;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = clelewisiii.Roots;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;

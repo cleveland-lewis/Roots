@@ -17,34 +17,29 @@ struct IOSDashboardView: View {
     private let calendar = Calendar.current
 
     var body: some View {
-        NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 18) {
-                    heroHeader
-                    quickStatsRow
-                    weekStrip
-                    upcomingEventsCard
-                    dueTasksCard
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 36)
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 18) {
+                heroHeader
+                quickStatsRow
+                weekStrip
+                upcomingEventsCard
+                dueTasksCard
             }
-            .background(backgroundView.ignoresSafeArea())
-            .navigationTitle("Dashboard")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        selectedDate = Date()
-                    } label: {
-                        Image(systemName: "dot.circle.and.hand.point.up.left.fill")
-                    }
-                    .accessibilityLabel("Jump to today")
-                }
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+            .padding(.bottom, 36)
+        }
+        .background(backgroundView.ignoresSafeArea())
+        .modifier(IOSNavigationChrome(title: "Dashboard") {
+            Button {
+                selectedDate = Date()
+            } label: {
+                Image(systemName: "dot.circle.and.hand.point.up.left.fill")
             }
-            .task {
-                await deviceCalendar.bootstrapOnLaunch()
-            }
+            .accessibilityLabel("Jump to today")
+        })
+        .task {
+            await deviceCalendar.bootstrapOnLaunch()
         }
     }
 

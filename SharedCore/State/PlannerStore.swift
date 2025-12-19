@@ -11,6 +11,55 @@ struct StoredScheduledSession: Identifiable, Codable, Hashable {
     let category: AssignmentCategory?
     let start: Date
     let end: Date
+    let type: ScheduleBlockType
+    let isLocked: Bool
+    let isUserEdited: Bool
+
+    init(id: UUID,
+         assignmentId: UUID?,
+         title: String,
+         dueDate: Date,
+         estimatedMinutes: Int,
+         isLockedToDueDate: Bool,
+         category: AssignmentCategory?,
+         start: Date,
+         end: Date,
+         type: ScheduleBlockType = .task,
+         isLocked: Bool = false,
+         isUserEdited: Bool = false) {
+        self.id = id
+        self.assignmentId = assignmentId
+        self.title = title
+        self.dueDate = dueDate
+        self.estimatedMinutes = estimatedMinutes
+        self.isLockedToDueDate = isLockedToDueDate
+        self.category = category
+        self.start = start
+        self.end = end
+        self.type = type
+        self.isLocked = isLocked
+        self.isUserEdited = isUserEdited
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, assignmentId, title, dueDate, estimatedMinutes, isLockedToDueDate, category, start, end, type, isLocked, isUserEdited
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        assignmentId = try container.decodeIfPresent(UUID.self, forKey: .assignmentId)
+        title = try container.decode(String.self, forKey: .title)
+        dueDate = try container.decode(Date.self, forKey: .dueDate)
+        estimatedMinutes = try container.decode(Int.self, forKey: .estimatedMinutes)
+        isLockedToDueDate = try container.decode(Bool.self, forKey: .isLockedToDueDate)
+        category = try container.decodeIfPresent(AssignmentCategory.self, forKey: .category)
+        start = try container.decode(Date.self, forKey: .start)
+        end = try container.decode(Date.self, forKey: .end)
+        type = try container.decodeIfPresent(ScheduleBlockType.self, forKey: .type) ?? .task
+        isLocked = try container.decodeIfPresent(Bool.self, forKey: .isLocked) ?? false
+        isUserEdited = try container.decodeIfPresent(Bool.self, forKey: .isUserEdited) ?? false
+    }
 }
 
 struct StoredOverflowSession: Identifiable, Codable, Hashable {
@@ -21,6 +70,13 @@ struct StoredOverflowSession: Identifiable, Codable, Hashable {
     let estimatedMinutes: Int
     let isLockedToDueDate: Bool
     let category: AssignmentCategory?
+}
+
+enum ScheduleBlockType: String, Codable, CaseIterable {
+    case task
+    case event
+    case study
+    case breakTime
 }
 
 @MainActor
@@ -44,8 +100,11 @@ final class PlannerStore: ObservableObject {
     }
 
     func persist(scheduled: [ScheduledSession], overflow: [PlannerSession]) {
+        let preserved = Dictionary(grouping: self.scheduled.filter { $0.isUserEdited }, by: {
+            PlannerSessionKey(assignmentId: $0.assignmentId, title: $0.title)
+        })
         self.scheduled = scheduled.map {
-            StoredScheduledSession(
+            var mapped = StoredScheduledSession(
                 id: $0.id,
                 assignmentId: $0.session.assignmentId,
                 title: $0.session.title,
@@ -54,8 +113,28 @@ final class PlannerStore: ObservableObject {
                 isLockedToDueDate: $0.session.isLockedToDueDate,
                 category: $0.session.category,
                 start: $0.start,
-                end: $0.end
+                end: $0.end,
+                type: .task,
+                isLocked: $0.session.isLockedToDueDate,
+                isUserEdited: false
             )
+            if let match = preserved[PlannerSessionKey(assignmentId: mapped.assignmentId, title: mapped.title)]?.first {
+                mapped = StoredScheduledSession(
+                    id: mapped.id,
+                    assignmentId: mapped.assignmentId,
+                    title: mapped.title,
+                    dueDate: mapped.dueDate,
+                    estimatedMinutes: mapped.estimatedMinutes,
+                    isLockedToDueDate: mapped.isLockedToDueDate,
+                    category: mapped.category,
+                    start: match.start,
+                    end: match.end,
+                    type: match.type,
+                    isLocked: match.isLocked,
+                    isUserEdited: true
+                )
+            }
+            return mapped
         }
         self.overflow = overflow.map {
             StoredOverflowSession(
@@ -68,6 +147,17 @@ final class PlannerStore: ObservableObject {
                 category: $0.category
             )
         }
+        save()
+    }
+
+    private struct PlannerSessionKey: Hashable {
+        let assignmentId: UUID?
+        let title: String
+    }
+
+    func updateScheduledSession(_ updated: StoredScheduledSession) {
+        guard let idx = scheduled.firstIndex(where: { $0.id == updated.id }) else { return }
+        scheduled[idx] = updated
         save()
     }
 

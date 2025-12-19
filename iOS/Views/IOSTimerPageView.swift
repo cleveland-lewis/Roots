@@ -27,11 +27,9 @@ struct IOSTimerPageView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            mainScroll
-                .navigationTitle("Timer")
-                .modifier(TimerSyncModifiers(viewModel: viewModel, settings: settings, syncLiveActivity: syncLiveActivity, syncSettingsFromApp: syncSettingsFromApp))
-        }
+        mainScroll
+            .modifier(IOSNavigationChrome(title: "Timer"))
+            .modifier(TimerSyncModifiers(viewModel: viewModel, settings: settings, syncLiveActivity: syncLiveActivity, syncSettingsFromApp: syncSettingsFromApp))
     }
 
     private var mainScroll: some View {
@@ -474,7 +472,7 @@ private struct TimerSyncModifiers: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .modifier(TimerSettingsSync(settings: settings, syncSettingsFromApp: syncSettingsFromApp))
+            .modifier(TimerSettingsSync(settings: settings, requestAlarmAuthorization: requestAlarmAuthorization, syncSettingsFromApp: syncSettingsFromApp))
             .modifier(TimerLiveActivitySync(viewModel: viewModel, syncLiveActivity: syncLiveActivity))
             .modifier(TimerDurationSync(viewModel: viewModel, settings: settings))
             .onAppear {
@@ -484,10 +482,19 @@ private struct TimerSyncModifiers: ViewModifier {
                 syncSettingsFromApp()
             }
     }
+
+    private func requestAlarmAuthorization() async -> Bool {
+        guard let scheduler = viewModel.alarmScheduler as? IOSTimerAlarmScheduler else { return false }
+        if #available(iOS 17.0, *) {
+            return await scheduler.requestAuthorizationIfNeeded()
+        }
+        return false
+    }
 }
 
 private struct TimerSettingsSync: ViewModifier {
     @ObservedObject var settings: AppSettingsModel
+    let requestAlarmAuthorization: () async -> Bool
     let syncSettingsFromApp: () -> Void
 
     func body(content: Content) -> some View {
@@ -497,6 +504,10 @@ private struct TimerSettingsSync: ViewModifier {
             .onChange(of: settings.pomodoroLongBreakMinutes) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.timerAlertsEnabled) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.pomodoroAlertsEnabled) { _, _ in syncSettingsFromApp() }
+            .onChange(of: settings.alarmKitTimersEnabled) { _, newValue in
+                guard newValue else { return }
+                Task { _ = await requestAlarmAuthorization() }
+            }
     }
 }
 

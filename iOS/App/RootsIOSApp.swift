@@ -7,6 +7,7 @@
 import SwiftUI
 import Combine
 
+@main
 struct RootsIOSApp: App {
     @StateObject private var coursesStore: CoursesStore
     @StateObject private var appSettings = AppSettingsModel.shared
@@ -14,6 +15,9 @@ struct RootsIOSApp: App {
     @StateObject private var gradesStore = GradesStore.shared
     @StateObject private var plannerStore = PlannerStore.shared
     @StateObject private var plannerCoordinator = PlannerCoordinator.shared
+    @StateObject private var sheetRouter = IOSSheetRouter()
+    @StateObject private var toastRouter = IOSToastRouter()
+    @StateObject private var filterState = IOSFilterState()
     @StateObject private var appModel = AppModel()
     @StateObject private var calendarManager = CalendarManager.shared
     @StateObject private var deviceCalendar = DeviceCalendarManager.shared
@@ -28,6 +32,11 @@ struct RootsIOSApp: App {
         _coursesStore = StateObject(wrappedValue: store)
         let settings = AppSettingsModel.shared
         _settingsCoordinator = StateObject(wrappedValue: SettingsCoordinator(appSettings: settings, coursesStore: store))
+        if UserDefaults.standard.data(forKey: "roots.settings.appsettings") == nil {
+            settings.visibleTabs = IOSTabConfiguration.defaultTabs
+            settings.tabOrder = IOSTabConfiguration.defaultTabs
+            settings.save()
+        }
     }
 
     var body: some Scene {
@@ -49,6 +58,9 @@ struct RootsIOSApp: App {
                 .environmentObject(plannerStore)
                 .environmentObject(plannerCoordinator)
                 .environmentObject(parsingStore)
+                .environmentObject(sheetRouter)
+                .environmentObject(toastRouter)
+                .environmentObject(filterState)
                 .onAppear {
                     preferences.highContrast = appSettings.highContrastMode
                     preferences.reduceTransparency = appSettings.increaseTransparency

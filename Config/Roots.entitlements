@@ -8,5 +8,16 @@
     <true/>
     <key>com.apple.security.personal-information.reminders</key>
     <true/>
+    <!-- iCloud entitlements temporarily removed for personal team development -->
+    <!--
+    <key>com.apple.developer.icloud-container-identifiers</key>
+    <array>
+        <string>iCloud.com.cwlewisiii.Roots</string>
+    </array>
+    <key>com.apple.developer.icloud-services</key>
+    <array>
+        <string>CloudKit</string>
+    </array>
+    -->
 </dict>
 </plist>

@@ -68,6 +68,18 @@ struct DeveloperSettingsView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
+
+#if DEBUG
+                Section {
+                    SyncStatusView()
+                } header: {
+                    Text("Sync Status")
+                } footer: {
+                    Text("Shows the last CloudKit mirroring event and remote change timestamp.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+#endif
                 
                 Section {
                     VStack(alignment: .leading, spacing: 8) {

@@ -31,7 +31,7 @@
   - [ ] Additional activity detail panel (selected activity)
   - [ ] Match macOS layout for iPad split view
 - AlarmKit
-  - [ ] Implement AlarmKit scheduling/cancel in `IOSTimerAlarmScheduler`
+- [x] Implement AlarmKit scheduling/cancel in `IOSTimerAlarmScheduler`
   - [ ] Handle authorization + fallback messaging
   - [ ] Default to enabled if authorized
 - Live Activity

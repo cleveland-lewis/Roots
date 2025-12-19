@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23039" systemVersion="23F79" minimumToolsVersion="Xcode 15.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="1">
+    <entity name="Course" representedClassName="CourseEntity" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" optional="NO" attributeType="String" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="assignments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Assignment" inverseName="course" inverseEntity="Assignment"/>
+        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Task" inverseName="course" inverseEntity="Task"/>
+    </entity>
+    <entity name="Assignment" representedClassName="AssignmentEntity" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dueAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" optional="NO" attributeType="String" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="course" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Course" inverseName="assignments" inverseEntity="Course"/>
+        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="assignment" inverseEntity="Task"/>
+    </entity>
+    <entity name="Task" representedClassName="TaskEntity" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dueAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="status" optional="NO" attributeType="String" usesScalarValueType="NO" defaultValueString="pending"/>
+        <attribute name="title" optional="NO" attributeType="String" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="assignment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Assignment" inverseName="tasks" inverseEntity="Assignment"/>
+        <relationship name="course" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Course" inverseName="tasks" inverseEntity="Course"/>
+        <relationship name="timerSessions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TimerSession" inverseName="task" inverseEntity="TimerSession"/>
+    </entity>
+    <entity name="TimerSession" representedClassName="TimerSessionEntity" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="durationSeconds" optional="NO" attributeType="Double" usesScalarValueType="NO" defaultValueString="0"/>
+        <attribute name="endedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="mode" optional="NO" attributeType="String" usesScalarValueType="NO" defaultValueString="timer"/>
+        <attribute name="startedAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="timerSessions" inverseEntity="Task"/>
+    </entity>
+</model>
