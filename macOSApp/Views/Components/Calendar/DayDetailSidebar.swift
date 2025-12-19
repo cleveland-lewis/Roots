@@ -191,11 +191,11 @@ struct DayDetailSidebar: View {
         switch category {
         case .exam: return .red
         case .class: return .blue
-        case .homework: return .orange
+        case .homework: return .green
         case .study: return .green
         case .review: return .yellow
         case .reading: return .cyan
-        case .lab: return .purple
+        case .lab: return .orange
         case .other: return Color(nsColor: .controlAccentColor)
         }
     }
