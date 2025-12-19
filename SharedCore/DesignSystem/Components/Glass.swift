@@ -40,6 +40,7 @@ extension View {
 }
 
 private struct GlassEffectModifier: ViewModifier {
+    @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.colorScheme) private var colorScheme
     var glass: Glass
     var shape: GlassInsetShape
@@ -54,12 +55,14 @@ private struct GlassEffectModifier: ViewModifier {
 
     @ViewBuilder
     private var overlayView: some View {
+        let policy = MaterialPolicy(preferences: preferences)
+        
         switch shape {
         case .rect(let cornerRadius):
             // Layer material, tint, highlights and subtle blur to resemble liquid glass
             ZStack {
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(DesignSystem.Materials.card)
+                    .fill(policy.cardMaterial(colorScheme: colorScheme))
 
                 if glass.tintColor != .clear {
                     RoundedRectangle(cornerRadius: cornerRadius)
@@ -71,18 +74,18 @@ private struct GlassEffectModifier: ViewModifier {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                neutral.opacity(0.6),
-                                neutral.opacity(0.05)
+                                neutral.opacity(policy.borderOpacity * 5),
+                                neutral.opacity(policy.borderOpacity * 0.42)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
-                        lineWidth: 1
+                        lineWidth: policy.borderWidth
                     )
                     .blendMode(.overlay)
 
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(neutral.opacity(0.04), lineWidth: 0.5)
+                    .stroke(neutral.opacity(policy.borderOpacity * 0.33), lineWidth: policy.borderWidth * 0.5)
                     .blendMode(.multiply)
             }
         }

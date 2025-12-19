@@ -9,12 +9,22 @@ enum RootsGlassStyle {
 }
 
 struct GlassCardModifier: ViewModifier {
+    @EnvironmentObject private var preferences: AppPreferences
+    @Environment(\.colorScheme) private var colorScheme
+    
     var cornerRadius: CGFloat
+    
     func body(content: Content) -> some View {
+        let policy = MaterialPolicy(preferences: preferences)
+        
         content
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(.regularMaterial)
+                    .fill(policy.cardMaterial(colorScheme: colorScheme))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(Color.primary.opacity(policy.borderOpacity), lineWidth: policy.borderWidth)
             )
             .shadow(color: RootsGlassStyle.cardShadow, radius: 8, x: 0, y: 4)
     }
@@ -28,10 +38,23 @@ extension View {
 
     /// Glass chrome surface (for tab bars, chips, navigation chrome).
     func glassChrome(cornerRadius: CGFloat = RootsGlassStyle.chromeCornerRadius) -> some View {
-        self
+        self.modifier(GlassChromeModifier(cornerRadius: cornerRadius))
+    }
+}
+
+struct GlassChromeModifier: ViewModifier {
+    @EnvironmentObject private var preferences: AppPreferences
+    @Environment(\.colorScheme) private var colorScheme
+    
+    var cornerRadius: CGFloat
+    
+    func body(content: Content) -> some View {
+        let policy = MaterialPolicy(preferences: preferences)
+        
+        content
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(DesignSystem.Materials.hud)
+                    .fill(policy.hudMaterial(colorScheme: colorScheme))
             )
             .shadow(color: RootsGlassStyle.chromeShadow, radius: 6, x: 0, y: 2)
     }
