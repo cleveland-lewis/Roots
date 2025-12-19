@@ -246,7 +246,7 @@ struct RootsApp: App {
 
     private var uiTestSizeCategoryOverride: ContentSizeCategory? {
         guard let raw = ProcessInfo.processInfo.environment["UITEST_CONTENT_SIZE"] else { return nil }
-        return ContentSizeCategory(rawValue: raw)
+        return sizeCategory(for: raw)
     }
 
     private var shouldDisableAnimationsForUITests: Bool {
@@ -268,6 +268,16 @@ struct RootsApp: App {
                     if shouldDisableAnimationsForUITests { txn.animation = nil }
                 }
         }
+    }
+
+    private func sizeCategory(for raw: String) -> ContentSizeCategory? {
+#if os(macOS)
+        guard let nsCategory = NSContentSizeCategory(rawValue: raw) else { return nil }
+        return ContentSizeCategory(nsCategory)
+#else
+        guard let uiCategory = UIContentSizeCategory(rawValue: raw) else { return nil }
+        return ContentSizeCategory(uiCategory)
+#endif
     }
 
     private func handleScenePhaseChange(_ phase: ScenePhase) {
