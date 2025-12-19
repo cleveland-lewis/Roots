@@ -38,8 +38,9 @@ struct TimerActivity: Identifiable, Hashable, Codable {
     var collectionID: UUID?
     var colorHex: String?
     var emoji: String?
+    var isPinned: Bool
 
-    init(id: UUID = UUID(), name: String, note: String? = nil, courseID: UUID? = nil, assignmentID: UUID? = nil, studyCategory: StudyCategory? = nil, collectionID: UUID? = nil, colorHex: String? = nil, emoji: String? = nil) {
+    init(id: UUID = UUID(), name: String, note: String? = nil, courseID: UUID? = nil, assignmentID: UUID? = nil, studyCategory: StudyCategory? = nil, collectionID: UUID? = nil, colorHex: String? = nil, emoji: String? = nil, isPinned: Bool = false) {
         self.id = id
         self.name = name
         self.note = note
@@ -49,6 +50,7 @@ struct TimerActivity: Identifiable, Hashable, Codable {
         self.collectionID = collectionID
         self.colorHex = colorHex
         self.emoji = emoji
+        self.isPinned = isPinned
     }
 }
 

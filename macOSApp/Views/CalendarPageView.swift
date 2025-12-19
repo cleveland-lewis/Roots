@@ -233,7 +233,7 @@ struct CalendarPageView: View {
             HStack(alignment: .top, spacing: 16) {
                 // Left sidebar showing events for selected date
                 eventSidebarView
-                    .frame(width: 280)
+                    .frame(width: 280, maxHeight: .infinity, alignment: .top)
                 
                 // Main calendar grid
                 VStack(spacing: 12) {
@@ -242,11 +242,12 @@ struct CalendarPageView: View {
                 .padding()
                 .background(DesignSystem.Materials.card)
                 .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .sheet(isPresented: $showingNewEventSheet) {
             AddEventPopup().environmentObject(calendarManager)
         }

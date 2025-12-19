@@ -11,6 +11,8 @@ struct IOSTimerPageView: View {
     @StateObject private var viewModel = TimerPageViewModel()
     @StateObject private var liveActivityManager = IOSTimerLiveActivityManager()
     @State private var newActivityName = ""
+    @State private var activitySearchText = ""
+    @State private var selectedCollectionID: UUID? = nil
 
     private var sessionState: FocusSession.State {
         viewModel.currentSession?.state ?? .idle
@@ -45,6 +47,9 @@ struct IOSTimerPageView: View {
             durationControls
             settingsControls
             activityPicker
+            activityCollections
+            activitySearch
+            activityNotes
             activityManager
             sessionHistory
 #if DEBUG
@@ -163,6 +168,66 @@ struct IOSTimerPageView: View {
         }
     }
 
+    private var activityCollections: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                Button {
+                    selectedCollectionID = nil
+                } label: {
+                    collectionChip(title: "All", isSelected: selectedCollectionID == nil)
+                }
+                .buttonStyle(.plain)
+
+                ForEach(viewModel.collections) { collection in
+                    Button {
+                        selectedCollectionID = collection.id
+                    } label: {
+                        collectionChip(title: collection.name, isSelected: selectedCollectionID == collection.id)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private func collectionChip(title: String, isSelected: Bool) -> some View {
+        Text(title)
+            .font(.caption.weight(.semibold))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(
+                Capsule()
+                    .fill(isSelected ? Color.accentColor.opacity(0.2) : Color(uiColor: .secondarySystemBackground))
+            )
+    }
+
+    private var activitySearch: some View {
+        TextField("Search activities", text: $activitySearchText)
+            .textFieldStyle(.roundedBorder)
+    }
+
+    private var activityNotes: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Notes")
+                .font(.headline)
+            if let activity = selectedActivity {
+                Text(activity.name)
+                    .font(.subheadline.weight(.semibold))
+                TextEditor(text: activityNoteBinding)
+                    .frame(minHeight: 120)
+                    .padding(8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(uiColor: .secondarySystemBackground))
+                    )
+            } else {
+                Text("Select an activity to add notes.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+
     private var settingsControls: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Alerts")
@@ -184,24 +249,20 @@ struct IOSTimerPageView: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(newActivityName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-            ForEach(viewModel.activities) { activity in
-                HStack {
-                    Button(activity.name) {
-                        viewModel.selectActivity(activity.id)
-                    }
-                    .buttonStyle(.plain)
-                    Spacer()
-                    Button(role: .destructive) {
-                        viewModel.deleteActivity(id: activity.id)
-                    } label: {
-                        Image(systemName: "trash")
-                    }
+            if !pinnedActivities.isEmpty {
+                Text("Pinned")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                ForEach(pinnedActivities) { activity in
+                    activityRow(activity)
                 }
-                .padding(8)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(uiColor: .tertiarySystemBackground))
-                )
+            }
+
+            Text("All Activities")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            ForEach(filteredActivities) { activity in
+                activityRow(activity)
             }
         }
     }
@@ -269,6 +330,23 @@ struct IOSTimerPageView: View {
         )
     }
 
+    private var selectedActivity: TimerActivity? {
+        guard let id = viewModel.currentActivityID else { return nil }
+        return viewModel.activities.first(where: { $0.id == id })
+    }
+
+    private var activityNoteBinding: Binding<String> {
+        guard let activity = selectedActivity else { return .constant("") }
+        return Binding(
+            get: { activity.note ?? "" },
+            set: { newValue in
+                var updated = activity
+                updated.note = newValue
+                viewModel.updateActivity(updated)
+            }
+        )
+    }
+
     private var iterationsRow: some View {
         HStack {
             Text("Iterations")
@@ -287,6 +365,38 @@ struct IOSTimerPageView: View {
         newActivityName = ""
     }
 
+    private func activityRow(_ activity: TimerActivity) -> some View {
+        HStack {
+            Button(activity.name) {
+                viewModel.selectActivity(activity.id)
+            }
+            .buttonStyle(.plain)
+            Spacer()
+            Button {
+                togglePinned(activity)
+            } label: {
+                Image(systemName: activity.isPinned ? "pin.fill" : "pin")
+            }
+            .buttonStyle(.plain)
+            Button(role: .destructive) {
+                viewModel.deleteActivity(id: activity.id)
+            } label: {
+                Image(systemName: "trash")
+            }
+        }
+        .padding(8)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(uiColor: .tertiarySystemBackground))
+        )
+    }
+
+    private func togglePinned(_ activity: TimerActivity) {
+        var updated = activity
+        updated.isPinned.toggle()
+        viewModel.updateActivity(updated)
+    }
+
     private func syncLiveActivity() {
         liveActivityManager.sync(
             currentMode: viewModel.currentMode,
@@ -300,6 +410,32 @@ struct IOSTimerPageView: View {
     private func syncSettingsFromApp() {
         viewModel.focusDuration = TimeInterval(settings.pomodoroFocusMinutes * 60)
         viewModel.breakDuration = TimeInterval(settings.pomodoroShortBreakMinutes * 60)
+    }
+
+    private var filteredActivities: [TimerActivity] {
+        viewModel.activities
+            .filter { activity in
+                guard selectedCollectionID == nil || activity.collectionID == selectedCollectionID else { return false }
+                guard !activity.isPinned else { return false }
+                if activitySearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    return true
+                }
+                let query = activitySearchText.lowercased()
+                return activity.name.lowercased().contains(query)
+            }
+    }
+
+    private var pinnedActivities: [TimerActivity] {
+        viewModel.activities
+            .filter { $0.isPinned }
+            .filter { activity in
+                guard selectedCollectionID == nil || activity.collectionID == selectedCollectionID else { return false }
+                if activitySearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    return true
+                }
+                let query = activitySearchText.lowercased()
+                return activity.name.lowercased().contains(query)
+            }
     }
 
 #if DEBUG
