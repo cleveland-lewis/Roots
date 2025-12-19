@@ -42,6 +42,7 @@ enum LogSubsystem: String, CaseIterable {
     case sync         = "Sync"
     case settings     = "Settings"
     case performance  = "Performance"
+    case ai           = "AI"
     
     var logger: Logger {
         Logger(subsystem: "com.roots.app", category: self.rawValue)
@@ -415,4 +416,14 @@ func LOG_INTEGRATIONS(_ severity: LogSeverity = .info,
                       function: StaticString = #function,
                       line: UInt = #line) {
     Diagnostics.shared.log(severity, subsystem: .integrations, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
+}
+
+func LOG_AI(_ severity: LogSeverity = .info,
+           _ category: String,
+           _ message: @autoclosure () -> String,
+           metadata: [String: String]? = nil,
+           file: StaticString = #fileID,
+           function: StaticString = #function,
+           line: UInt = #line) {
+    Diagnostics.shared.log(severity, subsystem: .ai, category: category, message: message(), metadata: metadata, file: file, function: function, line: line)
 }

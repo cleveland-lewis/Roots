@@ -79,6 +79,8 @@ struct SettingsRootView: View {
                     FlashcardSettingsView()
                 case .notifications:
                     NotificationsSettingsView()
+                case .ai:
+                    AISettingsView()
                 case .privacy:
                     PrivacySettingsView()
                 case .developer:
