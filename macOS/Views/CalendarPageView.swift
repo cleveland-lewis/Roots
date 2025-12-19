@@ -199,7 +199,7 @@ struct CalendarPageView: View {
             HStack(alignment: .top, spacing: 16) {
                 // Left sidebar showing events for selected date
                 eventSidebarView
-                    .frame(width: 280)
+                    .frame(width: 280, maxHeight: .infinity)
                 
                 // Main calendar grid
                 VStack(spacing: 12) {

@@ -152,7 +152,15 @@ struct DashboardView: View {
     }
 
     private func gradeColor(for hex: String?) -> Color {
-        (ColorTag.fromHex(hex) ?? .blue).color
+        if let colorTag = ColorTag.fromHex(hex) {
+            return colorTag.color
+        }
+        // Try to parse as hex color directly
+        if let hex = hex, let hexColor = Color(hex: hex) {
+            return hexColor
+        }
+        // Fallback to blue only if no hex provided
+        return Color.blue
     }
 
     private var todayCard: some View {

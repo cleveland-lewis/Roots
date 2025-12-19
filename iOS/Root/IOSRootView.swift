@@ -8,9 +8,13 @@ import SwiftUI
 
 struct IOSRootView: View {
     var body: some View {
-        Text("Roots iOS")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(DesignSystem.Colors.appBackground)
+        TabView {
+            IOSTimerPageView()
+                .tabItem {
+                    Label("Timer", systemImage: "timer")
+                }
+        }
+        .background(DesignSystem.Colors.appBackground)
     }
 }
 #endif

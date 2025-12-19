@@ -244,6 +244,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         case affirmationsEnabledStorage
         case timerAlertsEnabledStorage
         case pomodoroAlertsEnabledStorage
+        case alarmKitTimersEnabledStorage
         case assignmentLeadTimeStorage
         case dailyOverviewTimeStorage
         case showOnlySchoolCalendarStorage
@@ -408,6 +409,7 @@ final class AppSettingsModel: ObservableObject, Codable {
     var affirmationsEnabledStorage: Bool = false
     var timerAlertsEnabledStorage: Bool = true
     var pomodoroAlertsEnabledStorage: Bool = true
+    var alarmKitTimersEnabledStorage: Bool = true
     var assignmentLeadTimeStorage: Double = 3600 // 1 hour in seconds
     var dailyOverviewTimeStorage: Date = {
         var components = DateComponents()
@@ -686,6 +688,11 @@ final class AppSettingsModel: ObservableObject, Codable {
     var pomodoroAlertsEnabled: Bool {
         get { pomodoroAlertsEnabledStorage }
         set { pomodoroAlertsEnabledStorage = newValue }
+    }
+
+    var alarmKitTimersEnabled: Bool {
+        get { alarmKitTimersEnabledStorage }
+        set { alarmKitTimersEnabledStorage = newValue }
     }
     
     var assignmentLeadTime: TimeInterval {
@@ -997,6 +1004,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         try container.encode(affirmationsEnabledStorage, forKey: .affirmationsEnabledStorage)
         try container.encode(timerAlertsEnabledStorage, forKey: .timerAlertsEnabledStorage)
         try container.encode(pomodoroAlertsEnabledStorage, forKey: .pomodoroAlertsEnabledStorage)
+        try container.encode(alarmKitTimersEnabledStorage, forKey: .alarmKitTimersEnabledStorage)
         try container.encode(assignmentLeadTimeStorage, forKey: .assignmentLeadTimeStorage)
         try container.encode(dailyOverviewTimeStorage, forKey: .dailyOverviewTimeStorage)
         try container.encode(showOnlySchoolCalendarStorage, forKey: .showOnlySchoolCalendarStorage)
@@ -1044,6 +1052,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         affirmationsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .affirmationsEnabledStorage) ?? false
         timerAlertsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .timerAlertsEnabledStorage) ?? true
         pomodoroAlertsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .pomodoroAlertsEnabledStorage) ?? true
+        alarmKitTimersEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .alarmKitTimersEnabledStorage) ?? true
         assignmentLeadTimeStorage = try container.decodeIfPresent(Double.self, forKey: .assignmentLeadTimeStorage) ?? 3600
         dailyOverviewTimeStorage = try container.decodeIfPresent(Date.self, forKey: .dailyOverviewTimeStorage) ?? {
             var components = DateComponents()

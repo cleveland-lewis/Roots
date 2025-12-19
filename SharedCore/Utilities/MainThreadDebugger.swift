@@ -118,10 +118,11 @@ final class MainThreadDebugger: ObservableObject {
         }
         
         // Monitor memory
-        DispatchQueue.global(qos: .utility).async { [weak self] in
-            while self?.isEnabled == true {
-                self?.updateMemoryUsage()
-                Thread.sleep(forTimeInterval: 1.0)
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            while self.isEnabled {
+                self.updateMemoryUsage()
+                try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
             }
         }
     }

@@ -30,12 +30,17 @@ final class TimerPageViewModel: ObservableObject {
     private var timerCancellable: AnyCancellable?
     private var clockCancellable: AnyCancellable?
     private var hasRequestedNotificationPermission = false
+    var alarmScheduler: TimerAlarmScheduling?
+    private let persistenceQueue = DispatchQueue(label: "timer.persistence.queue", qos: .utility)
 
     // Mode binding - assume a shared selector writes to this or inject externally
     var modeCancellable: AnyCancellable?
 
     init() {
-        loadPlaceholderData()
+        loadPersistedState()
+        if activities.isEmpty && collections.isEmpty && pastSessions.isEmpty {
+            loadPlaceholderData()
+        }
         startClock()
         requestNotificationPermissionIfNeeded()
     }
@@ -68,21 +73,25 @@ final class TimerPageViewModel: ObservableObject {
     // MARK: - CRUD for activities
     func addActivity(_ activity: TimerActivity) {
         activities.append(activity)
+        persistState()
     }
 
     func updateActivity(_ activity: TimerActivity) {
         if let idx = activities.firstIndex(where: { $0.id == activity.id }) {
             activities[idx] = activity
+            persistState()
         }
     }
 
     func deleteActivity(id: UUID) {
         activities.removeAll { $0.id == id }
         if currentActivityID == id { currentActivityID = nil }
+        persistState()
     }
 
     func selectActivity(_ id: UUID?) {
         currentActivityID = id
+        persistState()
     }
 
     var filteredActivities: [TimerActivity] {
@@ -93,15 +102,20 @@ final class TimerPageViewModel: ObservableObject {
     // MARK: - Collections
     func addCollection(_ c: ActivityCollection) {
         collections.append(c)
+        persistState()
     }
 
     func updateCollection(_ c: ActivityCollection) {
-        if let idx = collections.firstIndex(where: { $0.id == c.id }) { collections[idx] = c }
+        if let idx = collections.firstIndex(where: { $0.id == c.id }) {
+            collections[idx] = c
+            persistState()
+        }
     }
 
     func deleteCollection(id: UUID) {
         collections.removeAll { $0.id == id }
         if selectedCollectionID == id { selectedCollectionID = nil }
+        persistState()
     }
 
     // MARK: - Sessions
@@ -125,6 +139,7 @@ final class TimerPageViewModel: ObservableObject {
 
         LOG_UI(.info, "Timer", "Started session \(session.id) for activity=\(String(describing: session.activityID)) mode=\(currentMode.rawValue)")
         scheduleCompletionNotification()
+        persistState()
     }
 
     func pauseSession() {
@@ -133,6 +148,7 @@ final class TimerPageViewModel: ObservableObject {
         currentSession = s
         LOG_UI(.info, "Timer", "Paused session \(s.id)")
         cancelCompletionNotification()
+        persistState()
     }
 
     func resumeSession() {
@@ -142,6 +158,7 @@ final class TimerPageViewModel: ObservableObject {
         currentSession = s
         LOG_UI(.info, "Timer", "Resumed session \(s.id)")
         scheduleCompletionNotification()
+        persistState()
     }
 
     func endSession(completed: Bool) {
@@ -158,6 +175,7 @@ final class TimerPageViewModel: ObservableObject {
         }
         LOG_UI(.info, "Timer", "Ended session \(s.id) completed=\(completed)")
         cancelCompletionNotification()
+        persistState()
     }
     
     /// Skip current Pomodoro segment and advance to the next one
@@ -216,14 +234,23 @@ final class TimerPageViewModel: ObservableObject {
     private func scheduleCompletionNotification() {
         guard let session = currentSession, session.state == .running else { return }
         guard session.mode != .stopwatch else { return }
+        if session.mode == .timer && !AppSettingsModel.shared.timerAlertsEnabled { return }
+        if session.mode == .pomodoro && !AppSettingsModel.shared.pomodoroAlertsEnabled { return }
         cancelCompletionNotification()
 
         let remaining = sessionRemaining > 0 ? sessionRemaining : (session.plannedDuration ?? 0) - sessionElapsed
         guard remaining > 0 else { return }
 
+        let title = session.mode == .pomodoro ? "Pomodoro Complete" : "Timer Finished"
+        let body = "Time to take a break or switch tasks!"
+        if alarmScheduler?.isEnabled == true {
+            alarmScheduler?.scheduleTimerEnd(id: "RootsTimerCompletion", fireIn: remaining, title: title, body: body)
+            return
+        }
+
         let content = UNMutableNotificationContent()
-        content.title = session.mode == .pomodoro ? "Pomodoro Complete" : "Timer Finished"
-        content.body = "Time to take a break or switch tasks!"
+        content.title = title
+        content.body = body
         content.sound = UNNotificationSound.default
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: remaining, repeats: false)
@@ -236,7 +263,71 @@ final class TimerPageViewModel: ObservableObject {
     }
 
     private func cancelCompletionNotification() {
+        alarmScheduler?.cancelTimer(id: "RootsTimerCompletion")
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["RootsTimerCompletion"])
+    }
+
+    // MARK: - Persistence
+    private struct TimerPersistedState: Codable {
+        var activities: [TimerActivity]
+        var collections: [ActivityCollection]
+        var pastSessions: [FocusSession]
+        var selectedCollectionID: UUID?
+        var currentActivityID: UUID?
+        var currentMode: TimerMode
+        var isOnBreak: Bool
+        var focusDuration: TimeInterval
+        var breakDuration: TimeInterval
+        var timerDuration: TimeInterval
+    }
+
+    private var stateURL: URL {
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return docs.appendingPathComponent("TimerState.json")
+    }
+
+    private func loadPersistedState() {
+        let url = stateURL
+        persistenceQueue.async {
+            guard let data = try? Data(contentsOf: url) else { return }
+            guard let decoded = try? JSONDecoder().decode(TimerPersistedState.self, from: data) else { return }
+            DispatchQueue.main.async {
+                self.activities = decoded.activities
+                self.collections = decoded.collections
+                self.pastSessions = decoded.pastSessions
+                self.selectedCollectionID = decoded.selectedCollectionID
+                self.currentActivityID = decoded.currentActivityID
+                self.currentMode = decoded.currentMode
+                self.isOnBreak = decoded.isOnBreak
+                self.focusDuration = decoded.focusDuration
+                self.breakDuration = decoded.breakDuration
+                self.timerDuration = decoded.timerDuration
+            }
+        }
+    }
+
+    private func persistState() {
+        let snapshot = TimerPersistedState(
+            activities: activities,
+            collections: collections,
+            pastSessions: pastSessions,
+            selectedCollectionID: selectedCollectionID,
+            currentActivityID: currentActivityID,
+            currentMode: currentMode,
+            isOnBreak: isOnBreak,
+            focusDuration: focusDuration,
+            breakDuration: breakDuration,
+            timerDuration: timerDuration
+        )
+        let url = stateURL
+        persistenceQueue.async {
+            do {
+                let data = try JSONEncoder().encode(snapshot)
+                try data.write(to: url, options: .atomic)
+            } catch {
+                LOG_UI(.error, "Timer", "Failed to persist timer state: \(error.localizedDescription)")
+            }
+        }
     }
 
     // MARK: - Placeholder data

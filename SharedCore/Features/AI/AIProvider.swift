@@ -53,7 +53,7 @@ struct AIGenerateOptions {
     let strictJSON: Bool
     let systemPrompt: String?
     
-    static let `default` = AIGenerateOptions(
+    nonisolated static let `default` = AIGenerateOptions(
         temperature: 0.7,
         maxTokens: nil,
         strictJSON: false,
