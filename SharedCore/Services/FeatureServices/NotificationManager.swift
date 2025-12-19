@@ -2,9 +2,9 @@ import Foundation
 import UserNotifications
 import Combine
 #if os(macOS)
-#if os(macOS)
 import AppKit
-#endif
+#elseif os(iOS)
+import UIKit
 #endif
 
 final class NotificationManager: ObservableObject {
@@ -73,6 +73,12 @@ final class NotificationManager: ObservableObject {
         guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") else { return }
         NSWorkspace.shared.open(url)
     }
+#elseif os(iOS)
+    func openNotificationSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+    }
 #endif
 
     func scheduleTimerNotification(seconds: TimeInterval, title: String) {
@@ -83,7 +89,11 @@ final class NotificationManager: ObservableObject {
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                LOG_UI(.error, "NotificationManager", "Failed to schedule timer notification", metadata: ["error": error.localizedDescription])
+            }
+        }
     }
 
     func updateBadgeCount(_ count: Int) {
@@ -97,7 +107,11 @@ final class NotificationManager: ObservableObject {
             let content = UNMutableNotificationContent()
             content.badge = NSNumber(value: count)
             let request = UNNotificationRequest(identifier: "roots.badge.update", content: content, trigger: nil)
-            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    LOG_UI(.error, "NotificationManager", "Failed to update badge", metadata: ["error": error.localizedDescription])
+                }
+            }
         }
     }
 
@@ -122,7 +136,11 @@ final class NotificationManager: ObservableObject {
             trigger: nil // Immediate
         )
         
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                LOG_UI(.error, "NotificationManager", "Failed to schedule timer completion", metadata: ["error": error.localizedDescription])
+            }
+        }
     }
     
     // MARK: - Pomodoro Notifications
@@ -142,7 +160,11 @@ final class NotificationManager: ObservableObject {
             trigger: nil // Immediate
         )
         
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                LOG_UI(.error, "NotificationManager", "Failed to schedule pomodoro work completion", metadata: ["error": error.localizedDescription])
+            }
+        }
     }
     
     func schedulePomodoroBreakComplete(isLongBreak: Bool = false) {
@@ -160,7 +182,11 @@ final class NotificationManager: ObservableObject {
             trigger: nil // Immediate
         )
         
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                LOG_UI(.error, "NotificationManager", "Failed to schedule pomodoro break completion", metadata: ["error": error.localizedDescription])
+            }
+        }
     }
     
     // MARK: - Assignment Notifications
@@ -187,7 +213,11 @@ final class NotificationManager: ObservableObject {
         let identifier = "assignment-\(assignment.id.uuidString)"
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                LOG_UI(.error, "NotificationManager", "Failed to schedule assignment notification", metadata: ["error": error.localizedDescription, "assignmentId": assignment.id.uuidString])
+            }
+        }
     }
     
     func cancelAssignmentNotification(_ assignmentId: UUID) {

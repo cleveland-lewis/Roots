@@ -66,7 +66,8 @@ final class UISnapshotTests: XCTestCase {
     private func captureOverlays(in app: XCUIApplication, config: SnapshotConfiguration) {
         // Confirmation sheet from Settings → Reset All Data.
         selectSettingsPane("General", in: app)
-        if let resetButton = app.buttons["Reset All Data"].firstMatchIfExists(timeout: 3) {
+        let resetButton = app.buttons["Reset All Data"]
+        if resetButton.waitForExistence(timeout: 3) {
             resetButton.click()
             if app.sheets.firstMatch.waitForExistence(timeout: 4) {
                 snapshotter.assertSnapshot(app: app, name: "overlay-confirmation", config: config)
@@ -76,15 +77,20 @@ final class UISnapshotTests: XCTestCase {
 
         // Calendar modal overlay (new event)
         switchToTab("calendar", in: app)
-        if let addButton = app.buttons.matching(identifier: "plus").firstMatchIfExists(timeout: 2) ??
-            app.buttons["Add"].firstMatchIfExists(timeout: 2) ??
-            app.buttons.firstMatchIfExists(timeout: 2) {
+        if let addButton = app.buttons.matching(identifier: "plus").firstMatchIfExists(timeout: 2) {
             addButton.click()
-            if app.sheets.firstMatch.waitForExistence(timeout: 4) || app.dialogs.firstMatch.waitForExistence(timeout: 4) {
-                snapshotter.assertSnapshot(app: app, name: "overlay-modal", config: config)
-                app.buttons["Cancel"].firstMatch.clickIfExists()
-                app.buttons["Close"].firstMatch.clickIfExists()
+        } else {
+            let addLabelButton = app.buttons["Add"]
+            if addLabelButton.waitForExistence(timeout: 2) {
+                addLabelButton.click()
+            } else if app.buttons.firstMatch.waitForExistence(timeout: 2) {
+                app.buttons.firstMatch.click()
             }
+        }
+        if app.sheets.firstMatch.waitForExistence(timeout: 4) || app.dialogs.firstMatch.waitForExistence(timeout: 4) {
+            snapshotter.assertSnapshot(app: app, name: "overlay-modal", config: config)
+            app.buttons["Cancel"].firstMatch.clickIfExists()
+            app.buttons["Close"].firstMatch.clickIfExists()
         }
     }
 
