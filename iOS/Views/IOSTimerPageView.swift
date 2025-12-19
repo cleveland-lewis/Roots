@@ -35,6 +35,9 @@ struct IOSTimerPageView: View {
                     activityPicker
                     activityManager
                     sessionHistory
+#if DEBUG
+                    debugSection
+#endif
                 }
                 .padding(20)
             }
@@ -88,9 +91,11 @@ struct IOSTimerPageView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(statusTitle)
                 .font(.headline)
+                .accessibilityIdentifier("Timer.Status")
             Text(timeString(for: viewModel.sessionRemaining, elapsed: viewModel.sessionElapsed))
                 .font(.system(size: 48, weight: .bold, design: .rounded))
                 .monospacedDigit()
+                .accessibilityIdentifier("Timer.Time")
             if viewModel.currentMode == .pomodoro {
                 Text(viewModel.isOnBreak ? "Break" : "Focus")
                     .font(.subheadline)
@@ -110,22 +115,27 @@ struct IOSTimerPageView: View {
             if isRunning {
                 Button("Pause") { viewModel.pauseSession() }
                     .buttonStyle(.bordered)
+                    .accessibilityIdentifier("Timer.Pause")
             } else if isPaused {
                 Button("Resume") { viewModel.resumeSession() }
                     .buttonStyle(.borderedProminent)
+                    .accessibilityIdentifier("Timer.Resume")
             } else {
                 Button("Start") { viewModel.startSession() }
                     .buttonStyle(.borderedProminent)
+                    .accessibilityIdentifier("Timer.Start")
             }
 
             Button("Stop") { viewModel.endSession(completed: false) }
                 .buttonStyle(.bordered)
                 .disabled(sessionState == .idle)
+                .accessibilityIdentifier("Timer.Stop")
 
             if viewModel.currentMode == .pomodoro {
                 Button("Skip") { viewModel.skipSegment() }
                     .buttonStyle(.bordered)
                     .disabled(!isRunning)
+                    .accessibilityIdentifier("Timer.Skip")
             }
         }
     }
@@ -314,5 +324,32 @@ struct IOSTimerPageView: View {
         viewModel.focusDuration = TimeInterval(settings.pomodoroFocusMinutes * 60)
         viewModel.breakDuration = TimeInterval(settings.pomodoroShortBreakMinutes * 60)
     }
+
+#if DEBUG
+    private var debugSection: some View {
+        Group {
+            if ProcessInfo.processInfo.arguments.contains("UITestTimerDebug") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Debug")
+                        .font(.headline)
+                    Text("Session: \(sessionState.rawValue)")
+                        .accessibilityIdentifier("Timer.SessionState")
+                    Text("LiveActivity: \(liveActivityStatus)")
+                        .accessibilityIdentifier("Timer.LiveActivityState")
+                    Button("Advance 10k") {
+                        viewModel.debugAdvance(seconds: 10_000)
+                    }
+                    .buttonStyle(.bordered)
+                    .accessibilityIdentifier("Timer.DebugAdvance")
+                }
+            }
+        }
+    }
+
+    private var liveActivityStatus: String {
+        guard liveActivityManager.isAvailable else { return "Unavailable" }
+        return liveActivityManager.isActive ? "Active" : "Inactive"
+    }
+#endif
 }
 #endif

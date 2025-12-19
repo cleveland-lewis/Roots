@@ -70,4 +70,62 @@ final class RootsUITests: XCTestCase {
             XCUIApplication().launch()
         }
     }
+
+#if os(iOS)
+    @MainActor
+    func testTimerSmokeFlow() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append("UITestTimerDebug")
+        app.launch()
+
+        let timerTab = app.tabBars.buttons["Timer"]
+        if timerTab.exists {
+            timerTab.tap()
+        }
+
+        let status = app.staticTexts["Timer.Status"]
+        XCTAssertTrue(status.waitForExistence(timeout: 5.0))
+
+        let startButton = app.buttons["Timer.Start"]
+        XCTAssertTrue(startButton.waitForExistence(timeout: 5.0))
+        startButton.tap()
+
+        XCTAssertTrue(status.label == "Running" || status.label == "Paused")
+
+        let stopButton = app.buttons["Timer.Stop"]
+        XCTAssertTrue(stopButton.waitForExistence(timeout: 5.0))
+        stopButton.tap()
+
+        XCTAssertTrue(status.label == "Stopped" || status.label == "Ready")
+    }
+
+    @MainActor
+    func testTimerCompletionAndLiveActivityLifecycle() throws {
+        let app = XCUIApplication()
+        app.launchArguments.append("UITestTimerDebug")
+        app.launch()
+
+        let startButton = app.buttons["Timer.Start"]
+        XCTAssertTrue(startButton.waitForExistence(timeout: 5.0))
+        startButton.tap()
+
+        let liveActivity = app.staticTexts["Timer.LiveActivityState"]
+        XCTAssertTrue(liveActivity.waitForExistence(timeout: 5.0))
+        XCTAssertTrue(["Active", "Unavailable"].contains(liveActivity.label))
+
+        XCUIDevice.shared.press(.home)
+        app.activate()
+
+        let advanceButton = app.buttons["Timer.DebugAdvance"]
+        XCTAssertTrue(advanceButton.waitForExistence(timeout: 5.0))
+        advanceButton.tap()
+
+        let sessionState = app.staticTexts["Timer.SessionState"]
+        XCTAssertTrue(sessionState.waitForExistence(timeout: 5.0))
+        let stateValue = sessionState.label.replacingOccurrences(of: "Session: ", with: "")
+        XCTAssertTrue(["completed", "idle"].contains(stateValue))
+
+        XCTAssertTrue(["Inactive", "Unavailable"].contains(liveActivity.label))
+    }
+#endif
 }

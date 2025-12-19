@@ -173,7 +173,7 @@ struct DashboardView: View {
                 switch eventStatus {
                 case .notDetermined:
                     HStack {
-                        Text("Connect Apple Calendar to show events")
+                        Text(NSLocalizedString("dashboard.calendar.connect", comment: "Message shown when calendar is not connected"))
                             .rootsBody()
                         Spacer()
                         Button("Connect Apple Calendar", action: {
@@ -186,7 +186,7 @@ struct DashboardView: View {
                     }
                 case .denied, .restricted:
                     HStack {
-                        Text("Access Denied. Open Settings.")
+                        Text(NSLocalizedString("dashboard.calendar.access_denied", comment: "Message shown when calendar access is denied"))
                             .rootsBody()
                         Spacer()
                         Button("Open Settings") {
@@ -264,7 +264,7 @@ struct DashboardView: View {
     private var eventsCard: some View {
         RootsCard {
             VStack(alignment: .leading, spacing: RootsSpacing.m) {
-                Text("Events Today").rootsSectionHeader()
+                Text(NSLocalizedString("dashboard.events.title", comment: "Events section header")).rootsSectionHeader()
                 DashboardEventsColumn(events: events)
             }
         }
@@ -273,7 +273,7 @@ struct DashboardView: View {
     private var assignmentsCard: some View {
         RootsCard {
             VStack(alignment: .leading, spacing: RootsSpacing.m) {
-                Text("Assignments Due Today").rootsSectionHeader()
+                Text(NSLocalizedString("dashboard.assignments.title", comment: "Assignments section header")).rootsSectionHeader()
                 DashboardTasksColumn(tasks: $tasks)
                 Spacer()
             }
@@ -454,7 +454,7 @@ private struct DashboardCalendarColumn: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Calendar").rootsSectionHeader()
+            Text(NSLocalizedString("dashboard.calendar.header", comment: "Calendar section header")).rootsSectionHeader()
             Text(monthHeader(for: selectedDate)).rootsBodySecondary()
 
             LazyVGrid(columns: columns, spacing: DesignSystem.Layout.spacing.small) {
@@ -647,11 +647,11 @@ private struct DashboardTasksColumn: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Due Today")
+            Text(NSLocalizedString("dashboard.assignments.due_today", comment: "Due today assignments header"))
                 .rootsSectionHeader()
 
             if tasks.isEmpty {
-                Text("No assignments due today.")
+                Text(NSLocalizedString("dashboard.assignments.empty", comment: "Empty state message for assignments"))
                     .rootsBodySecondary()
             } else {
                 ScrollView {
@@ -676,11 +676,11 @@ private struct DashboardEventsColumn: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Upcoming Events")
+            Text(NSLocalizedString("dashboard.events.upcoming", comment: "Upcoming events header"))
                 .rootsSectionHeader()
 
             if events.isEmpty {
-                Text("No upcoming events.")
+                Text(NSLocalizedString("dashboard.events.empty", comment: "Empty state message for events"))
                     .rootsBodySecondary()
             } else {
                 ScrollView {
