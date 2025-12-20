@@ -9,6 +9,7 @@ final class IOSSheetRouter: ObservableObject {
         var dueDate: Date
         var title: String
         var type: TaskType
+        var itemLabel: String
     }
 
     struct CourseDefaults {

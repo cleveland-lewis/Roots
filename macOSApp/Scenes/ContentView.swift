@@ -8,6 +8,8 @@ struct ContentView: View {
     @EnvironmentObject var coursesStore: CoursesStore
     @EnvironmentObject var settingsCoordinator: SettingsCoordinator
     @EnvironmentObject var plannerCoordinator: PlannerCoordinator
+    @EnvironmentObject private var assignmentsStore: AssignmentsStore
+    @EnvironmentObject private var plannerStore: PlannerStore
     @EnvironmentObject private var appModel: AppModel
     @State private var selectedTab: RootTab = .dashboard
     @State private var settingsRotation: Double = 0
@@ -33,23 +35,6 @@ struct ContentView: View {
                         .padding(.bottom, proxy.safeAreaInsets.bottom + 8)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                // LAYER 2: Floating quick actions menu
-                RootsFanOutMenu(items: [
-                    FanOutMenuItem(icon: "doc.badge.plus", label: "Add Assignment") {
-                        performQuickAction(.add_assignment)
-                    },
-                    FanOutMenuItem(icon: "calendar.badge.plus", label: "Add Event") {
-                        _Concurrency.Task { await CalendarManager.shared.quickAddEvent() }
-                    },
-                    FanOutMenuItem(icon: "graduationcap", label: "Add Course") {
-                        performQuickAction(.add_course)
-                    }
-                ])
-                .opacity(0.9)
-                .padding(.leading, 24)
-                .padding(.top, 16)
-                .zIndex(1)
 
                 // Floating tab bar stays at bottom; keep above content
                 VStack {
@@ -109,18 +94,31 @@ struct ContentView: View {
 
     private var topBar: some View {
         HStack {
-            RootsFanOutMenu(items: [
-                FanOutMenuItem(icon: "doc.badge.plus", label: "Add Assignment") {
-                    performQuickAction(.add_assignment)
-                },
-                FanOutMenuItem(icon: "calendar.badge.plus", label: "Add Event") {
-                    // Integrate with calendar flow as needed
-                },
-                FanOutMenuItem(icon: "graduationcap", label: "Add Course") {
-                    performQuickAction(.add_course)
+            Menu {
+                Section("Quick Actions") {
+                    Button {
+                        performQuickAction(.add_assignment)
+                    } label: {
+                        Label("Add Assignment", systemImage: "doc.badge.plus")
+                    }
+                    Button {
+                        performQuickAction(.add_grade)
+                    } label: {
+                        Label("Add Grade", systemImage: "chart.bar.doc.horizontal")
+                    }
+                    Button {
+                        performQuickAction(.auto_schedule)
+                    } label: {
+                        Label("Auto Schedule", systemImage: "wand.and.stars")
+                    }
                 }
-            ])
-            .opacity(0.9)
+            } label: {
+                Image(systemName: "line.3.horizontal")
+                    .font(DesignSystem.Typography.body)
+                    .frame(width: 36, height: 36)
+                    .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
+            }
+            .buttonStyle(.plain)
 
             Spacer()
 
@@ -196,6 +194,8 @@ struct ContentView: View {
         case .add_grade:
             LOG_UI(.info, "QuickAction", "Add Grade")
             break
+        case .auto_schedule:
+            autoSchedule()
         case .quick_note:
             LOG_UI(.info, "QuickAction", "Quick Note")
             break
@@ -203,6 +203,63 @@ struct ContentView: View {
             LOG_UI(.info, "QuickAction", "Open New Note")
             break
         }
+    }
+
+    private func autoSchedule() {
+        let assignments = assignmentsForPlanning()
+        guard !assignments.isEmpty else { return }
+        let settings = StudyPlanSettings()
+        let sessions = assignments.flatMap { PlannerEngine.generateSessions(for: $0, settings: settings) }
+        let result = PlannerEngine.scheduleSessions(sessions, settings: settings, energyProfile: defaultEnergyProfile())
+        plannerStore.persist(scheduled: result.scheduled, overflow: result.overflow)
+    }
+
+    private func assignmentsForPlanning() -> [Assignment] {
+        let today = Calendar.current.startOfDay(for: Date())
+        return assignmentsStore.tasks.compactMap { task in
+            guard !task.isCompleted, let due = task.due else { return nil }
+            if due < today { return nil }
+            return Assignment(
+                id: task.id,
+                courseId: task.courseId,
+                title: task.title,
+                dueDate: due,
+                estimatedMinutes: task.estimatedMinutes,
+                weightPercent: nil,
+                category: category(for: task),
+                urgency: urgency(for: task.importance),
+                isLockedToDueDate: task.locked,
+                plan: []
+            )
+        }
+    }
+
+    private func category(for task: AppTask) -> AssignmentCategory {
+        switch task.category {
+        case .exam: return .exam
+        case .quiz: return .quiz
+        case .practiceHomework: return .practiceHomework
+        case .reading: return .reading
+        case .review: return .review
+        case .project: return .project
+        }
+    }
+
+    private func urgency(for value: Double) -> AssignmentUrgency {
+        switch value {
+        case ..<0.3: return .low
+        case ..<0.6: return .medium
+        case ..<0.85: return .high
+        default: return .critical
+        }
+    }
+
+    private func defaultEnergyProfile() -> [Int: Double] {
+        [
+            9: 0.55, 10: 0.65, 11: 0.7, 12: 0.6,
+            13: 0.5, 14: 0.55, 15: 0.65, 16: 0.7,
+            17: 0.6, 18: 0.5, 19: 0.45, 20: 0.4
+        ]
     }
 
     private func handleTabSelection(_ tab: RootTab) {

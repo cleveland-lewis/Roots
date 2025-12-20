@@ -65,10 +65,17 @@ struct IOSRootView: View {
                 IOSTaskEditorView(
                     task: nil,
                     courses: coursesStore.activeCourses,
+                    defaults: .init(
+                        title: defaults.title,
+                        courseId: defaults.courseId,
+                        dueDate: defaults.dueDate,
+                        type: defaults.type
+                    ),
+                    itemLabel: defaults.itemLabel,
                     onSave: { draft in
                         let task = draft.makeTask(existing: nil)
                         assignmentsStore.addTask(task)
-                        toastRouter.show("Assignment added")
+                        toastRouter.show("\(defaults.itemLabel) added")
                     }
                 )
             case .addCourse(let defaults):

@@ -5,6 +5,7 @@ enum QuickAction: String, CaseIterable, Identifiable, Codable {
     case add_course
     case add_task
     case add_grade
+    case auto_schedule
     case quick_note
     case open_new_note
 
@@ -16,6 +17,7 @@ enum QuickAction: String, CaseIterable, Identifiable, Codable {
         case .add_course: return "Add Course"
         case .add_task: return "Add Task"
         case .add_grade: return "Add Grade"
+        case .auto_schedule: return "Auto Schedule"
         case .quick_note: return "Quick Note"
         case .open_new_note: return "New Note"
         }
@@ -27,6 +29,7 @@ enum QuickAction: String, CaseIterable, Identifiable, Codable {
         case .add_course: return "book.badge.plus"
         case .add_task: return "checkmark.circle.badge.plus"
         case .add_grade: return "chart.bar.doc.horizontal"
+        case .auto_schedule: return "wand.and.stars"
         case .quick_note: return "pencil"
         case .open_new_note: return "square.and.pencil"
         }

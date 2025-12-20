@@ -15,6 +15,7 @@ struct RootsIOSApp: App {
     @StateObject private var gradesStore = GradesStore.shared
     @StateObject private var plannerStore = PlannerStore.shared
     @StateObject private var plannerCoordinator = PlannerCoordinator.shared
+    @StateObject private var assignmentPlansStore = AssignmentPlansStore.shared
     @StateObject private var sheetRouter = IOSSheetRouter()
     @StateObject private var toastRouter = IOSToastRouter()
     @StateObject private var filterState = IOSFilterState()
@@ -57,6 +58,7 @@ struct RootsIOSApp: App {
                 .environmentObject(gradesStore)
                 .environmentObject(plannerStore)
                 .environmentObject(plannerCoordinator)
+                .environmentObject(assignmentPlansStore)
                 .environmentObject(parsingStore)
                 .environmentObject(sheetRouter)
                 .environmentObject(toastRouter)

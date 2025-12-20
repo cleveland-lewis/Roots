@@ -29,6 +29,7 @@ struct IOSPlannerView: View {
             }
             .padding(20)
         }
+        .background(DesignSystem.Colors.appBackground)
         .modifier(IOSNavigationChrome(title: "Planner") {
             Button {
                 generatePlan()
@@ -298,7 +299,7 @@ struct IOSAssignmentsView: View {
             }
             if assignmentsStore.tasks.isEmpty {
                 IOSInlineEmptyState(
-                    title: "No assignments yet",
+                    title: "No tasks yet",
                     subtitle: "Capture tasks and due dates here."
                 )
             } else {
@@ -337,19 +338,22 @@ struct IOSAssignmentsView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .modifier(IOSNavigationChrome(title: "Assignments") {
+        .scrollContentBackground(.hidden)
+        .background(DesignSystem.Colors.appBackground)
+        .modifier(IOSNavigationChrome(title: "Tasks") {
             Button {
                 editingTask = nil
                 showingEditor = true
             } label: {
                 Image(systemName: "plus")
             }
-            .accessibilityLabel("Add assignment")
+            .accessibilityLabel("Add task")
         })
         .sheet(isPresented: $showingEditor) {
             IOSTaskEditorView(
                 task: editingTask,
                 courses: coursesStore.activeCourses,
+                itemLabel: "Task",
                 onSave: upsertTask
             )
         }
@@ -461,6 +465,8 @@ struct IOSCoursesView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(DesignSystem.Colors.appBackground)
         .modifier(IOSNavigationChrome(title: "Courses") {
             Button {
                 showingCourseEditor = true
@@ -542,6 +548,7 @@ struct IOSCalendarView: View {
             }
             .padding(20)
         }
+        .background(DesignSystem.Colors.appBackground)
         .modifier(IOSNavigationChrome(title: "Calendar"))
         .task {
             await deviceCalendar.bootstrapOnLaunch()
@@ -582,6 +589,7 @@ struct IOSPracticeView: View {
             }
             .padding(20)
         }
+        .background(DesignSystem.Colors.appBackground)
         .modifier(IOSNavigationChrome(title: "Practice"))
     }
 }
@@ -769,12 +777,14 @@ struct IOSTaskEditorView: View {
     let task: AppTask?
     let courses: [Course]
     let defaults: TaskDraft
+    let itemLabel: String
     let onSave: (TaskDraft) -> Void
 
-    init(task: AppTask?, courses: [Course], defaults: TaskDraft = TaskDraft(), onSave: @escaping (TaskDraft) -> Void) {
+    init(task: AppTask?, courses: [Course], defaults: TaskDraft = TaskDraft(), itemLabel: String = "Assignment", onSave: @escaping (TaskDraft) -> Void) {
         self.task = task
         self.courses = courses
         self.defaults = defaults
+        self.itemLabel = itemLabel
         self.onSave = onSave
         _draft = State(initialValue: TaskDraft(task: task))
     }
@@ -818,7 +828,7 @@ struct IOSTaskEditorView: View {
                     }
                 }
             }
-            .navigationTitle(task == nil ? "New Assignment" : "Edit Assignment")
+            .navigationTitle(task == nil ? "New \(itemLabel)" : "Edit \(itemLabel)")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {

@@ -29,7 +29,7 @@ struct IOSDashboardView: View {
             .padding(.top, 12)
             .padding(.bottom, 36)
         }
-        .background(backgroundView.ignoresSafeArea())
+        .background(DesignSystem.Colors.appBackground.ignoresSafeArea())
         .modifier(IOSNavigationChrome(title: "Dashboard") {
             Button {
                 selectedDate = Date()
@@ -211,23 +211,7 @@ struct IOSDashboardView: View {
     }
 
     private var backgroundView: some View {
-        ZStack {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.96, green: 0.96, blue: 0.94),
-                    Color(red: 0.92, green: 0.94, blue: 0.96)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .opacity(0.7)
-
-            Circle()
-                .fill(Color.accentColor.opacity(0.12))
-                .frame(width: 280, height: 280)
-                .blur(radius: 30)
-                .offset(x: 160, y: -220)
-        }
+        DesignSystem.Colors.appBackground
     }
 
     private var greeting: String {
