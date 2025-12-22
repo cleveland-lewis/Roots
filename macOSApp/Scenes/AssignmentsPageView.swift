@@ -599,7 +599,7 @@ struct ByCourseSummaryCard: View {
     }
 
     var body: some View {
-        let grouped = Dictionary(grouping: assignments.filter { ($0.status ?? .notStarted) != .archived }) { $0.courseCode ?? "Unknown" }
+        let grouped = Dictionary(grouping: assignments.filter { ($0.status ?? .notStarted) != .archived }) { $0.courseCode ?? "Unknown" as String }
             .map { CourseLoad(course: $0.key, count: $0.value.count) }
             .sorted { $0.count > $1.count }
         VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
@@ -903,7 +903,7 @@ struct AssignmentDetailPanel: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(assignment.title)
                     .font(.title3.weight(.semibold))
-                Text("\(assignment.courseCode ?? "") · \(assignment.courseName)")
+                Text("\(assignment.courseCode ?? "Unknown") · \(assignment.courseName ?? "Unknown")")
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(.secondary)
             }
@@ -1257,7 +1257,7 @@ struct AssignmentEditorSheet: View {
                     weightText = "\(weight)"
                 }
                 isLocked = assignment.isLockedToDueDate
-                notes = assignment.notes ?? ""
+                notes = assignment.notes ?? "" as String
                 status = assignment.status ?? .notStarted
             }
         }
@@ -1431,7 +1431,6 @@ private extension AssignmentsPageView {
         }
         assignments.append(contentsOf: copies)
         selectedIDs.removeAll()
-        selectionMenuLocation = nil
     }
 
     func pasteClipboard() {
@@ -1456,7 +1455,6 @@ private extension AssignmentsPageView {
         }
         assignments.append(contentsOf: pasted)
         selectedIDs.removeAll()
-        selectionMenuLocation = nil
     }
 }
 
