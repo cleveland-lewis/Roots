@@ -599,7 +599,7 @@ struct ByCourseSummaryCard: View {
     }
 
     var body: some View {
-        let grouped = Dictionary(grouping: assignments.filter { $0.status != .archived }) { $0.courseCode }
+        let grouped = Dictionary(grouping: assignments.filter { ($0.status ?? .notStarted) != .archived }) { $0.courseCode ?? "Unknown" }
             .map { CourseLoad(course: $0.key, count: $0.value.count) }
             .sorted { $0.count > $1.count }
         VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
@@ -1257,8 +1257,8 @@ struct AssignmentEditorSheet: View {
                     weightText = "\(weight)"
                 }
                 isLocked = assignment.isLockedToDueDate
-                notes = assignment.notes
-                status = assignment.status
+                notes = assignment.notes ?? ""
+                status = assignment.status ?? .notStarted
             }
         }
         .frame(minWidth: RootsWindowSizing.minPopupWidth, minHeight: RootsWindowSizing.minPopupHeight)
@@ -1417,10 +1417,16 @@ private extension AssignmentsPageView {
                 courseId: item.courseId,
                 title: item.title + " (copy)",
                 dueDate: item.dueDate,
-                estimatedMinutes: item.estimatedMinutes, weightPercent: item.weightPercent, category: item.category, urgency: item.urgency, isLockedToDueDate: item.isLockedToDueDate, plan: item.plan, status: item.status, courseCode: item.courseCode, courseName: item.courseName,
+                estimatedMinutes: item.estimatedMinutes,
+                weightPercent: item.weightPercent,
+                category: item.category,
+                urgency: item.urgency,
                 isLockedToDueDate: item.isLockedToDueDate,
-                notes: item.notes,
-                plan: item.plan
+                plan: item.plan,
+                status: item.status,
+                courseCode: item.courseCode,
+                courseName: item.courseName,
+                notes: item.notes
             )
         }
         assignments.append(contentsOf: copies)
@@ -1445,11 +1451,7 @@ private extension AssignmentsPageView {
                 status: item.status,
                 courseCode: item.courseCode,
                 courseName: item.courseName,
-                urgency: item.urgency,
-                weightPercent: item.weightPercent,
-                isLockedToDueDate: item.isLockedToDueDate,
-                notes: item.notes,
-                plan: item.plan
+                notes: item.notes
             )
         }
         assignments.append(contentsOf: pasted)
