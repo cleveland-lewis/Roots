@@ -259,6 +259,46 @@ public struct VoiceOverLabels {
             hint: "Toggle switch"
         )
     }
+    
+    // MARK: - Modal/Popup Actions
+    
+    public static func showDetailButton(for itemType: String) -> AccessibilityContent {
+        AccessibilityContent(
+            label: "Show \(itemType) details",
+            hint: "Opens detailed view"
+        )
+    }
+    
+    public static func dismissButton() -> AccessibilityContent {
+        AccessibilityContent(
+            label: "Dismiss",
+            hint: "Closes current view"
+        )
+    }
+    
+    // MARK: - Selection Controls
+    
+    public static func radioButton(
+        label: String,
+        isSelected: Bool
+    ) -> AccessibilityContent {
+        AccessibilityContent(
+            label: label,
+            value: isSelected ? "Selected" : "Not selected",
+            hint: "Radio button"
+        )
+    }
+    
+    public static func checkbox(
+        label: String,
+        isChecked: Bool
+    ) -> AccessibilityContent {
+        AccessibilityContent(
+            label: label,
+            value: isChecked ? "Checked" : "Unchecked",
+            hint: "Checkbox"
+        )
+    }
 }
 
 // MARK: - Accessibility Content Structure
@@ -284,6 +324,21 @@ extension View {
             .accessibilityLabel(content.label)
             .modifier(OptionalValueModifier(value: content.value))
             .modifier(OptionalHintModifier(hint: content.hint))
+    }
+    
+    /// Mark view as a container with logical focus order
+    public func accessibilityContainer() -> some View {
+        self.accessibilityElement(children: .contain)
+    }
+    
+    /// Mark view as a combined accessibility element
+    public func accessibilityCombined() -> some View {
+        self.accessibilityElement(children: .combine)
+    }
+    
+    /// Set sort priority for accessibility navigation order (lower numbers come first)
+    public func accessibilitySortPriority(_ priority: Double) -> some View {
+        self.accessibilitySortPriority(priority)
     }
 }
 

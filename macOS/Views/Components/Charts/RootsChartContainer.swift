@@ -15,6 +15,12 @@ struct RootsChartContainer<Content: View>: View {
     }
 
     var body: some View {
+        let a11yContent = VoiceOverLabels.chartSummary(
+            title: title,
+            dataPoints: 0,
+            range: summary
+        )
+        
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 2) {
@@ -27,6 +33,7 @@ struct RootsChartContainer<Content: View>: View {
                 if let trend = trend {
                     Image(systemName: trend == .up ? "arrow.up" : "arrow.down")
                         .foregroundColor(trend == .up ? .green : .red)
+                        .accessibilityLabel(trend == .up ? "Trending up" : "Trending down")
                 }
             }
             .padding([.horizontal, .top], 12)
@@ -43,7 +50,7 @@ struct RootsChartContainer<Content: View>: View {
                 .stroke(Color.white.opacity(0.03), lineWidth: 1)
         )
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(Text(title))
+        .voiceOver(a11yContent)
     }
 }
 

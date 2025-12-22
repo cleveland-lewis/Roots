@@ -243,10 +243,13 @@ struct DashboardView: View {
                 .padding(.vertical, 8)
         }
         .buttonStyle(.borderedProminent)
+        .accessibilityLabel("Set energy level to \(title)")
+        .accessibilityHint("Updates your current energy level")
     }
 
     @ViewBuilder
     private func plannerButton(_ title: String) -> some View {
+        let a11yContent = VoiceOverLabels.navigationButton(to: "Planner")
         Button {
             appModel.selectedPage = .planner
         } label: {
@@ -259,6 +262,7 @@ struct DashboardView: View {
             .padding(.vertical, 8)
         }
         .buttonStyle(.borderedProminent)
+        .voiceOver(a11yContent)
     }
 
     private var eventsCard: some View {
@@ -760,6 +764,9 @@ private struct TaskRow: View {
                         )
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(task.isDone ? "Completed" : "Not completed")
+                .accessibilityHint("Toggle completion status")
+                .accessibilityAddTraits(.isButton)
             }
             .frame(width: 24)
 
@@ -778,6 +785,8 @@ private struct TaskRow: View {
         }
         .padding(10)
         .rootsCardBackground(radius: 18)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(task.title)\(task.course.map { ", \($0)" } ?? ""), \(task.isDone ? "Completed" : "Not completed")")
     }
 }
 

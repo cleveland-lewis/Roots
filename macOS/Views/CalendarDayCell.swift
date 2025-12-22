@@ -13,6 +13,7 @@ struct CalendarDayCell: View {
 
     var body: some View {
         let isToday = calendar.isDateInToday(date)
+        let a11yContent = VoiceOverLabels.dateCell(date: date, eventCount: eventCount)
 
         VStack(spacing: 7) {
             Text(dayString)
@@ -39,6 +40,8 @@ struct CalendarDayCell: View {
                 .onChanged { _ in isPressed = true }
                 .onEnded { _ in isPressed = false }
         )
+        .voiceOver(a11yContent)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
     }
 
     private var dayString: String {
