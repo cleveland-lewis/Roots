@@ -357,9 +357,9 @@ struct CoursesPageView: View {
             Image(systemName: "books.vertical")
                 .font(DesignSystem.Typography.body)
                 .foregroundStyle(.secondary)
-            Text("Select or create a course")
+            Text(NSLocalizedString("courses.empty.select", comment: "Select course"))
                 .font(DesignSystem.Typography.subHeader)
-            Text("Your course overview will appear here.")
+            Text(NSLocalizedString("courses.empty.overview", comment: "Overview"))
                 .font(DesignSystem.Typography.caption)
                 .foregroundStyle(.secondary)
         }
@@ -587,7 +587,7 @@ struct CoursesPageDetailView: View {
 
             if course.meetingTimes.isEmpty {
                 VStack(alignment: .leading, spacing: RootsSpacing.s) {
-                    Text("No meetings added yet.")
+                    Text(NSLocalizedString("courses.empty.no_meetings", comment: "No meetings"))
                         .rootsBodySecondary()
 
                 }
@@ -644,7 +644,7 @@ struct CoursesPageDetailView: View {
                     .padding(.top, 6)
             } else {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("No syllabus added yet.")
+                    Text(NSLocalizedString("courses.empty.no_syllabus", comment: "No syllabus"))
                         .font(DesignSystem.Typography.caption)
                         .foregroundStyle(.secondary)
                     Text("You’ll eventually be able to import this from a syllabus parser.")
@@ -969,7 +969,7 @@ struct CourseEditorSheet: View {
 
     private var courseSection: some View {
         VStack(alignment: .leading, spacing: RootsSpacing.m) {
-            Text("Course").rootsSectionHeader()
+            Text(NSLocalizedString("courses.section.course", comment: "Course")).rootsSectionHeader()
             RootsFormRow(label: "Code") {
                 TextField("e.g. BIO 101", text: $code)
                     .frame(width: 120)
@@ -1003,7 +1003,7 @@ struct CourseEditorSheet: View {
 
     private var detailsSection: some View {
         VStack(alignment: .leading, spacing: RootsSpacing.m) {
-            Text("Details").rootsSectionHeader()
+            Text(NSLocalizedString("courses.section.details", comment: "Details")).rootsSectionHeader()
             RootsFormRow(label: "Credits") {
                 Stepper(value: $credits, in: 1...8) {
                     Text("\(credits)")
@@ -1025,7 +1025,7 @@ struct CourseEditorSheet: View {
 
     private var actionBar: some View {
         HStack {
-            Text("You can edit course details later from the Courses page.")
+            Text(NSLocalizedString("courses.info.edit_later", comment: "Edit later"))
                 .font(.footnote)
                 .foregroundColor(.secondary)
             Spacer()
@@ -1108,7 +1108,7 @@ private extension CoursesPageView {
                 .font(.title3.weight(.semibold))
 
             VStack(alignment: .leading, spacing: RootsSpacing.s) {
-                Text("Percentage")
+                Text(NSLocalizedString("courses.grade.percentage", comment: "Percentage"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Slider(value: $gradePercentInput, in: 0...100, step: 1)

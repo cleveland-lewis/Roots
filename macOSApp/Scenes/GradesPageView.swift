@@ -126,7 +126,7 @@ struct GradesPageView: View {
 
     private var header: some View {
         HStack(alignment: .center, spacing: 12) {
-            Text("Grades")
+            Text(NSLocalizedString("grades.section.grades", comment: "Grades"))
                 .font(.title2.weight(.semibold))
 
             Spacer()
@@ -218,13 +218,13 @@ struct GradesPageView: View {
     private var courseListCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Courses")
+                Text(NSLocalizedString("grades.section.courses", comment: "Courses"))
                     .font(.subheadline.weight(.semibold))
                 Spacer()
                 Picker("Sort", selection: .constant(0)) {
-                    Text("Course").tag(0)
-                    Text("Grade").tag(1)
-                    Text("Credits").tag(2)
+                    Text(NSLocalizedString("grades.column.course", comment: "Course")).tag(0)
+                    Text(NSLocalizedString("grades.column.grade", comment: "Grade")).tag(1)
+                    Text(NSLocalizedString("grades.column.credits", comment: "Credits")).tag(2)
                 }
                 .pickerStyle(.menu)
             }
@@ -502,7 +502,7 @@ struct OverallStatusCard: View {
         let overallPercent = weightedOverallPercent
         let gpa = gpaValue(overallPercent: overallPercent)
         VStack(alignment: .leading, spacing: 10) {
-            Text("Overall Status")
+            Text(NSLocalizedString("grades.section.overall_status", comment: "Overall status"))
                 .font(.subheadline.weight(.semibold))
 
             Text("GPA \(String(format: "%.2f", gpa)) / \(String(format: "%.1f", gpaScale))")
@@ -586,7 +586,7 @@ struct CourseGradeRow: View {
                         if let pct = course.currentPercentage {
                             Text("\(String(format: "%.1f", pct))%")
                         } else {
-                            Text("No grade yet")
+                            Text(NSLocalizedString("grades.display.no_grade", comment: "No grade"))
                         }
                         if let letter = course.letterGrade { Text("· \(letter)") }
                         Text("· \(course.creditHours) credits")
@@ -672,7 +672,7 @@ struct GradeDetailCard: View {
                 Image(systemName: "chart.bar.doc.horizontal")
                     .font(.largeTitle)
                     .foregroundColor(.secondary)
-                Text("Select a course from the center panel to see its grade breakdown.")
+                Text(NSLocalizedString("grades.empty.select_course", comment: "Select course"))
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }

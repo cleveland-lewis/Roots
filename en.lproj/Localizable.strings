@@ -326,4 +326,66 @@
 
 /* Grades */
 
+/* Section Headers */
+"grades.section.grades" = "Grades";
+"grades.section.courses" = "Courses";
+"grades.section.overall_status" = "Overall Status";
+"grades.section.grade_components" = "Grade Components – %@";
+
+/* Column Headers */
+"grades.column.course" = "Course";
+"grades.column.grade" = "Grade";
+"grades.column.credits" = "Credits";
+
+/* GPA and Stats */
+"grades.gpa.format" = "GPA %.2f / %.1f";
+"grades.stats.weighted" = "Weighted %.1f%% • %d courses";
+"grades.stats.highest" = "Highest: %@ %d%%";
+"grades.stats.lowest" = "Lowest: %@ %d%%";
+"grades.stats.target" = "Target %d%%";
+
+/* Grade Display */
+"grades.display.percent" = "%.1f%%";
+"grades.display.percent_int" = "%d%%";
+"grades.display.no_grade" = "No grade yet";
+"grades.display.no_grade_short" = "No grade";
+"grades.display.dash" = "—";
+"grades.display.current" = "Current";
+"grades.display.letter_separator" = "·";
+
+/* Course Info */
+"grades.course.code_title" = "%@ · %@";
+"grades.course.credits" = "%@ credits";
+"grades.course.credits_format" = "%d credits";
+
+/* Empty States */
+"grades.empty.select_course" = "Select a course from the center panel to see its grade breakdown.";
+
+/* Courses */
+
+/* Section Headers */
+"courses.section.courses" = "Courses";
+"courses.section.course" = "Course";
+"courses.section.details" = "Details";
+
+/* Empty States */
+"courses.empty.select" = "Select or create a course";
+"courses.empty.overview" = "Your course overview will appear here.";
+"courses.empty.no_meetings" = "No meetings added yet.";
+"courses.empty.no_syllabus" = "No syllabus added yet.";
+"courses.empty.syllabus_parser" = "You'll eventually be able to import this from a syllabus parser.";
+
+/* Course Info */
+"courses.info.edit_later" = "You can edit course details later from the Courses page.";
+"courses.info.credits_format" = "%d";
+
+/* Grade Entry */
+"courses.grade.add_title" = "Add Grade for %@";
+"courses.grade.percentage" = "Percentage";
+"courses.grade.percent_display" = "%d%%";
+
+/* Meeting Display */
+"courses.meeting.day_time" = "%@ · %@";
+"courses.meeting.weight" = "%d%%";
+
 /* Notifications */
