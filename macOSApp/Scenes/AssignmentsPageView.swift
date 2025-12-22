@@ -4,72 +4,11 @@ import Combine
 
 // MARK: - Models
 
-enum LocalAssignmentStatus: String, CaseIterable, Identifiable, Codable {
-    case notStarted, inProgress, completed, archived
-    var id: String { rawValue }
 
-    var label: String {
-        switch self {
-        case .notStarted: return "Not Started"
-        case .inProgress: return "In Progress"
-        case .completed: return "Completed"
-        case .archived: return "Archived"
-        }
-    }
-}
 
-enum LocalAssignmentUrgency: String, CaseIterable, Identifiable, Codable {
-    case low, medium, high, critical
-    var id: String { rawValue }
 
-    var color: Color {
-        switch self {
-        case .low: return .green
-        case .medium: return .yellow
-        case .high: return .orange
-        case .critical: return .red
-        }
-    }
-}
 
-enum LocalAssignmentCategory: String, CaseIterable, Codable, Identifiable {
-    case project
-    case exam
-    case quiz
-    case practiceHomework
-    case reading
-    case review
 
-    var id: String { rawValue }
-
-    var displayName: String {
-        switch self {
-        case .project:           return "Project"
-        case .exam:              return "Exam"
-        case .quiz:              return "Quiz"
-        case .practiceHomework:  return "Homework"
-        case .reading:           return "Reading"
-        case .review:            return "Review"
-        }
-    }
-    
-    var effortProfile: CategoryEffortProfile {
-        switch self {
-        case .project:
-            return .init(baseMinutes: 240, minSessions: 4, spreadDaysBeforeDue: 7, sessionBias: .longBlocks)
-        case .exam:
-            return .init(baseMinutes: 180, minSessions: 3, spreadDaysBeforeDue: 5, sessionBias: .mediumBlocks)
-        case .quiz:
-            return .init(baseMinutes: 60, minSessions: 2, spreadDaysBeforeDue: 2, sessionBias: .shortBursts)
-        case .practiceHomework:
-            return .init(baseMinutes: 60, minSessions: 1, spreadDaysBeforeDue: 2, sessionBias: .mediumBlocks)
-        case .reading:
-            return .init(baseMinutes: 45, minSessions: 1, spreadDaysBeforeDue: 1, sessionBias: .shortBursts)
-        case .review:
-            return .init(baseMinutes: 90, minSessions: 2, spreadDaysBeforeDue: 3, sessionBias: .shortBursts)
-        }
-    }
-}
 
 enum EffortBias: String, Codable {
     case shortBursts
@@ -161,48 +100,7 @@ fileprivate func suggestedSessionLength(_ bias: EffortBias) -> Int {
     }
 }
 
-struct LocalAssignment: Identifiable, Hashable, Codable {
-    struct PlanStep: Identifiable, Hashable, Codable {
-        let id: UUID
-        var title: String
-        var targetDate: Date
-        var expectedMinutes: Int
-        var notes: String?
-    }
 
-    let id: UUID
-    var courseId: UUID? = nil
-    var title: String
-    var courseCode: String
-    var courseName: String
-    var category: LocalAssignmentCategory
-    var dueDate: Date
-    var estimatedMinutes: Int
-    var status: LocalAssignmentStatus
-    var urgency: LocalAssignmentUrgency
-    var weightPercent: Double?
-    var isLockedToDueDate: Bool
-    var notes: String
-    var plan: [PlanStep]
-
-    // backward-compat convenience init for older data
-    init(id: UUID = UUID(), courseId: UUID? = nil, title: String = "", courseCode: String = "", courseName: String = "", category: LocalAssignmentCategory = .practiceHomework, dueDate: Date = Date(), estimatedMinutes: Int = 60, status: LocalAssignmentStatus = .notStarted, urgency: LocalAssignmentUrgency = .medium, weightPercent: Double? = nil, isLockedToDueDate: Bool = false, notes: String = "", plan: [PlanStep]? = nil) {
-        self.id = id
-        self.courseId = courseId
-        self.title = title
-        self.courseCode = courseCode
-        self.courseName = courseName
-        self.category = category
-        self.dueDate = dueDate
-        self.estimatedMinutes = estimatedMinutes
-        self.status = status
-        self.urgency = urgency
-        self.weightPercent = weightPercent
-        self.isLockedToDueDate = isLockedToDueDate
-        self.notes = notes
-        self.plan = plan ?? Assignment.defaultPlan(for: category, due: dueDate, totalMinutes: estimatedMinutes)
-    }
-}
 
 enum AssignmentSegment: String, CaseIterable, Identifiable {
     case today, upcoming, all, completed
@@ -239,7 +137,7 @@ struct AssignmentsPageView: View {
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var appModel: AppModel
 
-    @State private var assignments: [LocalAssignment] = []
+    @State private var assignments: [Assignment] = []
     @State private var courseDeletedCancellable: AnyCancellable? = nil
     @State private var selectedSegment: AssignmentSegment = .all
     @State private var selectedAssignment: Assignment? = nil
@@ -247,7 +145,7 @@ struct AssignmentsPageView: View {
     @State private var showNewAssignmentSheet: Bool = false
     @State private var editingAssignment: Assignment? = nil
     @State private var sortOption: AssignmentSortOption = .byDueDate
-    @State private var filterStatus: LocalAssignmentStatus? = nil
+    @State private var filterStatus: AssignmentStatus? = nil
     @State private var filterCourse: String? = nil
     @State private var showFilterPopover: Bool = false
     // Drag selection state
@@ -256,7 +154,7 @@ struct AssignmentsPageView: View {
     @State private var selectionMenuLocation: CGPoint?
     @State private var selectedIDs: Set<UUID> = []
     @State private var assignmentFrames: [UUID: CGRect] = [:]
-    @State private var clipboard: [LocalAssignment] = []
+    @State private var clipboard: [Assignment] = []
 
     private let cardCorner: CGFloat = 24
 
@@ -487,7 +385,7 @@ struct AssignmentsPageView: View {
 
     // MARK: Helpers
 
-    private var filteredAndSortedAssignments: [LocalAssignment] {
+    private var filteredAndSortedAssignments: [Assignment] {
         let calendar = Calendar.current
         let todayStart = calendar.startOfDay(for: Date())
         let tomorrow = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
@@ -597,7 +495,7 @@ struct AssignmentsPageView: View {
     }
 
     private func autoPlanSelectedAssignments() {
-        let targetAssignments: [LocalAssignment]
+        let targetAssignments: [Assignment]
         if let selectedAssignment {
             targetAssignments = [selectedAssignment]
         } else {
@@ -655,7 +553,7 @@ struct AssignmentsPageView: View {
 // MARK: - Summary Cards
 
 struct TodaySummaryCard: View {
-    var assignments: [LocalAssignment]
+    var assignments: [Assignment]
     @Binding var selectedSegment: AssignmentSegment
 
     var body: some View {
@@ -690,7 +588,7 @@ struct TodaySummaryCard: View {
 }
 
 struct ByCourseSummaryCard: View {
-    var assignments: [LocalAssignment]
+    var assignments: [Assignment]
     var onSelectCourse: (String) -> Void
     @Environment(\.colorScheme) private var colorScheme
 
@@ -735,7 +633,7 @@ struct ByCourseSummaryCard: View {
 }
 
 struct LoadTimelineCard: View {
-    var assignments: [LocalAssignment]
+    var assignments: [Assignment]
 
     var body: some View {
         let calendar = Calendar.current
@@ -772,7 +670,7 @@ struct LoadTimelineCard: View {
         .frame(maxWidth: .infinity)
     }
 
-    private func urgencyValue(_ urgency: LocalAssignmentUrgency) -> Int {
+    private func urgencyValue(_ urgency: AssignmentUrgency) -> Int {
         switch urgency {
         case .low: return 1
         case .medium: return 2
@@ -798,7 +696,7 @@ struct LoadTimelineCard: View {
 }
 
 struct UpcomingCountCard: View {
-    var assignments: [LocalAssignment]
+    var assignments: [Assignment]
 
     var body: some View {
         let cal = Calendar.current
@@ -824,7 +722,7 @@ struct UpcomingCountCard: View {
 }
 
 struct MissedCountCard: View {
-    var assignments: [LocalAssignment]
+    var assignments: [Assignment]
 
     var body: some View {
         let cal = Calendar.current
@@ -851,7 +749,7 @@ struct MissedCountCard: View {
 
 // MARK: - Assignment Row
 
-struct LocalAssignmentsPageRow: View {
+struct AssignmentsPageRow: View {
     var assignment: Assignment
     var isSelected: Bool
     var onToggleComplete: () -> Void
@@ -973,11 +871,11 @@ struct LocalAssignmentsPageRow: View {
 
 // MARK: - Detail Panel
 
-struct LocalAssignmentDetailPanel: View {
+struct AssignmentDetailPanel: View {
     @Binding var assignment: Assignment?
-    var onUpdate: (LocalAssignment) -> Void
-    var onEdit: (LocalAssignment) -> Void
-    var onDelete: (LocalAssignment) -> Void
+    var onUpdate: (Assignment) -> Void
+    var onEdit: (Assignment) -> Void
+    var onDelete: (Assignment) -> Void
 
     private let cardCorner: CGFloat = 24
 
@@ -1209,23 +1107,23 @@ struct LocalAssignmentDetailPanel: View {
 
 // MARK: - Editor Sheet
 
-struct LocalAssignmentEditorSheet: View {
+struct AssignmentEditorSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var coursesStore: CoursesStore
 
     var assignment: Assignment?
-    var onSave: (LocalAssignment) -> Void
+    var onSave: (Assignment) -> Void
 
     @State private var title: String = ""
     @State private var selectedCourseId: UUID? = nil
-    @State private var category: LocalAssignmentCategory = .practiceHomework
+    @State private var category: AssignmentCategory = .practiceHomework
     @State private var dueDate: Date = Date()
     @State private var estimatedMinutes: Int = 60
-    @State private var urgency: LocalAssignmentUrgency = .medium
+    @State private var urgency: AssignmentUrgency = .medium
     @State private var weightText: String = ""
     @State private var isLocked: Bool = false
     @State private var notes: String = ""
-    @State private var status: LocalAssignmentStatus = .notStarted
+    @State private var status: AssignmentStatus = .notStarted
 
     var body: some View {
         RootsPopupContainer(
@@ -1420,7 +1318,7 @@ struct LocalAssignmentEditorSheet: View {
 // MARK: - Samples
 
 private extension AssignmentsPageView {
-    static var sampleAssignments: [LocalAssignment] { [] }
+    static var sampleAssignments: [Assignment] { [] }
 }
 
 // MARK: - Drag Selection (Assignments)
@@ -1563,7 +1461,7 @@ private extension AssignmentsPageView {
 
 // MARK: - Preferences
 
-private struct LocalAssignmentFramePreference: PreferenceKey {
+private struct AssignmentFramePreference: PreferenceKey {
     static var defaultValue: [UUID: CGRect] = [:]
     static func reduce(value: inout [UUID: CGRect], nextValue: () -> [UUID: CGRect]) {
         value.merge(nextValue(), uniquingKeysWith: { $1 })

@@ -18,8 +18,10 @@ public enum AssignmentCategory: String, CaseIterable, Codable {
     }
 }
 
-public enum AssignmentUrgency: String, Codable, CaseIterable, Hashable {
+public enum AssignmentUrgency: String, Codable, CaseIterable, Hashable, Identifiable {
     case low, medium, high, critical
+    
+    public var id: String { rawValue }
 }
 
 public struct PlanStepStub: Codable, Hashable {

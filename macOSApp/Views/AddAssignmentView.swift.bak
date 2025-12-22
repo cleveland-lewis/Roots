@@ -16,8 +16,8 @@ struct AddAssignmentView: View {
     @State private var showingAddCourse = false
     @State private var lockToDueDate = false
     @State private var weightPercent: Double = 0
-    @State private var urgency: AssignmentUrgency = .medium
-    @State private var status: AssignmentStatus = .notStarted
+    @State private var urgency: LocalAssignmentUrgency = .medium
+    @State private var status: LocalAssignmentStatus = .notStarted
 
     var onSave: (AppTask) -> Void
 
@@ -89,7 +89,7 @@ struct AddAssignmentView: View {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("Urgency").font(.caption).foregroundStyle(.secondary)
                                     Picker("", selection: $urgency) {
-                                        ForEach(AssignmentUrgency.allCases) { u in
+                                        ForEach(LocalAssignmentUrgency.allCases) { u in
                                             Text(u.rawValue.capitalized).tag(u)
                                         }
                                     }
@@ -104,7 +104,7 @@ struct AddAssignmentView: View {
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("Status").font(.caption).foregroundStyle(.secondary)
                                     Picker("", selection: $status) {
-                                        ForEach(AssignmentStatus.allCases) { s in
+                                        ForEach(LocalAssignmentStatus.allCases) { s in
                                             Text(s.label).tag(s)
                                         }
                                     }

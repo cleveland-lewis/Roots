@@ -2,34 +2,60 @@
 import SwiftUI
 
 struct IOSIPadRootView: View {
-    @State private var selection: AppPage = .dashboard
+    enum IPadSection: String, CaseIterable, Identifiable {
+        case core
+        case planning
+        case focus
 
-    private let sidebarPages: [AppPage] = [
-        .dashboard,
-        .calendar,
-        .planner,
-        .grades,
-        .timer
-    ]
+        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .core: return "Core"
+            case .planning: return "Planning"
+            case .focus: return "Focus"
+            }
+        }
+    }
+
+    @State private var selectedSection: IPadSection? = .core
+    @State private var selectedPage: AppPage? = .dashboard
 
     var body: some View {
         NavigationSplitView {
-            List {
-                ForEach(sidebarPages) { page in
-                    Button {
-                        selection = page
-                    } label: {
-                        Label(page.title, systemImage: page.systemImage)
-                    }
-                    .tag(page)
-                }
+            List(IPadSection.allCases, selection: $selectedSection) { section in
+                Text(section.title)
+                    .tag(section)
             }
             .listStyle(.sidebar)
             .navigationTitle("Menu")
         } detail: {
-            detailView(for: selection)
+            NavigationSplitView {
+                List(sectionPages, selection: $selectedPage) { page in
+                    Label(page.title, systemImage: page.systemImage)
+                        .tag(page)
+                }
+                .listStyle(.sidebar)
+                .navigationTitle("Pages")
+            } detail: {
+                if let page = selectedPage {
+                    detailView(for: page)
+                } else {
+                    IOSPlaceholderView(title: "Select a page", subtitle: "Choose a page from the middle column.")
+                }
+            }
         }
         .background(DesignSystem.Colors.appBackground)
+    }
+
+    private var sectionPages: [AppPage] {
+        switch selectedSection ?? .core {
+        case .core:
+            return [.dashboard, .calendar]
+        case .planning:
+            return [.planner, .grades]
+        case .focus:
+            return [.timer]
+        }
     }
 
     @ViewBuilder
