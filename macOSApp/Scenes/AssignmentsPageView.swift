@@ -52,6 +52,23 @@ enum LocalAssignmentCategory: String, CaseIterable, Codable, Identifiable {
         case .review:            return "Review"
         }
     }
+    
+    var effortProfile: CategoryEffortProfile {
+        switch self {
+        case .project:
+            return .init(baseMinutes: 240, minSessions: 4, spreadDaysBeforeDue: 7, sessionBias: .longBlocks)
+        case .exam:
+            return .init(baseMinutes: 180, minSessions: 3, spreadDaysBeforeDue: 5, sessionBias: .mediumBlocks)
+        case .quiz:
+            return .init(baseMinutes: 60, minSessions: 2, spreadDaysBeforeDue: 2, sessionBias: .shortBursts)
+        case .practiceHomework:
+            return .init(baseMinutes: 60, minSessions: 1, spreadDaysBeforeDue: 2, sessionBias: .mediumBlocks)
+        case .reading:
+            return .init(baseMinutes: 45, minSessions: 1, spreadDaysBeforeDue: 1, sessionBias: .shortBursts)
+        case .review:
+            return .init(baseMinutes: 90, minSessions: 2, spreadDaysBeforeDue: 3, sessionBias: .shortBursts)
+        }
+    }
 }
 
 enum EffortBias: String, Codable {
@@ -76,7 +93,7 @@ extension AssignmentCategory {
             return .init(baseMinutes: 180, minSessions: 3, spreadDaysBeforeDue: 5, sessionBias: .mediumBlocks)
         case .quiz:
             return .init(baseMinutes: 60, minSessions: 2, spreadDaysBeforeDue: 2, sessionBias: .shortBursts)
-        case .practiceHomework:
+        case .homework, .practiceHomework:
             return .init(baseMinutes: 60, minSessions: 1, spreadDaysBeforeDue: 2, sessionBias: .mediumBlocks)
         case .reading:
             return .init(baseMinutes: 45, minSessions: 1, spreadDaysBeforeDue: 1, sessionBias: .shortBursts)
@@ -87,7 +104,7 @@ extension AssignmentCategory {
 }
 
 extension Assignment {
-    static func defaultPlan(for category: LocalAssignmentCategory, due: Date, totalMinutes: Int) -> [PlanStep] {
+    static func defaultPlan(for category: AssignmentCategory, due: Date, totalMinutes: Int) -> [PlanStepStub] {
         let cal = Calendar.current
         func dayOffset(_ days: Int) -> Date {
             cal.date(byAdding: .day, value: -days, to: due) ?? due
@@ -99,38 +116,38 @@ extension Assignment {
         case .project:
             let chunk = max(60, minutes / 4)
             return [
-                PlanStep(id: UUID(), title: "Research & Gather", targetDate: dayOffset(7), expectedMinutes: chunk, notes: nil),
-                PlanStep(id: UUID(), title: "Outline & Plan", targetDate: dayOffset(5), expectedMinutes: chunk, notes: nil),
-                PlanStep(id: UUID(), title: "Draft", targetDate: dayOffset(3), expectedMinutes: chunk, notes: nil),
-                PlanStep(id: UUID(), title: "Polish & Submit", targetDate: dayOffset(1), expectedMinutes: chunk, notes: nil)
+                PlanStepStub(title: "Research & Gather", expectedMinutes: chunk),
+                PlanStepStub(title: "Outline & Plan", expectedMinutes: chunk),
+                PlanStepStub(title: "Draft", expectedMinutes: chunk),
+                PlanStepStub(title: "Polish & Submit", expectedMinutes: chunk)
             ]
         case .exam:
             let chunk = max(60, minutes / 3)
             return [
-                PlanStep(id: UUID(), title: "Review Notes", targetDate: dayOffset(5), expectedMinutes: chunk, notes: nil),
-                PlanStep(id: UUID(), title: "Practice Problems", targetDate: dayOffset(3), expectedMinutes: chunk, notes: nil),
-                PlanStep(id: UUID(), title: "Mock Test", targetDate: dayOffset(1), expectedMinutes: chunk, notes: nil)
+                PlanStepStub(title: "Review Notes", expectedMinutes: chunk),
+                PlanStepStub(title: "Practice Problems", expectedMinutes: chunk),
+                PlanStepStub(title: "Mock Test", expectedMinutes: chunk)
             ]
         case .quiz:
             let chunk = max(45, minutes / 2)
             return [
-                PlanStep(id: UUID(), title: "Skim & Outline", targetDate: dayOffset(2), expectedMinutes: chunk, notes: nil),
-                PlanStep(id: UUID(), title: "Practice Set", targetDate: dayOffset(1), expectedMinutes: chunk, notes: nil)
+                PlanStepStub(title: "Skim & Outline", expectedMinutes: chunk),
+                PlanStepStub(title: "Practice Set", expectedMinutes: chunk)
             ]
-        case .practiceHomework:
+        case .homework, .practiceHomework:
             let chunk = max(45, minutes)
             return [
-                PlanStep(id: UUID(), title: "Solve Set", targetDate: dayOffset(1), expectedMinutes: chunk, notes: nil)
+                PlanStepStub(title: "Solve Set", expectedMinutes: chunk)
             ]
         case .reading:
             return [
-                PlanStep(id: UUID(), title: "Read & Annotate", targetDate: dayOffset(2), expectedMinutes: max(30, minutes / 2), notes: nil),
-                PlanStep(id: UUID(), title: "Summarize", targetDate: dayOffset(1), expectedMinutes: max(20, minutes / 2), notes: nil)
+                PlanStepStub(title: "Read & Annotate", expectedMinutes: max(30, minutes / 2)),
+                PlanStepStub(title: "Summarize", expectedMinutes: max(20, minutes / 2))
             ]
         case .review:
             return [
-                PlanStep(id: UUID(), title: "Review Key Points", targetDate: dayOffset(2), expectedMinutes: max(30, minutes / 2), notes: nil),
-                PlanStep(id: UUID(), title: "Flashcards / Drill", targetDate: dayOffset(1), expectedMinutes: max(20, minutes / 2), notes: nil)
+                PlanStepStub(title: "Review Key Points", expectedMinutes: max(30, minutes / 2)),
+                PlanStepStub(title: "Flashcards / Drill", expectedMinutes: max(20, minutes / 2))
             ]
         }
     }
