@@ -14,31 +14,22 @@ struct IOSRootView: View {
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var gradesStore: GradesStore
     @StateObject private var navigation = IOSNavigationCoordinator()
+    @StateObject private var tabBarPrefs = TabBarPreferencesStore()
 
     private var tabs: [RootTab] {
-        IOSTabConfiguration.tabs(from: settings)
+        tabBarPrefs.effectiveTabsInOrder()
     }
 
     var body: some View {
         ZStack {
             NavigationStack(path: $navigation.path) {
-                TabView(selection: $navigation.selectedTab) {
+                TabView(selection: $tabBarPrefs.selectedTab) {
                     ForEach(tabs, id: \.self) { tab in
                         tabView(for: tab)
                             .tag(tab)
                             .tabItem {
                                 Label(tab.title, systemImage: tab.systemImage)
                             }
-                    }
-                }
-                .onAppear {
-                    if !tabs.contains(navigation.selectedTab) {
-                        navigation.selectedTab = tabs.first ?? .dashboard
-                    }
-                }
-                .onChange(of: tabs) { newTabs in
-                    if !newTabs.contains(navigation.selectedTab) {
-                        navigation.selectedTab = newTabs.first ?? .dashboard
                     }
                 }
                 .navigationDestination(for: IOSNavigationTarget.self) { destination in
@@ -52,6 +43,7 @@ struct IOSRootView: View {
             }
             .background(DesignSystem.Colors.appBackground)
             .environmentObject(navigation)
+            .environmentObject(tabBarPrefs)
 
             if let message = toastRouter.message {
                 toastView(message)

@@ -5,6 +5,17 @@ import Foundation
 
 public enum AssignmentCategory: String, CaseIterable, Codable {
     case reading, exam, homework, practiceHomework, quiz, review, project
+    
+    public var displayName: String {
+        switch self {
+        case .project: return "Project"
+        case .exam: return "Exam"
+        case .quiz: return "Quiz"
+        case .homework, .practiceHomework: return "Homework"
+        case .reading: return "Reading"
+        case .review: return "Review"
+        }
+    }
 }
 
 public enum AssignmentUrgency: String, Codable, CaseIterable, Hashable {

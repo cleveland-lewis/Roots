@@ -597,6 +597,7 @@ struct IOSPracticeView: View {
 struct IOSSettingsView: View {
     @EnvironmentObject private var settings: AppSettingsModel
     @EnvironmentObject private var coursesStore: CoursesStore
+    @EnvironmentObject private var tabBarPrefs: TabBarPreferencesStore
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
@@ -635,20 +636,24 @@ struct IOSSettingsView: View {
             }
             
             Section("Tab Bar Pages") {
-                ForEach(IOSTabConfiguration.tabCandidates, id: \.self) { tab in
-                    Toggle(isOn: Binding(get: {
-                        settings.visibleTabs.contains(tab)
-                    }, set: { newValue in
-                        updateTabs(tab, isVisible: newValue)
-                    })) {
+                ForEach(TabDefinition.allTabs, id: \.id) { tab in
+                    Toggle(isOn: Binding(
+                        get: { tabBarPrefs.isEnabled(tab.id) },
+                        set: { newValue in
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                tabBarPrefs.setEnabled(newValue, for: tab.id)
+                            }
+                        }
+                    )) {
                         Label(tab.title, systemImage: tab.systemImage)
                     }
+                    .disabled(tab.id == .settings)
                 }
 
                 Button("Restore Defaults") {
-                    settings.visibleTabs = IOSTabConfiguration.defaultTabs
-                    settings.tabOrder = IOSTabConfiguration.defaultTabs
-                    settings.save()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        tabBarPrefs.restoreDefaults()
+                    }
                 }
             }
             
@@ -669,23 +674,6 @@ struct IOSSettingsView: View {
             }
         }
         .modifier(IOSNavigationChrome(title: "Settings"))
-    }
-
-    private func updateTabs(_ tab: RootTab, isVisible: Bool) {
-        var visible = settings.visibleTabs
-        var order = settings.tabOrder
-
-        if isVisible {
-            if !visible.contains(tab) { visible.append(tab) }
-            if !order.contains(tab) { order.append(tab) }
-        } else {
-            visible.removeAll { $0 == tab }
-            order.removeAll { $0 == tab }
-        }
-
-        settings.visibleTabs = visible
-        settings.tabOrder = order
-        settings.save()
     }
 }
 

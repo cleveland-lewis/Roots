@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A58B1622EF58EAC0077C827 /* Notification+Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58B1612EF58EAB0077C827 /* Notification+Names.swift */; };
 		1A6947212EF0891800072BDF /* roots.icon in Resources */ = {isa = PBXBuildFile; fileRef = 1A6947202EF0891800072BDF /* roots.icon */; };
+		EE1142A41637459998E50931 /* roots.icon in Resources */ = {isa = PBXBuildFile; fileRef = 1A6947202EF0891800072BDF /* roots.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +35,15 @@
 		1AD7D4342EDD328800D403F3 /* Roots.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roots.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AD7D4432EDD328A00D403F3 /* RootsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RootsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AD7D44D2EDD328A00D403F3 /* RootsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RootsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BBB386A3C3046FCA7A3D6DB /* RootsWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RootsWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		0C39BF544BB34BC69FE56ED2 /* watchOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = watchOS;
+			sourceTree = "<group>";
+		};
 		1AD7D4462EDD328A00D403F3 /* RootsTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RootsTests;
@@ -65,6 +72,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1247E4305FC34D9FA2A5E45A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1AD7D4312EDD328800D403F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -102,6 +116,7 @@
 			children = (
 				1AD7D46B2EDD328800D403F3 /* SharedCore */,
 				1AD7D46C2EDD328800D403F3 /* macOSApp */,
+				0C39BF544BB34BC69FE56ED2 /* watchOS */,
 				1AD7D4462EDD328A00D403F3 /* RootsTests */,
 				1AD7D4502EDD328A00D403F3 /* RootsUITests */,
 				1AD7D4352EDD328800D403F3 /* Products */,
@@ -117,6 +132,7 @@
 				1AD7D4342EDD328800D403F3 /* Roots.app */,
 				1AD7D4432EDD328A00D403F3 /* RootsTests.xctest */,
 				1AD7D44D2EDD328A00D403F3 /* RootsUITests.xctest */,
+				9BBB386A3C3046FCA7A3D6DB /* RootsWatch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -194,6 +210,29 @@
 			productReference = 1AD7D44D2EDD328A00D403F3 /* RootsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		A3D4E93275A547E499CA3B3E /* RootsWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAAF631C0E284669ACB25FE7 /* Build configuration list for PBXNativeTarget "RootsWatch" */;
+			buildPhases = (
+				EC428515A2604A26815D8F53 /* Sources */,
+				1247E4305FC34D9FA2A5E45A /* Frameworks */,
+				ACBDC019B3D947FE99044FB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0C39BF544BB34BC69FE56ED2 /* watchOS */,
+				1AD7D46B2EDD328800D403F3 /* SharedCore */,
+			);
+			name = RootsWatch;
+			packageProductDependencies = (
+			);
+			productName = RootsWatch;
+			productReference = 9BBB386A3C3046FCA7A3D6DB /* RootsWatch.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -214,6 +253,9 @@
 					1AD7D44C2EDD328A00D403F3 = {
 						CreatedOnToolsVersion = 26.1.1;
 						TestTargetID = 1AD7D4332EDD328800D403F3;
+					};
+					A3D4E93275A547E499CA3B3E = {
+						CreatedOnToolsVersion = 26.1.1;
 					};
 				};
 			};
@@ -238,6 +280,7 @@
 				1AD7D4332EDD328800D403F3 /* Roots */,
 				1AD7D4422EDD328A00D403F3 /* RootsTests */,
 				1AD7D44C2EDD328A00D403F3 /* RootsUITests */,
+				A3D4E93275A547E499CA3B3E /* RootsWatch */,
 			);
 		};
 /* End PBXProject section */
@@ -262,6 +305,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ACBDC019B3D947FE99044FB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE1142A41637459998E50931 /* roots.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +341,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EC428515A2604A26815D8F53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -306,6 +364,28 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		0C12087117E646F3BDB74716 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = roots;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V9ZWYKRGTL;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Roots;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = clelewisiii.Roots.watch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 		1AD7D4552EDD328A00D403F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -719,6 +799,28 @@
 			};
 			name = Release;
 		};
+		D6FA2CD38EA64955A98B6401 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = roots;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V9ZWYKRGTL;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Roots;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = clelewisiii.Roots.watch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -754,6 +856,15 @@
 			buildConfigurations = (
 				1AD7D45E2EDD328A00D403F3 /* Debug */,
 				1AD7D45F2EDD328A00D403F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAAF631C0E284669ACB25FE7 /* Build configuration list for PBXNativeTarget "RootsWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6FA2CD38EA64955A98B6401 /* Debug */,
+				0C12087117E646F3BDB74716 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

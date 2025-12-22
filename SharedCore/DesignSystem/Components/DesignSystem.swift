@@ -1,6 +1,8 @@
 import SwiftUI
 #if os(macOS)
 import AppKit
+#elseif os(watchOS)
+import SwiftUI
 #else
 import UIKit
 #endif
@@ -41,6 +43,8 @@ struct DesignSystem {
         static var appBackground: Color {
             #if os(macOS)
             return Color(nsColor: .windowBackgroundColor)
+            #elseif os(watchOS)
+            return Color.black
             #else
             return Color(
                 uiColor: UIColor { traits in
@@ -58,6 +62,8 @@ struct DesignSystem {
         static var sidebarBackground: Color {
             #if os(macOS)
             return Color(nsColor: .controlBackgroundColor)
+            #elseif os(watchOS)
+            return Color.black
             #else
             return Color(uiColor: .secondarySystemBackground)
             #endif
@@ -66,6 +72,8 @@ struct DesignSystem {
         static var cardBackground: Color {
             #if os(macOS)
             return Color(nsColor: .textBackgroundColor)
+            #elseif os(watchOS)
+            return Color.black.opacity(0.8)
             #else
             return Color(uiColor: .systemBackground)
             #endif
@@ -74,6 +82,8 @@ struct DesignSystem {
         static var groupedBackground: Color {
             #if os(macOS)
             return Color(nsColor: .underPageBackgroundColor)
+            #elseif os(watchOS)
+            return Color.black
             #else
             return Color(uiColor: .systemGroupedBackground)
             #endif
@@ -103,6 +113,8 @@ struct DesignSystem {
             let darkBackground = resolvedBackground(.darkAqua)
             // Invert: light scheme gets the dark background (charcoal), dark scheme gets light background (white)
             return colorScheme == .dark ? Color(lightBackground) : Color(darkBackground)
+            #elseif os(watchOS)
+            return Color.gray.opacity(colorScheme == .dark ? 0.6 : 0.4)
             #else
             let lightTrait = UITraitCollection(userInterfaceStyle: .light)
             let darkTrait = UITraitCollection(userInterfaceStyle: .dark)

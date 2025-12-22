@@ -2,6 +2,43 @@ import Foundation
 import SwiftUI
 
 #if !os(macOS)
+#if os(watchOS)
+import SwiftUI
+
+// Minimal stubs for macOS-only types used by shared code when building for watchOS.
+
+// Map NSColor to Color for watchOS compatibility
+public typealias NSColor = Color
+
+// Allow constructing SwiftUI Color from an NSColor-like initializer used in shared code
+public extension Color {
+    init(nsColor: NSColor) {
+        self = nsColor
+    }
+} 
+
+// Provide commonly used NSColor-like static properties used in code
+public extension NSColor {
+    static var controlAccentColor: NSColor { Color.blue }
+    static var controlBackgroundColor: NSColor { Color.black }
+    static var separatorColor: NSColor { Color.gray.opacity(0.4) }
+    static var windowBackgroundColor: NSColor { Color.black }
+    static var underPageBackgroundColor: NSColor { Color.black }
+    static var controlHighlightColor: NSColor { Color.gray }
+    static var alternatingContentBackgroundColors: [NSColor] { [Color.black, Color.gray.opacity(0.2)] }
+    static var unemphasizedSelectedContentBackgroundColor: NSColor { Color.gray.opacity(0.3) }
+
+    static var systemGray: NSColor { Color.gray }
+    static var systemTeal: NSColor { Color.teal }
+    static var systemBlue: NSColor { Color.blue }
+    static var systemPurple: NSColor { Color.purple }
+    static var systemPink: NSColor { Color.pink }
+    static var systemRed: NSColor { Color.red }
+    static var systemOrange: NSColor { Color.orange }
+    static var systemYellow: NSColor { Color.yellow }
+    static var systemGreen: NSColor { Color.green }
+}
+#else
 import UIKit
 
 // Minimal stubs for macOS-only types used by shared code when building for iOS.
@@ -27,6 +64,7 @@ public extension NSColor {
     static var alternatingContentBackgroundColors: [NSColor] { [UIColor.systemBackground, UIColor.secondarySystemBackground] }
     static var unemphasizedSelectedContentBackgroundColor: NSColor { UIColor.systemGray2 }
 }
+#endif
 
 #if os(watchOS)
 public struct LocalTimerSession: Identifiable, Codable, Hashable {

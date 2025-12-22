@@ -28,10 +28,12 @@ extension Color {
         guard let components = NSColor(self).cgColor.components, components.count >= 3 else {
             return "#000000"
         }
-        #else
+        #elseif canImport(UIKit)
         guard let components = UIColor(self).cgColor.components, components.count >= 3 else {
             return "#000000"
         }
+        #else
+        return "#000000"
         #endif
 
         let r = Int(components[0] * 255.0)

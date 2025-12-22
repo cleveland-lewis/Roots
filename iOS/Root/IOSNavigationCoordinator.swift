@@ -9,12 +9,12 @@ enum IOSNavigationTarget: Hashable {
 
 final class IOSNavigationCoordinator: ObservableObject {
     @Published var path = NavigationPath()
-    @Published var selectedTab: RootTab = .dashboard
 
-    func open(page: AppPage, visibleTabs: [RootTab]) {
+    func open(page: AppPage, tabBarPrefs: TabBarPreferencesStore) {
+        let visibleTabs = tabBarPrefs.effectiveTabsInOrder()
         if let tab = RootTab(rawValue: page.rawValue), visibleTabs.contains(tab) {
             path = NavigationPath()
-            selectedTab = tab
+            tabBarPrefs.selectedTab = tab
         } else {
             path.append(IOSNavigationTarget.page(page))
         }
@@ -55,6 +55,7 @@ struct IOSTabConfiguration {
 struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
     @EnvironmentObject private var settings: AppSettingsModel
     @EnvironmentObject private var navigation: IOSNavigationCoordinator
+    @EnvironmentObject private var tabBarPrefs: TabBarPreferencesStore
     @EnvironmentObject private var sheetRouter: IOSSheetRouter
     @EnvironmentObject private var toastRouter: IOSToastRouter
     @EnvironmentObject private var filterState: IOSFilterState
@@ -71,16 +72,14 @@ struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        let visibleTabs = IOSTabConfiguration.tabs(from: settings)
-
         return content
             .navigationTitle(title)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    pageMenu(visibleTabs: visibleTabs)
+                    pageMenu()
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    quickActionsMenu(visibleTabs: visibleTabs)
+                    quickActionsMenu()
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     trailingContent()
@@ -88,7 +87,7 @@ struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
             }
     }
 
-    private func pageMenu(visibleTabs: [RootTab]) -> some View {
+    private func pageMenu() -> some View {
         Menu {
             Section("Quick Actions") {
                 Button {
@@ -110,7 +109,7 @@ struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
 
             ForEach(menuPages, id: \.self) { page in
                 Button {
-                    navigation.open(page: page, visibleTabs: visibleTabs)
+                    navigation.open(page: page, tabBarPrefs: tabBarPrefs)
                 } label: {
                     Label(menuTitle(for: page), systemImage: page.systemImage)
                 }
@@ -129,7 +128,7 @@ struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
         .accessibilityLabel("Open menu")
     }
 
-    private func quickActionsMenu(visibleTabs: [RootTab]) -> some View {
+    private func quickActionsMenu() -> some View {
         Menu {
             ForEach(quickActions, id: \.self) { action in
                 Button {
