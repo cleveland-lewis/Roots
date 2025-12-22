@@ -289,7 +289,7 @@ struct DashboardView: View {
                 let clockSize: CGFloat = 160
                 HStack(alignment: .center, spacing: DesignSystem.Layout.spacing.large) {
                     // Column 1: Clock
-                    RootsAnalogClock(diameter: clockSize, showSecondHand: true, accentColor: settings.activeAccentColor)
+                    RootsAnalogClock(diameter: clockSize, showSecondHand: true, accentColor: .accentColor)
                         .frame(width: clockSize, height: clockSize)
                     
                     // Column 2: Calendar (integrated, no nested card)
@@ -315,7 +315,7 @@ struct DashboardView: View {
             .frame(minHeight: 34)
         }
         .buttonStyle(.borderedProminent)
-        .tint(settings.activeAccentColor)
+        .tint(.accentColor)
         .controlSize(.small)
         .transition(DesignSystem.Motion.slideTrailingTransition)
     }

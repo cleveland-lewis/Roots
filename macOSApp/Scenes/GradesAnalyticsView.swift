@@ -82,7 +82,7 @@ struct GradesAnalyticsView: View {
     private var whatIfBanner: some View {
         HStack(spacing: 12) {
             Image(systemName: "wand.and.stars")
-                .foregroundStyle(settings.activeAccentColor)
+                .foregroundStyle(.accentColor)
                 .symbolRenderingMode(.hierarchical)
             
             VStack(alignment: .leading, spacing: 2) {
@@ -111,11 +111,11 @@ struct GradesAnalyticsView: View {
             .foregroundStyle(.secondary)
         }
         .padding()
-        .background(settings.activeAccentColor.opacity(0.1))
+        .background(.accentColor.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(settings.activeAccentColor.opacity(0.3), lineWidth: 1)
+                .stroke(.accentColor.opacity(0.3), lineWidth: 1)
         )
     }
     
@@ -194,7 +194,7 @@ struct GradesAnalyticsView: View {
                     Label("What-If Mode", systemImage: "wand.and.stars")
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(whatIfMode ? settings.activeAccentColor : .secondary)
+                .tint(whatIfMode ? .accentColor : .secondary)
                 
                 // Risk Breakdown Toggle
                 Button {
@@ -252,7 +252,7 @@ struct GradesAnalyticsView: View {
                     x: .value("Week", item.week),
                     y: .value("GPA", item.gpa)
                 )
-                .foregroundStyle(settings.activeAccentColor)
+                .foregroundStyle(.accentColor)
                 .interpolationMethod(.catmullRom)
                 
                 AreaMark(
@@ -262,8 +262,8 @@ struct GradesAnalyticsView: View {
                 .foregroundStyle(
                     LinearGradient(
                         colors: [
-                            settings.activeAccentColor.opacity(0.3),
-                            settings.activeAccentColor.opacity(0.0)
+                            .accentColor.opacity(0.3),
+                            .accentColor.opacity(0.0)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -323,7 +323,7 @@ struct GradesAnalyticsView: View {
                     x: .value("Course", item.courseCode),
                     y: .value("Grade", item.percentage)
                 )
-                .foregroundStyle(settings.activeAccentColor)
+                .foregroundStyle(.accentColor)
                 .cornerRadius(8)
             }
             .chartYScale(domain: 0...100)

@@ -34,8 +34,8 @@ struct RootsIOSApp: App {
         let settings = AppSettingsModel.shared
         _settingsCoordinator = StateObject(wrappedValue: SettingsCoordinator(appSettings: settings, coursesStore: store))
         if UserDefaults.standard.data(forKey: "roots.settings.appsettings") == nil {
-            settings.visibleTabs = IOSTabConfiguration.defaultTabs
-            settings.tabOrder = IOSTabConfiguration.defaultTabs
+            settings.visibleTabs = TabRegistry.defaultEnabledTabs
+            settings.tabOrder = TabRegistry.allTabs.map { $0.id }
             settings.save()
         }
     }

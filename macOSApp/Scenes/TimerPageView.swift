@@ -561,7 +561,7 @@ struct TimerPageView: View {
             currentBlockDuration: $currentBlockDuration,
             completedPomodoroSessions: $completedPomodoroSessions,
             isPomodorBreak: $isPomodorBreak,
-            accentColor: settings.activeAccentColor,
+            accentColor: .accentColor,
             activity: selectedActivity,
             tasks: tasks,
             pomodoroSessions: settings.pomodoroIterations,

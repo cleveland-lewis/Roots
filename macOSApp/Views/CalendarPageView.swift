@@ -164,12 +164,12 @@ struct CalendarPageView: View {
                 }
                 .pickerStyle(.segmented)
                 .frame(width: 280)
-                .tint(settings.activeAccentColor)
+                .tint(.accentColor)
 
                 HStack(spacing: 6) {
                     Button { shift(by: -1) } label: {
                         Image(systemName: "chevron.left")
-                            .foregroundStyle(chevronLeftHover ? settings.activeAccentColor : .primary)
+                            .foregroundStyle(chevronLeftHover ? .accentColor : .primary)
                             .scaleEffect(chevronLeftHover ? 1.06 : 1.0)
                     }
                     .buttonStyle(.plain)
@@ -183,7 +183,7 @@ struct CalendarPageView: View {
                             .font(.subheadline.weight(.semibold))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(settings.activeAccentColor).opacity(todayHover ? 0.18 : 0.12))
+                            .background(RoundedRectangle(cornerRadius: 8).fill(.accentColor).opacity(todayHover ? 0.18 : 0.12))
                     }
                     .buttonStyle(.plain)
                     .rootsStandardInteraction()
@@ -193,7 +193,7 @@ struct CalendarPageView: View {
 
                     Button { shift(by: 1) } label: {
                         Image(systemName: "chevron.right")
-                            .foregroundStyle(chevronRightHover ? settings.activeAccentColor : .primary)
+                            .foregroundStyle(chevronRightHover ? .accentColor : .primary)
                             .scaleEffect(chevronRightHover ? 1.06 : 1.0)
                     }
                     .buttonStyle(.plain)
@@ -356,7 +356,7 @@ struct CalendarPageView: View {
                     if calendar.isDateInToday(event.startDate) && event.startDate.timeIntervalSinceNow < 0 && event.endDate.timeIntervalSinceNow > 0 {
                         Text(String(localized: "calendar.now"))
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(settings.activeAccentColor)
+                            .foregroundStyle(.accentColor)
                     } else if isAllDay(event: event) {
                         Text(String(localized: "calendar.all_day"))
                             .font(.caption.weight(.medium))
@@ -372,7 +372,7 @@ struct CalendarPageView: View {
                 // Category color indicator (outline SF Symbol)
                 Image(systemName: categoryIcon(for: event.category))
                     .font(.system(size: 16))
-                    .foregroundStyle(settings.activeAccentColor)
+                    .foregroundStyle(.accentColor)
                     .frame(width: 20)
                 
                 // Event details
@@ -1151,7 +1151,7 @@ private struct WeekCalendarView: View {
                 ForEach(placeholders) { block in
                     let yOffset = CGFloat(block.startHour - 6) * hourHeight
                     RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous)
-                        .fill(settings.activeAccentColor.opacity(0.2))
+                        .fill(.accentColor.opacity(0.2))
                         .overlay(
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(block.title).font(.caption.weight(.semibold))

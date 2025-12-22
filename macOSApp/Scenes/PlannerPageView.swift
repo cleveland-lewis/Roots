@@ -264,7 +264,7 @@ struct PlannerPageView: View {
                 .padding(.bottom, DesignSystem.Layout.spacing.large)
             }
         }
-        .accentColor(settings.activeAccentColor)
+        .accentColor(.accentColor)
         .sheet(isPresented: $showTaskSheet) {
             if let draft = editingTaskDraft {
                 NewTaskSheet(
@@ -374,7 +374,7 @@ private extension PlannerPageView {
                         .frame(minWidth: 120)
                 }
                 .buttonStyle(.bordered)
-                .tint(settings.activeAccentColor)
+                .tint(.accentColor)
                 .controlSize(.regular)
                 .disabled(isRunningPlanner)
                 .opacity(isRunningPlanner ? 0.85 : 1)

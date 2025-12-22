@@ -35,7 +35,7 @@ struct RootsSettingsWindow: View {
     @State private var paneSelectionCancellableHolder: AnyCancellable? = nil
     @State private var query: String = ""
 
-    private var accentColor: Color { settings.activeAccentColor }
+    private var accentColor: Color { .accentColor }
 
     @State private var sidebarExpanded: Bool = true
 

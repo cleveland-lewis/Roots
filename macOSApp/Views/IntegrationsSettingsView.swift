@@ -180,7 +180,7 @@ struct IntegrationCard: View {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.title2)
-                    .foregroundStyle(settings.activeAccentColor)
+                    .foregroundStyle(.accentColor)
                     .frame(width: 32, height: 32)
                 
                 VStack(alignment: .leading, spacing: 2) {
@@ -225,7 +225,7 @@ struct IntegrationCard: View {
                         Label("Open System Settings", systemImage: "gear")
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(settings.activeAccentColor)
+                    .tint(.accentColor)
                 }
             }
             

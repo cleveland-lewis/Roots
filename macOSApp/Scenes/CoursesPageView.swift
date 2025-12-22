@@ -126,7 +126,7 @@ struct CoursesPageView: View {
                 }
             }
         }
-        .accentColor(settings.activeAccentColor)
+        .accentColor(.accentColor)
         .sheet(isPresented: $showNewCourseSheet) {
             CourseEditorSheet(course: editingCourse) { updated in
                 persistCourse(updated)
@@ -909,7 +909,7 @@ struct ColorTagPicker: View {
                         .frame(width: 24, height: 24)
                         .overlay(
                             Circle()
-                                .stroke(selected == tag ? appSettings.activeAccentColor : Color(nsColor: .separatorColor).opacity(0.12), lineWidth: selected == tag ? 3 : 1)
+                                .stroke(selected == tag ? .accentColor : Color(nsColor: .separatorColor).opacity(0.12), lineWidth: selected == tag ? 3 : 1)
                         )
                 }
                 .buttonStyle(.plain)

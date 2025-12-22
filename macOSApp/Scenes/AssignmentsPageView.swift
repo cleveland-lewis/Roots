@@ -268,7 +268,7 @@ struct AssignmentsPageView: View {
                     .frame(height: 36)
             }
             .buttonStyle(.bordered)
-            .tint(settings.activeAccentColor)
+            .tint(.accentColor)
             .controlSize(.regular)
         }
     }
