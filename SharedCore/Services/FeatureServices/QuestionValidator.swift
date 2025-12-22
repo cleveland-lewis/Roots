@@ -4,10 +4,23 @@ import CryptoKit
 /// Strict validation gates for question generation
 class QuestionValidator {
     
+    // Supported contract versions
+    private static let supportedContractVersions = ["testgen.v1"]
+    
     // MARK: - Schema Validation
     
     static func validateSchema(draft: QuestionDraft) -> [ValidationError] {
         var errors: [ValidationError] = []
+        
+        // Contract version validation
+        if !supportedContractVersions.contains(draft.contractVersion) {
+            errors.append(ValidationError(
+                category: .schema,
+                field: "contractVersion",
+                message: "Unsupported contract version '\(draft.contractVersion)'. Expected: \(supportedContractVersions.joined(separator: ", "))",
+                severity: "error"
+            ))
+        }
         
         // Required fields
         if draft.prompt.isEmpty {

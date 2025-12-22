@@ -15,6 +15,7 @@ enum SettingsToolbarIdentifier: String, CaseIterable, Identifiable {
     case integrations
     case notifications
     case privacy
+    case storage
     case developer
 
     var id: String { rawValue }
@@ -34,6 +35,7 @@ enum SettingsToolbarIdentifier: String, CaseIterable, Identifiable {
         case .integrations: return "Integrations"
         case .notifications: return "Notifications"
         case .privacy: return "Privacy"
+        case .storage: return "Storage"
         case .developer: return "Developer"
         }
     }
@@ -53,6 +55,7 @@ enum SettingsToolbarIdentifier: String, CaseIterable, Identifiable {
         case .integrations: return "arrow.triangle.2.circlepath.circle"
         case .notifications: return "bell.badge"
         case .privacy: return "lock.shield"
+        case .storage: return "externaldrive"
         case .developer: return "hammer.fill"
         }
     }

@@ -12,6 +12,10 @@ struct GeneralSettingsView: View {
     @State private var resetCode: String = ""
     @State private var resetInput: String = ""
     @State private var isResetting = false
+    @State private var retentionPolicy: StorageRetentionPolicy = .never
+    @State private var showRetentionAlert = false
+    @State private var retentionResult: StorageRetentionManager.Result?
+    @State private var practiceStore = PracticeTestStore()
 
     enum StartOfWeek: String, CaseIterable, Identifiable {
         case sunday = "Sunday"
@@ -85,6 +89,34 @@ struct GeneralSettingsView: View {
                 ), displayedComponents: .hourAndMinute)
             }
 
+            Section("Storage") {
+                Picker("Retention Policy", selection: $retentionPolicy) {
+                    ForEach(StorageRetentionPolicy.allCases) { policy in
+                        Text(policy.label).tag(policy)
+                    }
+                }
+                .onChange(of: retentionPolicy) { _, newValue in
+                    settings.storageRetentionPolicy = newValue
+                    settings.save()
+                }
+
+                Text(retentionPolicy.detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Button("Apply Retention Now") {
+                    retentionResult = StorageRetentionManager.apply(
+                        policy: retentionPolicy,
+                        coursesStore: coursesStore,
+                        assignmentsStore: assignmentsStore,
+                        practiceStore: practiceStore
+                    )
+                    showRetentionAlert = true
+                }
+                .buttonStyle(.bordered)
+                .disabled(retentionPolicy == .never)
+            }
+
             Section("Danger Zone") {
                 Button(role: .destructive) {
                     resetCode = generateResetCode()
@@ -102,6 +134,16 @@ struct GeneralSettingsView: View {
             userName = settings.userName ?? ""
             startOfWeek = StartOfWeek(rawValue: settings.startOfWeek ?? "Sunday") ?? .sunday
             defaultView = DefaultView(rawValue: settings.defaultView ?? "Dashboard") ?? .dashboard
+            retentionPolicy = settings.storageRetentionPolicy
+        }
+        .alert("Retention Applied", isPresented: $showRetentionAlert) {
+            Button("OK") { retentionResult = nil }
+        } message: {
+            if let result = retentionResult {
+                Text("Deleted \(result.deletedCount) items.")
+            } else {
+                Text("No items deleted.")
+            }
         }
         .sheet(isPresented: $showResetSheet) {
             VStack(spacing: 18) {

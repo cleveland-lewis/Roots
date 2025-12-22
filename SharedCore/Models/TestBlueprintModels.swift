@@ -122,8 +122,20 @@ struct GenerationContext: Codable {
     }
 }
 
+/// Quality self-check for LLM-generated questions
+struct QuestionQuality: Codable, Sendable {
+    var selfCheck: [String] // List of quality criteria checked by LLM
+    var confidence: Double // Confidence score 0.0-1.0
+    
+    init(selfCheck: [String] = [], confidence: Double = 0.0) {
+        self.selfCheck = selfCheck
+        self.confidence = confidence
+    }
+}
+
 /// Draft question from LLM (before validation)
 struct QuestionDraft: Codable {
+    var contractVersion: String // e.g., "testgen.v1"
     var prompt: String
     var choices: [String]? // For MCQ
     var correctAnswer: String
@@ -133,6 +145,33 @@ struct QuestionDraft: Codable {
     var bloomLevel: String
     var difficulty: String
     var templateType: String
+    var quality: QuestionQuality? // LLM self-assessment
+    
+    init(
+        contractVersion: String = "testgen.v1",
+        prompt: String,
+        choices: [String]? = nil,
+        correctAnswer: String,
+        correctIndex: Int? = nil,
+        rationale: String,
+        topic: String,
+        bloomLevel: String,
+        difficulty: String,
+        templateType: String,
+        quality: QuestionQuality? = nil
+    ) {
+        self.contractVersion = contractVersion
+        self.prompt = prompt
+        self.choices = choices
+        self.correctAnswer = correctAnswer
+        self.correctIndex = correctIndex
+        self.rationale = rationale
+        self.topic = topic
+        self.bloomLevel = bloomLevel
+        self.difficulty = difficulty
+        self.templateType = templateType
+        self.quality = quality
+    }
 }
 
 /// Validated question (passed all gates)

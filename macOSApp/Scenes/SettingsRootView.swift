@@ -83,6 +83,8 @@ struct SettingsRootView: View {
                     NotificationsSettingsView()
                 case .privacy:
                     PrivacySettingsView()
+                case .storage:
+                    StorageSettingsView()
                 case .developer:
                     DeveloperSettingsView()
                 }

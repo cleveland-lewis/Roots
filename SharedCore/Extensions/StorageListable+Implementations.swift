@@ -227,6 +227,244 @@ extension CalendarEvent: StorageListable {
     }
 }
 
+// MARK: - AppTask (Assignments)
+
+extension AppTask: StorageListable {
+    public var displayTitle: String {
+        if !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return title
+        }
+        return "Untitled Assignment"
+    }
+
+    public var entityType: StorageEntityType { .assignment }
+
+    public var contextDescription: String? {
+        due?.formatted(date: .abbreviated, time: .omitted)
+    }
+
+    public var primaryDate: Date {
+        due ?? Date()
+    }
+
+    public var statusDescription: String? {
+        isCompleted ? "Completed" : nil
+    }
+}
+
+// MARK: - PracticeTest
+
+extension PracticeTest: StorageListable {
+    public var displayTitle: String {
+        let topic = topics.first ?? "Practice Test"
+        return "\(courseName) - \(topic)"
+    }
+
+    public var entityType: StorageEntityType { .practiceTest }
+
+    public var contextDescription: String? {
+        status.rawValue
+    }
+
+    public var primaryDate: Date {
+        createdAt
+    }
+
+    public var statusDescription: String? {
+        status.rawValue
+    }
+}
+
+// MARK: - GradeEntry
+
+extension GradeEntry: StorageListable {
+    public var displayTitle: String {
+        if let letter, !letter.isEmpty {
+            return "Grade: \(letter)"
+        }
+        if let percent {
+            return String(format: "Grade: %.1f%%", percent)
+        }
+        return "Grade Entry"
+    }
+
+    public var entityType: StorageEntityType { .grade }
+
+    public var contextDescription: String? {
+        if let letter, !letter.isEmpty { return letter }
+        if let percent { return String(format: "%.1f%%", percent) }
+        return nil
+    }
+
+    public var primaryDate: Date { updatedAt }
+}
+
+// MARK: - Planner Sessions
+
+extension StoredScheduledSession: StorageListable {
+    public var displayTitle: String {
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? "Planner Block" : trimmed
+    }
+
+    public var entityType: StorageEntityType { .plannerBlock }
+
+    public var contextDescription: String? {
+        "\(start.formatted(date: .abbreviated, time: .shortened)) - \(end.formatted(date: .omitted, time: .shortened))"
+    }
+
+    public var primaryDate: Date { start }
+
+    public var statusDescription: String? {
+        isLocked ? "Locked" : nil
+    }
+}
+
+extension StoredOverflowSession: StorageListable {
+    public var displayTitle: String {
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? "Overflow Block" : trimmed
+    }
+
+    public var entityType: StorageEntityType { .plannerBlock }
+
+    public var contextDescription: String? {
+        dueDate.formatted(date: .abbreviated, time: .omitted)
+    }
+
+    public var primaryDate: Date { dueDate }
+
+    public var statusDescription: String? { "Overflow" }
+}
+
+// MARK: - AssignmentPlan
+
+extension AssignmentPlan: StorageListable {
+    public var displayTitle: String {
+        "Assignment Plan"
+    }
+
+    public var entityType: StorageEntityType { .assignmentPlan }
+
+    public var contextDescription: String? {
+        status.rawValue.capitalized
+    }
+
+    public var primaryDate: Date { generatedAt }
+
+    public var statusDescription: String? {
+        status.rawValue.capitalized
+    }
+}
+
+// MARK: - FocusSession / Timer Sessions
+
+extension FocusSession: StorageListable {
+    public var displayTitle: String {
+        let duration = actualDuration ?? plannedDuration
+        if let duration {
+            let minutes = Int(duration / 60)
+            return "Focus: \(minutes)m"
+        }
+        return "Focus Session"
+    }
+
+    public var entityType: StorageEntityType { .focusSession }
+
+    public var contextDescription: String? {
+        mode.displayName
+    }
+
+    public var primaryDate: Date {
+        startedAt ?? Date()
+    }
+
+    public var statusDescription: String? {
+        state.rawValue.capitalized
+    }
+}
+
+extension LocalTimerSession: StorageListable {
+    public var displayTitle: String {
+        let minutes = Int(duration / 60)
+        return "Timer: \(minutes)m"
+    }
+
+    public var entityType: StorageEntityType { .timerSession }
+
+    public var contextDescription: String? {
+        mode.label
+    }
+
+    public var primaryDate: Date { startDate }
+
+    public var statusDescription: String? {
+        isBreakSession ? "Break" : nil
+    }
+}
+
+// MARK: - TestBlueprint
+
+extension TestBlueprint: Identifiable {}
+
+extension TestBlueprint: StorageListable {
+    public var displayTitle: String {
+        if let topic = topics.first, !topic.isEmpty {
+            return "Blueprint: \(topic)"
+        }
+        return "Test Blueprint"
+    }
+
+    public var entityType: StorageEntityType { .testBlueprint }
+
+    public var contextDescription: String? {
+        difficultyTarget.rawValue
+    }
+
+    public var primaryDate: Date { createdAt }
+}
+
+// MARK: - Syllabus Parsing
+
+extension SyllabusParsingJob: StorageListable {
+    public var displayTitle: String {
+        "Syllabus Parsing"
+    }
+
+    public var entityType: StorageEntityType { .syllabus }
+
+    public var contextDescription: String? {
+        status.rawValue
+    }
+
+    public var primaryDate: Date { createdAt }
+
+    public var statusDescription: String? {
+        status.rawValue
+    }
+}
+
+extension ParsedAssignment: StorageListable {
+    public var displayTitle: String {
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? "Parsed Assignment" : trimmed
+    }
+
+    public var entityType: StorageEntityType { .parsedAssignment }
+
+    public var contextDescription: String? {
+        inferredType
+    }
+
+    public var primaryDate: Date {
+        dueDate ?? createdAt
+    }
+
+    public var statusDescription: String? {
+        isImported ? "Imported" : nil
+    }
+}
+
 // MARK: - Fallback Utilities
 
 /// Helper to generate fallback titles with timestamps

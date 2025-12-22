@@ -184,6 +184,28 @@ class AlgorithmicTestGenerator {
                 logInfo("TestGen.Algorithm", "  Slot \(slot.id) validated successfully")
                 return .success(validated)
                 
+            } catch let error as LocalLLMService.LLMError {
+                // Handle specific LLM errors
+                switch error {
+                case .contractViolation(let reason):
+                    lastErrors = [ValidationError(
+                        category: .schema,
+                        message: "CONTRACT_VIOLATION: \(reason)",
+                        severity: "error"
+                    )]
+                    logError("TestGen.Algorithm", "    LLM reported contract violation: \(reason)")
+                    // This counts as an attempt, continue to retry or fallback
+                    
+                default:
+                    lastErrors = [ValidationError(
+                        category: .schema,
+                        message: "LLM error: \(error.localizedDescription)",
+                        severity: "error"
+                    )]
+                    logError("TestGen.Algorithm", "    LLM error: \(error)")
+                }
+                continue
+                
             } catch {
                 lastErrors = [ValidationError(
                     category: .schema,

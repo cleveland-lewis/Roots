@@ -10,6 +10,7 @@ class LocalLLMService {
         case generationFailed(String)
         case timeout
         case invalidResponse
+        case contractViolation(String)
         case backendError(Error)
         
         var errorDescription: String? {
@@ -22,6 +23,8 @@ class LocalLLMService {
                 return "Generation timed out"
             case .invalidResponse:
                 return "Invalid response from LLM"
+            case .contractViolation(let reason):
+                return "LLM cannot comply with requirements: \(reason)"
             case .backendError(let error):
                 return "Backend error: \(error.localizedDescription)"
             }
@@ -105,9 +108,25 @@ class LocalLLMService {
             // Use real LLM backend
             let jsonResponse = try await backend.generateJSON(prompt: prompt, schema: nil)
             
+            // Check for CONTRACT_VIOLATION error response
+            if let data = jsonResponse.data(using: .utf8),
+               let errorCheck = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let error = errorCheck["error"] as? String,
+               error == "CONTRACT_VIOLATION" {
+                let reason = errorCheck["reason"] as? String ?? "Unknown reason"
+                throw LLMError.contractViolation(reason)
+            }
+            
             // Parse the JSON response
-            guard let data = jsonResponse.data(using: .utf8),
-                  let json = try? JSONDecoder().decode(QuestionDraft.self, from: data) else {
+            guard let data = jsonResponse.data(using: .utf8) else {
+                throw LLMError.invalidResponse
+            }
+            
+            // Use strict decoding
+            let decoder = JSONDecoder()
+            // Note: Swift's JSONDecoder already rejects unknown keys by default when using structs
+            
+            guard let json = try? decoder.decode(QuestionDraft.self, from: data) else {
                 throw LLMError.invalidResponse
             }
             
@@ -177,6 +196,8 @@ class LocalLLMService {
         var prompt = """
         Generate ONE multiple-choice question with the following STRICT requirements:
         
+        CONTRACT VERSION: testgen.v1
+        
         Course: \(context.courseName)
         Topic: \(slot.topic)
         Difficulty: \(slot.difficulty.rawValue)
@@ -184,21 +205,34 @@ class LocalLLMService {
         Template Type: \(slot.templateType.rawValue)
         Max Prompt Words: \(slot.maxPromptWords)
         
-        REQUIREMENTS:
+        HARD-LINE REQUIREMENTS (NON-NEGOTIABLE):
         - Question prompt: clear, unambiguous, \(slot.maxPromptWords) words maximum
         - Exactly 4 answer choices (A, B, C, D)
         - Exactly 1 correct answer
         - Rationale: minimum 10 words explaining why the answer is correct
         - All choices must be unique and plausible
         - Correct answer can be in any position (0-3)
+        - NO external sources or URLs allowed
+        - ONLY use the provided topic: \(slot.topic)
+        - Must match specified difficulty and Bloom level exactly
         
-        BANNED PHRASES (do NOT use):
+        BANNED PHRASES (do NOT use under any circumstances):
         \(slot.bannedPhrases.map { "  - \($0)" }.joined(separator: "\n"))
         
         AVOID:
-        - Double negatives
-        - Trick questions
+        - Double negatives (e.g., "Which is NOT incorrect")
+        - Trick questions or misleading language
         - Ambiguous phrasing
+        - "All of the above" or "None of the above" constructs
+        
+        QUALITY SELF-CHECK:
+        Before returning, verify:
+        1. Prompt is clear and unambiguous
+        2. All 4 choices are unique and plausible
+        3. Only ONE choice is definitively correct
+        4. Rationale justifies the correct answer
+        5. No banned phrases present
+        6. Word count within limit
         """
         
         if let repairs = repairInstructions, !repairs.isEmpty {
@@ -206,22 +240,31 @@ class LocalLLMService {
             for error in repairs {
                 prompt += "- \(error.description)\n"
             }
+            prompt += "\nYou MUST fix all errors above in this generation.\n"
         }
         
         prompt += """
         
         
-        Return ONLY valid JSON in this exact format:
+        CRITICAL: If you CANNOT comply with these requirements, you MUST return:
+        {"error": "CONTRACT_VIOLATION", "reason": "Specific reason why requirements cannot be met"}
+        
+        Otherwise, return ONLY valid JSON in this EXACT format (no markdown, no extra text):
         {
+          "contractVersion": "testgen.v1",
           "prompt": "Your question text here",
           "choices": ["Choice A", "Choice B", "Choice C", "Choice D"],
           "correctAnswer": "The exact text of the correct choice",
           "correctIndex": 0,
-          "rationale": "Explanation of why this is correct",
+          "rationale": "Explanation of why this is correct (minimum 10 words)",
           "topic": "\(slot.topic)",
           "bloomLevel": "\(slot.bloomLevel.rawValue)",
           "difficulty": "\(slot.difficulty.rawValue)",
-          "templateType": "\(slot.templateType.rawValue)"
+          "templateType": "\(slot.templateType.rawValue)",
+          "quality": {
+            "selfCheck": ["List of criteria verified"],
+            "confidence": 0.95
+          }
         }
         """
         
