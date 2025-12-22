@@ -153,14 +153,14 @@ struct TimerPageView: View {
     private var activitiesColumn: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.medium) {
             HStack {
-                Text("Activities")
+                Text(NSLocalizedString("timer.label.activities", comment: "Activities"))
                     .font(DesignSystem.Typography.subHeader)
                 Spacer()
             }
             
             collectionsFilter
             
-            TextField("Search", text: $searchText)
+            TextField(NSLocalizedString("timer.label.search", comment: "Search"), text: $searchText)
                 .textFieldStyle(.roundedBorder)
             
             activityList
@@ -181,7 +181,7 @@ struct TimerPageView: View {
                         .font(DesignSystem.Typography.body.weight(.semibold))
                     
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Notes")
+                        Text(NSLocalizedString("timer.label.notes", comment: "Notes"))
                             .font(DesignSystem.Typography.caption)
                             .foregroundColor(.secondary)
                         
@@ -197,7 +197,7 @@ struct TimerPageView: View {
                         .background(DesignSystem.Materials.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                     }
                 } else {
-                    Text("No activity selected")
+                    Text(NSLocalizedString("timer.label.no_activity", comment: "No activity"))
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(.secondary)
                 }
@@ -237,7 +237,7 @@ struct TimerPageView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 8) {
                 if !cachedPinnedActivities.isEmpty {
-                    Text("Pinned")
+                    Text(NSLocalizedString("timer.label.pinned", comment: "Pinned"))
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(.secondary)
                     
@@ -246,7 +246,7 @@ struct TimerPageView: View {
                     }
                 }
                 
-                Text("All Activities")
+                Text(NSLocalizedString("timer.label.all_activities", comment: "All activities"))
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(.secondary)
                 
@@ -281,7 +281,7 @@ struct TimerPageView: View {
     
     private var rightPane: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Layout.spacing.small) {
-            Text("Study Summary")
+            Text(NSLocalizedString("timer.stats.study_summary", comment: "Study summary"))
                 .font(DesignSystem.Typography.subHeader)
             
             Text("Activities: \(activities.count)")
@@ -407,13 +407,13 @@ struct TimerPageView: View {
                     .frame(height: 12)
                     .padding(.bottom, 4)
                     
-                    Button("Start", action: startTimer)
+                    Button(NSLocalizedString("timer.action.start", comment: "Start"), action: startTimer)
                         .buttonStyle(.borderedProminent)
                         .controlSize(.large)
                         .padding(.top, 4)
                 }
                 
-                Text("Focus on your current activity")
+                Text(NSLocalizedString("timer.focus.message", comment: "Focus message"))
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(.secondary)
             }
@@ -577,7 +577,7 @@ struct TimerPageView: View {
         window.styleMask = NSWindow.StyleMask([.titled, .closable, .miniaturizable, .resizable])
         window.setContentSize(NSSize(width: 640, height: 480))
         window.center()
-        window.title = "Focus"
+        window.title = NSLocalizedString("timer.focus.window_title", comment: "Focus")
         window.isReleasedWhenClosed = false
         
         let delegate = FocusWindowDelegate {
@@ -757,7 +757,7 @@ private struct FocusWindowView: View {
 
     private var activityCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Current Activity")
+            Text(NSLocalizedString("timer.label.current_activity", comment: "Current activity"))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
 
@@ -773,7 +773,7 @@ private struct FocusWindowView: View {
                     }
 
                     if tasks.isEmpty {
-                        Text("No linked tasks yet.")
+                        Text(NSLocalizedString("timer.focus.no_linked_tasks", comment: "No tasks"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
@@ -803,7 +803,7 @@ private struct FocusWindowView: View {
                     }
                 }
             } else {
-                Text("No activity selected.")
+                Text(NSLocalizedString("timer.label.no_activity_short", comment: "No activity"))
                     .font(.body)
                     .foregroundStyle(.secondary)
             }

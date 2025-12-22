@@ -122,7 +122,7 @@ struct IOSTimerPageView: View {
 
     private var durationControls: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Durations")
+            Text(NSLocalizedString("timer.label.durations", comment: "Durations"))
                 .font(.headline)
             switch viewModel.currentMode {
             case .pomodoro:
@@ -133,7 +133,7 @@ struct IOSTimerPageView: View {
             case .timer:
                 stepperRow(label: "Timer", value: $viewModel.timerDuration, range: 1 * 60...180 * 60, step: 1 * 60)
             case .stopwatch:
-                Text("Stopwatch counts up while running.")
+                Text(NSLocalizedString("timer.mode.stopwatch_description", comment: "Stopwatch description"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -153,10 +153,10 @@ struct IOSTimerPageView: View {
 
     private var activityPicker: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Activity")
+            Text(NSLocalizedString("timer.label.activity", comment: "Activity"))
                 .font(.headline)
             Picker("Activity", selection: $viewModel.currentActivityID) {
-                Text("None").tag(UUID?.none)
+                Text(NSLocalizedString("timer.label.none", comment: "None")).tag(UUID?.none)
                 ForEach(viewModel.activities) { activity in
                     Text(activity.name)
                         .tag(Optional(activity.id))
@@ -206,7 +206,7 @@ struct IOSTimerPageView: View {
 
     private var activityNotes: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Notes")
+            Text(NSLocalizedString("timer.label.notes", comment: "Notes"))
                 .font(.headline)
             if let activity = selectedActivity {
                 Text(activity.name)
@@ -219,7 +219,7 @@ struct IOSTimerPageView: View {
                             .fill(Color(uiColor: .secondarySystemBackground))
                     )
             } else {
-                Text("Select an activity to add notes.")
+                Text(NSLocalizedString("timer.focus.no_linked_tasks", comment: "No activity"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -228,7 +228,7 @@ struct IOSTimerPageView: View {
 
     private var settingsControls: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Alerts")
+            Text(NSLocalizedString("timer.label.alerts", comment: "Alerts"))
                 .font(.headline)
             Toggle("Timer Alerts", isOn: $settings.timerAlertsEnabled)
             Toggle("Pomodoro Alerts", isOn: $settings.pomodoroAlertsEnabled)
@@ -238,7 +238,7 @@ struct IOSTimerPageView: View {
 
     private var activityManager: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Manage Activities")
+            Text(NSLocalizedString("timer.label.manage_activities", comment: "Manage"))
                 .font(.headline)
             HStack {
                 TextField("New activity name", text: $newActivityName)
@@ -248,7 +248,7 @@ struct IOSTimerPageView: View {
                     .disabled(newActivityName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             if !pinnedActivities.isEmpty {
-                Text("Pinned")
+                Text(NSLocalizedString("timer.label.pinned", comment: "Pinned"))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 ForEach(pinnedActivities) { activity in
@@ -256,7 +256,7 @@ struct IOSTimerPageView: View {
                 }
             }
 
-            Text("All Activities")
+            Text(NSLocalizedString("timer.label.all_activities", comment: "All"))
                 .font(.caption)
                 .foregroundColor(.secondary)
             ForEach(filteredActivities) { activity in
@@ -267,10 +267,10 @@ struct IOSTimerPageView: View {
 
     private var sessionHistory: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Recent Sessions")
+            Text(NSLocalizedString("timer.stats.recent_sessions", comment: "Recent"))
                 .font(.headline)
             if viewModel.pastSessions.isEmpty {
-                Text("No sessions yet.")
+                Text(NSLocalizedString("timer.stats.no_sessions", comment: "No sessions"))
                     .foregroundColor(.secondary)
             } else {
                 ForEach(viewModel.pastSessions.prefix(5)) { session in
@@ -347,7 +347,7 @@ struct IOSTimerPageView: View {
 
     private var iterationsRow: some View {
         HStack {
-            Text("Iterations")
+            Text(NSLocalizedString("timer.pomodoro.iterations", comment: "Iterations"))
             Spacer()
             Text("\(settings.pomodoroIterations)")
                 .monospacedDigit()
@@ -441,7 +441,7 @@ struct IOSTimerPageView: View {
         Group {
             if ProcessInfo.processInfo.arguments.contains("UITestTimerDebug") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Debug")
+                    Text(NSLocalizedString("timer.debug.label", comment: "Debug"))
                         .font(.headline)
                     Text("Session: \(sessionState.rawValue)")
                         .accessibilityIdentifier("Timer.SessionState")
