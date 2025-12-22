@@ -11,6 +11,56 @@
 
 /* Timer/Focus */
 
+/* Timer Actions */
+"timer.action.start" = "Start";
+"timer.action.pause" = "Pause";
+"timer.action.resume" = "Resume";
+"timer.action.stop" = "Stop";
+"timer.action.reset" = "Reset";
+
+/* Timer Labels */
+"timer.label.activities" = "Activities";
+"timer.label.search" = "Search";
+"timer.label.selected_activity" = "Selected: %@";
+"timer.label.notes" = "Notes";
+"timer.label.no_activity" = "No activity selected";
+"timer.label.no_activity_short" = "No activity selected.";
+"timer.label.pinned" = "Pinned";
+"timer.label.all_activities" = "All Activities";
+"timer.label.current_activity" = "Current Activity";
+"timer.label.none" = "None";
+"timer.label.durations" = "Durations";
+"timer.label.activity" = "Activity";
+"timer.label.alerts" = "Alerts";
+"timer.label.manage_activities" = "Manage Activities";
+
+/* Timer Stats */
+"timer.stats.study_summary" = "Study Summary";
+"timer.stats.activities_count" = "Activities: %d";
+"timer.stats.selected_duration" = "Selected: %@ • %@ today";
+"timer.stats.no_sessions" = "No sessions yet.";
+"timer.stats.recent_sessions" = "Recent Sessions";
+
+/* Timer Focus */
+"timer.focus.window_title" = "Focus";
+"timer.focus.message" = "Focus on your current activity";
+"timer.focus.no_linked_tasks" = "No linked tasks yet.";
+
+/* Pomodoro */
+"timer.pomodoro.work" = "Work";
+"timer.pomodoro.break" = "Break";
+"timer.pomodoro.iterations" = "Iterations";
+"timer.pomodoro.running" = "%@ running";
+
+/* Timer Mode */
+"timer.mode.stopwatch" = "Stopwatch";
+"timer.mode.countdown" = "Countdown";
+"timer.mode.pomodoro" = "Pomodoro";
+"timer.mode.stopwatch_description" = "Stopwatch counts up while running.";
+
+/* Timer Debug */
+"timer.debug.label" = "Debug";
+
 /* Assignments */
 
 /* Segments */
