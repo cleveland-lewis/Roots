@@ -83,6 +83,8 @@ struct SettingsRootView: View {
                     NotificationsSettingsView()
                 case .privacy:
                     PrivacySettingsView()
+                case .localModel:
+                    LocalModelSettingsView()
                 case .storage:
                     StorageSettingsView()
                 case .developer:
