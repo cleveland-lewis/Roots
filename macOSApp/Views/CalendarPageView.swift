@@ -842,7 +842,7 @@ private struct MonthCalendarSplitView: View {
                                 .buttonStyle(.plain)
                                 .background(
                                     RoundedRectangle(cornerRadius: DesignSystem.Corners.pill, style: .continuous)
-                                        .fill(event.id == selectedEvent?.id ? Color(nsColor: .controlAccentColor).opacity(0.1) : Color.clear)
+                                        .fill(event.id == selectedEvent?.id ? Color.accentColor.opacity(0.1) : Color.clear)
                                 )
                             }
                         }

@@ -67,7 +67,7 @@ struct FloatingTabBar: View {
         .padding(.vertical, 4)
         .padding(.horizontal, showText ? 8 : 0)
         .scaleEffect(hoveredTab == tab ? 1.02 : 1)
-        .foregroundColor(isSelected ? settings.activeAccentColor : Color.secondary)
+        .foregroundColor(isSelected ? .accentColor : Color.secondary)
         .animation(.easeInOut(duration: 0.25), value: selectedTab)
     }
 

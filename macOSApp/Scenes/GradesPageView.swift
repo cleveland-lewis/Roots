@@ -613,7 +613,7 @@ struct CourseGradeRow: View {
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(isSelected ? Color(nsColor: .controlAccentColor).opacity(0.12) : Color(nsColor: .controlBackgroundColor))
+                    .fill(isSelected ? Color.accentColor.opacity(0.12) : Color(nsColor: .controlBackgroundColor))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)

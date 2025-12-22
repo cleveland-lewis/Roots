@@ -126,7 +126,6 @@ struct CoursesPageView: View {
                 }
             }
         }
-        .accentColor(.accentColor)
         .sheet(isPresented: $showNewCourseSheet) {
             CourseEditorSheet(course: editingCourse) { updated in
                 persistCourse(updated)

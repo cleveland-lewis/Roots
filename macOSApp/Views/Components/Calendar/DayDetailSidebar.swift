@@ -229,11 +229,11 @@ private struct DayDetailEventRow: View {
         .padding(.horizontal, 12)
         .background(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(isSelected ? Color(nsColor: .controlAccentColor).opacity(0.1) : Color.clear)
+                .fill(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .stroke(isSelected ? Color(nsColor: .controlAccentColor).opacity(0.3) : Color.clear, lineWidth: 1)
+                .stroke(isSelected ? Color.accentColor.opacity(0.3) : Color.clear, lineWidth: 1)
         )
     }
 }

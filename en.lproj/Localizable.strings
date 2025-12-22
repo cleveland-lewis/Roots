@@ -13,6 +13,87 @@
 
 /* Assignments */
 
+/* Segments */
+"assignments.segment.today" = "Today";
+"assignments.segment.upcoming" = "Upcoming";
+"assignments.segment.all" = "All";
+"assignments.segment.completed" = "Completed";
+
+/* Sort Options */
+"assignments.sort.due_date" = "Due Date";
+"assignments.sort.course" = "Course";
+"assignments.sort.urgency" = "Urgency";
+
+/* Actions */
+"assignments.action.new" = "New";
+"assignments.action.plan_day" = "Plan Day";
+"assignments.action.filters" = "Filters";
+
+/* Filters */
+"assignments.filter.status" = "Status";
+"assignments.filter.any" = "Any";
+"assignments.filter.all_courses" = "All courses";
+
+/* Sections */
+"assignments.section.today" = "Today";
+"assignments.section.by_course" = "By Course";
+"assignments.section.upcoming_load" = "Upcoming Load";
+"assignments.section.upcoming" = "Upcoming";
+"assignments.section.missed" = "Missed";
+
+/* Stats */
+"assignments.stats.due_planned_remaining" = "%d due · %d planned · %d remaining";
+"assignments.stats.assignments_due" = "Assignments due today or later";
+"assignments.stats.overdue_assignments" = "Overdue assignments";
+
+/* Detail */
+"assignments.detail.unknown" = "Unknown";
+"assignments.detail.due" = "Due %@";
+"assignments.detail.minutes_short" = "min";
+"assignments.detail.grade_impact" = "Grade Impact";
+"assignments.detail.worth_percent" = "Worth %d%% of final grade in %@";
+"assignments.detail.no_weight" = "No weight specified yet. This will sync from Syllabus later.";
+"assignments.detail.plan" = "Plan";
+"assignments.detail.actions" = "Actions";
+"assignments.detail.state" = "State";
+"assignments.detail.planning" = "Planning";
+"assignments.detail.execution" = "Execution";
+"assignments.detail.delete" = "Delete Assignment";
+"assignments.detail.select_prompt" = "Select an assignment to see details.";
+
+/* Editor */
+"assignments.editor.section.task" = "Task";
+"assignments.editor.section.timing" = "Timing";
+"assignments.editor.section.status" = "Status";
+"assignments.editor.field.title" = "Title";
+"assignments.editor.field.course" = "Course";
+"assignments.editor.field.category" = "Category";
+"assignments.editor.field.due_date" = "Due Date";
+"assignments.editor.field.estimated_minutes" = "%d min";
+"assignments.editor.field.typical_sessions" = "Typical: %d × %d min over %d days for %@";
+"assignments.editor.field.weight" = "Weight";
+"assignments.editor.field.urgency" = "Urgency";
+"assignments.editor.field.lock_due_date" = "Lock to exact due date";
+"assignments.editor.field.notes" = "Notes";
+"assignments.editor.action.save" = "Save";
+"assignments.editor.action.cancel" = "Cancel";
+
+/* Plan Steps */
+"assignments.plan.research_gather" = "Research & Gather";
+"assignments.plan.outline_plan" = "Outline & Plan";
+"assignments.plan.draft" = "Draft";
+"assignments.plan.polish_submit" = "Polish & Submit";
+"assignments.plan.review_notes" = "Review Notes";
+"assignments.plan.practice_problems" = "Practice Problems";
+"assignments.plan.mock_test" = "Mock Test";
+"assignments.plan.skim_outline" = "Skim & Outline";
+"assignments.plan.practice_set" = "Practice Set";
+"assignments.plan.solve_set" = "Solve Set";
+"assignments.plan.read_annotate" = "Read & Annotate";
+"assignments.plan.summarize" = "Summarize";
+"assignments.plan.review_key_points" = "Review Key Points";
+"assignments.plan.flashcards_drill" = "Flashcards / Drill";
+
 /* Courses */
 
 /* Calendar */

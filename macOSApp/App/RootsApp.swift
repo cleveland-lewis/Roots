@@ -47,6 +47,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct RootsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
+    private let appAccentColor: Color = .blue
+
     @StateObject private var coursesStore: CoursesStore
     @StateObject private var appSettings = AppSettingsModel.shared
     @StateObject private var settingsCoordinator: SettingsCoordinator
@@ -161,11 +163,11 @@ struct RootsApp: App {
                         preferences.reduceTransparency = appSettings.increaseTransparency
                         if let g = appSettings.glassIntensity { preferences.glassIntensity = g }
                     }
-                    .accentColor(preferences.currentAccentColor)
+                    .accentColor(appAccentColor)
                     .buttonStyle(.glassBlueProminent)
                     .controlSize(.regular)
                     .buttonBorderShape(.automatic)
-                    .tint(preferences.currentAccentColor)
+                    .tint(appAccentColor)
                     .frame(minWidth: RootsWindowSizing.minMainWidth, minHeight: RootsWindowSizing.minMainHeight)
                     .task {
                         LOG_LIFECYCLE(.info, "AppStartup", "Running startup tasks")

@@ -264,7 +264,6 @@ struct PlannerPageView: View {
                 .padding(.bottom, DesignSystem.Layout.spacing.large)
             }
         }
-        .accentColor(.accentColor)
         .sheet(isPresented: $showTaskSheet) {
             if let draft = editingTaskDraft {
                 NewTaskSheet(

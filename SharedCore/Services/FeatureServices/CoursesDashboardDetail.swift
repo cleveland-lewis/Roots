@@ -76,7 +76,7 @@ struct CoursesDashboardDetail: View {
                 .trim(from: 0, to: course.currentGrade / 100.0)
                 .stroke(
                     AngularGradient(
-                        colors: [appPreferences.currentAccentColor, appPreferences.currentAccentColor.opacity(0.7)],
+                        colors: [.accentColor, .accentColor.opacity(0.7)],
                         center: .center
                     ),
                     style: StrokeStyle(lineWidth: 12, lineCap: .round)
@@ -235,7 +235,7 @@ struct CoursesDashboardDetail: View {
             VStack(spacing: DesignSystem.Layout.spacing.small) {
                 Image(systemName: icon)
                     .font(DesignSystem.Typography.body)
-                    .foregroundStyle(appPreferences.currentAccentColor)
+                    .foregroundStyle(.accentColor)
 
                 Text(title)
                     .font(DesignSystem.Typography.body)
@@ -287,28 +287,28 @@ struct CoursesDashboardDetail: View {
                         title: "Assignments",
                         value: "\(course.analytics.assignmentsCompleted)/\(course.analytics.assignmentsTotal)",
                         icon: "checkmark.circle.fill",
-                        color: appPreferences.currentAccentColor
+                        color: .accentColor
                     )
 
                     analyticRow(
                         title: "Average Score",
                         value: String(format: "%.1f%%", course.analytics.averageScore),
                         icon: "star.fill",
-                        color: appPreferences.currentAccentColor
+                        color: .accentColor
                     )
 
                     analyticRow(
                         title: "Attendance",
                         value: String(format: "%.0f%%", course.analytics.attendanceRate * 100),
                         icon: "person.fill.checkmark",
-                        color: appPreferences.currentAccentColor
+                        color: .accentColor
                     )
 
                     analyticRow(
                         title: "Hours Studied",
                         value: String(format: "%.1fh", course.analytics.hoursStudied),
                         icon: "clock.fill",
-                        color: appPreferences.currentAccentColor
+                        color: .accentColor
                     )
                 }
             } else {
