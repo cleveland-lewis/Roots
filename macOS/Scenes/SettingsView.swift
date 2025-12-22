@@ -14,20 +14,20 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("General")) {
+                Section(header: Text(NSLocalizedString("settings.section.general", comment: "General"))) {
                     Toggle("Use 24-hour time", isOn: $settings.use24HourTime)
                     Toggle("Show Energy Panel", isOn: $settings.showEnergyPanel)
                     Toggle("High Contrast Mode", isOn: $settings.highContrastMode)
                 }
 
-                Section(header: Text("Academic")) {
+                Section(header: Text(NSLocalizedString("settings.section.academic", comment: "Academic"))) {
                     // Note: Courses & Semesters management now handled via SettingsRootView
                     // NavigationLink(destination: CoursesSettingsView().environmentObject(coursesStore)) {
                     //     Label("Courses & Semesters", systemImage: "book.closed")
                     // }
                 }
 
-                Section(header: Text("Workday")) {
+                Section(header: Text(NSLocalizedString("settings.section.workday", comment: "Workday"))) {
                     DatePicker("Start", selection: Binding(
                         get: { settings.date(from: settings.defaultWorkdayStart) },
                         set: { settings.defaultWorkdayStart = settings.components(from: $0) }
@@ -38,13 +38,13 @@ struct SettingsView: View {
                     ), displayedComponents: [.hourAndMinute])
                 }
 
-                Section(header: Text("Advanced")) {
+                Section(header: Text(NSLocalizedString("settings.section.advanced", comment: "Advanced"))) {
                     NavigationLink(destination: DebugSettingsView(selectedMaterial: $selectedMaterial)) {
                         Label("Developer", systemImage: "hammer")
                     }
                 }
 
-                Section(header: Text("Design")) {
+                Section(header: Text(NSLocalizedString("settings.section.design", comment: "Design"))) {
                     Picker("Material", selection: $selectedMaterial) {
                         ForEach(DesignSystem.materials, id: \.id) { token in
                             Text(token.name).tag(token as DesignMaterial)
@@ -65,7 +65,7 @@ struct SettingsView: View {
                         Label("Run Health Check", systemImage: "stethoscope")
                     }
                 } footer: {
-                    Text("Runs a quick self-diagnostic across data, permissions, and local files.")
+                    Text(NSLocalizedString("settings.advanced.diagnostics_description", comment: "Diagnostics"))
                 }
             }
             #if os(iOS)
@@ -89,7 +89,7 @@ struct SettingsView: View {
             Button("OK", role: .cancel) { }
         } message: { report in
             if report.issues.isEmpty {
-                Text("All systems look healthy.")
+                Text(NSLocalizedString("settings.advanced.all_healthy", comment: "All healthy"))
             } else {
                 Text(report.formattedSummary)
             }
@@ -105,9 +105,9 @@ private struct DebugSettingsView: View {
             Toggle("Enable verbose logging", isOn: .constant(false))
             Button("Reset demo data") { }
 
-            Section(header: Text("Design debug")) {
+            Section(header: Text(NSLocalizedString("settings.section.design_debug", comment: "Design debug"))) {
                 HStack {
-                    Text("Selected material")
+                    Text(NSLocalizedString("settings.advanced.selected_material", comment: "Selected material"))
                     Spacer()
                     Text(selectedMaterial.name)
                         .foregroundStyle(.secondary)

@@ -602,40 +602,40 @@ struct IOSSettingsView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("General")) {
-                Toggle("Use 24-hour time", isOn: $settings.use24HourTime)
-                    .accessibilityLabel("Use 24-hour time format")
+            Section(header: Text(NSLocalizedString("settings.section.general", comment: "General section"))) {
+                Toggle(NSLocalizedString("settings.general.use_24h", comment: "24-hour time"), isOn: $settings.use24HourTime)
+                    .accessibilityLabel(NSLocalizedString("settings.a11y.use_24h", comment: "24h format"))
                 
-                Toggle("Show Energy Panel", isOn: $settings.showEnergyPanel)
-                    .accessibilityLabel("Show energy panel on dashboard")
+                Toggle(NSLocalizedString("settings.general.show_energy", comment: "Energy panel"), isOn: $settings.showEnergyPanel)
+                    .accessibilityLabel(NSLocalizedString("settings.a11y.show_energy", comment: "Energy panel"))
                 
-                Toggle("High Contrast Mode", isOn: $settings.highContrastMode)
-                    .accessibilityLabel("Enable high contrast mode for better visibility")
+                Toggle(NSLocalizedString("settings.general.high_contrast", comment: "High contrast"), isOn: $settings.highContrastMode)
+                    .accessibilityLabel(NSLocalizedString("settings.a11y.high_contrast", comment: "High contrast"))
             }
             
-            Section(header: Text("Workday")) {
+            Section(header: Text(NSLocalizedString("settings.section.workday", comment: "Workday section"))) {
                 DatePicker(
-                    "Start Time",
+                    NSLocalizedString("settings.workday.start_time", comment: "Start time"),
                     selection: Binding(
                         get: { settings.date(from: settings.defaultWorkdayStart) },
                         set: { settings.defaultWorkdayStart = settings.components(from: $0) }
                     ),
                     displayedComponents: [.hourAndMinute]
                 )
-                .accessibilityLabel("Workday start time")
+                .accessibilityLabel(NSLocalizedString("settings.a11y.workday_start", comment: "Workday start"))
                 
                 DatePicker(
-                    "End Time",
+                    NSLocalizedString("settings.workday.end_time", comment: "End time"),
                     selection: Binding(
                         get: { settings.date(from: settings.defaultWorkdayEnd) },
                         set: { settings.defaultWorkdayEnd = settings.components(from: $0) }
                     ),
                     displayedComponents: [.hourAndMinute]
                 )
-                .accessibilityLabel("Workday end time")
+                .accessibilityLabel(NSLocalizedString("settings.a11y.workday_end", comment: "Workday end"))
             }
             
-            Section("Tab Bar Pages") {
+            Section(NSLocalizedString("settings.section.tab_bar_pages", comment: "Tab bar section")) {
                 if let tabPrefs = tabBarPrefs {
                     ForEach(TabRegistry.allTabs) { tabDef in
                         HStack {
@@ -651,32 +651,32 @@ struct IOSSettingsView: View {
                             
                             if tabDef.isSystemRequired {
                                 Spacer()
-                                Text("Required")
+                                Text(NSLocalizedString("settings.tabbar.required", comment: "Required"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
                         }
-                        .accessibilityHint(tabDef.isSystemRequired ? "This tab cannot be disabled" : "")
+                        .accessibilityHint(tabDef.isSystemRequired ? NSLocalizedString("settings.tabbar.cannot_disable_hint", comment: "Cannot disable") : "")
                     }
 
-                    Button("Restore Defaults") {
+                    Button(NSLocalizedString("settings.tabbar.restore_defaults", comment: "Restore defaults")) {
                         tabPrefs.resetToDefaults()
                     }
                 }
             }
             
-            Section(header: Text("About")) {
+            Section(header: Text(NSLocalizedString("settings.section.about", comment: "About section"))) {
                 HStack {
-                    Text("Version")
+                    Text(NSLocalizedString("settings.about.version", comment: "Version"))
                     Spacer()
                     Text("1.0.0")
                         .foregroundColor(.secondary)
                 }
                 
                 HStack {
-                    Text("Build")
+                    Text(NSLocalizedString("settings.about.build", comment: "Build"))
                     Spacer()
-                    Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
+                    Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? NSLocalizedString("settings.about.unknown", comment: "Unknown"))
                         .foregroundColor(.secondary)
                 }
             }

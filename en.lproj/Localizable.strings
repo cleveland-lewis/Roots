@@ -245,6 +245,47 @@
 
 /* Settings */
 
+/* Section Headers */
+"settings.section.general" = "General";
+"settings.section.academic" = "Academic";
+"settings.section.workday" = "Workday";
+"settings.section.advanced" = "Advanced";
+"settings.section.design" = "Design";
+"settings.section.about" = "About";
+"settings.section.tab_bar_pages" = "Tab Bar Pages";
+"settings.section.design_debug" = "Design debug";
+
+/* General Settings */
+"settings.general.use_24h" = "Use 24-hour time";
+"settings.general.show_energy" = "Show Energy Panel";
+"settings.general.high_contrast" = "High Contrast Mode";
+
+/* Workday Settings */
+"settings.workday.start_time" = "Start Time";
+"settings.workday.end_time" = "End Time";
+
+/* Tab Bar */
+"settings.tabbar.required" = "Required";
+"settings.tabbar.restore_defaults" = "Restore Defaults";
+"settings.tabbar.cannot_disable_hint" = "This tab cannot be disabled";
+
+/* About */
+"settings.about.version" = "Version";
+"settings.about.build" = "Build";
+"settings.about.unknown" = "Unknown";
+
+/* Advanced */
+"settings.advanced.diagnostics_description" = "Runs a quick self-diagnostic across data, permissions, and local files.";
+"settings.advanced.all_healthy" = "All systems look healthy.";
+"settings.advanced.selected_material" = "Selected material";
+
+/* Accessibility Labels */
+"settings.a11y.use_24h" = "Use 24-hour time format";
+"settings.a11y.show_energy" = "Show energy panel on dashboard";
+"settings.a11y.high_contrast" = "Enable high contrast mode for better visibility";
+"settings.a11y.workday_start" = "Workday start time";
+"settings.a11y.workday_end" = "Workday end time";
+
 /* Dashboard */
 "dashboard.calendar.connect" = "Connect Apple Calendar to show events";
 "dashboard.calendar.access_denied" = "Access Denied. Open Settings.";
