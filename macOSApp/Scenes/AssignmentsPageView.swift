@@ -415,8 +415,8 @@ struct AssignmentsPageView: View {
             let q = searchText.lowercased()
             result = result.filter {
                 $0.title.lowercased().contains(q) ||
-                $0.courseCode.lowercased().contains(q) ||
-                $0.courseName.lowercased().contains(q) ||
+                ($0.courseCode ?? "").lowercased().contains(q) ||
+                ($0.courseName ?? "").lowercased().contains(q) ||
                 $0.category.displayName.lowercased().contains(q)
             }
         }
@@ -434,7 +434,7 @@ struct AssignmentsPageView: View {
         case .byDueDate:
             result = result.sorted { $0.dueDate < $1.dueDate }
         case .byCourse:
-            result = result.sorted { $0.courseCode < $1.courseCode }
+            result = result.sorted { ($0.courseCode ?? "") < ($1.courseCode ?? "") }
         case .byUrgency:
             let order: [AssignmentUrgency: Int] = [.critical: 0, .high: 1, .medium: 2, .low: 3]
             result = result.sorted { (order[$0.urgency] ?? 99) < (order[$1.urgency] ?? 99) }
@@ -444,7 +444,7 @@ struct AssignmentsPageView: View {
     }
 
     private var uniqueCourses: [String] {
-        Set(assignments.map { $0.courseCode }).sorted()
+        Set(assignments.map { $0.courseCode ?? "" }).sorted()
     }
 
     private var activeFiltersLabel: String {
@@ -780,7 +780,7 @@ struct AssignmentsPageRow: View {
                         .foregroundColor(.primary)
                         .lineLimit(1)
                     HStack(spacing: 8) {
-                        Text(assignment.courseCode)
+                        Text(assignment.courseCode ?? "")
                         Text("· \(assignment.category.displayName)")
                         Text("· ~\(assignment.estimatedMinutes) min")
                         Text("·")
@@ -848,7 +848,7 @@ struct AssignmentsPageRow: View {
     }
 
     private var statusChip: some View {
-        Text(assignment.status.label)
+        Text((assignment.status ?? .notStarted).label)
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
@@ -903,12 +903,12 @@ struct AssignmentDetailPanel: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(assignment.title)
                     .font(.title3.weight(.semibold))
-                Text("\(assignment.courseCode) · \(assignment.courseName)")
+                Text("\(assignment.courseCode ?? "") · \(assignment.courseName)")
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(.secondary)
             }
             Spacer()
-            Text(assignment.status.label)
+            Text((assignment.status ?? .notStarted).label)
                 .font(.caption.weight(.semibold))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
@@ -974,12 +974,12 @@ struct AssignmentDetailPanel: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Plan")
                 .font(DesignSystem.Typography.subHeader)
-            ForEach(assignment.plan.sorted(by: { $0.targetDate < $1.targetDate })) { step in
+            ForEach(assignment.plan) { step in
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(step.title)
                             .font(DesignSystem.Typography.body)
-                        Text(fullDateFormatter.string(from: step.targetDate))
+                        Text("\(step.expectedMinutes) min")
                             .font(DesignSystem.Typography.caption)
                             .foregroundColor(.secondary)
                     }
@@ -1225,15 +1225,16 @@ struct AssignmentEditorSheet: View {
                         id: assignment?.id ?? UUID(),
                         courseId: course?.id,
                         title: title,
-                        courseCode: course?.code ?? "",
-                        courseName: course?.title ?? "",
-                        category: category,
                         dueDate: dueDate,
                         estimatedMinutes: estimatedMinutes,
-                        status: status,
-                        urgency: urgency,
                         weightPercent: weight,
+                        category: category,
+                        urgency: urgency,
                         isLockedToDueDate: isLocked,
+                        plan: [],
+                        status: status,
+                        courseCode: course?.code ?? "",
+                        courseName: course?.title ?? "",
                         notes: notes
                     )
                     onSave(newAssignment)
@@ -1415,14 +1416,8 @@ private extension AssignmentsPageView {
                 id: UUID(),
                 courseId: item.courseId,
                 title: item.title + " (copy)",
-                courseCode: item.courseCode,
-                courseName: item.courseName,
-                category: item.category,
                 dueDate: item.dueDate,
-                estimatedMinutes: item.estimatedMinutes,
-                status: item.status,
-                urgency: item.urgency,
-                weightPercent: item.weightPercent,
+                estimatedMinutes: item.estimatedMinutes, weightPercent: item.weightPercent, category: item.category, urgency: item.urgency, isLockedToDueDate: item.isLockedToDueDate, plan: item.plan, status: item.status, courseCode: item.courseCode, courseName: item.courseName,
                 isLockedToDueDate: item.isLockedToDueDate,
                 notes: item.notes,
                 plan: item.plan
@@ -1440,12 +1435,16 @@ private extension AssignmentsPageView {
                 id: UUID(),
                 courseId: item.courseId,
                 title: item.title,
-                courseCode: item.courseCode,
-                courseName: item.courseName,
-                category: item.category,
                 dueDate: item.dueDate,
                 estimatedMinutes: item.estimatedMinutes,
+                weightPercent: item.weightPercent,
+                category: item.category,
+                urgency: item.urgency,
+                isLockedToDueDate: item.isLockedToDueDate,
+                plan: item.plan,
                 status: item.status,
+                courseCode: item.courseCode,
+                courseName: item.courseName,
                 urgency: item.urgency,
                 weightPercent: item.weightPercent,
                 isLockedToDueDate: item.isLockedToDueDate,

@@ -3,8 +3,10 @@ import Foundation
 // MARK: - Shared Planning Models
 // These types are available on all platforms (macOS, iOS, watchOS)
 
-public enum AssignmentCategory: String, CaseIterable, Codable {
+public enum AssignmentCategory: String, CaseIterable, Codable, Identifiable {
     case reading, exam, homework, practiceHomework, quiz, review, project
+    
+    public var id: String { rawValue }
     
     public var displayName: String {
         switch self {
@@ -33,11 +35,13 @@ public enum AssignmentStatus: String, Codable, CaseIterable, Sendable, Identifia
     public var id: String { rawValue }
 }
 
-public struct PlanStepStub: Codable, Hashable {
+public struct PlanStepStub: Codable, Hashable, Identifiable {
+    public var id: UUID
     public var title: String
     public var expectedMinutes: Int
     
-    public init(title: String = "", expectedMinutes: Int = 0) { 
+    public init(id: UUID = UUID(), title: String = "", expectedMinutes: Int = 0) {
+        self.id = id
         self.title = title
         self.expectedMinutes = expectedMinutes
     }
