@@ -24,6 +24,15 @@ public enum AssignmentUrgency: String, Codable, CaseIterable, Hashable, Identifi
     public var id: String { rawValue }
 }
 
+public enum AssignmentStatus: String, Codable, CaseIterable, Sendable, Identifiable {
+    case notStarted
+    case inProgress
+    case completed
+    case archived
+    
+    public var id: String { rawValue }
+}
+
 public struct PlanStepStub: Codable, Hashable {
     public var title: String
     public var expectedMinutes: Int
@@ -45,6 +54,12 @@ public struct Assignment: Identifiable, Codable, Hashable {
     public var urgency: AssignmentUrgency
     public var isLockedToDueDate: Bool
     public var plan: [PlanStepStub]
+    
+    // Optional UI/tracking fields
+    public var status: AssignmentStatus?
+    public var courseCode: String?
+    public var courseName: String?
+    public var notes: String?
 
     public init(
         id: UUID = UUID(),
@@ -56,7 +71,11 @@ public struct Assignment: Identifiable, Codable, Hashable {
         category: AssignmentCategory = .practiceHomework,
         urgency: AssignmentUrgency = .medium,
         isLockedToDueDate: Bool = false,
-        plan: [PlanStepStub] = []
+        plan: [PlanStepStub] = [],
+        status: AssignmentStatus? = nil,
+        courseCode: String? = nil,
+        courseName: String? = nil,
+        notes: String? = nil
     ) {
         self.id = id
         self.courseId = courseId
@@ -68,6 +87,10 @@ public struct Assignment: Identifiable, Codable, Hashable {
         self.urgency = urgency
         self.isLockedToDueDate = isLockedToDueDate
         self.plan = plan
+        self.status = status
+        self.courseCode = courseCode
+        self.courseName = courseName
+        self.notes = notes
     }
 }
 
