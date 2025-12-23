@@ -271,10 +271,26 @@
 /* Settings */
 "planner.settings.section.title" = "计划器";
 "planner.settings.enable_ai" = "启用 AI 计划器";
-"planner.settings.horizon" = "默认规划范围";
+"planner.settings.horizon" = "排程前瞻";
 "planner.settings.horizon.one_week" = "1 周";
 "planner.settings.horizon.two_weeks" = "2 周";
 "planner.settings.horizon.one_month" = "1 个月";
+"planner.settings.horizon.two_months" = "2 个月";
+"calendar.refresh.in_progress" = "正在刷新日历…";
+"calendar.refresh.last" = "上次刷新：%@";
+"calendar.refresh.last.never" = "上次刷新：从未";
+"calendar.refresh.failed" = "日历刷新失败";
+"calendar.refresh.permission_denied" = "日历访问已禁用。请在“系统设置 > 隐私与安全性 > 日历”中启用。";
+"calendar.refresh.scheduling_failed" = "日历已刷新，但排程未完成。";
+"calendar.refresh.open_settings" = "打开设置";
+"timer.context.refresh_calendar" = "刷新日历";
+"timer.context.go_to_planner" = "前往规划";
+"timer.context.add_assignment" = "添加作业";
+"timer.context.add_grade" = "添加成绩";
+"timer.context.start_clock" = "开始计时";
+"timer.context.stop_clock" = "暂停计时";
+"timer.context.end_clock" = "结束计时";
+"common.button.ok" = "确定";
 
 /* Mode */
 "planner.mode.picker_label" = "模式";

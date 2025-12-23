@@ -367,7 +367,7 @@ final class AppSettingsModel: ObservableObject, Codable {
     var showEnergyPanelStorage: Bool = true
     var highContrastModeStorage: Bool = false
     var enableAIPlannerStorage: Bool = false
-    var plannerHorizonStorage: String = "1w"
+    var plannerHorizonStorage: String = "2w"
     var enableFlashcardsStorage: Bool = true
     var assignmentSwipeLeadingRaw: String = AssignmentSwipeAction.complete.rawValue
     var assignmentSwipeTrailingRaw: String = AssignmentSwipeAction.delete.rawValue

@@ -14,20 +14,20 @@ struct GlobalContextMenuModifier: ViewModifier {
         content
             .contextMenu {
                 // Global items
-                Button("Refresh Calendar") {
+                Button(NSLocalizedString("timer.context.refresh_calendar", comment: "")) {
                     GlobalMenuActions.shared.refresh()
                 }
                 .keyboardShortcut("r", modifiers: .command)
                 
-                Button("Go to Planner") {
+                Button(NSLocalizedString("timer.context.go_to_planner", comment: "")) {
                     GlobalMenuActions.shared.navigateToPlanner()
                 }
                 
-                Button("Add Assignment") {
+                Button(NSLocalizedString("timer.context.add_assignment", comment: "")) {
                     GlobalMenuActions.shared.addAssignment()
                 }
                 
-                Button("Add Grade") {
+                Button(NSLocalizedString("timer.context.add_grade", comment: "")) {
                     GlobalMenuActions.shared.addGrade()
                 }
             }
@@ -47,17 +47,17 @@ struct TimerContextMenuModifier: ViewModifier {
         content
             .contextMenu {
                 // Timer-specific items
-                Button("Start clock") {
+                Button(NSLocalizedString("timer.context.start_clock", comment: "")) {
                     TimerMenuActions.shared.startClock()
                 }
                 .disabled(isRunning)
                 
-                Button("Stop clock") {
+                Button(NSLocalizedString("timer.context.stop_clock", comment: "")) {
                     TimerMenuActions.shared.stopClock()
                 }
                 .disabled(!isRunning)
                 
-                Button("End clock") {
+                Button(NSLocalizedString("timer.context.end_clock", comment: "")) {
                     TimerMenuActions.shared.endClock()
                 }
                 .disabled(!isRunning)
@@ -65,20 +65,20 @@ struct TimerContextMenuModifier: ViewModifier {
                 Divider()
                 
                 // Global items
-                Button("Refresh Calendar") {
+                Button(NSLocalizedString("timer.context.refresh_calendar", comment: "")) {
                     GlobalMenuActions.shared.refresh()
                 }
                 .keyboardShortcut("r", modifiers: .command)
                 
-                Button("Go to Planner") {
+                Button(NSLocalizedString("timer.context.go_to_planner", comment: "")) {
                     GlobalMenuActions.shared.navigateToPlanner()
                 }
                 
-                Button("Add Assignment") {
+                Button(NSLocalizedString("timer.context.add_assignment", comment: "")) {
                     GlobalMenuActions.shared.addAssignment()
                 }
                 
-                Button("Add Grade") {
+                Button(NSLocalizedString("timer.context.add_grade", comment: "")) {
                     GlobalMenuActions.shared.addGrade()
                 }
             }
@@ -92,7 +92,7 @@ class GlobalMenuActions: NSObject {
     static let shared = GlobalMenuActions()
     
     @objc func refresh() {
-        NotificationCenter.default.post(name: .refreshRequested, object: nil)
+        CalendarRefreshCoordinator.shared.refresh()
     }
     
     @objc func navigateToCalendar() {
@@ -100,15 +100,21 @@ class GlobalMenuActions: NSObject {
     }
     
     @objc func navigateToPlanner() {
-        NotificationCenter.default.post(name: .navigateToTab, object: nil, userInfo: ["tab": "planner"])
+        Task { @MainActor in
+            AppModalRouter.shared.present(.planner)
+        }
     }
     
     @objc func addAssignment() {
-        NotificationCenter.default.post(name: .addAssignmentRequested, object: nil)
+        Task { @MainActor in
+            AppModalRouter.shared.present(.addAssignment)
+        }
     }
     
     @objc func addGrade() {
-        NotificationCenter.default.post(name: .addGradeRequested, object: nil)
+        Task { @MainActor in
+            AppModalRouter.shared.present(.addGrade)
+        }
     }
 }
 
@@ -144,4 +150,3 @@ extension View {
 }
 
 #endif
-

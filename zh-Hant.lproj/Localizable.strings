@@ -10,174 +10,541 @@
 /* Navigation */
 
 /* Timer/Focus */
+
+/* Timer Actions */
+"timer.action.start" = "開始";
+"timer.action.pause" = "暫停";
+"timer.action.resume" = "繼續";
+"timer.action.stop" = "停止";
+"timer.action.reset" = "重置";
+
+/* Timer Labels */
+"timer.label.activities" = "活動";
+"timer.label.search" = "搜尋";
+"timer.label.selected_activity" = "已選擇：%@";
+"timer.label.notes" = "筆記";
+"timer.label.no_activity" = "未選擇活動";
+"timer.label.no_activity_short" = "未選擇活動。";
+"timer.label.pinned" = "已固定";
+"timer.label.all_activities" = "所有活動";
+"timer.label.current_activity" = "目前活動";
+"timer.label.none" = "無";
+"timer.label.durations" = "時長";
+"timer.label.activity" = "活動";
+"timer.label.alerts" = "提醒";
+"timer.label.manage_activities" = "管理活動";
+
+/* Timer Stats */
+"timer.stats.study_summary" = "學習摘要";
+"timer.stats.activities_count" = "活動數：%d";
+"timer.stats.selected_duration" = "已選擇：%@ • 今天 %@";
+"timer.stats.no_sessions" = "暫無記錄。";
+"timer.stats.recent_sessions" = "最近的記錄";
+
+/* Timer Focus */
+"timer.focus.window_title" = "專注";
+"timer.focus.message" = "專注於目前活動";
+"timer.focus.no_linked_tasks" = "暫無關聯任務。";
+
+/* Pomodoro */
+"timer.pomodoro.work" = "工作";
+"timer.pomodoro.break" = "休息";
+"timer.pomodoro.iterations" = "循環次數";
+"timer.pomodoro.running" = "%@ 運行中";
+
+/* Timer Mode */
+"timer.mode.stopwatch" = "碼錶";
+"timer.mode.countdown" = "倒數計時";
+"timer.mode.pomodoro" = "番茄鐘";
+"timer.mode.stopwatch_description" = "碼錶在運行時向上計數。";
 "timer.display.digital" = "數位";
 "timer.display.analog" = "類比";
 
+/* Timer Debug */
+"timer.debug.label" = "偵錯";
+
 /* Assignments */
 
-/* Courses */
+/* Segments */
+"assignments.segment.today" = "今天";
+"assignments.segment.upcoming" = "即將到來";
+"assignments.segment.all" = "全部";
+"assignments.segment.completed" = "已完成";
+"assignments.segment.label" = "分段";
 
-/* Calendar */
+/* Sort Options */
+"assignments.sort.due_date" = "截止日期";
+"assignments.sort.course" = "課程";
+"assignments.sort.urgency" = "緊急程度";
+"assignments.sort.label" = "排序";
+
+/* Actions */
+"assignments.action.new" = "新增";
+"assignments.action.plan_day" = "計劃一天";
+"assignments.action.filters" = "篩選";
+"assignments.search.placeholder" = "搜尋作業";
+
+/* Filters */
+"assignments.filter.status" = "狀態";
+"assignments.filter.any" = "任意";
+"assignments.filter.all_courses" = "所有課程";
+"assignments.filter.segment_label" = "分段：%@";
+"assignments.filter.sort_label" = "排序：%@";
+"assignments.filter.status_label" = "狀態：%@";
+"assignments.filter.course_label" = "課程：%@";
+
+/* Sections */
+"assignments.section.today" = "今天";
+"assignments.section.by_course" = "按課程";
+"assignments.section.upcoming_load" = "即將到來的負擔";
+"assignments.section.upcoming" = "即將到來";
+"assignments.section.missed" = "已錯過";
+
+/* Stats */
+"assignments.stats.due_planned_remaining" = "%d 到期 • %d 已計劃 • %d 剩餘";
+"assignments.stats.assignments_due" = "作業到期";
+"assignments.stats.overdue_assignments" = "逾期作業";
+"assignments.stats.no_assignments" = "今天沒有作業";
+
+/* Detail */
+"assignments.detail.empty_title" = "未選擇作業";
+"assignments.detail.empty_subtitle" = "從清單中選擇作業以檢視詳細資訊。";
+"assignments.detail.due" = "到期：%@";
+"assignments.detail.estimated_minutes" = "預計：%d 分鐘";
+"assignments.detail.difficulty" = "難度：%@";
+"assignments.detail.status" = "狀態：%@";
+"assignments.detail.no_description" = "此作業沒有描述。";
+"assignments.detail.grade_impact" = "成績影響";
+"assignments.detail.worth_percent" = "在 %2$@ 中佔 %1$d%%";
+"assignments.detail.no_weight" = "未設定權重";
+"assignments.detail.plan" = "計劃";
+"assignments.detail.actions" = "操作";
+"assignments.detail.state" = "狀態";
+"assignments.detail.mark_completed" = "標記為已完成";
+"assignments.detail.planning" = "規劃";
+"assignments.detail.planner" = "規劃器";
+"assignments.detail.planner_accessibility" = "在規劃器中開啟";
+"assignments.detail.execution" = "執行";
+"assignments.detail.timer" = "計時器";
+"assignments.detail.timer_accessibility" = "在計時器中開啟";
+"assignments.detail.delete" = "刪除";
+"assignments.detail.delete_confirmation" = "確定要刪除「%@」嗎？";
+
+/* Editor */
+"assignments.editor.section.task" = "任務";
+"assignments.editor.section.timing" = "時間";
+"assignments.editor.section.status" = "狀態";
+"assignments.editor.field.title" = "標題";
+"assignments.editor.field.course" = "課程";
+"assignments.editor.field.category" = "類別";
+"assignments.editor.field.due_date" = "截止日期";
+"assignments.editor.field.estimated_minutes" = "預計分鐘數";
+"assignments.editor.field.difficulty" = "難度";
+"assignments.editor.field.status" = "狀態";
+"assignments.editor.field.notes" = "筆記";
+"assignments.editor.field.weight_percent" = "權重百分比";
+"assignments.editor.field.weight_optional" = "權重（選填）";
+"assignments.editor.field.description" = "描述";
+"assignments.editor.course.empty" = "您還沒有任何課程。";
+"assignments.editor.course.add" = "新增課程";
+"assignments.editor.course.helper" = "選擇一門課程以繼續";
+"assignments.editor.validation.title_required" = "標題為必填";
+"assignments.editor.validation.course_required" = "課程為必填";
+
+/* Assignment Status */
+"assignments.status.not_started" = "未開始";
+"assignments.status.in_progress" = "進行中";
+"assignments.status.completed" = "已完成";
+"assignments.status.submitted" = "已提交";
+
+/* Assignment Category */
+"assignments.category.homework" = "作業";
+"assignments.category.quiz" = "小考";
+"assignments.category.exam" = "考試";
+"assignments.category.project" = "專案";
+"assignments.category.lab" = "實驗";
+"assignments.category.reading" = "閱讀";
+"assignments.category.other" = "其他";
+
+/* Difficulty */
+"assignments.difficulty.very_easy" = "非常簡單";
+"assignments.difficulty.easy" = "簡單";
+"assignments.difficulty.medium" = "中等";
+"assignments.difficulty.hard" = "困難";
+"assignments.difficulty.very_hard" = "非常困難";
+
+/* Practice Test */
+
+/* Main View */
+"practice.title" = "練習測試";
+"practice.subtitle" = "測試您的知識並追蹤進度";
+"practice.empty.title" = "還沒有練習測試";
+"practice.empty.message" = "建立您的第一個練習測試以開始學習";
+
+/* Actions */
+"practice.action.create_test" = "建立測試";
+"practice.action.start_test" = "開始測試";
+"practice.action.view_results" = "檢視結果";
+"practice.action.delete_test" = "刪除測試";
+
+/* Test Configuration */
+"practice.config.title" = "測試設定";
+"practice.config.subject" = "科目";
+"practice.config.unit" = "單元";
+"practice.config.question_count" = "問題數量";
+"practice.config.time_limit" = "時間限制";
+"practice.config.difficulty" = "難度";
+"practice.config.test_type" = "測試類型";
+
+/* Test Types */
+"practice.type.multiple_choice" = "選擇題";
+"practice.type.true_false" = "是非題";
+"practice.type.short_answer" = "簡答題";
+"practice.type.mixed" = "混合題型";
+
+/* Test Progress */
+"practice.progress.question_number" = "問題 %d / %d";
+"practice.progress.time_remaining" = "剩餘時間：%@";
+"practice.progress.time_elapsed" = "已用時間：%@";
+
+/* Test Results */
+"practice.results.title" = "測試結果";
+"practice.results.score" = "分數：%d%%";
+"practice.results.correct_answers" = "正確：%d / %d";
+"practice.results.time_taken" = "用時：%@";
+"practice.results.review_answers" = "檢視答案";
+
+/* Recent Tests */
+"practice.recent.title" = "最近的測試";
+"practice.recent.empty" = "還沒有最近的測試";
+"practice.recent.score" = "分數：%d%%";
+"practice.recent.date" = "日期：%@";
+
+/* Generation */
+"practice.generation.title" = "正在產生練習測試";
+"practice.generation.message" = "為 %2$@ 建立 %1$d 個問題";
+"practice.generation.preparing" = "正在準備您的測試…";
+"practice.generation.error" = "產生測試時發生錯誤";
+
+/* Prompts */
+"practice.prompt.start_now" = "您想現在開始「%@」嗎？這將建立一個新的測試嘗試。";
+"practice.prompt.delete_confirm" = "確定要刪除此測試嗎？";
+"practice.prompt.exit_test" = "確定要退出此測試嗎？進度將會遺失。";
 
 /* Planner */
 
+/* Main View */
+"planner.title" = "規劃器";
+"planner.today" = "今天";
+"planner.timeline.title" = "規劃器時間軸";
+"planner.timeline.overflow" = "溢位";
+"planner.timeline.free" = "空閒";
+
+/* Unscheduled Tasks */
+"planner.unscheduled.title" = "未安排的任務";
+"planner.unscheduled.empty" = "目前沒有來自規劃器的溢位任務。";
+
+/* Course */
+"planner.course.default" = "課程";
+
+/* Task */
+"planner.task.minutes_short" = "分鐘";
+"planner.task.due" = "到期";
+
+/* Task Sheet */
+"planner.task_sheet.new_title" = "新增任務";
+"planner.task_sheet.edit_title" = "編輯任務";
+"planner.task_sheet.subtitle" = "任務會自動安排到規劃器時間軸中。";
+"planner.task_sheet.section.task" = "任務";
+"planner.task_sheet.section.course" = "課程";
+"planner.task_sheet.section.timing" = "時間";
+"planner.task_sheet.field.title" = "標題";
+"planner.task_sheet.field.priority" = "優先順序";
+"planner.task_sheet.field.course" = "課程";
+"planner.task_sheet.field.course_none" = "無";
+"planner.task_sheet.field.assignment" = "作業";
+"planner.task_sheet.field.assignment_placeholder" = "作業連結（選填）";
+"planner.task_sheet.field.assignment_linked" = "已連結";
+"planner.task_sheet.field.due_date" = "截止日期";
+"planner.task_sheet.field.focus_estimate" = "專注時間估計";
+"planner.task_sheet.field.minutes" = "分鐘";
+"planner.task_sheet.field.lock_due_date" = "鎖定到確切的截止日期";
+"planner.task_sheet.field.lock_due_date_help" = "鎖定後，AI 規劃器僅在截止日期安排此時間段。";
+"planner.task_sheet.action.cancel" = "取消";
+"planner.task_sheet.action.create" = "建立";
+"planner.task_sheet.action.save" = "儲存";
+
 /* Settings */
+"planner.settings.section.title" = "規劃器";
+"planner.settings.enable_ai" = "啟用 AI 規劃器";
+"planner.settings.horizon" = "排程前瞻";
+"planner.settings.horizon.one_week" = "1 週";
+"planner.settings.horizon.two_weeks" = "2 週";
+"planner.settings.horizon.one_month" = "1 個月";
+"planner.settings.horizon.two_months" = "2 個月";
+"calendar.refresh.in_progress" = "正在重新整理日曆…";
+"calendar.refresh.last" = "上次重新整理：%@";
+"calendar.refresh.last.never" = "上次重新整理：從未";
+"calendar.refresh.failed" = "日曆重新整理失敗";
+"calendar.refresh.permission_denied" = "日曆存取已停用。請在「系統設定 > 隱私權與安全性 > 日曆」中啟用。";
+"calendar.refresh.scheduling_failed" = "日曆已重新整理，但排程未完成。";
+"calendar.refresh.open_settings" = "開啟設定";
+"timer.context.refresh_calendar" = "重新整理日曆";
+"timer.context.go_to_planner" = "前往規劃";
+"timer.context.add_assignment" = "新增作業";
+"timer.context.add_grade" = "新增成績";
+"timer.context.start_clock" = "開始計時";
+"timer.context.stop_clock" = "暫停計時";
+"timer.context.end_clock" = "結束計時";
+"common.button.ok" = "確定";
+
+/* Mode */
+"planner.mode.picker_label" = "模式";
+"planner.mode.today" = "今天";
+"planner.mode.this_week" = "本週";
+"planner.mode.upcoming" = "即將到來";
+
+/* Scheduler */
+"planner.scheduler.min_block" = "最小時間段";
+"planner.scheduler.max_block" = "最大時間段";
+"planner.scheduler.horizon_days" = "範圍（天）";
+"planner.scheduler.minutes_short" = "分鐘";
+"planner.scheduler.weights" = "權重";
+"planner.scheduler.weight.urgency" = "緊急程度";
+"planner.scheduler.weight.importance" = "重要性";
+"planner.scheduler.weight.difficulty" = "難度";
+"planner.scheduler.weight.size" = "大小";
+
+/* Reminders */
+"planner.reminders.access_off" = "提醒存取已關閉";
+"planner.reminders.enable_instructions" = "在「系統設定 → 隱私權」中啟用提醒存取，以便 Roots 可以顯示您的任務。";
+"planner.reminders.open_settings" = "開啟系統設定";
+
+/* Sections */
+"planner.section.this_week" = "本週";
+"planner.section.unscheduled" = "未安排";
 
 /* Dashboard */
-"dashboard.calendar.connect" = "TODO";
-"dashboard.calendar.access_denied" = "TODO";
-"dashboard.events.title" = "TODO";
-"dashboard.assignments.title" = "TODO";
-"dashboard.calendar.header" = "TODO";
-"dashboard.assignments.due_today" = "TODO";
-"dashboard.assignments.empty" = "TODO";
-"dashboard.events.upcoming" = "TODO";
-"dashboard.events.empty" = "TODO";
+"dashboard.calendar.connect" = "連接日曆";
+"dashboard.calendar.access_denied" = "日曆存取被拒絕";
+"dashboard.events.title" = "事件";
+"dashboard.assignments.title" = "作業";
+"dashboard.calendar.header" = "日曆";
+"dashboard.assignments.due_today" = "今天到期";
+"dashboard.assignments.empty" = "今天沒有到期的作業";
+"dashboard.events.upcoming" = "即將到來的事件";
+"dashboard.events.empty" = "沒有即將到來的事件";
 
 /* Calendar */
-"calendar.today" = "TODO";
-"calendar.no_events.title" = "TODO";
-"calendar.no_events.message" = "TODO";
-"calendar.now" = "TODO";
-"calendar.all_day" = "TODO";
-"calendar.selected_date" = "TODO";
-"calendar.no_date_selected" = "TODO";
-"calendar.no_events" = "TODO";
-"calendar.select_day" = "TODO";
-"calendar.details" = "TODO";
-"calendar.location_label" = "TODO";
-"calendar.more_events" = "TODO";
-"calendar.travel_time" = "TODO";
-"calendar.notes" = "TODO";
-"calendar.delete_confirmation" = "TODO";
-"calendar.reminders" = "TODO";
-"calendar.calendar" = "TODO";
-"calendar.no_events_yet" = "TODO";
-"calendar.edit_event" = "TODO";
-"calendar.time" = "TODO";
-"calendar.invalid_url" = "TODO";
-"calendar.options" = "TODO";
-"calendar.loading" = "TODO";
-"calendar.new_event" = "TODO";
-"calendar.readonly" = "TODO";
+"calendar.today" = "今天";
+"calendar.no_events.title" = "沒有事件";
+"calendar.no_events.message" = "這一天沒有安排的事件";
+"calendar.now" = "現在";
+"calendar.all_day" = "全天";
+"calendar.selected_date" = "選擇的日期";
+"calendar.no_date_selected" = "未選擇日期";
+"calendar.no_events" = "沒有事件";
+"calendar.select_day" = "選擇一天";
+"calendar.details" = "詳細資訊";
+"calendar.location_label" = "地點";
+"calendar.more_events" = "更多事件";
+"calendar.travel_time" = "旅行時間";
+"calendar.notes" = "筆記";
+"calendar.delete_confirmation" = "刪除確認";
+"calendar.reminders" = "提醒事項";
+"calendar.calendar" = "日曆";
+"calendar.no_events_yet" = "暫無事件。";
+"calendar.edit_event" = "編輯事件";
+"calendar.time" = "時間";
+"calendar.invalid_url" = "無效的 URL 格式";
+"calendar.options" = "選項";
+"calendar.loading" = "正在載入事件…";
+"calendar.new_event" = "新增事件";
+"calendar.readonly" = "此日曆為唯讀；編輯已停用。";
+
+/* Schedule Result */
+"planner.schedule_result.none" = "沒有安排結果";
+
+/* Settings */
+
+/* Section Headers */
+"settings.section.general" = "通用";
+"settings.section.academic" = "學術";
+"settings.section.workday" = "工作日";
+"settings.section.advanced" = "進階";
+"settings.section.design" = "設計";
+"settings.section.about" = "關於";
+"settings.section.tab_bar_pages" = "標籤列頁面";
+"settings.section.design_debug" = "設計偵錯";
+
+/* General Settings */
+"settings.general.use_24h" = "使用 24 小時制";
+"settings.general.show_energy" = "顯示能量面板";
+"settings.general.high_contrast" = "高對比度模式";
+
+/* Workday Settings */
+"settings.workday.start_time" = "開始時間";
+"settings.workday.end_time" = "結束時間";
+
+/* Tab Bar */
+"settings.tabbar.required" = "必需";
+"settings.tabbar.restore_defaults" = "恢復預設";
+"settings.tabbar.cannot_disable_hint" = "此標籤無法停用";
+
+/* About */
+"settings.about.version" = "版本";
+"settings.about.build" = "組建";
+"settings.about.unknown" = "未知";
+
+/* Advanced */
+"settings.advanced.diagnostics_description" = "對資料、權限和本機檔案進行快速自診斷。";
+"settings.advanced.all_healthy" = "所有系統看起來都很健康。";
+"settings.advanced.selected_material" = "選定的材料";
+
+/* Accessibility Labels */
+"settings.a11y.use_24h" = "使用 24 小時時間格式";
+"settings.a11y.show_energy" = "在儀錶板上顯示能量面板";
+"settings.a11y.high_contrast" = "啟用高對比度模式以提高可見性";
+"settings.a11y.workday_start" = "工作日開始時間";
+"settings.a11y.workday_end" = "工作日結束時間";
 
 /* Grades */
 
-/* Assignments */
-"assignments.segment.today" = "Today";
-"assignments.segment.upcoming" = "Upcoming";
-"assignments.segment.all" = "All";
-"assignments.segment.completed" = "Completed";
-"assignments.segment.label" = "Segment";
-"assignments.sort.due_date" = "Due Date";
-"assignments.sort.course" = "Course";
-"assignments.sort.urgency" = "Urgency";
-"assignments.sort.label" = "Sort";
-"assignments.action.new" = "New";
-"assignments.action.plan_day" = "Plan Day";
-"assignments.action.filters" = "Filters";
-"assignments.search.placeholder" = "Search assignments";
-"assignments.filter.status" = "Status";
-"assignments.filter.any" = "Any";
-"assignments.filter.all_courses" = "All courses";
-"assignments.filter.segment_label" = "Segment: %@";
-"assignments.filter.sort_label" = "Sort: %@";
-"assignments.filter.status_label" = "Status: %@";
-"assignments.filter.course_label" = "Course: %@";
-"assignments.section.today" = "Today";
-"assignments.section.by_course" = "By Course";
-"assignments.section.upcoming_load" = "Upcoming Load";
-"assignments.section.upcoming" = "Upcoming";
-"assignments.section.missed" = "Missed";
-"assignments.stats.due_planned_remaining" = "%d due · %d planned · %d remaining";
-"assignments.stats.assignments_due" = "Assignments due today or later";
-"assignments.stats.overdue_assignments" = "Overdue assignments";
-"assignments.row.category_label" = "· %@";
-"assignments.row.estimated_minutes" = "· ~%d min";
-"assignments.row.due" = "Due %@";
-"assignments.row.weight_percent" = "· %d%%";
-"assignments.status.not_started" = "Not Started";
-"assignments.status.in_progress" = "In Progress";
-"assignments.status.completed" = "Completed";
-"assignments.status.archived" = "Archived";
-"assignments.urgency.low" = "Low";
-"assignments.urgency.medium" = "Medium";
-"assignments.urgency.high" = "High";
-"assignments.urgency.critical" = "Critical";
-"assignments.course.unknown" = "Unknown";
-"assignments.detail.unknown" = "Unknown";
-"assignments.detail.course_line" = "%@ · %@";
-"assignments.detail.due" = "Due %@";
-"assignments.detail.minutes_short" = "%d min";
-"assignments.detail.minutes_estimate" = "~%d min";
-"assignments.detail.estimated_time" = "Est. Time: %d min";
-"assignments.detail.lock_due" = "Lock work to due date";
-"assignments.detail.mark_completed" = "Mark Completed";
-"assignments.detail.mark_completed_full" = "Mark as completed";
-"assignments.detail.archive" = "Archive";
-"assignments.detail.planner" = "Planner";
-"assignments.detail.planner_accessibility" = "Open Planner for this assignment";
-"assignments.detail.timer" = "Timer";
-"assignments.detail.timer_accessibility" = "Open Timer for this assignment";
-"assignments.detail.due_in_days" = "Due in %d day(s)";
-"assignments.detail.due_in_hours" = "Due in %d hour(s)";
-"assignments.detail.due_soon" = "Due soon";
-"assignments.detail.grade_impact" = "Grade Impact";
-"assignments.detail.worth_percent" = "Worth %d%% of final grade in %@";
-"assignments.detail.no_weight" = "No weight specified yet. This will sync from Syllabus later.";
-"assignments.detail.plan" = "Plan";
-"assignments.detail.actions" = "Actions";
-"assignments.detail.state" = "State";
-"assignments.detail.planning" = "Planning";
-"assignments.detail.execution" = "Execution";
-"assignments.detail.delete" = "Delete Assignment";
-"assignments.detail.select_prompt" = "Select an assignment to see details.";
-"assignments.detail.empty_title" = "Select an assignment";
-"assignments.detail.empty_subtitle" = "Details, plan steps, and actions will appear here.";
-"assignments.selection.copy_suffix" = " (copy)";
-"assignments.selection.cut" = "Cut";
-"assignments.selection.copy" = "Copy";
-"assignments.selection.duplicate" = "Duplicate";
-"assignments.selection.paste" = "Paste";
-"assignments.editor.section.task" = "Task";
-"assignments.editor.section.timing" = "Timing";
-"assignments.editor.section.status" = "Status";
-"assignments.editor.title.new" = "New Assignment";
-"assignments.editor.title.edit" = "Edit Assignment";
-"assignments.editor.subtitle" = "Planner tasks connect to Assignments and Timer.";
-"assignments.editor.field.title" = "Title";
-"assignments.editor.field.course" = "Course";
-"assignments.editor.field.category" = "Category";
-"assignments.editor.field.due_date" = "Due Date";
-"assignments.editor.field.estimated" = "Estimated";
-"assignments.editor.field.estimated_minutes" = "%d min";
-"assignments.editor.field.typical_sessions" = "Typical: %d × %d min over %d days for %@";
-"assignments.editor.field.weight" = "Weight";
-"assignments.editor.field.weight_placeholder" = "Optional";
-"assignments.editor.field.urgency" = "Urgency";
-"assignments.editor.field.lock" = "Lock";
-"assignments.editor.field.lock_due_date" = "Lock to exact due date";
-"assignments.editor.field.notes" = "Notes";
-"assignments.editor.field.status" = "Status";
-"assignments.editor.action.save" = "Save";
-"assignments.editor.action.cancel" = "Cancel";
-"assignments.editor.course.empty" = "No courses in this semester";
-"assignments.editor.course.add" = "Add Course…";
-"assignments.editor.course.option" = "%@ · %@";
-"assignments.editor.course.helper" = "Select a course from the active semester to save.";
-"assignments.plan.research_gather" = "Research & Gather";
-"assignments.plan.outline_plan" = "Outline & Plan";
-"assignments.plan.draft" = "Draft";
-"assignments.plan.polish_submit" = "Polish & Submit";
-"assignments.plan.review_notes" = "Review Notes";
-"assignments.plan.practice_problems" = "Practice Problems";
-"assignments.plan.mock_test" = "Mock Test";
-"assignments.plan.skim_outline" = "Skim & Outline";
-"assignments.plan.practice_set" = "Practice Set";
-"assignments.plan.solve_set" = "Solve Set";
-"assignments.plan.read_annotate" = "Read & Annotate";
-"assignments.plan.summarize" = "Summarize";
-"assignments.plan.review_key_points" = "Review Key Points";
-"assignments.plan.flashcards_drill" = "Flashcards / Drill";
+/* Section Headers */
+"grades.section.grades" = "成績";
+"grades.section.courses" = "課程";
+"grades.section.overall_status" = "總體狀態";
+"grades.section.grade_components" = "成績組成 – %@";
+
+/* Column Headers */
+"grades.column.course" = "課程";
+"grades.column.grade" = "成績";
+"grades.column.credits" = "學分";
+
+/* GPA and Stats */
+"grades.gpa.format" = "平均績點 %.2f / %.1f";
+"grades.stats.weighted" = "加權 %.1f%% • %d 門課程";
+"grades.stats.highest" = "最高：%@ %d%%";
+"grades.stats.lowest" = "最低：%@ %d%%";
+"grades.stats.target" = "目標 %d%%";
+
+/* Grade Display */
+"grades.display.percent" = "%.1f%%";
+"grades.display.percent_int" = "%d%%";
+"grades.display.no_grade" = "尚無成績";
+"grades.display.no_grade_short" = "無成績";
+"grades.display.dash" = "—";
+"grades.display.current" = "目前";
+"grades.display.letter_separator" = "·";
+
+/* Course Info */
+"grades.course.code_title" = "%@ · %@";
+"grades.course.credits" = "%@ 學分";
+"grades.course.credits_format" = "%d 學分";
+
+/* Empty States */
+"grades.empty.select_course" = "從中心面板選擇一門課程以檢視其成績明細。";
+
+/* Courses */
+
+/* Section Headers */
+"courses.section.courses" = "課程";
+"courses.section.course" = "課程";
+"courses.section.details" = "詳細資訊";
+
+/* Empty States */
+"courses.empty.select" = "選擇或建立一門課程";
+"courses.empty.overview" = "您的課程概覽將顯示在這裡。";
+"courses.empty.no_meetings" = "尚未新增會議。";
+"courses.empty.no_syllabus" = "尚未新增教學大綱。";
+"courses.empty.syllabus_parser" = "您最終將能夠從教學大綱解析器匯入它。";
+
+/* Course Info */
+"courses.info.edit_later" = "您稍後可以從課程頁面編輯課程詳細資訊。";
+"courses.info.credits_format" = "%d";
+
+/* Grade Entry */
+"courses.grade.add_title" = "為 %@ 新增成績";
+"courses.grade.percentage" = "百分比";
+"courses.grade.percent_display" = "%d%%";
+
+/* Meeting Display */
+"courses.meeting.day_time" = "%@ · %@";
+"courses.meeting.weight" = "%d%%";
 
 /* Notifications */
+
+/* Common UI Elements */
+"common.button.change" = "變更";
+"common.button.edit" = "編輯";
+"common.button.delete" = "刪除";
+"common.button.cancel" = "取消";
+"common.button.save" = "儲存";
+"common.button.close" = "關閉";
+"common.button.reset" = "重置";
+"common.button.open_settings" = "開啟設定";
+"common.button.open_planner" = "開啟規劃器";
+"common.button.start_now" = "立即開始";
+"common.button.reset_totals" = "重置總計";
+
+/* Common Labels */
+"common.label.today" = "今天";
+"common.label.details" = "詳細資訊";
+"common.label.loading" = "正在載入…";
+"common.label.no_activity" = "未選擇活動";
+"common.label.current_activity" = "目前活動";
+"common.label.activities" = "活動";
+"common.label.all_activities" = "所有活動";
+"common.label.pinned" = "已固定";
+"common.label.select_prompt" = "選擇一個活動以檢視詳細資訊。";
+
+/* Assignments Page */
+"assignments.button.plan_day" = "計劃一天";
+"assignments.button.filters" = "篩選";
+"assignments.label.any" = "任意";
+"assignments.label.all_courses" = "所有課程";
+"assignments.section.by_course" = "按課程";
+"assignments.section.upcoming_load" = "即將到來的負擔";
+
+/* Calendar Page */
+"calendar.label.no_events" = "沒有事件";
+"calendar.message.event_creation" = "事件建立流程在此處。";
+
+/* Courses Page */
+"courses.empty.select" = "選擇或建立一門課程";
+"courses.empty.overview" = "您的課程概覽將顯示在這裡。";
+"courses.label.courses" = "課程";
+"courses.empty.no_meetings" = "尚未新增會議。";
+"courses.empty.no_syllabus" = "尚未新增教學大綱。";
+"courses.message.syllabus_parser" = "您最終將能夠從教學大綱解析器匯入它。";
+
+/* Grades Page */
+"grades.label.grades" = "成績";
+"grades.label.courses" = "課程";
+"grades.column.course" = "課程";
+"grades.column.grade" = "成績";
+"grades.column.credits" = "學分";
+"grades.label.overall_status" = "總體狀態";
+"grades.label.no_grade" = "尚無成績";
+
+/* Planner Page */
+"planner.message.loading" = "正在載入課程…";
+"planner.empty.no_sessions" = "這一天還沒有課程。";
+"planner.message.run_plan_day" = "執行「計劃一天」以安排任務或手動新增任務。";
+"planner.message.caught_up" = "您已完成。";
+"planner.message.overdue_info" = "任何逾期的內容都會顯示在此處，以便規劃器可以優先處理它。";
+
+/* Practice Test Page */
+"practice.label.title" = "練習測試";
+"practice.label.subtitle" = "測試您的知識並追蹤進度";
+"practice.empty.title" = "還沒有練習測試";
+"practice.empty.message" = "建立您的第一個練習測試以開始學習";
+"practice.label.recent_tests" = "最近的測試";
+"practice.message.generating" = "正在產生練習測試";
+"practice.message.creating" = "為 %2$@ 建立 %1$d 個問題";
+"practice.prompt.start_now" = "您想現在開始「%@」嗎？這將建立一個新的測試嘗試。";
+
+/* Timer Additional */
+"timer.label.tasks_for_activity" = "此活動的任務";
+"timer.label.no_linked_tasks" = "暫無關聯任務。";
+"timer.help.edit_activities" = "您稍後可以從計時器頁面編輯活動。";

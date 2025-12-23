@@ -100,15 +100,21 @@ class GlobalMenuActions: NSObject {
     }
     
     @objc func navigateToPlanner() {
-        AppModalRouter.shared.present(.planner)
+        Task { @MainActor in
+            AppModalRouter.shared.present(.planner)
+        }
     }
     
     @objc func addAssignment() {
-        AppModalRouter.shared.present(.addAssignment)
+        Task { @MainActor in
+            AppModalRouter.shared.present(.addAssignment)
+        }
     }
     
     @objc func addGrade() {
-        AppModalRouter.shared.present(.addGrade)
+        Task { @MainActor in
+            AppModalRouter.shared.present(.addGrade)
+        }
     }
 }
 

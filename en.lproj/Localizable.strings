@@ -271,10 +271,26 @@
 /* Settings */
 "planner.settings.section.title" = "Planner";
 "planner.settings.enable_ai" = "Enable AI Planner";
-"planner.settings.horizon" = "Default Planning Horizon";
+"planner.settings.horizon" = "Scheduling Lookahead";
 "planner.settings.horizon.one_week" = "1 Week";
 "planner.settings.horizon.two_weeks" = "2 Weeks";
 "planner.settings.horizon.one_month" = "1 Month";
+"planner.settings.horizon.two_months" = "2 Months";
+"calendar.refresh.in_progress" = "Refreshing calendar…";
+"calendar.refresh.last" = "Last refresh: %@";
+"calendar.refresh.last.never" = "Last refresh: never";
+"calendar.refresh.failed" = "Calendar Refresh Failed";
+"calendar.refresh.permission_denied" = "Calendar access is disabled. Enable access in System Settings > Privacy & Security > Calendars.";
+"calendar.refresh.scheduling_failed" = "Calendar refreshed, but scheduling could not be completed.";
+"calendar.refresh.open_settings" = "Open Settings";
+"timer.context.refresh_calendar" = "Refresh Calendar";
+"timer.context.go_to_planner" = "Go to Planner";
+"timer.context.add_assignment" = "Add Assignment";
+"timer.context.add_grade" = "Add Grade";
+"timer.context.start_clock" = "Start clock";
+"timer.context.stop_clock" = "Stop clock";
+"timer.context.end_clock" = "End clock";
+"common.button.ok" = "OK";
 
 /* Mode */
 "planner.mode.picker_label" = "Mode";

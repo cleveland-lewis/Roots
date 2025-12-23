@@ -21,17 +21,7 @@ struct PlannerSettingsView: View {
                     Text(String(localized: "planner.settings.horizon.one_week")).tag("1w")
                     Text(String(localized: "planner.settings.horizon.two_weeks")).tag("2w")
                     Text(String(localized: "planner.settings.horizon.one_month")).tag("1m")
-                }
-                .pickerStyle(.segmented)
-                .onChange(of: settings.plannerHorizon) { _, _ in settings.save() }
-
-                Picker(String(localized: "planner.settings.horizon"), selection: Binding(
-                    get: { settings.plannerHorizon },
-                    set: { newValue in settings.plannerHorizon = newValue; settings.save() }
-                )) {
-                    Text(String(localized: "planner.settings.horizon.one_week")).tag("1w")
-                    Text(String(localized: "planner.settings.horizon.two_weeks")).tag("2w")
-                    Text(String(localized: "planner.settings.horizon.one_month")).tag("1m")
+                    Text(String(localized: "planner.settings.horizon.two_months")).tag("2m")
                 }
                 .pickerStyle(.segmented)
             }

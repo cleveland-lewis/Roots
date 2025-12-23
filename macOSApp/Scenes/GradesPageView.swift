@@ -120,6 +120,9 @@ struct GradesPageView: View {
         .onReceive(gradesStore.$grades) { _ in
             refreshCourses()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .addGradeRequested)) { _ in
+            showAddGradeSheet = true
+        }
     }
 
     // MARK: Header
