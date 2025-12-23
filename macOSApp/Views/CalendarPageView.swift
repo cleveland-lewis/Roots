@@ -108,13 +108,43 @@ struct CalendarPageView: View {
     @State private var fullDataReadyElapsed: TimeInterval?
     @State private var loadedEventCount: Int = 0
     @State private var hydratedEKEvents: [EKEvent] = []
+    
+    // Performance: Cache filtered events to avoid repeated filtering in body
+    @State private var cachedFilteredEvents: [EKEvent] = []
+    @State private var lastFilterUpdate: Date = Date.distantPast
+    
+    // Performance: Cache events by day to avoid repeated filtering
+    @State private var eventsByDay: [String: [CalendarEvent]] = [:]
 
     // Computed property to filter events based on settings
     private var filteredEvents: [EKEvent] {
+        // Cache invalidation check
+        let now = Date()
+        if now.timeIntervalSince(lastFilterUpdate) > 1.0 {
+            updateFilteredEventsCache()
+        }
+        return cachedFilteredEvents
+    }
+    
+    private func updateFilteredEventsCache() {
+        let startTime = CFAbsoluteTimeGetCurrent()
+        
         let allEvents = deviceCalendar.events
-        guard settings.showOnlySchoolCalendar else { return allEvents }
-        guard !calendarManager.selectedCalendarID.isEmpty else { return allEvents }
-        return allEvents.filter { $0.calendar.calendarIdentifier == calendarManager.selectedCalendarID }
+        let filtered: [EKEvent]
+        
+        if settings.showOnlySchoolCalendar && !calendarManager.selectedCalendarID.isEmpty {
+            filtered = allEvents.filter { $0.calendar.calendarIdentifier == calendarManager.selectedCalendarID }
+        } else {
+            filtered = allEvents
+        }
+        
+        cachedFilteredEvents = filtered
+        lastFilterUpdate = Date()
+        
+        let duration = (CFAbsoluteTimeGetCurrent() - startTime) * 1000
+        if duration > 16 { // Log if filtering takes more than one frame
+            print("⚠️ Calendar filter took \(String(format: "%.2f", duration))ms")
+        }
     }
 
     var body: some View {
@@ -257,18 +287,28 @@ struct CalendarPageView: View {
             markFirstFrame()
             requestAccessAndSync()
             hydrateEventsIncrementally()
+            updateFilteredEventsCache()
             updateMetrics()
         }
         .onChange(of: focusedDate) { _, newValue in
+            invalidateEventsCache()
             loadVisibleRangeEvents()
             updateMetrics()
         }
         .onChange(of: currentViewMode) { _, _ in
+            invalidateEventsCache()
             loadVisibleRangeEvents()
             updateMetrics()
         }
         .onReceive(deviceCalendar.$events) { _ in
+            invalidateEventsCache()
             updateMetrics()
+        }
+        .onChange(of: settings.showOnlySchoolCalendar) { _, _ in
+            invalidateEventsCache()
+        }
+        .onChange(of: calendarManager.selectedCalendarID) { _, _ in
+            invalidateEventsCache()
         }
         // Present event detail without resizing layout
         .sheet(item: $selectedEvent, onDismiss: {
@@ -713,9 +753,31 @@ struct CalendarPageView: View {
 
     private func events(on day: Date) -> [CalendarEvent] {
         let startOfDay = calendar.startOfDay(for: day)
-        return effectiveEvents
+        let dayKey = dateKey(for: startOfDay)
+        
+        // Return cached if available
+        if let cached = eventsByDay[dayKey] {
+            return cached
+        }
+        
+        // Compute and cache
+        let filtered = effectiveEvents
             .filter { calendar.isDate($0.startDate, inSameDayAs: startOfDay) }
             .sorted { $0.startDate < $1.startDate }
+        
+        eventsByDay[dayKey] = filtered
+        return filtered
+    }
+    
+    private func dateKey(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
+    
+    private func invalidateEventsCache() {
+        eventsByDay.removeAll()
+        updateFilteredEventsCache()
     }
 
     private func visibleInterval() -> DateInterval {
@@ -743,9 +805,26 @@ struct CalendarPageView: View {
     }
 
     private func updateMetrics() {
-        // CalendarStats.calculate expects [EKEvent]
+        let startTime = CFAbsoluteTimeGetCurrent()
+        
+        // Capture values for background computation
         let source = hydratedEKEvents.isEmpty ? filteredEvents : hydratedEKEvents
-        metrics = CalendarStats.calculate(from: source, for: focusedDate)
+        let dateToProcess = focusedDate
+        
+        Task.detached(priority: .userInitiated) {
+            // Heavy computation off main thread
+            let calculatedMetrics = CalendarStats.calculate(from: source, for: dateToProcess)
+            
+            let duration = (CFAbsoluteTimeGetCurrent() - startTime) * 1000
+            
+            // Update UI on main thread
+            await MainActor.run {
+                self.metrics = calculatedMetrics
+                if duration > 16 {
+                    print("⚠️ Calendar metrics calculation took \(String(format: "%.2f", duration))ms")
+                }
+            }
+        }
     }
 
     private func formattedMillis(_ interval: TimeInterval?) -> String {
