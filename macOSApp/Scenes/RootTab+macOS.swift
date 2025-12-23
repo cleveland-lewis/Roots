@@ -2,7 +2,7 @@
 import Foundation
 
 // Import shared RootTab enum - platform extensions only
-extension RootTab {
+public extension RootTab {
     var title: String {
         switch self {
         case .dashboard:    return "Dashboard"

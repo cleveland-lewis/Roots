@@ -936,6 +936,8 @@ final class AppSettingsModel: ObservableObject, Codable {
         set { localBackendTypeRaw = newValue.rawValue }
     }
     
+    // FIXME: BYOProviderConfig type is missing - temporarily commented out
+    /*
     var byoProviderConfig: BYOProviderConfig {
         get {
             guard let data = byoProviderConfigData,
@@ -948,6 +950,7 @@ final class AppSettingsModel: ObservableObject, Codable {
             byoProviderConfigData = try? JSONEncoder().encode(newValue)
         }
     }
+    */
     
     var aiEnabled: Bool {
         get { aiEnabledStorage }

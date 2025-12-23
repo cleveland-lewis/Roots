@@ -42,7 +42,7 @@ public enum AIMode: String, Codable, CaseIterable, Identifiable {
 // MARK: - Routing Event
 
 /// Log entry for provider routing decisions
-struct RoutingEvent {
+public struct RoutingEvent {
     let timestamp: Date
     let provider: String
     let task: AITaskKind
