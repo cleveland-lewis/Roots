@@ -464,23 +464,9 @@ struct AddEventPopup: View {
                     Divider()
                         .padding(.leading, 20)
                     
-                    // Notes field with proper grouping
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "note.text")
-                                .foregroundColor(.secondary)
-                                .frame(width: 20)
-                            Text("Notes")
-                        }
+                    NotesEditor(title: "Notes", text: $notes, minHeight: 100)
                         .padding(.horizontal, 20)
-                        .padding(.top, 10)
-                        
-                        TextEditor(text: $notes)
-                            .frame(height: 100)
-                            .scrollContentBackground(.hidden)
-                            .padding(.horizontal, 16)
-                            .padding(.bottom, 10)
-                    }
+                        .padding(.vertical, 10)
                 }
             }
             

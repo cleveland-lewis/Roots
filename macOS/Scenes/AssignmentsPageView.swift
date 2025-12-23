@@ -1285,17 +1285,7 @@ struct AssignmentEditorSheet: View {
                     }
 
                     VStack(alignment: .leading, spacing: RootsSpacing.m) {
-                        Text("Notes").rootsSectionHeader()
-                        TextEditor(text: $notes)
-                            .textEditorStyle(.plain)
-                            .scrollContentBackground(.hidden)
-                            .padding(DesignSystem.Layout.spacing.small)
-                            .frame(minHeight: 120)
-                            .background(
-                                RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous)
-                                    .fill(RootsColor.inputBackground)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Cards.cardCornerRadius, style: .continuous))
+                        NotesEditor(title: "Notes", text: $notes, minHeight: 120)
                     }
                 }
             }

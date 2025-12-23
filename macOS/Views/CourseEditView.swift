@@ -93,11 +93,14 @@ struct CourseEditView: View {
                     ), axis: .vertical)
                     .lineLimit(2...4)
 
-                    TextField("Notes", text: Binding(
-                        get: { course.notes ?? "" },
-                        set: { course.notes = $0.isEmpty ? nil : $0 }
-                    ), axis: .vertical)
-                    .lineLimit(3...6)
+                    NotesEditor(
+                        title: "Notes",
+                        text: Binding(
+                            get: { course.notes ?? "" },
+                            set: { course.notes = $0.isEmpty ? nil : $0 }
+                        ),
+                        minHeight: 120
+                    )
                 }
             }
             .formStyle(.grouped)

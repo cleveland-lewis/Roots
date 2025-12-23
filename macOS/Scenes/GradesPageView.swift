@@ -779,25 +779,18 @@ struct GradeDetailCard: View {
 
     private func notes(_ detail: CourseGradeDetail) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Notes")
-                .font(.subheadline.weight(.semibold))
-            TextEditor(text: Binding(
-                get: { detail.notes },
-                set: { newValue in
-                    var updated = detail
-                    updated.notes = newValue
-                    onUpdateNotes(updated)
-                    self.detail = updated
-                }
-            ))
-            .frame(minHeight: 120)
-            .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(nsColor: .controlBackgroundColor))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(Color(nsColor: .separatorColor), lineWidth: 1)
+            NotesEditor(
+                title: "Notes",
+                text: Binding(
+                    get: { detail.notes },
+                    set: { newValue in
+                        var updated = detail
+                        updated.notes = newValue
+                        onUpdateNotes(updated)
+                        self.detail = updated
+                    }
+                ),
+                minHeight: 120
             )
         }
     }

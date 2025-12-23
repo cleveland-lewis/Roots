@@ -116,15 +116,7 @@ struct AddAssignmentView: View {
                     }
 
                     // Notes
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("NOTES")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                        TextEditor(text: $notes)
-                        .frame(minHeight: 140)
-                        .padding(10)
-                        .background(DesignSystem.Materials.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    }
+                    NotesEditor(title: "Notes", text: $notes, minHeight: 140)
 
                     // Attachments
                     VStack(alignment: .leading, spacing: 8) {

@@ -206,18 +206,14 @@ struct IOSTimerPageView: View {
 
     private var activityNotes: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("timer.label.notes", comment: "Notes"))
-                .font(.headline)
             if let activity = selectedActivity {
                 Text(activity.name)
                     .font(.subheadline.weight(.semibold))
-                TextEditor(text: activityNoteBinding)
-                    .frame(minHeight: 120)
-                    .padding(8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(uiColor: .secondarySystemBackground))
-                    )
+                NotesEditor(
+                    title: NSLocalizedString("timer.label.notes", comment: "Notes"),
+                    text: activityNoteBinding,
+                    minHeight: 120
+                )
             } else {
                 Text(NSLocalizedString("timer.focus.no_linked_tasks", comment: "No activity"))
                     .font(.subheadline)
