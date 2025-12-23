@@ -31,6 +31,7 @@ struct RootsAnalogClock: View {
                 )
             }
             .frame(width: diameter, height: diameter)
+            .padding(diameter * 0.08) // Add padding for numerals
         } else {
             ZStack {
                 AnalogDialView(style: style, diameter: diameter, accentColor: accentColor)
@@ -56,6 +57,7 @@ struct RootsAnalogClock: View {
                 }
             }
             .frame(width: diameter, height: diameter)
+            .padding(diameter * 0.08) // Add padding for numerals
         }
     }
 
