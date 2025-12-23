@@ -255,6 +255,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         case showOnlySchoolCalendarStorage
         case lockCalendarPickerToSchoolStorage
         case selectedSchoolCalendarID
+        case starredTabsRaw
         case aiModeRaw
         case byoProviderConfigData
         case localBackendTypeRaw
@@ -441,6 +442,9 @@ final class AppSettingsModel: ObservableObject, Codable {
     
     // Selected school calendar identifier
     var selectedSchoolCalendarID: String? = nil
+    
+    // Starred tabs for iOS (max 5)
+    var starredTabsRaw: [String] = ["dashboard", "calendar", "timer", "assignments", "settings"]
     
     // AI Settings
     var aiModeRaw: String = "auto"

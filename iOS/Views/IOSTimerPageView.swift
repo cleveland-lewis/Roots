@@ -13,6 +13,7 @@ struct IOSTimerPageView: View {
     @State private var newActivityName = ""
     @State private var activitySearchText = ""
     @State private var selectedCollectionID: UUID? = nil
+    @AppStorage("timer.display.style") private var timerDisplayStyleRaw: String = TimerDisplayStyle.digital.rawValue
 
     private var sessionState: FocusSession.State {
         viewModel.currentSession?.state ?? .idle
@@ -24,6 +25,14 @@ struct IOSTimerPageView: View {
 
     private var isPaused: Bool {
         sessionState == .paused
+    }
+
+    private var displayStyle: TimerDisplayStyle {
+        TimerDisplayStyle(rawValue: timerDisplayStyleRaw) ?? .digital
+    }
+
+    private var timerDialSeconds: TimeInterval {
+        viewModel.currentMode == .stopwatch ? viewModel.sessionElapsed : viewModel.sessionRemaining
     }
 
     var body: some View {
@@ -72,10 +81,21 @@ struct IOSTimerPageView: View {
             Text(statusTitle)
                 .font(.headline)
                 .accessibilityIdentifier("Timer.Status")
-            Text(timeString(for: viewModel.sessionRemaining, elapsed: viewModel.sessionElapsed))
-                .font(.system(size: 48, weight: .bold, design: .rounded))
-                .monospacedDigit()
-                .accessibilityIdentifier("Timer.Time")
+            if displayStyle == .analog {
+                RootsAnalogClock(
+                    style: .stopwatch,
+                    diameter: 180,
+                    showSecondHand: true,
+                    accentColor: .accentColor,
+                    timerSeconds: timerDialSeconds
+                )
+                .accessibilityIdentifier("Timer.Clock")
+            } else {
+                Text(timeString(for: viewModel.sessionRemaining, elapsed: viewModel.sessionElapsed))
+                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .accessibilityIdentifier("Timer.Time")
+            }
             if viewModel.currentMode == .pomodoro {
                 Text(viewModel.isOnBreak ? "Break" : "Focus")
                     .font(.subheadline)
