@@ -229,23 +229,22 @@ struct CalendarPageView: View {
                 .padding(.horizontal, 4)
             }
 
-            // Main content: sidebar + calendar grid
+            // Main content: sidebar + calendar grid (equal height cards)
             HStack(alignment: .top, spacing: 16) {
                 // Left sidebar showing events for selected date
                 eventSidebarView
-                    .frame(width: 280, alignment: .top)
-                    .frame(maxHeight: .infinity, alignment: .top)
+                    .frame(width: 280)
 
                 // Main calendar grid
                 VStack(spacing: 12) {
                     gridContent
-                    Spacer(minLength: 0)
                 }
+                .frame(maxWidth: .infinity, alignment: .top)
                 .padding()
                 .background(DesignSystem.Materials.card)
                 .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(20)
