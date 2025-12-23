@@ -3,6 +3,8 @@ import SwiftUI
 import Combine
 import AppKit
 
+// MARK: - Settings Navigation
+
 enum SettingsSection: String, CaseIterable, Identifiable {
     case general
     case appearance
@@ -24,6 +26,17 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .accounts: return "person.crop.circle"
         case .courses: return "books.vertical"
         }
+    }
+}
+
+// MARK: - Compatibility wrapper for RootsApp
+
+/// Compatibility wrapper to match expected interface in RootsApp.swift
+struct SettingsRootView: View {
+    @Binding var selection: SettingsToolbarIdentifier
+    
+    var body: some View {
+        RootsSettingsWindow()
     }
 }
 

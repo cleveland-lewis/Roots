@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1A58B1622EF58EAC0077C827 /* Notification+Names.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58B1612EF58EAB0077C827 /* Notification+Names.swift */; };
 		1A6947212EF0891800072BDF /* roots.icon in Resources */ = {isa = PBXBuildFile; fileRef = 1A6947202EF0891800072BDF /* roots.icon */; };
+		B0A1C0012F7A000100000001 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B0A1C1012F7A000100000001 /* en.lproj */; };
+		B0A1C0012F7A000100000002 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B0A1C1012F7A000100000002 /* zh-Hans.lproj */; };
+		B0A1C0012F7A000100000003 /* zh-Hant.lproj in Resources */ = {isa = PBXBuildFile; fileRef = B0A1C1012F7A000100000003 /* zh-Hant.lproj */; };
 		EE1142A41637459998E50931 /* roots.icon in Resources */ = {isa = PBXBuildFile; fileRef = 1A6947202EF0891800072BDF /* roots.icon */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +39,9 @@
 		1AD7D4432EDD328A00D403F3 /* RootsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RootsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AD7D44D2EDD328A00D403F3 /* RootsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RootsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BBB386A3C3046FCA7A3D6DB /* RootsWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RootsWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A1C1012F7A000100000001 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
+		B0A1C1012F7A000100000002 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
+		B0A1C1012F7A000100000003 /* zh-Hant.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hant.lproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -114,6 +120,9 @@
 		1AD7D42B2EDD328800D403F3 = {
 			isa = PBXGroup;
 			children = (
+				B0A1C1012F7A000100000001 /* en.lproj */,
+				B0A1C1012F7A000100000002 /* zh-Hans.lproj */,
+				B0A1C1012F7A000100000003 /* zh-Hant.lproj */,
 				1AD7D46B2EDD328800D403F3 /* SharedCore */,
 				1AD7D46C2EDD328800D403F3 /* macOSApp */,
 				0C39BF544BB34BC69FE56ED2 /* watchOS */,
@@ -290,6 +299,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0A1C0012F7A000100000001 /* en.lproj in Resources */,
+				B0A1C0012F7A000100000002 /* zh-Hans.lproj in Resources */,
+				B0A1C0012F7A000100000003 /* zh-Hant.lproj in Resources */,
 				1A6947212EF0891800072BDF /* roots.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
