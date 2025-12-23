@@ -9,25 +9,50 @@ struct IOSPlannerView: View {
     @EnvironmentObject private var filterState: IOSFilterState
     @EnvironmentObject private var toastRouter: IOSToastRouter
     @EnvironmentObject private var settings: AppSettingsModel
+    @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
     @State private var selectedDate = Date()
     @State private var showingPlanHelp = false
     @State private var isEditing = false
     @State private var editingBlock: StoredScheduledSession? = nil
     @State private var showingBlockEditor = false
+    @State private var focusPulse = false
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 18) {
-                planHeader
-                IOSFilterHeaderView(
-                    coursesStore: coursesStore,
-                    filterState: filterState
-                )
-                scheduleSection
-                overflowSection
-                unscheduledSection
+        ScrollViewReader { proxy in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 18) {
+                    planHeader
+                        .id(PlannerScrollTarget.header)
+                    IOSFilterHeaderView(
+                        coursesStore: coursesStore,
+                        filterState: filterState
+                    )
+                    scheduleSection
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .stroke(Color.accentColor.opacity(focusPulse ? 0.55 : 0), lineWidth: 2)
+                        )
+                        .animation(.easeInOut(duration: 0.35), value: focusPulse)
+                        .id(PlannerScrollTarget.schedule)
+                    overflowSection
+                        .id(PlannerScrollTarget.overflow)
+                    unscheduledSection
+                        .id(PlannerScrollTarget.unscheduled)
+                }
+                .padding(20)
             }
-            .padding(20)
+            .onReceive(plannerCoordinator.$requestedDate) { date in
+                guard let date else { return }
+                selectedDate = date
+                withAnimation(.easeInOut) {
+                    proxy.scrollTo(PlannerScrollTarget.schedule, anchor: .top)
+                }
+                focusPulse = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                    focusPulse = false
+                }
+                plannerCoordinator.requestedDate = nil
+            }
         }
         .background(DesignSystem.Colors.appBackground)
         .modifier(IOSNavigationChrome(title: NSLocalizedString("ios.planner.title", comment: "Planner")) {
@@ -56,6 +81,13 @@ struct IOSPlannerView: View {
                 }
             )
         }
+    }
+
+    private enum PlannerScrollTarget: Hashable {
+        case header
+        case schedule
+        case overflow
+        case unscheduled
     }
 
     private var planHeader: some View {
@@ -281,8 +313,8 @@ struct IOSAssignmentsView: View {
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var coursesStore: CoursesStore
     @EnvironmentObject private var filterState: IOSFilterState
+    @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
     @State private var showingEditor = false
-    @State private var showingDetail = false
     @State private var selectedTask: AppTask? = nil
     @State private var editingTask: AppTask? = nil
 
@@ -328,7 +360,12 @@ struct IOSAssignmentsView: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         selectedTask = task
-                        showingDetail = true
+                    }
+                    .contextMenu {
+                        Button("timer.context.go_to_planner".localized) {
+                            openPlanner(for: task)
+                        }
+                        .disabled(task.due == nil)
                     }
                 }
                 .onDelete(perform: deleteTasks)
@@ -346,25 +383,23 @@ struct IOSAssignmentsView: View {
             }
             .accessibilityLabel("Add task")
         })
-        .sheet(isPresented: $showingDetail) {
-            if let task = selectedTask {
-                IOSTaskDetailView(
-                    task: task,
-                    courses: coursesStore.activeCourses,
-                    onEdit: {
-                        showingDetail = false
-                        editingTask = task
-                        showingEditor = true
-                    },
-                    onDelete: {
-                        assignmentsStore.removeTask(id: task.id)
-                        showingDetail = false
-                    },
-                    onToggleCompletion: {
-                        toggleCompletion(task)
-                    }
-                )
-            }
+        .sheet(item: $selectedTask) { task in
+            IOSTaskDetailView(
+                task: task,
+                courses: coursesStore.activeCourses,
+                onEdit: {
+                    selectedTask = nil
+                    editingTask = task
+                    showingEditor = true
+                },
+                onDelete: {
+                    assignmentsStore.removeTask(id: task.id)
+                    selectedTask = nil
+                },
+                onToggleCompletion: {
+                    toggleCompletion(task)
+                }
+            )
         }
         .sheet(isPresented: $showingEditor) {
             IOSTaskEditorView(
@@ -380,6 +415,10 @@ struct IOSAssignmentsView: View {
         var updated = task
         updated.isCompleted.toggle()
         assignmentsStore.updateTask(updated)
+    }
+
+    private func openPlanner(for task: AppTask) {
+        plannerCoordinator.openPlanner(for: task.due ?? Date(), courseId: task.courseId)
     }
 
     private var sortedTasks: [AppTask] {

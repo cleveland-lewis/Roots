@@ -230,6 +230,7 @@ struct PlannerPageView: View {
 
     // local simplified planner settings used during build
     @State private var plannerSettings = PlannerSettings()
+    @State private var focusPulse = false
 
     private let cardCornerRadius: CGFloat = 26
     private let studySettings = StudyPlanSettings()
@@ -247,22 +248,42 @@ struct PlannerPageView: View {
         ZStack {
             Color(nsColor: .windowBackgroundColor).ignoresSafeArea()
 
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.medium) {
-                    headerBar
-                        .padding(.top, DesignSystem.Layout.spacing.small)
+            ScrollViewReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.medium) {
+                        headerBar
+                            .padding(.top, DesignSystem.Layout.spacing.small)
 
-                    HStack(alignment: .top, spacing: 18) {
-                        timelineCard
-                            .frame(maxWidth: .infinity, alignment: .topLeading)
-                            .layoutPriority(1)
+                        HStack(alignment: .top, spacing: 18) {
+                            timelineCard
+                                .id(PlannerScrollTarget.timeline)
+                                .frame(maxWidth: .infinity, alignment: .topLeading)
+                                .layoutPriority(1)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous)
+                                        .stroke(Color.accentColor.opacity(focusPulse ? 0.4 : 0), lineWidth: 2)
+                                )
+                                .animation(.easeInOut(duration: 0.35), value: focusPulse)
 
-                        rightColumn
-                            .frame(minWidth: 280, idealWidth: 320, maxWidth: 360, alignment: .top)
+                            rightColumn
+                                .frame(minWidth: 280, idealWidth: 320, maxWidth: 360, alignment: .top)
+                        }
                     }
+                    .padding(.horizontal, DesignSystem.Layout.padding.window)
+                    .padding(.bottom, DesignSystem.Layout.spacing.large)
                 }
-                .padding(.horizontal, DesignSystem.Layout.padding.window)
-                .padding(.bottom, DesignSystem.Layout.spacing.large)
+                .onReceive(plannerCoordinator.$requestedDate) { date in
+                    guard let date else { return }
+                    selectedDate = date
+                    withAnimation(DesignSystem.Motion.fluidSpring) {
+                        proxy.scrollTo(PlannerScrollTarget.timeline, anchor: .top)
+                    }
+                    focusPulse = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                        focusPulse = false
+                    }
+                    plannerCoordinator.requestedDate = nil
+                }
             }
         }
         .sheet(isPresented: $showTaskSheet) {
@@ -315,6 +336,10 @@ struct PlannerPageView: View {
         .onReceive(assignmentsStore.$tasks) { _ in
             syncTodayTasksAndSchedule()
         }
+    }
+
+    private enum PlannerScrollTarget: Hashable {
+        case timeline
     }
 }
 

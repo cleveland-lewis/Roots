@@ -2,145 +2,43 @@
 //  TimerAlarmScheduler.swift
 //  Roots (iOS)
 //
+//  AlarmKit temporarily disabled for iOS 17 compatibility
+//  Original file backed up as TimerAlarmScheduler.swift.ios26_backup
+//  Can be restored when iOS 26 is publicly released
+//
 
 #if os(iOS)
 import Foundation
 import SwiftUI
 
-#if canImport(AlarmKit)
+// AlarmKit APIs require iOS 26 beta - temporarily disabled
+#if false && canImport(AlarmKit)
 import AlarmKit
-#if canImport(ActivityKit)
-import ActivityKit
-#endif
-#if canImport(AppIntents)
-import AppIntents
-#endif
 #endif
 
+/// Stub implementation for iOS 17+ compatibility
+/// Alarm notifications temporarily disabled until iOS 26 is stable
 final class IOSTimerAlarmScheduler: TimerAlarmScheduling {
     private let settings = AppSettingsModel.shared
-    private var scheduledIDs: [String: UUID] = [:]
-
+    
     var isEnabled: Bool {
-        guard settings.alarmKitTimersEnabled else { return false }
-        return alarmKitAvailable && isAuthorized
+        // AlarmKit disabled - requires iOS 26 beta
+        return false
     }
-
+    
     func scheduleTimerEnd(id: String, fireIn seconds: TimeInterval, title: String, body: String) {
-        guard isEnabled else { return }
-#if canImport(AlarmKit)
-        guard #available(iOS 17.0, *) else { return }
-        let alarmID = alarmID(for: id)
-        Task {
-            do {
-                let attributes = AlarmAttributes(
-                    presentation: alarmPresentation(title: title),
-                    metadata: TimerAlarmMetadata(mode: body),
-                    tintColor: Color.accentColor
-                )
-                let config = AlarmManager.AlarmConfiguration.timer(
-                    duration: seconds,
-                    attributes: attributes,
-                    stopIntent: nil,
-                    secondaryIntent: nil,
-                    sound: .default
-                )
-                _ = try await AlarmManager.shared.schedule(id: alarmID, configuration: config)
-            } catch {
-                LOG_UI(.error, "AlarmKit", "Failed to schedule alarm: \(error.localizedDescription)")
-            }
-        }
-#endif
+        // AlarmKit temporarily disabled
+        // No-op for now
     }
-
+    
     func cancelTimer(id: String) {
-        guard isEnabled else { return }
-#if canImport(AlarmKit)
-        guard #available(iOS 17.0, *) else { return }
-        guard let alarmID = scheduledIDs[id] else { return }
-        do {
-            try AlarmManager.shared.cancel(id: alarmID)
-        } catch {
-            LOG_UI(.error, "AlarmKit", "Failed to cancel alarm: \(error.localizedDescription)")
-        }
-#endif
+        // No-op
     }
-
-    private var alarmKitAvailable: Bool {
-        #if canImport(AlarmKit)
-        if #available(iOS 17.0, *) {
-            return true
-        }
-        return false
-        #else
-        return false
-        #endif
-    }
-
-    private var isAuthorized: Bool {
-#if canImport(AlarmKit)
-        if #available(iOS 17.0, *) {
-            return AlarmManager.shared.authorizationState == .authorized
-        }
-        return false
-#else
-        return false
-#endif
-    }
-
-    @available(iOS 17.0, *)
+    
     func requestAuthorizationIfNeeded() async -> Bool {
-#if canImport(AlarmKit)
-        let state = AlarmManager.shared.authorizationState
-        if state == .authorized { return true }
-        if state == .denied { return false }
-        do {
-            let newState = try await AlarmManager.shared.requestAuthorization()
-            return newState == .authorized
-        } catch {
-            return false
-        }
-#else
+        // AlarmKit disabled - return false
         return false
-#endif
     }
-
-#if canImport(AlarmKit)
-    private func alarmID(for id: String) -> UUID {
-        if let existing = scheduledIDs[id] { return existing }
-        let newID = UUID()
-        scheduledIDs[id] = newID
-        return newID
-    }
-
-    @available(iOS 17.0, *)
-    private func alarmPresentation(title: String) -> AlarmPresentation {
-        let stop = AlarmButton(text: LocalizedStringResource(stringLiteral: NSLocalizedString("alarm.stop", comment: "Stop")), textColor: .white, systemImageName: "stop.fill")
-        let pause = AlarmButton(text: LocalizedStringResource(stringLiteral: NSLocalizedString("alarm.pause", comment: "Pause")), textColor: .white, systemImageName: "pause.fill")
-        let resume = AlarmButton(text: LocalizedStringResource(stringLiteral: NSLocalizedString("alarm.resume", comment: "Resume")), textColor: .white, systemImageName: "play.fill")
-
-        let alert = AlarmPresentation.Alert(
-            title: LocalizedStringResource(stringLiteral: title),
-            stopButton: stop,
-            secondaryButton: nil,
-            secondaryButtonBehavior: nil
-        )
-        let countdown = AlarmPresentation.Countdown(
-            title: LocalizedStringResource(stringLiteral: title),
-            pauseButton: pause
-        )
-        let paused = AlarmPresentation.Paused(
-            title: LocalizedStringResource(stringLiteral: NSLocalizedString("alarm.paused", comment: "Paused")),
-            resumeButton: resume
-        )
-        return AlarmPresentation(alert: alert, countdown: countdown, paused: paused)
-    }
-#endif
 }
 
-#if canImport(AlarmKit)
-private struct TimerAlarmMetadata: AlarmMetadata, Codable, Hashable, Sendable {
-    var mode: String
-}
-#endif
 #endif

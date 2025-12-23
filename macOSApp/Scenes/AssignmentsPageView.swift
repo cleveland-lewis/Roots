@@ -774,6 +774,7 @@ struct AssignmentsPageRow: View {
     var leadingAction: AssignmentSwipeAction
     var trailingAction: AssignmentSwipeAction
     var onPerformAction: (AssignmentSwipeAction) -> Void
+    @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
 
     private var urgencyColor: Color { assignment.urgency.color }
 
@@ -855,6 +856,11 @@ struct AssignmentsPageRow: View {
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             swipeButton(for: trailingAction)
         }
+        .contextMenu {
+            Button("timer.context.go_to_planner".localized) {
+                plannerCoordinator.openPlanner(for: assignment.dueDate, courseId: assignment.courseId)
+            }
+        }
     }
 
     @ViewBuilder
@@ -905,6 +911,7 @@ struct AssignmentDetailPanel: View {
     var onUpdate: (Assignment) -> Void
     var onEdit: (Assignment) -> Void
     var onDelete: (Assignment) -> Void
+    @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
 
     private let cardCorner: CGFloat = 24
 
@@ -1076,7 +1083,7 @@ struct AssignmentDetailPanel: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
                     Button("assignments.detail.planner".localized) {
-                        // TODO: navigate to Planner with this assignment
+                        plannerCoordinator.openPlanner(for: assignment.dueDate, courseId: assignment.courseId)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)

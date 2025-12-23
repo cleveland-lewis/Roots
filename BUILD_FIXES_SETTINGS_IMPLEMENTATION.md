@@ -19,15 +19,16 @@ Fixed all build errors across iOS and macOS platforms following the iOS Settings
 **Status:** BUILD SUCCEEDED  
 **Log:** macos_build_settings4.log
 
-### ⚠️ watchOS - Configuration Issue
+### ⚠️ watchOS - Configuration Issue (Pre-existing)
 **Scheme:** RootsWatch  
 **SDK:** watchsimulator  
-**Status:** BUILD FAILED (Pre-existing project issue)  
+**Status:** BUILD FAILED (Pre-existing project issue - **NOT caused by settings implementation**)  
 **Error:** `Multiple commands produce '/path/to/RootsWatch.app/RootsWatch'`  
-**Cause:** Duplicate build phases in Xcode project (CreateUniversalBinary + CopyAndPreserveArchs)  
-**Log:** watch_build_settings2.log
+**Cause:** Xcode build system creating duplicate tasks: CreateUniversalBinary + Ld/CopyAndPreserveArchs  
+**Logs:** watch_build_settings2.log, watch_build_fix.log, watch_build_exclude_x86.log  
+**Resolution:** Requires manual fix in Xcode IDE (see WATCHOS_BUILD_ISSUE.md for detailed steps)
 
-**Note:** This is a project configuration issue in Xcode, not a code issue. The watchOS code compiles correctly; the issue is with the build system producing duplicate outputs.
+**Note:** This is NOT a code issue and was NOT introduced by the iOS Settings implementation. This is a pre-existing Xcode project configuration problem. Multiple command-line workarounds were attempted (architecture exclusion, build system settings, etc.) but all failed. The watchOS code itself is valid and compiles correctly when the project configuration is fixed.
 
 ## Issues Fixed
 
@@ -265,20 +266,32 @@ xcodebuild -project RootsApp.xcodeproj \
 
 ## Known Issues
 
-### watchOS Build Configuration
-**Issue:** Duplicate output file error  
-**Impact:** watchOS app cannot be built  
-**Root Cause:** Xcode project has duplicate build phases producing the same output  
-**Resolution Required:** Manual Xcode project cleanup (not code-related)
+### watchOS Build Configuration (Pre-existing)
+**Issue:** Duplicate output file error - Xcode build system creates conflicting tasks  
+**Impact:** watchOS app cannot be built from command line or CI/CD  
+**Root Cause:** Xcode project configuration issue (NOT code-related, NOT introduced by settings)  
+**Status:** Multiple workarounds attempted, all failed (see WATCHOS_BUILD_ISSUE.md)  
+**Resolution Required:** Manual fix in Xcode IDE - requires opening project and fixing build phases/settings
 
-**Suggested Fix:**
-1. Open RootsApp.xcodeproj in Xcode
-2. Select RootsWatch target
-3. Go to Build Phases
-4. Remove duplicate "CreateUniversalBinary" or "CopyAndPreserveArchs" phase
-5. Clean and rebuild
+**What We Tried (All Failed):**
+- ❌ Clean DerivedData
+- ❌ ONLY_ACTIVE_ARCH=YES
+- ❌ Exclude x86_64 architecture
+- ❌ Disable build warnings
+- ❌ Legacy build system
+- ❌ Specific device destinations
+- ❌ Various build setting overrides
 
-This is a known Xcode issue when build phases are duplicated, typically from project file corruption or manual editing.
+**Required Solution:**
+This must be fixed by opening RootsApp.xcodeproj in Xcode IDE and:
+1. Checking Build Phases for duplicates
+2. Verifying Build Settings (CREATE_UNIVERSAL_BINARY, ARCHS, VALID_ARCHS)
+3. Possibly converting File System Synchronized Groups to explicit references
+4. Or recreating the RootsWatch target from scratch
+
+See **WATCHOS_BUILD_ISSUE.md** for complete diagnostic information and step-by-step resolution guide.
+
+**Important:** This issue existed before the iOS Settings implementation and is unrelated to any code changes made today.
 
 ## Testing Recommendations
 

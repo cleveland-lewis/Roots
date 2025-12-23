@@ -8,10 +8,15 @@ struct IOSRootView: View {
     @EnvironmentObject private var coursesStore: CoursesStore
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var gradesStore: GradesStore
+    @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
     @StateObject private var navigation = IOSNavigationCoordinator()
-    @StateObject private var tabBarPrefs = TabBarPreferencesStore(settings: AppSettingsModel.shared)
+    @StateObject private var tabBarPrefs: TabBarPreferencesStore
     
     @State private var selectedTab: RootTab = .dashboard
+    
+    init() {
+        _tabBarPrefs = StateObject(wrappedValue: TabBarPreferencesStore(settings: AppSettingsModel.shared))
+    }
 
     private var starredTabs: [RootTab] {
         let starred = settings.starredTabs
@@ -101,6 +106,14 @@ struct IOSRootView: View {
                 )
             }
         }
+        .onChange(of: plannerCoordinator.requestedDate) { _, date in
+            guard date != nil else { return }
+            openPlannerPage()
+            plannerCoordinator.requestedDate = nil
+        }
+        .onChange(of: plannerCoordinator.requestedCourseId) { _, _ in
+            openPlannerPage()
+        }
     }
 
     private func toastView(_ message: String) -> some View {
@@ -118,6 +131,15 @@ struct IOSRootView: View {
         }
         .padding(.top, 18)
         .padding(.horizontal, 16)
+    }
+
+    private func openPlannerPage() {
+        if starredTabs.contains(.planner) {
+            selectedTab = .planner
+            navigation.path = NavigationPath()
+        } else {
+            navigation.open(page: .planner, starredTabs: starredTabs)
+        }
     }
 
     private func gradeCourseSummaries() -> [GradeCourseSummary] {

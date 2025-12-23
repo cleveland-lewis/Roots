@@ -80,6 +80,10 @@ struct ContentView: View {
             selectedTab = .planner
             plannerCoordinator.selectedCourseFilter = courseId
         }
+        .onChange(of: plannerCoordinator.requestedDate) { _, date in
+            guard date != nil else { return }
+            selectedTab = .planner
+        }
         .onReceive(appModel.$selectedPage) { page in
             if let tab = RootTab(rawValue: page.rawValue), selectedTab != tab {
                 selectedTab = tab

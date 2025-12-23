@@ -795,12 +795,12 @@ struct CalendarPageView: View {
             return cached
         }
         
-        // Compute and cache
+        // Compute without caching during view render
+        // (prevents "modifying state during view update" warning)
         let filtered = effectiveEvents
             .filter { calendar.isDate($0.startDate, inSameDayAs: startOfDay) }
             .sorted { $0.startDate < $1.startDate }
         
-        eventsByDay[dayKey] = filtered
         return filtered
     }
     
