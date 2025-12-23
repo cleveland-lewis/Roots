@@ -368,13 +368,24 @@
 "settings.section.advanced" = "高级";
 "settings.section.design" = "设计";
 "settings.section.about" = "关于";
+"settings.section.calendar" = "日历";
 "settings.section.tab_bar_pages" = "标签栏页面";
+"settings.section.timer" = "计时器";
+"settings.section.starred_tabs" = "收藏标签";
 "settings.section.design_debug" = "设计调试";
 
 /* General Settings */
 "settings.general.use_24h" = "使用 24 小时制";
 "settings.general.show_energy" = "显示能量面板";
 "settings.general.high_contrast" = "高对比度模式";
+"settings.timer.display" = "显示";
+"settings.calendar.school" = "学校日历";
+"settings.calendar.all" = "所有日历";
+"settings.calendar.selected_hint" = "仅会显示所选日历中的事件。";
+"settings.search" = "搜索设置";
+"settings.title" = "设置";
+"settings.starred_tabs.footer" = "最多选择 5 个页面显示在标签栏中，所有页面仍可通过菜单访问。";
+"settings.starred_tabs.limit" = "最多可固定 5 个页面";
 
 /* Workday Settings */
 "settings.workday.start_time" = "开始时间";

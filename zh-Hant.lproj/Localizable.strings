@@ -374,13 +374,24 @@
 "settings.section.advanced" = "進階";
 "settings.section.design" = "設計";
 "settings.section.about" = "關於";
+"settings.section.calendar" = "行事曆";
 "settings.section.tab_bar_pages" = "標籤列頁面";
+"settings.section.timer" = "計時器";
+"settings.section.starred_tabs" = "常用標籤";
 "settings.section.design_debug" = "設計偵錯";
 
 /* General Settings */
 "settings.general.use_24h" = "使用 24 小時制";
 "settings.general.show_energy" = "顯示能量面板";
 "settings.general.high_contrast" = "高對比度模式";
+"settings.timer.display" = "顯示";
+"settings.calendar.school" = "學校行事曆";
+"settings.calendar.all" = "所有行事曆";
+"settings.calendar.selected_hint" = "只會顯示所選行事曆中的事件。";
+"settings.search" = "搜尋設定";
+"settings.title" = "設定";
+"settings.starred_tabs.footer" = "最多選擇 5 個頁面顯示在標籤列中，所有頁面仍可透過選單存取。";
+"settings.starred_tabs.limit" = "最多可固定 5 個頁面";
 
 /* Workday Settings */
 "settings.workday.start_time" = "開始時間";

@@ -36,9 +36,9 @@ enum TimerDisplayStyle: String, CaseIterable, Identifiable, Codable {
     var label: String {
         switch self {
         case .digital:
-            return "Digital"
+            return NSLocalizedString("timer.display.digital", comment: "")
         case .analog:
-            return "Analog"
+            return NSLocalizedString("timer.display.analog", comment: "")
         }
     }
 }

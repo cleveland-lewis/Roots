@@ -589,13 +589,13 @@ struct IOSPracticeView: View {
 
 struct IOSSettingsView: View {
     @EnvironmentObject private var settings: AppSettingsModel
-    @EnvironmentObject private var coursesStore: CoursesStore
     @EnvironmentObject private var deviceCalendar: DeviceCalendarManager
     @EnvironmentObject private var toastRouter: IOSToastRouter
     @State private var tabBarPrefs: TabBarPreferencesStore?
     @State private var availableCalendars: [EKCalendar] = []
     @Environment(\.colorScheme) var colorScheme
     @AppStorage("timer.display.style") private var timerDisplayStyleRaw: String = TimerDisplayStyle.digital.rawValue
+    @State private var searchText: String = ""
 
     private var timerDisplayStyle: Binding<TimerDisplayStyle> {
         Binding(
@@ -605,160 +605,266 @@ struct IOSSettingsView: View {
     }
 
     var body: some View {
-        Form {
-            Section(header: Text(NSLocalizedString("settings.section.general", comment: "General section"))) {
-                Toggle(NSLocalizedString("settings.general.use_24h", comment: "24-hour time"), isOn: $settings.use24HourTime)
-                    .accessibilityLabel(NSLocalizedString("settings.a11y.use_24h", comment: "24h format"))
-                
-                Toggle(NSLocalizedString("settings.general.show_energy", comment: "Energy panel"), isOn: $settings.showEnergyPanel)
-                    .accessibilityLabel(NSLocalizedString("settings.a11y.show_energy", comment: "Energy panel"))
-                
-                Toggle(NSLocalizedString("settings.general.high_contrast", comment: "High contrast"), isOn: $settings.highContrastMode)
-                    .accessibilityLabel(NSLocalizedString("settings.a11y.high_contrast", comment: "High contrast"))
-            }
-
-            Section(header: Text("Timer")) {
-                Picker("Display", selection: timerDisplayStyle) {
-                    ForEach(TimerDisplayStyle.allCases) { style in
-                        Text(style.label).tag(style)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .accessibilityLabel("Timer display")
-            }
-            
-            Section(header: Text(NSLocalizedString("settings.section.workday", comment: "Workday section"))) {
-                DatePicker(
-                    NSLocalizedString("settings.workday.start_time", comment: "Start time"),
-                    selection: Binding(
-                        get: { settings.date(from: settings.defaultWorkdayStart) },
-                        set: { settings.defaultWorkdayStart = settings.components(from: $0) }
+        List {
+            settingsSection(
+                title: NSLocalizedString("settings.section.general", comment: "General section"),
+                rows: [
+                    .toggle(
+                        title: NSLocalizedString("settings.general.use_24h", comment: "24-hour time"),
+                        icon: "clock",
+                        color: .blue,
+                        isOn: $settings.use24HourTime,
+                        a11y: NSLocalizedString("settings.a11y.use_24h", comment: "24h format")
                     ),
-                    displayedComponents: [.hourAndMinute]
-                )
-                .accessibilityLabel(NSLocalizedString("settings.a11y.workday_start", comment: "Workday start"))
-                
-                DatePicker(
-                    NSLocalizedString("settings.workday.end_time", comment: "End time"),
-                    selection: Binding(
-                        get: { settings.date(from: settings.defaultWorkdayEnd) },
-                        set: { settings.defaultWorkdayEnd = settings.components(from: $0) }
+                    .toggle(
+                        title: NSLocalizedString("settings.general.show_energy", comment: "Energy panel"),
+                        icon: "bolt.circle",
+                        color: .orange,
+                        isOn: $settings.showEnergyPanel,
+                        a11y: NSLocalizedString("settings.a11y.show_energy", comment: "Energy panel")
                     ),
-                    displayedComponents: [.hourAndMinute]
-                )
-                .accessibilityLabel(NSLocalizedString("settings.a11y.workday_end", comment: "Workday end"))
-            }
-            
-            Section(header: Text("Calendar")) {
-                Picker("School Calendar", selection: Binding(
-                    get: { settings.selectedSchoolCalendarID ?? "" },
-                    set: { newValue in
-                        settings.selectedSchoolCalendarID = newValue.isEmpty ? nil : newValue
-                        Task {
-                            await deviceCalendar.refreshEventsForVisibleRange(reason: "calendarChanged")
-                        }
-                    }
-                )) {
-                    Text("All Calendars").tag("")
-                    ForEach(availableCalendars, id: \.calendarIdentifier) { calendar in
-                        HStack {
-                            Circle()
-                                .fill(Color(cgColor: calendar.cgColor))
-                                .frame(width: 12, height: 12)
-                            Text(calendar.title)
-                        }
-                        .tag(calendar.calendarIdentifier)
-                    }
-                }
-                .accessibilityLabel("Select school calendar")
-                .accessibilityHint("Choose which calendar contains your school events")
-                
-                if settings.selectedSchoolCalendarID != nil {
-                    Text("Only events from the selected calendar will be shown throughout the app.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            
-            Section(header: Text("Starred Tabs"),
-                    footer: Text("Select up to 5 pages to show in the tab bar. All pages remain accessible via the menu.")) {
-                ForEach(TabRegistry.allTabs) { tabDef in
-                    HStack {
-                        Button {
-                            toggleStarredTab(tabDef.id)
-                        } label: {
-                            HStack(spacing: 12) {
-                                Image(systemName: tabDef.icon)
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.blue)
-                                    .frame(width: 28)
-                                Text(tabDef.title)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                                if settings.starredTabs.contains(tabDef.id) {
-                                    Image(systemName: "star.fill")
-                                        .foregroundColor(.yellow)
-                                }
-                            }
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-            
-            Section(NSLocalizedString("settings.section.tab_bar_pages", comment: "Tab bar section")) {
-                if let tabPrefs = tabBarPrefs {
-                    ForEach(TabRegistry.allTabs) { tabDef in
-                        HStack {
-                            Toggle(isOn: Binding(
-                                get: { tabPrefs.visibleTabs().contains(tabDef.id) },
-                                set: { newValue in
-                                    tabPrefs.setTabVisibility(tabDef.id, visible: newValue)
-                                }
-                            )) {
-                                Label(tabDef.title, systemImage: tabDef.icon)
-                            }
-                            .disabled(tabDef.isSystemRequired)
-                            
-                            if tabDef.isSystemRequired {
-                                Spacer()
-                                Text(NSLocalizedString("settings.tabbar.required", comment: "Required"))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .accessibilityHint(tabDef.isSystemRequired ? NSLocalizedString("settings.tabbar.cannot_disable_hint", comment: "Cannot disable") : "")
-                    }
+                    .toggle(
+                        title: NSLocalizedString("settings.general.high_contrast", comment: "High contrast"),
+                        icon: "circle.lefthalf.filled",
+                        color: .gray,
+                        isOn: $settings.highContrastMode,
+                        a11y: NSLocalizedString("settings.a11y.high_contrast", comment: "High contrast")
+                    )
+                ]
+            )
 
-                    Button(NSLocalizedString("settings.tabbar.restore_defaults", comment: "Restore defaults")) {
-                        tabPrefs.resetToDefaults()
-                    }
-                }
-            }
-            
-            Section(header: Text(NSLocalizedString("settings.section.about", comment: "About section"))) {
-                HStack {
-                    Text(NSLocalizedString("settings.about.version", comment: "Version"))
-                    Spacer()
-                    Text("1.0.0")
-                        .foregroundColor(.secondary)
-                }
-                
-                HStack {
-                    Text(NSLocalizedString("settings.about.build", comment: "Build"))
-                    Spacer()
-                    Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? NSLocalizedString("settings.about.unknown", comment: "Unknown"))
-                        .foregroundColor(.secondary)
-                }
-            }
+            settingsSection(
+                title: NSLocalizedString("settings.section.timer", comment: "Timer section"),
+                rows: [
+                    .navigationValue(
+                        title: NSLocalizedString("settings.timer.display", comment: "Timer display"),
+                        icon: "timer",
+                        color: .red,
+                        value: timerDisplayStyle.wrappedValue.label,
+                        destination: AnyView(
+                            SelectionListView(
+                                title: NSLocalizedString("settings.timer.display", comment: "Timer display"),
+                                selection: timerDisplayStyle,
+                                options: TimerDisplayStyle.allCases
+                            )
+                        )
+                    )
+                ]
+            )
+
+            settingsSection(
+                title: NSLocalizedString("settings.section.workday", comment: "Workday section"),
+                rows: [
+                    .datePicker(
+                        title: NSLocalizedString("settings.workday.start_time", comment: "Start time"),
+                        icon: "sunrise",
+                        color: .orange,
+                        selection: Binding(
+                            get: { settings.date(from: settings.defaultWorkdayStart) },
+                            set: { settings.defaultWorkdayStart = settings.components(from: $0) }
+                        ),
+                        a11y: NSLocalizedString("settings.a11y.workday_start", comment: "Workday start")
+                    ),
+                    .datePicker(
+                        title: NSLocalizedString("settings.workday.end_time", comment: "End time"),
+                        icon: "sunset",
+                        color: .purple,
+                        selection: Binding(
+                            get: { settings.date(from: settings.defaultWorkdayEnd) },
+                            set: { settings.defaultWorkdayEnd = settings.components(from: $0) }
+                        ),
+                        a11y: NSLocalizedString("settings.a11y.workday_end", comment: "Workday end")
+                    )
+                ]
+            )
+
+            settingsSection(
+                title: NSLocalizedString("settings.section.calendar", comment: "Calendar section"),
+                rows: [
+                    .navigationValue(
+                        title: NSLocalizedString("settings.calendar.school", comment: "School calendar"),
+                        icon: "calendar",
+                        color: .red,
+                        value: calendarSelectionLabel,
+                        destination: AnyView(
+                            CalendarSelectionView(
+                                title: NSLocalizedString("settings.calendar.school", comment: "School calendar"),
+                                calendars: availableCalendars,
+                                selectedCalendarID: Binding(
+                                    get: { settings.selectedSchoolCalendarID ?? "" },
+                                    set: { newValue in
+                                        settings.selectedSchoolCalendarID = newValue.isEmpty ? nil : newValue
+                                        Task {
+                                            await deviceCalendar.refreshEventsForVisibleRange(reason: "calendarChanged")
+                                        }
+                                    }
+                                )
+                            )
+                        )
+                    )
+                ],
+                footer: settings.selectedSchoolCalendarID != nil
+                    ? Text(NSLocalizedString("settings.calendar.selected_hint", comment: "Calendar hint"))
+                    : nil
+            )
+
+            starredTabsSection
+
+            settingsSection(
+                title: NSLocalizedString("settings.section.tab_bar_pages", comment: "Tab bar section"),
+                rows: tabBarRows
+            )
+
+            settingsSection(
+                title: NSLocalizedString("settings.section.about", comment: "About section"),
+                rows: [
+                    .value(
+                        title: NSLocalizedString("settings.about.version", comment: "Version"),
+                        icon: "info.circle",
+                        color: .blue,
+                        value: "1.0.0"
+                    ),
+                    .value(
+                        title: NSLocalizedString("settings.about.build", comment: "Build"),
+                        icon: "hammer",
+                        color: .gray,
+                        value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? NSLocalizedString("settings.about.unknown", comment: "Unknown")
+                    )
+                ]
+            )
         }
-        .modifier(IOSNavigationChrome(title: "Settings"))
+        .listStyle(.insetGrouped)
+        .searchable(text: $searchText, prompt: Text(NSLocalizedString("settings.search", comment: "Search settings")))
+        .modifier(IOSNavigationChrome(title: NSLocalizedString("settings.title", comment: "Settings")))
         .onAppear {
             if tabBarPrefs == nil {
                 tabBarPrefs = TabBarPreferencesStore(settings: settings)
             }
             availableCalendars = deviceCalendar.getAvailableCalendars()
+        }
+    }
+
+    private var calendarSelectionLabel: String {
+        if let selectedID = settings.selectedSchoolCalendarID,
+           let match = availableCalendars.first(where: { $0.calendarIdentifier == selectedID }) {
+            return match.title
+        }
+        return NSLocalizedString("settings.calendar.all", comment: "All calendars")
+    }
+
+    private var starredTabsSection: some View {
+        let filteredTabs = TabRegistry.allTabs.filter { matchesSearch($0.title) }
+        return Group {
+            if !filteredTabs.isEmpty {
+                Section(
+                    header: Text(NSLocalizedString("settings.section.starred_tabs", comment: "Starred tabs")),
+                    footer: Text(NSLocalizedString("settings.starred_tabs.footer", comment: "Starred tabs footer"))
+                ) {
+                    ForEach(filteredTabs) { tabDef in
+                        Button {
+                            toggleStarredTab(tabDef.id)
+                        } label: {
+                            HStack {
+                                SettingsIconTile(systemImage: tabDef.icon, color: .blue)
+                                Text(tabDef.title)
+                                Spacer()
+                                if settings.starredTabs.contains(tabDef.id) {
+                                    Image(systemName: "star.fill")
+                                        .foregroundStyle(.yellow)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    private var tabBarRows: [SettingsRow] {
+        guard let tabPrefs = tabBarPrefs else { return [] }
+        return TabRegistry.allTabs.map { tabDef in
+            SettingsRow.toggle(
+                title: tabDef.title,
+                icon: tabDef.icon,
+                color: .blue,
+                isOn: Binding(
+                    get: { tabPrefs.visibleTabs().contains(tabDef.id) },
+                    set: { newValue in
+                        tabPrefs.setTabVisibility(tabDef.id, visible: newValue)
+                    }
+                ),
+                a11y: tabDef.isSystemRequired ? NSLocalizedString("settings.tabbar.cannot_disable_hint", comment: "Cannot disable") : "",
+                requiredText: tabDef.isSystemRequired ? NSLocalizedString("settings.tabbar.required", comment: "Required") : nil
+            )
+        } + [
+            .button(
+                title: NSLocalizedString("settings.tabbar.restore_defaults", comment: "Restore defaults"),
+                icon: "arrow.counterclockwise",
+                color: .gray,
+                action: {
+                    tabPrefs.resetToDefaults()
+                }
+            )
+        ]
+    }
+
+    private func settingsSection(title: String, rows: [SettingsRow], footer: Text? = nil) -> some View {
+        let visibleRows = rows.filter { row in
+            matchesSearch(row.title)
+        }
+
+        return Group {
+            if !visibleRows.isEmpty {
+                Section(header: Text(title), footer: footer) {
+                    ForEach(visibleRows) { row in
+                        rowView(for: row)
+                    }
+                }
+            }
+        }
+    }
+
+    private func matchesSearch(_ text: String) -> Bool {
+        searchText.isEmpty || text.localizedCaseInsensitiveContains(searchText)
+    }
+
+    @ViewBuilder
+    private func rowView(for row: SettingsRow) -> some View {
+        switch row.kind {
+        case .toggle(let isOn, let a11y, let requiredText):
+            Toggle(isOn: isOn) {
+                SettingsRowLabel(title: row.title, systemImage: row.icon, color: row.color, trailingText: requiredText)
+            }
+            .accessibilityLabel(a11y.isEmpty ? row.title : a11y)
+        case .datePicker(let selection, let a11y):
+            DatePicker(
+                selection: selection,
+                displayedComponents: [.hourAndMinute]
+            ) {
+                SettingsRowLabel(title: row.title, systemImage: row.icon, color: row.color, trailingText: nil)
+            }
+            .accessibilityLabel(a11y.isEmpty ? row.title : a11y)
+        case .value(let value):
+            HStack {
+                SettingsRowLabel(title: row.title, systemImage: row.icon, color: row.color, trailingText: nil)
+                Spacer()
+                Text(value)
+                    .foregroundStyle(.secondary)
+            }
+        case .navigationValue(let value, let destination):
+            NavigationLink(destination: destination) {
+                HStack {
+                    SettingsRowLabel(title: row.title, systemImage: row.icon, color: row.color, trailingText: nil)
+                    Spacer()
+                    Text(value)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        case .button(let action):
+            Button(action: action) {
+                SettingsRowLabel(title: row.title, systemImage: row.icon, color: row.color, trailingText: nil)
+            }
         }
     }
     
@@ -786,7 +892,159 @@ struct IOSSettingsView: View {
     }
     
     private func showStarredLimitAlert() {
-        toastRouter.show("You can pin up to 5 pages")
+        toastRouter.show(NSLocalizedString("settings.starred_tabs.limit", comment: "Starred tabs limit"))
+    }
+}
+
+private struct SettingsRow: Identifiable {
+    enum Kind {
+        case toggle(isOn: Binding<Bool>, a11y: String, requiredText: String?)
+        case datePicker(selection: Binding<Date>, a11y: String)
+        case value(value: String)
+        case navigationValue(value: String, destination: AnyView)
+        case button(action: () -> Void)
+    }
+
+    let id = UUID()
+    let title: String
+    let icon: String
+    let color: Color
+    let kind: Kind
+
+    static func toggle(title: String, icon: String, color: Color, isOn: Binding<Bool>, a11y: String, requiredText: String? = nil) -> SettingsRow {
+        SettingsRow(title: title, icon: icon, color: color, kind: .toggle(isOn: isOn, a11y: a11y, requiredText: requiredText))
+    }
+
+    static func datePicker(title: String, icon: String, color: Color, selection: Binding<Date>, a11y: String) -> SettingsRow {
+        SettingsRow(title: title, icon: icon, color: color, kind: .datePicker(selection: selection, a11y: a11y))
+    }
+
+    static func value(title: String, icon: String, color: Color, value: String) -> SettingsRow {
+        SettingsRow(title: title, icon: icon, color: color, kind: .value(value: value))
+    }
+
+    static func navigationValue(title: String, icon: String, color: Color, value: String, destination: AnyView) -> SettingsRow {
+        SettingsRow(title: title, icon: icon, color: color, kind: .navigationValue(value: value, destination: destination))
+    }
+
+    static func button(title: String, icon: String, color: Color, action: @escaping () -> Void) -> SettingsRow {
+        SettingsRow(title: title, icon: icon, color: color, kind: .button(action: action))
+    }
+}
+
+private struct SettingsRowLabel: View {
+    let title: String
+    let systemImage: String
+    let color: Color
+    let trailingText: String?
+
+    var body: some View {
+        HStack(spacing: 12) {
+            SettingsIconTile(systemImage: systemImage, color: color)
+            Text(title)
+            Spacer()
+            if let trailingText {
+                Text(trailingText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+}
+
+private struct SettingsIconTile: View {
+    let systemImage: String
+    let color: Color
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                .fill(color.opacity(0.2))
+                .frame(width: 28, height: 28)
+            Image(systemName: systemImage)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(color)
+        }
+    }
+}
+
+private struct SelectionListView<Option: Identifiable & Hashable>: View {
+    let title: String
+    @Binding var selection: Option
+    let options: [Option]
+
+    var body: some View {
+        List {
+            ForEach(options) { option in
+                Button {
+                    selection = option
+                } label: {
+                    HStack {
+                        Text(optionLabel(option))
+                        Spacer()
+                        if option == selection {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle(title)
+    }
+
+    private func optionLabel(_ option: Option) -> String {
+        if let displayable = option as? TimerDisplayStyle {
+            return displayable.label
+        }
+        return String(describing: option)
+    }
+}
+
+private struct CalendarSelectionView: View {
+    let title: String
+    let calendars: [EKCalendar]
+    @Binding var selectedCalendarID: String
+
+    var body: some View {
+        List {
+            Button {
+                selectedCalendarID = ""
+            } label: {
+                HStack {
+                    Text(NSLocalizedString("settings.calendar.all", comment: "All calendars"))
+                    Spacer()
+                    if selectedCalendarID.isEmpty {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.accentColor)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+
+            ForEach(calendars, id: \.calendarIdentifier) { calendar in
+                Button {
+                    selectedCalendarID = calendar.calendarIdentifier
+                } label: {
+                    HStack {
+                        Circle()
+                            .fill(Color(cgColor: calendar.cgColor))
+                            .frame(width: 10, height: 10)
+                        Text(calendar.title)
+                        Spacer()
+                        if selectedCalendarID == calendar.calendarIdentifier {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle(title)
     }
 }
 
