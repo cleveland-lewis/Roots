@@ -548,6 +548,7 @@ struct TimerPageView: View {
     }
     
     private func openFocusWindow() {
+        // Singleton pattern: if Focus window already exists, bring it to front
         if let existing = focusWindowController, let win = existing.window {
             win.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
@@ -581,8 +582,10 @@ struct TimerPageView: View {
         window.title = NSLocalizedString("timer.focus.window_title", comment: "Focus")
         window.isReleasedWhenClosed = false
         
-        let delegate = FocusWindowDelegate {
-            // cleanup handled by controller deinit if needed
+        let delegate = FocusWindowDelegate { [weak self] in
+            // Window closed - clear the controller reference to allow reopening
+            self?.focusWindowController = nil
+            self?.focusWindowDelegate = nil
         }
         window.delegate = delegate
         focusWindowDelegate = delegate

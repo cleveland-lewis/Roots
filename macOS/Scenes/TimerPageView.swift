@@ -444,6 +444,13 @@ struct TimerPageView: View {
     }
 
     private func openFocusWindow() {
+        // Check if Focus window already exists and bring it to front
+        if let existing = focusWindowController, let win = existing.window {
+            win.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+        
         let tasks = selectedActivity.flatMap { activityTasks($0.id) } ?? []
         let focusView = FocusWindowView(
             mode: mode,
@@ -473,8 +480,10 @@ struct TimerPageView: View {
         window.isReleasedWhenClosed = false
         
         // Create and store delegate with strong reference to prevent deallocation
-        let delegate = FocusWindowDelegate {
-            // Window closed - cleanup will happen automatically
+        let delegate = FocusWindowDelegate { [weak self] in
+            // Window closed - clear the controller reference
+            self?.focusWindowController = nil
+            self?.focusWindowDelegate = nil
         }
         window.delegate = delegate
         focusWindowDelegate = delegate
