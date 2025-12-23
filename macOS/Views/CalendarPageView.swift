@@ -761,6 +761,8 @@ private struct MonthCalendarView: View {
     @EnvironmentObject var eventsStore: EventsCountStore
     private let calendar = Calendar.current
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
+    
+    @FocusState private var isGridFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -837,8 +839,45 @@ private struct MonthCalendarView: View {
                         )
                     }
                 }
+                .focused($isGridFocused)
+                .focusable()
+                .onKeyPress(.upArrow) {
+                    navigateDay(by: -7)
+                    return .handled
+                }
+                .onKeyPress(.downArrow) {
+                    navigateDay(by: 7)
+                    return .handled
+                }
+                .onKeyPress(.leftArrow) {
+                    navigateDay(by: -1)
+                    return .handled
+                }
+                .onKeyPress(.rightArrow) {
+                    navigateDay(by: 1)
+                    return .handled
+                }
+                .onKeyPress(.return) {
+                    onSelectDate(focusedDate)
+                    return .handled
+                }
+                .onKeyPress(.space) {
+                    onSelectDate(focusedDate)
+                    return .handled
+                }
             }
         }
+        .onAppear {
+            isGridFocused = true
+        }
+    }
+    
+    private func navigateDay(by offset: Int) {
+        guard let newDate = calendar.date(byAdding: .day, value: offset, to: focusedDate) else { return }
+        withAnimation(DesignSystem.Motion.snappyEase) {
+            focusedDate = newDate
+        }
+        onSelectDate(newDate)
     }
 
     private var monthHeader: String {
