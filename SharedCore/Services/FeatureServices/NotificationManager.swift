@@ -212,7 +212,8 @@ final class NotificationManager: ObservableObject {
         
         // Add course subtitle if available
         if let courseId = assignment.courseId,
-           let course = CoursesStore.shared?.courses.first(where: { $0.id == courseId }) {
+           let coursesStore = CoursesStore.shared,
+           let course = coursesStore.courses.first(where: { $0.id == courseId }) {
             content.subtitle = course.title
         }
         
@@ -359,7 +360,6 @@ final class NotificationManager: ObservableObject {
         var bodyParts: [String] = []
         
         let today = Calendar.current.startOfDay(for: Date())
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
         
         // Today's assignments
@@ -427,7 +427,7 @@ final class NotificationManager: ObservableObject {
         // Access today's calendar events
         // This will integrate with CalendarManager when available
         let today = Calendar.current.startOfDay(for: Date())
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+        _ = Calendar.current.date(byAdding: .day, value: 1, to: today)!
         
         // Placeholder: return nil for now, can be enhanced with CalendarManager
         // TODO: Integrate with CalendarManager.shared.events or similar
