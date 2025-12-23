@@ -36,6 +36,14 @@ fileprivate func eventCategoryLabel(for title: String) -> String {
     return "Other"
 }
 
+fileprivate func isAllDayEvent(_ event: CalendarEvent, calendar: Calendar = .current) -> Bool {
+    let duration = event.endDate.timeIntervalSince(event.startDate)
+    if duration >= 86400 - 60 { return true }
+    let startOfDay = calendar.startOfDay(for: event.startDate)
+    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? event.endDate
+    return event.startDate <= startOfDay && event.endDate >= endOfDay
+}
+
 enum CalendarViewMode: String, CaseIterable, Identifiable {
     case day = "Day"
     case week = "Week"
@@ -96,6 +104,7 @@ struct CalendarPageView: View {
     @State private var chevronLeftHover = false
     @State private var chevronRightHover = false
     @State private var todayHover = false
+    @State private var searchText: String = ""
     
     // Performance: Cache filtered events to avoid repeated filtering in body
     @State private var cachedFilteredEvents: [EKEvent] = []
@@ -136,113 +145,23 @@ struct CalendarPageView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            // Header: Add button, Title, View selector, Navigation
-            HStack(alignment: .center, spacing: 12) {
-                Button {
-                    showingNewEventSheet = true
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(width: 36, height: 36)
-                        .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
-                }
-                .buttonStyle(.plain)
-                .rootsStandardInteraction()
+        VStack(spacing: 0) {
+            calendarToolbar
 
-                VStack(alignment: .leading, spacing: 2) {
-                    // Large title driven by current view mode
-                    Group {
-                        switch currentViewMode {
-                        case .day:
-                            Text(focusedDate.formatted(.dateTime.weekday().month().day()))
-                        case .week:
-                            Text(weekTitle(for: focusedDate))
-                        case .month:
-                            Text(monthTitle(for: focusedDate))
-                        case .year:
-                            Text(String(Calendar.current.component(.year, from: focusedDate)))
-                        }
-                    }
-                    .font(.largeTitle.weight(.semibold))
-                    .lineLimit(1)
+            Divider()
 
-                    // Subtitle / small metadata
-                    Text(currentViewMode == .week ? weekSubtitle(for: focusedDate) : "")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundStyle(.secondary)
-                }
+            HStack(spacing: 0) {
+                calendarSidebar
+                    .frame(width: 240)
 
-                Spacer()
+                Divider()
 
-                Picker("View", selection: $currentViewMode) {
-                    ForEach(CalendarViewMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .frame(width: 280)
-                .tint(settings.activeAccentColor)
-
-                HStack(spacing: 6) {
-                    Button { shift(by: -1) } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundStyle(chevronLeftHover ? settings.activeAccentColor : .primary)
-                            .scaleEffect(chevronLeftHover ? 1.06 : 1.0)
-                    }
-                    .buttonStyle(.plain)
-                    .rootsStandardInteraction()
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { chevronLeftHover = hovering }
-                    }
-
-                    Button { jumpToToday() } label: {
-                        Text(String(localized: "calendar.today"))
-                            .font(.subheadline.weight(.semibold))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(settings.activeAccentColor).opacity(todayHover ? 0.18 : 0.12))
-                    }
-                    .buttonStyle(.plain)
-                    .rootsStandardInteraction()
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { todayHover = hovering }
-                    }
-
-                    Button { shift(by: 1) } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(chevronRightHover ? settings.activeAccentColor : .primary)
-                            .scaleEffect(chevronRightHover ? 1.06 : 1.0)
-                    }
-                    .buttonStyle(.plain)
-                    .rootsStandardInteraction()
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { chevronRightHover = hovering }
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                calendarContent
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(nsColor: .windowBackgroundColor))
             }
-            .padding(.horizontal, DesignSystem.Layout.padding.window)
-            .padding(.vertical, 4)
-
-            // Main content: sidebar + calendar grid
-            HStack(alignment: .top, spacing: 16) {
-                // Left sidebar showing events for selected date
-                eventSidebarView
-                    .frame(width: 280)
-
-                // Main calendar grid
-                VStack(spacing: 12) {
-                    gridContent
-                }
-                .frame(maxWidth: .infinity, alignment: .top)
-                .padding()
-                .background(DesignSystem.Materials.card)
-                .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .sheet(isPresented: $showingNewEventSheet) {
             AddEventPopup().environmentObject(calendarManager)
         }
@@ -306,6 +225,166 @@ struct CalendarPageView: View {
             EventDetailView(item: event, isPresented: Binding(get: { selectedEvent != nil }, set: { if !$0 { selectedEvent = nil } }))
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         })
+    }
+
+    private var calendarToolbar: some View {
+        HStack(spacing: 12) {
+            Button {
+                showingNewEventSheet = true
+            } label: {
+                Image(systemName: "plus")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(width: 28, height: 28)
+                    .background(DesignSystem.Materials.hud.opacity(0.7), in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+            }
+            .buttonStyle(.plain)
+            .rootsStandardInteraction()
+
+            Picker("View", selection: $currentViewMode) {
+                ForEach(CalendarViewMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 240)
+            .tint(settings.activeAccentColor)
+
+            Button { jumpToToday() } label: {
+                Text(String(localized: "calendar.today"))
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+            }
+            .buttonStyle(.borderless)
+            .rootsStandardInteraction()
+
+            HStack(spacing: 4) {
+                Button { shift(by: -1) } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .buttonStyle(.borderless)
+                .rootsStandardInteraction()
+
+                Button { shift(by: 1) } label: {
+                    Image(systemName: "chevron.right")
+                }
+                .buttonStyle(.borderless)
+                .rootsStandardInteraction()
+            }
+
+            Spacer()
+
+            TextField(String(localized: "calendar.search"), text: $searchText)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 220)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(DesignSystem.Materials.hud)
+    }
+
+    private var calendarSidebar: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(String(localized: "calendar.calendars"))
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.top, 12)
+                .padding(.horizontal, 12)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    Button {
+                        calendarManager.selectedCalendarID = ""
+                    } label: {
+                        CalendarSourceRow(
+                            title: String(localized: "calendar.all_calendars"),
+                            color: .secondary,
+                            isSelected: calendarManager.selectedCalendarID.isEmpty
+                        )
+                    }
+                    .buttonStyle(.plain)
+
+                    ForEach(calendarSources, id: \.sourceTitle) { source in
+                        Text(source.sourceTitle)
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 6)
+
+                        ForEach(source.calendars, id: \.calendarIdentifier) { calendar in
+                            Button {
+                                calendarManager.selectedCalendarID = calendar.calendarIdentifier
+                            } label: {
+                                CalendarSourceRow(
+                                    title: calendar.title,
+                                    color: Color(calendar.cgColor),
+                                    isSelected: calendarManager.selectedCalendarID == calendar.calendarIdentifier
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
+            }
+
+            Divider()
+                .padding(.horizontal, 12)
+
+            MiniMonthNavigator(selectedDate: $focusedDate)
+                .padding(.horizontal, 8)
+                .padding(.bottom, 12)
+        }
+        .background(DesignSystem.Materials.card)
+    }
+
+    @ViewBuilder
+    private var calendarContent: some View {
+        switch currentViewMode {
+        case .year:
+            CalendarYearGridView(selectedDate: $focusedDate)
+        case .month:
+            CalendarMonthGridView(
+                focusedDate: $focusedDate,
+                events: searchedEvents,
+                onSelectDate: { date in
+                    focusedDate = date
+                    selectedDate = date
+                    calendarManager.selectedDate = date
+                },
+                onSelectEvent: { event in
+                    selectedEvent = event
+                    focusedDate = event.startDate
+                    selectedDate = event.startDate
+                    calendarManager.selectedDate = event.startDate
+                }
+            )
+        case .week:
+            CalendarWeekTimelineView(
+                focusedDate: $focusedDate,
+                events: searchedEvents,
+                onSelectEvent: { selectedEvent = $0 }
+            )
+        case .day:
+            CalendarDaySplitView(
+                date: $focusedDate,
+                events: searchedEvents,
+                selectedEvent: $selectedEvent
+            )
+        }
+    }
+
+    private var searchedEvents: [CalendarEvent] {
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return effectiveEvents }
+        return effectiveEvents.filter { $0.title.localizedCaseInsensitiveContains(trimmed) }
+    }
+
+    private var calendarSources: [CalendarSourceGroup] {
+        let grouped = Dictionary(grouping: calendarManager.availableCalendars) { $0.source.title }
+        return grouped.keys.sorted().map { key in
+            CalendarSourceGroup(sourceTitle: key, calendars: grouped[key] ?? [])
+        }
     }
     
     // MARK: - Event Sidebar
@@ -717,6 +796,650 @@ struct CalendarPageView: View {
                 }
             }
         }
+    }
+}
+
+private struct CalendarSourceGroup {
+    let sourceTitle: String
+    let calendars: [EKCalendar]
+}
+
+private struct CalendarSourceRow: View {
+    let title: String
+    let color: Color
+    let isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Circle()
+                .strokeBorder(color.opacity(0.5), lineWidth: 1)
+                .background(
+                    Circle()
+                        .fill(isSelected ? color : Color.clear)
+                        .padding(3)
+                )
+                .frame(width: 14, height: 14)
+
+            Text(title)
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+
+            Spacer()
+        }
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
+    }
+}
+
+private struct MiniMonthNavigator: View {
+    @Binding var selectedDate: Date
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(LocaleFormatters.monthYear.string(from: selectedDate))
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            LazyVGrid(columns: columns, spacing: 4) {
+                ForEach(weekdays, id: \.self) { symbol in
+                    Text(symbol)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                }
+
+                ForEach(monthDays, id: \.self) { day in
+                    if let day {
+                        let isToday = calendar.isDateInToday(day)
+                        let isSelected = calendar.isDate(day, inSameDayAs: selectedDate)
+                        Button {
+                            selectedDate = day
+                        } label: {
+                            Text("\(calendar.component(.day, from: day))")
+                                .font(.caption2.weight(.semibold))
+                                .frame(maxWidth: .infinity, minHeight: 20)
+                                .foregroundStyle(isSelected ? Color.white : Color.primary)
+                                .background(
+                                    Circle()
+                                        .fill(isSelected ? Color.accentColor : (isToday ? Color.accentColor.opacity(0.2) : Color.clear))
+                                )
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        Color.clear.frame(height: 20)
+                    }
+                }
+            }
+        }
+    }
+
+    private var weekdays: [String] {
+        let symbols = calendar.shortWeekdaySymbols
+        let first = calendar.firstWeekday - 1
+        let ordered = Array(symbols[first..<symbols.count] + symbols[0..<first])
+        return ordered.map { $0.prefix(1).uppercased() }
+    }
+
+    private var monthDays: [Date?] {
+        guard let interval = calendar.dateInterval(of: .month, for: selectedDate) else { return [] }
+        let monthStart = interval.start
+        let startWeekday = calendar.component(.weekday, from: monthStart)
+        let leading = (startWeekday - calendar.firstWeekday + 7) % 7
+        let range = calendar.range(of: .day, in: .month, for: selectedDate) ?? 1..<1
+        var days: [Date?] = Array(repeating: nil, count: leading)
+        for day in range {
+            if let date = calendar.date(bySetting: .day, value: day, of: selectedDate) {
+                days.append(date)
+            }
+        }
+        return days
+    }
+}
+
+private struct CalendarMonthGridView: View {
+    @Binding var focusedDate: Date
+    let events: [CalendarEvent]
+    let onSelectDate: (Date) -> Void
+    let onSelectEvent: (CalendarEvent) -> Void
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
+    private let rowHeight: CGFloat = 92
+
+    var body: some View {
+        VStack(spacing: 0) {
+            monthHeader
+            weekdayHeader
+            LazyVGrid(columns: columns, spacing: 0) {
+                ForEach(monthGridDays, id: \.self) { day in
+                    MonthGridCell(
+                        date: day,
+                        isInMonth: calendar.isDate(day, equalTo: focusedDate, toGranularity: .month),
+                        isSelected: calendar.isDate(day, inSameDayAs: focusedDate),
+                        isToday: calendar.isDateInToday(day),
+                        events: eventsForDay(day),
+                        onSelect: {
+                            focusedDate = day
+                            onSelectDate(day)
+                        },
+                        onSelectEvent: onSelectEvent
+                    )
+                    .frame(height: rowHeight)
+                    .overlay(
+                        Rectangle()
+                            .fill(Color(nsColor: .separatorColor).opacity(0.2))
+                            .frame(width: 1),
+                        alignment: .trailing
+                    )
+                    .overlay(
+                        Rectangle()
+                            .fill(Color(nsColor: .separatorColor).opacity(0.2))
+                            .frame(height: 1),
+                        alignment: .bottom
+                    )
+                }
+            }
+        }
+        .padding(12)
+    }
+
+    private var monthHeader: some View {
+        Text(LocaleFormatters.monthYear.string(from: focusedDate))
+            .font(.title3.weight(.semibold))
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var weekdayHeader: some View {
+        let symbols = calendar.shortWeekdaySymbols
+        let first = calendar.firstWeekday - 1
+        let ordered = Array(symbols[first..<symbols.count] + symbols[0..<first])
+        return HStack(spacing: 0) {
+            ForEach(ordered, id: \.self) { symbol in
+                Text(symbol.uppercased())
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
+            }
+        }
+    }
+
+    private var monthGridDays: [Date] {
+        guard let interval = calendar.dateInterval(of: .month, for: focusedDate) else { return [] }
+        let monthStart = interval.start
+        guard let gridStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: monthStart)) else { return [] }
+        return (0..<42).compactMap { calendar.date(byAdding: .day, value: $0, to: gridStart) }
+    }
+
+    private func eventsForDay(_ date: Date) -> [CalendarEvent] {
+        events
+            .filter { calendar.isDate($0.startDate, inSameDayAs: date) }
+            .sorted { $0.startDate < $1.startDate }
+    }
+}
+
+private struct MonthGridCell: View {
+    let date: Date
+    let isInMonth: Bool
+    let isSelected: Bool
+    let isToday: Bool
+    let events: [CalendarEvent]
+    let onSelect: () -> Void
+    let onSelectEvent: (CalendarEvent) -> Void
+    private let calendar = Calendar.current
+
+    var body: some View {
+        Button(action: onSelect) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Spacer()
+                    Text("\(calendar.component(.day, from: date))")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(dayNumberColor)
+                        .padding(4)
+                        .background(
+                            Circle()
+                                .fill(isToday ? Color.accentColor : Color.clear)
+                        )
+                }
+
+                ForEach(events.prefix(3)) { event in
+                    Button {
+                        onSelectEvent(event)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Rectangle()
+                                .fill(event.category.color)
+                                .frame(width: 3)
+                            Text(event.title)
+                                .font(.caption2)
+                                .lineLimit(1)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                if events.count > 3 {
+                    Text(String(format: String(localized: "calendar.more_events"), events.count - 3))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
+            .padding(.horizontal, 6)
+            .padding(.top, 4)
+            .padding(.bottom, 6)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(isSelected ? Color.accentColor.opacity(0.15) : Color.clear)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var dayNumberColor: Color {
+        if isToday { return .white }
+        if !isInMonth { return .secondary.opacity(0.5) }
+        return .primary
+    }
+}
+
+private struct CalendarYearGridView: View {
+    @Binding var selectedDate: Date
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 16), count: 3)
+
+    var body: some View {
+        let year = calendar.component(.year, from: selectedDate)
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(1...12, id: \.self) { month in
+                    YearMonthCard(
+                        year: year,
+                        month: month,
+                        selectedDate: $selectedDate
+                    )
+                }
+            }
+            .padding(16)
+        }
+    }
+}
+
+private struct YearMonthCard: View {
+    let year: Int
+    let month: Int
+    @Binding var selectedDate: Date
+    private let calendar = Calendar.current
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 7)
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(monthTitle)
+                .font(.caption.weight(.semibold))
+
+            LazyVGrid(columns: columns, spacing: 2) {
+                ForEach(days, id: \.self) { date in
+                    if let date {
+                        let isToday = calendar.isDateInToday(date)
+                        let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
+                        Text("\(calendar.component(.day, from: date))")
+                            .font(.caption2)
+                            .foregroundStyle(isSelected ? Color.white : .primary)
+                            .frame(maxWidth: .infinity, minHeight: 14)
+                            .background(
+                                Circle()
+                                    .fill(isSelected ? Color.accentColor : (isToday ? Color.accentColor.opacity(0.2) : Color.clear))
+                            )
+                            .onTapGesture { selectedDate = date }
+                    } else {
+                        Color.clear.frame(height: 14)
+                    }
+                }
+            }
+        }
+        .padding(10)
+        .background(DesignSystem.Materials.card)
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+    }
+
+    private var monthTitle: String {
+        let comps = DateComponents(year: year, month: month)
+        let date = calendar.date(from: comps) ?? Date()
+        return LocaleFormatters.monthYear.string(from: date)
+    }
+
+    private var days: [Date?] {
+        guard let monthDate = calendar.date(from: DateComponents(year: year, month: month)),
+              let interval = calendar.dateInterval(of: .month, for: monthDate) else { return [] }
+        let monthStart = interval.start
+        let startWeekday = calendar.component(.weekday, from: monthStart)
+        let leading = (startWeekday - calendar.firstWeekday + 7) % 7
+        let range = calendar.range(of: .day, in: .month, for: monthDate) ?? 1..<1
+        var days: [Date?] = Array(repeating: nil, count: leading)
+        for day in range {
+            if let date = calendar.date(bySetting: .day, value: day, of: monthDate) {
+                days.append(date)
+            }
+        }
+        return days
+    }
+}
+
+private struct CalendarWeekTimelineView: View {
+    @Binding var focusedDate: Date
+    let events: [CalendarEvent]
+    let onSelectEvent: (CalendarEvent) -> Void
+    private let calendar = Calendar.current
+    private let hourHeight: CGFloat = 52
+    private let dayHeaderHeight: CGFloat = 28
+
+    var body: some View {
+        VStack(spacing: 0) {
+            WeekHeaderRow(days: weekDays, focusedDate: $focusedDate)
+                .padding(.leading, 56)
+
+            Divider()
+
+            ScrollView {
+                ZStack(alignment: .topLeading) {
+                    timeGrid
+                    eventBlocks
+                    nowLine
+                }
+            }
+        }
+    }
+
+    private var weekDays: [Date] {
+        let start = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: focusedDate)) ?? focusedDate
+        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: start) }
+    }
+
+    private var timeGrid: some View {
+        VStack(spacing: 0) {
+            ForEach(0..<24, id: \.self) { hour in
+                HStack(spacing: 0) {
+                    Text(hourLabel(hour))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 52, alignment: .trailing)
+                        .padding(.trailing, 4)
+                    Rectangle()
+                        .fill(Color(nsColor: .separatorColor).opacity(0.2))
+                        .frame(height: 1)
+                }
+                .frame(height: hourHeight)
+            }
+        }
+    }
+
+    private var eventBlocks: some View {
+        GeometryReader { proxy in
+            let columnWidth = (proxy.size.width - 52) / 7
+            ForEach(events.filter { !isAllDay(event: $0) }) { event in
+                if let dayIndex = weekDays.firstIndex(where: { calendar.isDate($0, inSameDayAs: event.startDate) }) {
+                    let startOffset = minutesFromStart(event.startDate) * hourHeight / 60
+                    let duration = max(event.endDate.timeIntervalSince(event.startDate) / 60, 30)
+                    let height = CGFloat(duration) * hourHeight / 60
+
+                    CalendarEventBlock(event: event)
+                        .frame(width: columnWidth - 8, height: height)
+                        .position(
+                            x: 52 + columnWidth * CGFloat(dayIndex) + (columnWidth / 2),
+                            y: startOffset + height / 2
+                        )
+                        .onTapGesture { onSelectEvent(event) }
+                }
+            }
+        }
+    }
+
+    private var nowLine: some View {
+        GeometryReader { proxy in
+            if calendar.isDateInToday(focusedDate) {
+                let nowMinutes = minutesFromStart(Date())
+                let y = CGFloat(nowMinutes) * hourHeight / 60
+                Path { path in
+                    path.move(to: CGPoint(x: 52, y: y))
+                    path.addLine(to: CGPoint(x: proxy.size.width, y: y))
+                }
+                .stroke(Color.red, lineWidth: 1)
+                .overlay(
+                    Text("•")
+                        .foregroundStyle(Color.red)
+                        .offset(x: 42, y: y - 6)
+                )
+            }
+        }
+    }
+
+    private func hourLabel(_ hour: Int) -> String {
+        let date = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: focusedDate) ?? focusedDate
+        let formatter = LocaleFormatters.timeFormatter(use24Hour: AppSettingsModel.shared.use24HourTime)
+        return formatter.string(from: date)
+    }
+
+    private func minutesFromStart(_ date: Date) -> CGFloat {
+        let start = calendar.startOfDay(for: date)
+        return CGFloat(date.timeIntervalSince(start) / 60)
+    }
+}
+
+private struct WeekHeaderRow: View {
+    let days: [Date]
+    @Binding var focusedDate: Date
+    private let calendar = Calendar.current
+    private let rowHeight: CGFloat = 48
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(days, id: \.self) { day in
+                let isToday = calendar.isDateInToday(day)
+                let isSelected = calendar.isDate(day, inSameDayAs: focusedDate)
+                Button {
+                    focusedDate = day
+                } label: {
+                    VStack(spacing: 2) {
+                        Text(calendar.shortWeekdaySymbols[(calendar.component(.weekday, from: day) - 1)])
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Text("\(calendar.component(.day, from: day))")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(isToday ? .white : .primary)
+                            .padding(6)
+                            .background(
+                                Circle()
+                                    .fill(isToday ? Color.accentColor : (isSelected ? Color.accentColor.opacity(0.15) : Color.clear))
+                            )
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .frame(height: rowHeight)
+    }
+}
+
+private struct CalendarEventBlock: View {
+    let event: CalendarEvent
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Rectangle()
+                .fill(event.category.color)
+                .frame(width: 3)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(event.title)
+                    .font(.caption.weight(.semibold))
+                    .lineLimit(2)
+                Text(event.startDate.formatted(date: .omitted, time: .shortened))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(6)
+        .background(
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(event.category.color.opacity(0.15))
+        )
+    }
+}
+
+private struct CalendarDaySplitView: View {
+    @Binding var date: Date
+    let events: [CalendarEvent]
+    @Binding var selectedEvent: CalendarEvent?
+    private let calendar = Calendar.current
+
+    var body: some View {
+        HStack(spacing: 0) {
+            CalendarDayTimelineView(date: date, events: events) { event in
+                selectedEvent = event
+            }
+            Divider()
+            CalendarDayDetailPanel(event: selectedEvent)
+                .frame(width: 260)
+        }
+    }
+}
+
+private struct CalendarDayTimelineView: View {
+    let date: Date
+    let events: [CalendarEvent]
+    let onSelectEvent: (CalendarEvent) -> Void
+    private let calendar = Calendar.current
+    private let hourHeight: CGFloat = 52
+
+    var body: some View {
+        ScrollView {
+            ZStack(alignment: .topLeading) {
+                timeGrid
+                eventBlocks
+                nowLine
+            }
+        }
+    }
+
+    private var dayEvents: [CalendarEvent] {
+        events
+            .filter { calendar.isDate($0.startDate, inSameDayAs: date) && !isAllDay(event: $0) }
+            .sorted { $0.startDate < $1.startDate }
+    }
+
+    private var timeGrid: some View {
+        VStack(spacing: 0) {
+            ForEach(0..<24, id: \.self) { hour in
+                HStack(spacing: 0) {
+                    Text(hourLabel(hour))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 52, alignment: .trailing)
+                        .padding(.trailing, 4)
+                    Rectangle()
+                        .fill(Color(nsColor: .separatorColor).opacity(0.2))
+                        .frame(height: 1)
+                }
+                .frame(height: hourHeight)
+            }
+        }
+    }
+
+    private var eventBlocks: some View {
+        GeometryReader { proxy in
+            let contentWidth = proxy.size.width - 52
+            ForEach(dayEvents) { event in
+                let startOffset = minutesFromStart(event.startDate) * hourHeight / 60
+                let duration = max(event.endDate.timeIntervalSince(event.startDate) / 60, 30)
+                let height = CGFloat(duration) * hourHeight / 60
+                CalendarEventBlock(event: event)
+                    .frame(width: contentWidth - 12, height: height)
+                    .position(x: 52 + (contentWidth / 2), y: startOffset + height / 2)
+                    .onTapGesture { onSelectEvent(event) }
+            }
+        }
+    }
+
+    private var nowLine: some View {
+        GeometryReader { proxy in
+            if calendar.isDateInToday(date) {
+                let nowMinutes = minutesFromStart(Date())
+                let y = CGFloat(nowMinutes) * hourHeight / 60
+                Path { path in
+                    path.move(to: CGPoint(x: 52, y: y))
+                    path.addLine(to: CGPoint(x: proxy.size.width, y: y))
+                }
+                .stroke(Color.red, lineWidth: 1)
+                .overlay(
+                    Text("•")
+                        .foregroundStyle(Color.red)
+                        .offset(x: 42, y: y - 6)
+                )
+            }
+        }
+    }
+
+    private func hourLabel(_ hour: Int) -> String {
+        let hourDate = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: date) ?? date
+        let formatter = LocaleFormatters.timeFormatter(use24Hour: AppSettingsModel.shared.use24HourTime)
+        return formatter.string(from: hourDate)
+    }
+
+    private func minutesFromStart(_ date: Date) -> CGFloat {
+        let start = calendar.startOfDay(for: date)
+        return CGFloat(date.timeIntervalSince(start) / 60)
+    }
+}
+
+private struct CalendarDayDetailPanel: View {
+    let event: CalendarEvent?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(String(localized: "calendar.event_details"))
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            if let event {
+                Text(event.title)
+                    .font(.headline)
+
+                Text("\(LocaleFormatters.shortTime.string(from: event.startDate)) – \(LocaleFormatters.shortTime.string(from: event.endDate))")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                if let location = event.location, !location.isEmpty {
+                    HStack(spacing: 6) {
+                        Image(systemName: "mappin")
+                        Text(location)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                }
+
+                if let notes = event.notes, !notes.isEmpty {
+                    Text(notes)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(6)
+                }
+            } else {
+                Text(String(localized: "calendar.no_event_selected"))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(12)
+        .background(DesignSystem.Materials.card)
     }
 }
 

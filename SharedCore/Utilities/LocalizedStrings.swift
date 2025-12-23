@@ -21,52 +21,10 @@ extension TaskType {
     }
 }
 
-// MARK: - AssignmentCategory Localization
-extension AssignmentCategory {
-    var localizedName: String {
-        switch self {
-        case .homework:
-            return "task.type.homework".localized
-        case .quiz:
-            return "task.type.quiz".localized
-        case .exam:
-            return "task.type.exam".localized
-        case .reading:
-            return "task.type.reading".localized
-        case .review:
-            return "task.type.review".localized
-        case .project:
-            return "task.type.project".localized
-        }
-    }
-}
-
 // MARK: - Timer Mode Localization
-extension FocusSession.Mode {
-    var displayName: String {
-        switch self {
-        case .timer:
-            return "timer.mode.timer".localized
-        case .pomodoro:
-            return "timer.mode.pomodoro".localized
-        case .stopwatch:
-            return "timer.mode.stopwatch".localized
-        }
-    }
-}
-
-// MARK: - Pomodoro Phase Localization
-extension PomodoroPhase {
-    var localizedName: String {
-        switch self {
-        case .work:
-            return "timer.pomodoro.work".localized
-        case .shortBreak:
-            return "timer.pomodoro.short_break".localized
-        case .longBreak:
-            return "timer.pomodoro.long_break".localized
-        }
-    }
+extension TimerMode {
+    // displayName already exists in TimerModels.swift
+    // Keep that implementation to avoid breaking changes
 }
 
 // MARK: - Common Localizations Helper

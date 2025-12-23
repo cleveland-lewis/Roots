@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 /// Localization utility that ensures keys never appear in UI
 /// Falls back to English text if key is missing
