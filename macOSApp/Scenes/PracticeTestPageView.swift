@@ -5,7 +5,9 @@ struct PracticeTestPageView: View {
     @EnvironmentObject private var appModel: AppModel
     @EnvironmentObject private var coursesStore: CoursesStore
     @State private var practiceStore: PracticeTestStore
+    @State private var scheduledTestsStore = ScheduledTestsStore()
     @State private var showingGenerator = false
+    @State private var selectedScheduledTest: ScheduledPracticeTest?
     
     init() {
         _practiceStore = State(initialValue: PracticeTestStore())
@@ -27,6 +29,23 @@ struct PracticeTestPageView: View {
                 testListView
             }
         }
+        .alert("Start Scheduled Test", isPresented: Binding(
+            get: { selectedScheduledTest != nil },
+            set: { if !$0 { selectedScheduledTest = nil } }
+        )) {
+            Button("Cancel", role: .cancel) {
+                selectedScheduledTest = nil
+            }
+            Button("Start Now") {
+                if let test = selectedScheduledTest {
+                    startScheduledTest(test)
+                }
+            }
+        } message: {
+            if let test = selectedScheduledTest {
+                Text("Would you like to start '\(test.title)' now? This will create a new test attempt.")
+            }
+        }
     }
     
     // MARK: - Test List View
@@ -37,6 +56,14 @@ struct PracticeTestPageView: View {
             
             ScrollView {
                 VStack(spacing: 16) {
+                    // Scheduled Tests Section (NEW)
+                    ScheduledTestsSection(
+                        store: scheduledTestsStore,
+                        onStartTest: { test in
+                            selectedScheduledTest = test
+                        }
+                    )
+                    
                     if practiceStore.tests.isEmpty {
                         emptyStateView
                     } else {
@@ -306,6 +333,36 @@ struct PracticeTestPageView: View {
     
     private func resultsView(test: PracticeTest) -> some View {
         PracticeTestResultsView(test: test, store: practiceStore)
+    }
+    
+    // MARK: - Scheduled Test Handling
+    
+    private func startScheduledTest(_ scheduledTest: ScheduledPracticeTest) {
+        // Record the attempt
+        let attempt = scheduledTestsStore.startTest(scheduledTest: scheduledTest)
+        
+        // Create a practice test request based on scheduled test info
+        // In a real implementation, you might have a mapping or store additional metadata
+        // For now, create a simple test as a placeholder
+        Task {
+            let request = PracticeTestRequest(
+                courseId: UUID(), // Would come from scheduled test metadata
+                courseName: scheduledTest.subject,
+                topics: scheduledTest.unitName.map { [$0] } ?? [],
+                difficulty: difficultyFromInt(scheduledTest.difficulty),
+                questionCount: (scheduledTest.estimatedMinutes ?? 30) / 3 // Rough estimate
+            )
+            
+            await practiceStore.generateTest(request: request)
+        }
+    }
+    
+    private func difficultyFromInt(_ level: Int) -> PracticeTestDifficulty {
+        switch level {
+        case 1...2: return .easy
+        case 4...5: return .hard
+        default: return .medium
+        }
     }
 }
 

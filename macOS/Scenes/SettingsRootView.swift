@@ -48,10 +48,8 @@ struct SettingsRootView: View {
     var body: some View {
         NavigationSplitView {
             List(SettingsToolbarIdentifier.allCases, selection: $selectedPane) { pane in
-                NavigationLink(value: pane) {
-                    Label(pane.label, systemImage: pane.systemImageName)
-                }
-                .tag(pane)
+                Label(pane.label, systemImage: pane.systemImageName)
+                    .tag(pane)
             }
             .navigationTitle("Settings")
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 250)

@@ -187,6 +187,8 @@ enum EventCategory: String, CaseIterable, Identifiable {
 // Shared category parsing & colors
 func parseEventCategory(from title: String) -> EventCategory? {
     let t = title.lowercased()
+    
+    // English keywords
     if t.contains("exam") || t.contains("final") || t.contains("quiz") || t.contains("midterm") { return .exam }
     if t.contains("lab") { return .lab }
     if t.contains("class") || t.contains("lecture") { return .class }
@@ -194,6 +196,16 @@ func parseEventCategory(from title: String) -> EventCategory? {
     if t.contains("study") { return .study }
     if t.contains("review") { return .review }
     if t.contains("read") || t.contains("reading") { return .reading }
+    
+    // Chinese keywords (Simplified)
+    if t.contains("考试") || t.contains("期末") || t.contains("期中") || t.contains("测验") || t.contains("小测") { return .exam }
+    if t.contains("实验") || t.contains("實驗") { return .lab }
+    if t.contains("课程") || t.contains("上课") || t.contains("讲座") || t.contains("課程") { return .class }
+    if t.contains("作业") || t.contains("功课") || t.contains("习题") || t.contains("練習") { return .homework }
+    if t.contains("学习") || t.contains("學習") { return .study }
+    if t.contains("复习") || t.contains("復習") { return .review }
+    if t.contains("阅读") || t.contains("閱讀") || t.contains("读书") { return .reading }
+    
     return nil
 }
 

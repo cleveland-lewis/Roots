@@ -2,8 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Example pluralization rules for Chinese (Simplified) -->
-	<!-- Chinese typically doesn't have plural forms, but this structure is needed -->
+	<!-- Chinese doesn't inflect for plurals, uses measure words and context -->
+	
+	<!-- Assignments -->
 	<key>%d assignments</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -16,6 +17,118 @@
 			<string>d</string>
 			<key>other</key>
 			<string>%d 个作业</string>
+		</dict>
+	</dict>
+	
+	<!-- Courses -->
+	<key>%d courses</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@courses@</string>
+		<key>courses</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 门课程</string>
+		</dict>
+	</dict>
+	
+	<!-- Tasks -->
+	<key>%d tasks</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@tasks@</string>
+		<key>tasks</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 个任务</string>
+		</dict>
+	</dict>
+	
+	<!-- Questions -->
+	<key>%d questions</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@questions@</string>
+		<key>questions</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 个问题</string>
+		</dict>
+	</dict>
+	
+	<!-- Items -->
+	<key>%d items</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 项</string>
+		</dict>
+	</dict>
+	
+	<!-- Minutes -->
+	<key>%d minutes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@minutes@</string>
+		<key>minutes</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 分钟</string>
+		</dict>
+	</dict>
+	
+	<!-- Hours -->
+	<key>%d hours</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@hours@</string>
+		<key>hours</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 小时</string>
+		</dict>
+	</dict>
+	
+	<!-- Days -->
+	<key>%d days</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@days@</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d 天</string>
 		</dict>
 	</dict>
 </dict>
