@@ -59,7 +59,7 @@ public final class LocalModelProvider_iOS: AIProvider {
             latencyMs: latency,
             tokenCount: nil,
             cached: false,
-            structuredData: schema != nil ? ["local": true, "platform": "iOS"} : nil
+            structuredData: schema != nil ? ["local": true, "platform": "iOS"] : nil
         )
         #else
         throw AIError.generationFailed("Local inference not yet implemented")

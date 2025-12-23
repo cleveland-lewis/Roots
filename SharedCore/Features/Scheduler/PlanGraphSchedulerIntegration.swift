@@ -100,16 +100,18 @@ struct PlanGraphSchedulerIntegration {
             let dependents = graph.getDependents(for: completedNode.id)
             
             for dependent in dependents {
+                guard let assignmentId = dependent.assignmentId else { continue }
+                
                 // Check if this dependent is now unblocked
                 // (all its prerequisites are complete)
                 let prerequisites = graph.getPrerequisites(for: dependent.id)
                 let allPrerequisitesComplete = prerequisites.allSatisfy { $0.isCompleted }
                 
                 if allPrerequisitesComplete {
-                    newlyUnblocked.append(dependent.assignmentId)
+                    newlyUnblocked.append(assignmentId)
                     
                     LOG_SCHEDULER(.info, "AutoUnblock", "Task unblocked", metadata: [
-                        "taskId": dependent.assignmentId.uuidString,
+                        "taskId": assignmentId.uuidString,
                         "taskTitle": dependent.title,
                         "unlockedBy": completedTaskId.uuidString
                     ])

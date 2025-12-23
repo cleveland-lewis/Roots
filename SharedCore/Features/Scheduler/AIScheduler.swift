@@ -127,8 +127,8 @@ struct ScheduledBlock: Equatable {
 }
 
 struct ScheduleResult {
-    let blocks: [ScheduledBlock]
-    let unscheduledTasks: [AppTask]
+    var blocks: [ScheduledBlock]
+    var unscheduledTasks: [AppTask]
     var log: [String]
 }
 

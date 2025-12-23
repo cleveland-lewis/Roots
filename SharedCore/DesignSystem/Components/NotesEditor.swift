@@ -31,7 +31,6 @@ public struct NotesEditor: View {
                         .foregroundStyle(.secondary.opacity(0.5))
                         .padding(.horizontal, 6)
                         .padding(.vertical, 10)
-                        .transition(DesignSystem.Transitions.placeholder)
                 }
 
                 NotesTextView(text: $text, isFocused: $isFocused)
@@ -39,7 +38,6 @@ public struct NotesEditor: View {
                     .accessibilityLabel("Notes")
                     .accessibilityHint("Editable text. Supports bold and italic formatting.")
             }
-            .textFieldStyle(FocusAnimatedTextFieldStyle(isFocused: isFocused))
         }
     }
 }

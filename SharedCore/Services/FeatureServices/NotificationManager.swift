@@ -287,6 +287,8 @@ final class NotificationManager: ObservableObject {
         }
         
         // Yesterday's accomplishments
+        // TODO: Re-enable when AppTask has completedDate property
+        /*
         if AppSettingsModel.shared.dailyOverviewIncludeYesterdayCompleted {
             let yesterdayCompleted = AssignmentsStore.shared.tasks.filter { task in
                 guard task.isCompleted, let completedDate = task.completedDate else { return false }
@@ -302,6 +304,7 @@ final class NotificationManager: ObservableObject {
                 }
             }
         }
+        */
         
         // Yesterday's study time from FocusManager/timer sessions
         if AppSettingsModel.shared.dailyOverviewIncludeYesterdayStudyTime {
