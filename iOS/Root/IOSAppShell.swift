@@ -148,56 +148,92 @@ struct IOSAppShell<Content: View>: View {
     
     private var quickAddMenu: some View {
         VStack(alignment: .leading, spacing: 0) {
-            quickAddButton(
-                title: "Add Assignment",
-                icon: "plus.square.on.square",
-                action: {
-                    handleQuickAction(.add_assignment)
-                }
-            )
-            
-            Divider()
-            
-            quickAddButton(
-                title: "Add Grade",
-                icon: "number.circle",
-                action: {
-                    handleQuickAction(.add_grade)
-                }
-            )
-            
-            Divider()
-            
-            quickAddButton(
-                title: "Auto Schedule",
-                icon: "calendar.badge.clock",
-                action: {
-                    handleQuickAction(.auto_schedule)
-                }
-            )
-        }
-        .frame(width: 220)
-        .presentationCompactAdaptation(.popover)
-    }
-    
-    private func quickAddButton(title: String, icon: String, action: @escaping () -> Void) -> some View {
-        Button {
-            action()
-            showingQuickAddMenu = false
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 18))
-                    .foregroundColor(.blue)
-                    .frame(width: 24)
-                Text(title)
-                    .foregroundColor(.primary)
+            // Header
+            HStack {
+                Text("Quick Add")
+                    .font(.title2.weight(.bold))
                 Spacer()
+                Button {
+                    showingQuickAddMenu = false
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                }
             }
             .padding()
-            .contentShape(Rectangle())
+            
+            Divider()
+            
+            // Quick action buttons
+            VStack(alignment: .leading, spacing: 0) {
+                Button {
+                    handleQuickAction(.add_assignment)
+                    showingQuickAddMenu = false
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(systemName: "plus.square.on.square")
+                            .font(.system(size: 20))
+                            .foregroundColor(.blue)
+                            .frame(width: 28)
+                        Text("Add Assignment")
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                
+                Divider()
+                    .padding(.leading, 60)
+                
+                Button {
+                    handleQuickAction(.add_grade)
+                    showingQuickAddMenu = false
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(systemName: "number.circle")
+                            .font(.system(size: 20))
+                            .foregroundColor(.blue)
+                            .frame(width: 28)
+                        Text("Add Grade")
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                
+                Divider()
+                    .padding(.leading, 60)
+                
+                Button {
+                    handleQuickAction(.auto_schedule)
+                    showingQuickAddMenu = false
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(systemName: "calendar.badge.clock")
+                            .font(.system(size: 20))
+                            .foregroundColor(.blue)
+                            .frame(width: 28)
+                        Text("Auto Schedule")
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .buttonStyle(.plain)
+        .frame(width: 280, height: 280, alignment: .topLeading)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(uiColor: .systemBackground).opacity(0.9))
+        )
+        .padding(8)
     }
     
     private var allMenuPages: [AppPage] {
