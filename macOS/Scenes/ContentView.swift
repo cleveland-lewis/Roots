@@ -37,13 +37,10 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                if isQuickActionsExpanded {
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .ignoresSafeArea()
-                        .onTapGesture { collapseQuickActions() }
-                        .zIndex(0.5)
+                QuickActionsDismissLayer(isExpanded: isQuickActionsExpanded) {
+                    collapseQuickActions()
                 }
+                .zIndex(0.5)
 
                 // Floating tab bar stays at bottom; keep above content
                 VStack {

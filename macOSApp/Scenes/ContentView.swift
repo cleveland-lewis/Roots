@@ -14,6 +14,7 @@ struct ContentView: View {
     @EnvironmentObject private var modalRouter: AppModalRouter
     @State private var selectedTab: RootTab = .dashboard
     @State private var settingsRotation: Double = 0
+    @State private var isQuickActionsExpanded = false
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -36,6 +37,11 @@ struct ContentView: View {
                         .padding(.bottom, proxy.safeAreaInsets.bottom + 8)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                QuickActionsDismissLayer(isExpanded: isQuickActionsExpanded) {
+                    collapseQuickActions()
+                }
+                .zIndex(0.5)
 
                 // Floating tab bar stays at bottom; keep above content
                 VStack {
@@ -118,31 +124,9 @@ struct ContentView: View {
 
     private var topBar: some View {
         HStack {
-            Menu {
-                Section("Quick Actions") {
-                    Button {
-                        performQuickAction(.add_assignment)
-                    } label: {
-                        Label("Add Assignment", systemImage: "doc.badge.plus")
-                    }
-                    Button {
-                        performQuickAction(.add_grade)
-                    } label: {
-                        Label("Add Grade", systemImage: "chart.bar.doc.horizontal")
-                    }
-                    Button {
-                        performQuickAction(.auto_schedule)
-                    } label: {
-                        Label("Auto Schedule", systemImage: "wand.and.stars")
-                    }
-                }
-            } label: {
-                Image(systemName: "line.3.horizontal")
-                    .font(DesignSystem.Typography.body)
-                    .frame(width: 36, height: 36)
-                    .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
+            QuickActionsLauncher(isExpanded: $isQuickActionsExpanded, actions: settings.quickActions) { action in
+                performQuickAction(action)
             }
-            .buttonStyle(.plain)
 
             Spacer()
 
@@ -164,6 +148,9 @@ struct ContentView: View {
             .accessibilityIdentifier("Header.Settings")
         }
         .contentTransition(.opacity)
+        .onExitCommand {
+            collapseQuickActions()
+        }
     }
 
     @ViewBuilder
@@ -295,6 +282,12 @@ struct ContentView: View {
         selectedTab = tab
         if let page = AppPage(rawValue: tab.rawValue), appModel.selectedPage != page {
             appModel.selectedPage = page
+        }
+    }
+
+    private func collapseQuickActions() {
+        if isQuickActionsExpanded {
+            isQuickActionsExpanded = false
         }
     }
 

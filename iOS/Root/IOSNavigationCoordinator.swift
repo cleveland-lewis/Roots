@@ -77,11 +77,8 @@ struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
                 }
             }
             .overlay {
-                if isQuickActionsExpanded {
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .ignoresSafeArea()
-                        .onTapGesture { collapseQuickActions() }
+                QuickActionsDismissLayer(isExpanded: isQuickActionsExpanded) {
+                    collapseQuickActions()
                 }
             }
     }

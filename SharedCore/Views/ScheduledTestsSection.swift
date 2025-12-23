@@ -67,8 +67,12 @@ struct ScheduledTestsSection: View {
     
     private var weeklyCalendarView: some View {
         let daysOfWeek = Calendar.current.daysOfWeek(for: store.currentWeek)
+        let hasTests = !store.testsForCurrentWeek().isEmpty
         
         return VStack(spacing: 12) {
+            if !hasTests {
+                emptyWeekBanner
+            }
             ForEach(daysOfWeek, id: \.self) { day in
                 dayRow(for: day)
             }
@@ -125,69 +129,33 @@ struct ScheduledTestsSection: View {
     private func testRow(test: ScheduledPracticeTest) -> some View {
         let status = store.computedStatus(for: test)
         
-        return HStack(alignment: .top, spacing: 12) {
-            // Time
-            VStack(alignment: .leading, spacing: 2) {
-                Text(timeLabel(for: test.scheduledAt))
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.secondary)
-                
-                if let minutes = test.estimatedMinutes {
-                    Text("\(minutes) min")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .frame(width: 60, alignment: .leading)
-            
-            // Content
+        return ViewThatFits(in: .horizontal) {
+            testRowHorizontal(test: test, status: status)
+            testRowVertical(test: test, status: status)
+        }
+    }
+
+    private func testRowHorizontal(test: ScheduledPracticeTest, status: ScheduledTestStatus) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            timeColumn(for: test)
+                .frame(width: 60, alignment: .leading)
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(test.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
+                subjectLine(for: test)
+
                 HStack(spacing: 8) {
-                    Text(test.subject)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    if let unit = test.unitName {
-                        Text("•")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text(unit)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                HStack(spacing: 8) {
-                    // Difficulty indicator
-                    HStack(spacing: 2) {
-                        ForEach(1...5, id: \.self) { level in
-                            Circle()
-                                .fill(level <= test.difficulty ? Color.orange : Color.gray.opacity(0.3))
-                                .frame(width: 6, height: 6)
-                        }
-                    }
-                    
-                    // Status badge
+                    difficultyRow(for: test)
                     statusBadge(status: status)
                 }
             }
-            
+
             Spacer()
-            
-            // Start button
-            Button(action: { onStartTest(test) }) {
-                Text("Start")
-                    .font(.caption)
-                    .fontWeight(.medium)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.small)
-            .disabled(status == .completed)
+
+            startButton(for: test, status: status)
         }
         .padding(12)
         .background(Color(nsColor: .controlBackgroundColor))
@@ -196,6 +164,103 @@ struct ScheduledTestsSection: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(status == .missed ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
         )
+    }
+
+    private func testRowVertical(test: ScheduledPracticeTest, status: ScheduledTestStatus) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .top) {
+                timeColumn(for: test)
+                Spacer()
+                statusBadge(status: status)
+            }
+
+            Text(test.title)
+                .font(.subheadline)
+                .fontWeight(.medium)
+
+            subjectLine(for: test)
+
+            HStack(spacing: 8) {
+                difficultyRow(for: test)
+                Spacer()
+                startButton(for: test, status: status)
+            }
+        }
+        .padding(12)
+        .background(Color(nsColor: .controlBackgroundColor))
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(status == .missed ? Color.red.opacity(0.3) : Color.clear, lineWidth: 1)
+        )
+    }
+
+    private var emptyWeekBanner: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "calendar.badge.clock")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text("No tests scheduled this week.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Spacer()
+        }
+        .padding(10)
+        .background(Color(nsColor: .controlBackgroundColor))
+        .cornerRadius(8)
+    }
+
+    private func timeColumn(for test: ScheduledPracticeTest) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(timeLabel(for: test.scheduledAt))
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+
+            if let minutes = test.estimatedMinutes {
+                Text("\(minutes) min")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+
+    private func subjectLine(for test: ScheduledPracticeTest) -> some View {
+        HStack(spacing: 8) {
+            Text(test.subject)
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            if let unit = test.unitName {
+                Text("•")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Text(unit)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+
+    private func difficultyRow(for test: ScheduledPracticeTest) -> some View {
+        HStack(spacing: 2) {
+            ForEach(1...5, id: \.self) { level in
+                Circle()
+                    .fill(level <= test.difficulty ? Color.orange : Color.gray.opacity(0.3))
+                    .frame(width: 6, height: 6)
+            }
+        }
+    }
+
+    private func startButton(for test: ScheduledPracticeTest, status: ScheduledTestStatus) -> some View {
+        Button(action: { onStartTest(test) }) {
+            Text("Start")
+                .font(.caption)
+                .fontWeight(.medium)
+        }
+        .buttonStyle(.borderedProminent)
+        .controlSize(.small)
+        .disabled(status == .completed)
     }
     
     private func statusBadge(status: ScheduledTestStatus) -> some View {

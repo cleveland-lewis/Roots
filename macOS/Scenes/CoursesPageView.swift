@@ -544,7 +544,6 @@ struct CoursesPageDetailView: View {
                     meetingsCard
                     syllabusCard
                 }
-                quickActionsCard
             }
             .padding(.trailing, 6)
             .padding(.vertical, 12)
@@ -675,49 +674,6 @@ struct CoursesPageDetailView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: cardCorner, style: .continuous))
         .overlay(cardStroke)
-    }
-
-    private var quickActionsCard: some View {
-        RootsCard(title: "Quick Actions") {
-            HStack(spacing: RootsSpacing.m) {
-                quickActionTile(
-                    title: "Add Assignment",
-                    subtitle: "Create a new assignment for this course",
-                    systemImage: "doc.badge.plus",
-                    action: onAddAssignment
-                )
-
-                quickActionTile(
-                    title: "Add Exam",
-                    subtitle: "Schedule an exam or quiz",
-                    systemImage: "calendar.badge.clock",
-                    action: onAddExam
-                )
-
-                quickActionTile(
-                    title: "Add Grade",
-                    subtitle: "Log a grade for this course",
-                    systemImage: "checkmark.seal",
-                    action: onAddGrade
-                )
-
-                quickActionTile(
-                    title: "View Plan for Course",
-                    subtitle: "Open Planner with this course filtered",
-                    systemImage: "list.bullet.rectangle",
-                    action: onViewPlanner
-                )
-                
-                if let reviewAction = onReviewParsedAssignments {
-                    quickActionTile(
-                        title: "Review Parsed Assignments",
-                        subtitle: "Import assignments from syllabus parsing",
-                        systemImage: "doc.text.magnifyingglass",
-                        action: reviewAction
-                    )
-                }
-            }
-        }
     }
 
     private func quickActionTile(title: String, subtitle: String, systemImage: String, action: @escaping () -> Void) -> some View {

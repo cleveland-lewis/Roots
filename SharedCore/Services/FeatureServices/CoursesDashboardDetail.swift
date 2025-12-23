@@ -17,9 +17,6 @@ struct CoursesDashboardDetail: View {
                     syllabusCard
                 }
 
-                // Quick Actions Row
-                quickActionsRow
-
                 Spacer(minLength: 80) // Space for floating nav bar
             }
             .padding(DesignSystem.Layout.padding.card)
@@ -215,41 +212,6 @@ struct CoursesDashboardDetail: View {
             }
             .frame(height: 8)
         }
-    }
-
-    // MARK: - Quick Actions Row
-
-    private var quickActionsRow: some View {
-        HStack(spacing: 12) {
-            quickActionButton(title: "Add Assignment", icon: "doc.badge.plus")
-            quickActionButton(title: "Add Exam", icon: "checkmark.seal")
-            quickActionButton(title: "Add Grade", icon: "chart.line.uptrend.xyaxis")
-            quickActionButton(title: "View Plan", icon: "calendar.day.timeline.left")
-        }
-    }
-
-    private func quickActionButton(title: String, icon: String) -> some View {
-        Button {
-            // Action
-        } label: {
-            VStack(spacing: DesignSystem.Layout.spacing.small) {
-                Image(systemName: icon)
-                    .font(DesignSystem.Typography.body)
-                    .foregroundStyle(Color.accentColor)
-
-                Text(title)
-                    .font(DesignSystem.Typography.body)
-                    .foregroundStyle(.primary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(DesignSystem.Materials.card, in: RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous)
-                    .strokeBorder(Color(nsColor: .separatorColor).opacity(0.3), lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Secondary Panel
