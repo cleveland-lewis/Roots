@@ -83,6 +83,28 @@ struct AppTask: Codable, Equatable, Hashable {
         self.gradePossiblePoints = gradePossiblePoints
         self.gradeEarnedPoints = gradeEarnedPoints
     }
+
+    func withCourseId(_ newCourseId: UUID?) -> AppTask {
+        AppTask(
+            id: id,
+            title: title,
+            courseId: newCourseId,
+            due: due,
+            estimatedMinutes: estimatedMinutes,
+            minBlockMinutes: minBlockMinutes,
+            maxBlockMinutes: maxBlockMinutes,
+            difficulty: difficulty,
+            importance: importance,
+            type: type,
+            locked: locked,
+            attachments: attachments,
+            isCompleted: isCompleted,
+            gradeWeightPercent: gradeWeightPercent,
+            gradePossiblePoints: gradePossiblePoints,
+            gradeEarnedPoints: gradeEarnedPoints,
+            category: category
+        )
+    }
 }
 
 struct Constraints {

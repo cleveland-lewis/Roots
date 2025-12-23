@@ -119,6 +119,7 @@ final class CoursesStore: ObservableObject {
 
     func deleteCourse(_ course: Course) {
         courses.removeAll { $0.id == course.id }
+        AssignmentsStore.shared.reassignTasks(fromCourseId: course.id, toCourseId: nil)
         // Publish course deleted event via Combine for subscribers
         courseDeleted.send(course.id)
         persist()

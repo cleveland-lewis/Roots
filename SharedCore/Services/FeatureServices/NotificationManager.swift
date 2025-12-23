@@ -275,13 +275,13 @@ final class NotificationManager: ObservableObject {
             }
             
             if todayTasks.isEmpty {
-                bodyParts.append("✓ No assignments due today")
+                bodyParts.append("No assignments due today")
             } else {
                 let taskTitles = todayTasks.prefix(3).map { $0.title }.joined(separator: ", ")
                 if todayTasks.count <= 3 {
-                    bodyParts.append("📝 \(todayTasks.count) due today: \(taskTitles)")
+                    bodyParts.append("\(todayTasks.count) due today: \(taskTitles)")
                 } else {
-                    bodyParts.append("📝 \(todayTasks.count) due today: \(taskTitles), +\(todayTasks.count - 3) more")
+                    bodyParts.append("\(todayTasks.count) due today: \(taskTitles), +\(todayTasks.count - 3) more")
                 }
             }
         }
@@ -296,9 +296,9 @@ final class NotificationManager: ObservableObject {
             if !yesterdayCompleted.isEmpty {
                 if yesterdayCompleted.count <= 2 {
                     let titles = yesterdayCompleted.map { $0.title }.joined(separator: ", ")
-                    bodyParts.append("✅ Yesterday: Completed \(titles)")
+                    bodyParts.append("Yesterday: Completed \(titles)")
                 } else {
-                    bodyParts.append("✅ Yesterday: Completed \(yesterdayCompleted.count) tasks")
+                    bodyParts.append("Yesterday: Completed \(yesterdayCompleted.count) tasks")
                 }
             }
         }
@@ -309,9 +309,9 @@ final class NotificationManager: ObservableObject {
                 let hours = studyMinutes / 60
                 let mins = studyMinutes % 60
                 if hours > 0 {
-                    bodyParts.append("⏱️ Yesterday: Studied \(hours)h \(mins)m")
+                    bodyParts.append("Yesterday: Studied \(hours)h \(mins)m")
                 } else if mins > 0 {
-                    bodyParts.append("⏱️ Yesterday: Studied \(mins)m")
+                    bodyParts.append("Yesterday: Studied \(mins)m")
                 }
             }
         }
@@ -321,9 +321,9 @@ final class NotificationManager: ObservableObject {
             if let todayEvents = getTodayEvents(), !todayEvents.isEmpty {
                 if todayEvents.count <= 2 {
                     let eventTitles = todayEvents.map { $0.title }.joined(separator: ", ")
-                    bodyParts.append("📅 Today: \(eventTitles)")
+                    bodyParts.append("Today: \(eventTitles)")
                 } else {
-                    bodyParts.append("📅 Today: \(todayEvents.count) events scheduled")
+                    bodyParts.append("Today: \(todayEvents.count) events scheduled")
                 }
             }
         }
@@ -365,12 +365,12 @@ final class NotificationManager: ObservableObject {
     
     private func getMotivationalLine() -> String {
         let lines = [
-            "Make today count! 💪",
-            "You've got this! 🌟",
-            "One step at a time 🚀",
-            "Progress, not perfection ✨",
-            "Stay focused, stay strong 💫",
-            "Keep moving forward 🎯"
+            "Make today count!",
+            "You've got this!",
+            "One step at a time",
+            "Progress, not perfection",
+            "Stay focused, stay strong",
+            "Keep moving forward"
         ]
         return lines.randomElement() ?? lines[0]
     }

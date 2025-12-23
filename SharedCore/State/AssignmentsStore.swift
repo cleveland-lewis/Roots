@@ -130,6 +130,19 @@ final class AssignmentsStore: ObservableObject {
         }
     }
 
+    func reassignTasks(fromCourseId: UUID, toCourseId: UUID?) {
+        var didChange = false
+        let updated = tasks.map { task -> AppTask in
+            guard task.courseId == fromCourseId else { return task }
+            didChange = true
+            return task.withCourseId(toCourseId)
+        }
+        guard didChange else { return }
+        tasks = updated
+        saveCache()
+        refreshGPA()
+    }
+
     func incompleteTasks() -> [AppTask] {
         // For now all tasks are considered active; in future, filter by completion state
         return tasks
