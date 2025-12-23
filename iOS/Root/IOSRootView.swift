@@ -41,7 +41,7 @@ struct IOSRootView: View {
                     }
                 }
                 .navigationDestination(for: IOSNavigationTarget.self) { destination in
-                    IOSAppShell {
+                    IOSAppShell(hideNavigationButtons: destination == .settings) {
                         switch destination {
                         case .page(let page):
                             pageView(for: page)

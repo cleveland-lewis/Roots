@@ -16,52 +16,83 @@ struct IOSPlannerView: View {
     @State private var editingBlock: StoredScheduledSession? = nil
     @State private var showingBlockEditor = false
     @State private var focusPulse = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    private var isPad: Bool { horizontalSizeClass == .regular }
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 18) {
-                    planHeader
-                        .id(PlannerScrollTarget.header)
-                    IOSFilterHeaderView(
-                        coursesStore: coursesStore,
-                        filterState: filterState
-                    )
-                    scheduleSection
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .stroke(Color.accentColor.opacity(focusPulse ? 0.55 : 0), lineWidth: 2)
+        ZStack(alignment: .bottom) {
+            ScrollViewReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 18) {
+                        planHeader
+                            .id(PlannerScrollTarget.header)
+                        IOSFilterHeaderView(
+                            coursesStore: coursesStore,
+                            filterState: filterState
                         )
-                        .animation(.easeInOut(duration: 0.35), value: focusPulse)
-                        .id(PlannerScrollTarget.schedule)
-                    overflowSection
-                        .id(PlannerScrollTarget.overflow)
-                    unscheduledSection
-                        .id(PlannerScrollTarget.unscheduled)
+                        scheduleSection
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                    .stroke(Color.accentColor.opacity(focusPulse ? 0.55 : 0), lineWidth: 2)
+                            )
+                            .animation(.easeInOut(duration: 0.35), value: focusPulse)
+                            .id(PlannerScrollTarget.schedule)
+                        overflowSection
+                            .id(PlannerScrollTarget.overflow)
+                        unscheduledSection
+                            .id(PlannerScrollTarget.unscheduled)
+                    }
+                    .padding(20)
+                    .padding(.bottom, isPad ? 80 : 0) // Extra padding on iPad for floating button
                 }
-                .padding(20)
+                .onReceive(plannerCoordinator.$requestedDate) { date in
+                    guard let date else { return }
+                    selectedDate = date
+                    withAnimation(.easeInOut) {
+                        proxy.scrollTo(PlannerScrollTarget.schedule, anchor: .top)
+                    }
+                    focusPulse = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                        focusPulse = false
+                    }
+                    plannerCoordinator.requestedDate = nil
+                }
             }
-            .onReceive(plannerCoordinator.$requestedDate) { date in
-                guard let date else { return }
-                selectedDate = date
-                withAnimation(.easeInOut) {
-                    proxy.scrollTo(PlannerScrollTarget.schedule, anchor: .top)
+            
+            // Floating bottom button on iPad
+            if isPad {
+                Button {
+                    generatePlan()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "sparkles")
+                        Text(NSLocalizedString("ios.planner.generate_plan_button", comment: "Generate Plan"))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .fill(Color.accentColor)
+                    )
+                    .foregroundColor(.white)
                 }
-                focusPulse = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                    focusPulse = false
-                }
-                plannerCoordinator.requestedDate = nil
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+                .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
             }
         }
         .background(DesignSystem.Colors.appBackground)
         .modifier(IOSNavigationChrome(title: NSLocalizedString("ios.planner.title", comment: "Planner")) {
-            Button {
-                generatePlan()
-            } label: {
-                Image(systemName: "sparkles")
+            // Show button in toolbar on iPhone only
+            if !isPad {
+                Button {
+                    generatePlan()
+                } label: {
+                    Image(systemName: "sparkles")
+                }
+                .accessibilityLabel(NSLocalizedString("ios.planner.generate_plan", comment: "Generate plan"))
             }
-            .accessibilityLabel(NSLocalizedString("ios.planner.generate_plan", comment: "Generate plan"))
         })
         .sheet(isPresented: $showingPlanHelp) {
             IOSPlanHelpView()
@@ -108,16 +139,6 @@ struct IOSPlannerView: View {
             Text(formattedDate(selectedDate))
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Button {
-                generatePlan()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "sparkles")
-                    Text(NSLocalizedString("ios.planner.generate_plan_button", comment: "Generate Plan"))
-                }
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
         }
         .padding(16)
         .background(
@@ -592,7 +613,7 @@ struct IOSCalendarView: View {
                         detail: "Add events quickly from the plus menu."
                     )
                 } else {
-                    ForEach(upcomingEvents.prefix(8), id: \.eventIdentifier) { event in
+                    ForEach(Array(upcomingEvents.prefix(8).enumerated()), id: \.offset) { index, event in
                         IOSInfoCard(
                             title: event.title,
                             subtitle: timeRange(for: event),

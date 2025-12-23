@@ -11,6 +11,7 @@ struct IOSDashboardView: View {
     @EnvironmentObject private var assignmentsStore: AssignmentsStore
     @EnvironmentObject private var coursesStore: CoursesStore
     @EnvironmentObject private var deviceCalendar: DeviceCalendarManager
+    @EnvironmentObject private var settings: AppSettingsModel
 
     @State private var selectedDate = Date()
     @AppStorage("dashboard.greeting.dateKey") private var greetingDateKey: String = ""
@@ -274,7 +275,7 @@ struct IOSDashboardView: View {
     }
 
     private var todayEventCount: Int {
-        deviceCalendar.events.filter { calendar.isDateInToday($0.startDate) }.count
+        filteredCalendarEvents.filter { calendar.isDateInToday($0.startDate) }.count
     }
 
     private var todayTaskCount: Int {
@@ -286,7 +287,7 @@ struct IOSDashboardView: View {
 
     private var upcomingEvents: [EKEvent] {
         let now = Date()
-        return deviceCalendar.events
+        return filteredCalendarEvents
             .filter { $0.endDate > now }
             .sorted { $0.startDate < $1.startDate }
     }
@@ -294,7 +295,14 @@ struct IOSDashboardView: View {
     private var weekEventCount: Int {
         let now = Date()
         let end = calendar.date(byAdding: .day, value: 7, to: now) ?? now
-        return deviceCalendar.events.filter { $0.startDate >= now && $0.startDate <= end }.count
+        return filteredCalendarEvents.filter { $0.startDate >= now && $0.startDate <= end }.count
+    }
+
+    private var filteredCalendarEvents: [EKEvent] {
+        guard let selectedID = settings.selectedSchoolCalendarID, !selectedID.isEmpty else {
+            return deviceCalendar.events
+        }
+        return deviceCalendar.events.filter { $0.calendar.calendarIdentifier == selectedID }
     }
 
     private var dueSoonTasks: [AppTask] {

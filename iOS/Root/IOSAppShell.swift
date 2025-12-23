@@ -12,11 +12,30 @@ struct IOSAppShell<Content: View>: View {
     @EnvironmentObject private var plannerStore: PlannerStore
     @EnvironmentObject private var filterState: IOSFilterState
     @State private var tabBarPrefs: TabBarPreferencesStore?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     let content: Content
+    let hideNavigationButtons: Bool
     
-    init(@ViewBuilder content: () -> Content) {
+    init(hideNavigationButtons: Bool = false, @ViewBuilder content: () -> Content) {
+        self.hideNavigationButtons = hideNavigationButtons
         self.content = content()
+    }
+    
+    private var shouldShowButtons: Bool {
+        if hideNavigationButtons { return false }
+        
+        // On iPhone (compact width), hide buttons when navigated (back button present)
+        if horizontalSizeClass == .compact {
+            return navigation.path.isEmpty
+        }
+        
+        // On iPad (regular width), always show buttons
+        return true
+    }
+    
+    private var isPad: Bool {
+        horizontalSizeClass == .regular
     }
     
     var body: some View {
@@ -24,10 +43,13 @@ struct IOSAppShell<Content: View>: View {
             // Base content layer - scrolls under buttons
             content
             
-            // Floating overlay buttons - no background strip
-            VStack(spacing: 0) {
-                floatingButtons
-                Spacer()
+            // Floating overlay buttons
+            if shouldShowButtons {
+                VStack(spacing: 0) {
+                    floatingButtons
+                        .padding(.top, isPad ? 0 : 10) // Align with tab bar on iPad, slight offset on iPhone
+                    Spacer()
+                }
             }
         }
         .onAppear {

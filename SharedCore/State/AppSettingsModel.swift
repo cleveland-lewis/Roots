@@ -219,6 +219,9 @@ final class AppSettingsModel: ObservableObject, Codable {
     static let shared: AppSettingsModel = {
         return AppSettingsModel.load()
     }()
+    
+    // MARK: - Performance optimization
+    private var saveDebouncer: Task<Void, Never>?
 
     // MARK: - Codable keys
     enum CodingKeys: String, CodingKey {
@@ -1044,10 +1047,22 @@ final class AppSettingsModel: ObservableObject, Codable {
     }
 
     func save() {
-        let key = "roots.settings.appsettings"
-        let encoder = JSONEncoder()
-        if let data = try? encoder.encode(self) {
-            UserDefaults.standard.set(data, forKey: key)
+        // Debounce rapid saves to improve toggle performance
+        saveDebouncer?.cancel()
+        saveDebouncer = Task { @MainActor [weak self] in
+            do {
+                // Wait 300ms before saving - batches rapid changes
+                try await Task.sleep(nanoseconds: 300_000_000)
+                guard let self = self else { return }
+                
+                let key = "roots.settings.appsettings"
+                let encoder = JSONEncoder()
+                if let data = try? encoder.encode(self) {
+                    UserDefaults.standard.set(data, forKey: key)
+                }
+            } catch {
+                // Task was cancelled (user toggled again), ignore
+            }
         }
     }
 

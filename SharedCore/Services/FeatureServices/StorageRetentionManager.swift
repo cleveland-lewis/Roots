@@ -12,7 +12,7 @@ enum StorageRetentionManager {
         coursesStore: CoursesStore,
         assignmentsStore: AssignmentsStore,
         practiceStore: PracticeTestStore,
-        aggregateStore: StorageAggregateStore = .shared,
+        aggregateStore: StorageAggregateStore,
         now: Date = Date()
     ) -> Result {
         guard policy != .never else {

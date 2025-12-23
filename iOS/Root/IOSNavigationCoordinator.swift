@@ -45,6 +45,7 @@ struct IOSTabConfiguration {
 struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
     let title: String
     let trailingContent: () -> TrailingContent
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     init(title: String, @ViewBuilder trailingContent: @escaping () -> TrailingContent = { EmptyView() }) {
         self.title = title
@@ -57,6 +58,8 @@ struct IOSNavigationChrome<TrailingContent: View>: ViewModifier {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
+                // On iPad (regular width), show trailing content in toolbar
+                // On iPhone (compact width), show in toolbar
                 ToolbarItem(placement: .topBarTrailing) {
                     trailingContent()
                 }
