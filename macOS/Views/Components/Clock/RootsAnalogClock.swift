@@ -155,26 +155,58 @@ struct StopwatchTicks: View {
 
 struct StopwatchNumerals: View {
     let diameter: CGFloat
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var radius: CGFloat { diameter / 2 }
+    
+    /// Show cardinal hours (12, 3, 6, 9) for smaller clocks, all hours for larger
+    private var hoursToShow: [Int] {
+        diameter >= 250 ? Array(1...12) : [12, 3, 6, 9]
+    }
+    
+    private var dynamicTypeSizeMultiplier: CGFloat {
+        switch dynamicTypeSize {
+        case .xSmall, .small: return 0.85
+        case .medium: return 1.0
+        case .large: return 1.1
+        case .xLarge: return 1.2
+        case .xxLarge: return 1.3
+        case .xxxLarge: return 1.4
+        default: return 1.5
+        }
+    }
+    
+    private var fontSize: CGFloat {
+        let baseSize = diameter / 12
+        return baseSize * dynamicTypeSizeMultiplier
+    }
+    
+    private func formatHour(_ hour: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .none
+        formatter.locale = Locale.current
+        return formatter.string(from: NSNumber(value: hour)) ?? "\(hour)"
+    }
 
     var body: some View {
-        let fontSize = diameter * 0.07
         ZStack {
-            ForEach(1...12, id: \.self) { idx in
-                let value = idx * 5
-                let angle = Double(value) / 60.0 * 360.0 - 90.0
-                Text("\(value)")
+            ForEach(hoursToShow, id: \.self) { hour in
+                let angle = Double(hour) / 12.0 * 360.0 - 90.0
+                let radian = angle * .pi / 180.0
+                let numeralDistance = radius * 0.82
+                
+                Text(formatHour(hour))
                     .font(.system(size: fontSize, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color.primary.opacity(0.7))
-                    .frame(width: fontSize * 2.2, height: fontSize * 1.6, alignment: .center)
+                    .foregroundStyle(Color.primary.opacity(0.8))
                     .position(
-                        x: radius + cos(angle * .pi / 180) * radius * 0.76,
-                        y: radius + sin(angle * .pi / 180) * radius * 0.76
+                        x: radius + cos(radian) * numeralDistance,
+                        y: radius + sin(radian) * numeralDistance
                     )
             }
         }
         .drawingGroup()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Clock face with hour numerals")
     }
 }
 
