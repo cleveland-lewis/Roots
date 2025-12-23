@@ -733,7 +733,7 @@ private struct MonthCalendarSplitView: View {
                             .font(DesignSystem.Typography.body)
                     }
                     if let notes = event.notes, !notes.isEmpty {
-                        Text(notes)
+                        Text(AttributedString(NotesRichTextStorage.attributedString(from: notes)))
                             .font(DesignSystem.Typography.body)
                             .foregroundStyle(.secondary)
                     }
@@ -1287,7 +1287,7 @@ private struct EventDetailView: View {
                         .foregroundStyle(.primary)
 
                     ScrollView {
-                        Text(notes)
+                        Text(AttributedString(NotesRichTextStorage.attributedString(from: notes)))
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -1538,8 +1538,7 @@ private struct EventEditSheet: View {
                     }
                 }
                 
-                TextField("Notes", text: $notes, axis: .vertical)
-                    .lineLimit(2, reservesSpace: true)
+                NotesEditor(title: "Notes", text: $notes, minHeight: 80)
             }
 
             Divider()
