@@ -1,0 +1,46 @@
+import Foundation
+
+#if os(watchOS)
+import WatchKit
+#endif
+
+final class LegacyFeedbackAdapter: FeedbackService {
+    private let settings = AppSettingsModel.shared
+
+    func play(_ event: FeedbackEvent) {
+        #if os(watchOS)
+        if settings.enableSounds {
+            Feedback.shared.play(mapToLegacyType(event))
+        }
+        if settings.enableHaptics {
+            WKInterfaceDevice.current().play(mapToWatchHaptic(event))
+        }
+        #else
+        Feedback.shared.play(mapToLegacyType(event))
+        #endif
+    }
+
+    private func mapToLegacyType(_ event: FeedbackEvent) -> FeedbackType {
+        switch event {
+        case .taskCompleted: return .taskCompleted
+        case .timerStart: return .selection
+        case .timerStop: return .success
+        case .success: return .success
+        case .warning: return .warning
+        case .error: return .error
+        }
+    }
+
+    #if os(watchOS)
+    private func mapToWatchHaptic(_ event: FeedbackEvent) -> WKHapticType {
+        switch event {
+        case .taskCompleted: return .success
+        case .timerStart: return .start
+        case .timerStop: return .stop
+        case .success: return .success
+        case .warning: return .retry
+        case .error: return .failure
+        }
+    }
+    #endif
+}

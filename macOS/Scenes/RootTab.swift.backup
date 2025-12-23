@@ -1,7 +1,7 @@
 #if os(macOS)
 import Foundation
 
-enum RootTab: String, CaseIterable, Identifiable {
+public enum RootTab: String, CaseIterable, Identifiable {
     case dashboard
     case calendar
     case planner
@@ -11,10 +11,11 @@ enum RootTab: String, CaseIterable, Identifiable {
     case timer
     case decks
     case practice
+    case settings
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
-    var title: String {
+    public var title: String {
         switch self {
         case .dashboard:    return "Dashboard"
         case .calendar:     return "Calendar"
@@ -25,10 +26,11 @@ enum RootTab: String, CaseIterable, Identifiable {
         case .timer:        return "Timer"
         case .decks:        return "Decks"
         case .practice:     return "Practice"
+        case .settings:     return "Settings"
         }
     }
 
-    var systemImage: String {
+    public var systemImage: String {
         switch self {
         case .dashboard:    return "square.grid.2x2"
         case .calendar:     return "calendar"
@@ -39,9 +41,10 @@ enum RootTab: String, CaseIterable, Identifiable {
         case .timer:        return "timer"
         case .decks:        return "rectangle.stack"
         case .practice:     return "list.clipboard"
+        case .settings:     return "gearshape"
         }
     }
 
-    var logKey: String { title.lowercased().replacingOccurrences(of: " ", with: "") }
+    public var logKey: String { title.lowercased().replacingOccurrences(of: " ", with: "") }
 }
 #endif
