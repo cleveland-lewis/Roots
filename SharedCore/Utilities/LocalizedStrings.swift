@@ -51,27 +51,27 @@ struct PlannerLocalizations {
     static let noPlan = "planner.no_plan".localized
     
     static func allowedHours(min: Int, max: Int) -> String {
-        String(format: "planner.allowed_hours".localized, min, max)
+        String.localizedStringWithFormat("planner.allowed_hours".localized, min, max)
     }
     
     static func stepsCount(completed: Int, total: Int) -> String {
-        String(format: "planner.steps_count".localized, completed, total)
+        String.localizedStringWithFormat("planner.steps_count".localized, completed, total)
     }
     
     static func minutesTotal(_ minutes: Int) -> String {
-        String(format: "planner.minutes_total".localized, minutes)
+        String.localizedStringWithFormat("planner.minutes_total".localized, minutes)
     }
     
     static func progress(_ percentage: Int) -> String {
-        String(format: "planner.progress".localized, percentage)
+        String.localizedStringWithFormat("planner.progress".localized, percentage)
     }
     
     static func updated(_ timeAgo: String) -> String {
-        String(format: "planner.updated".localized, timeAgo)
+        String.localizedStringWithFormat("planner.updated".localized, timeAgo)
     }
     
     static func dueDate(_ date: String) -> String {
-        String(format: "plans.due_date".localized, date)
+        String.localizedStringWithFormat("plans.due_date".localized, date)
     }
 }
 
