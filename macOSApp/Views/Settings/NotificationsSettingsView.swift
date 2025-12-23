@@ -255,13 +255,6 @@ struct NotificationsSettingsView: View {
                 .padding(.leading, 20)
         }
     }
-            
-            Text("Receive a daily summary of your schedule and tasks")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .padding(.leading, 20)
-        }
-    }
     
     private var badgeSection: some View {
         VStack(alignment: .leading, spacing: 12) {
