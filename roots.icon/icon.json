@@ -1,60 +1,97 @@
 {
   "color-space-for-untagged-svg-colors" : "display-p3",
-  "fill" : {
-    "solid" : "display-p3:0.24280,0.49637,0.83793,1.00000"
-  },
+  "fill" : "automatic",
   "groups" : [
     {
+      "blur-material" : 0.28,
       "layers" : [
         {
-          "image-name" : "Group 3.svg",
-          "name" : "Group 3",
+          "fill-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "image-name" : "Vertical 3.svg",
+          "name" : "Vertical 3",
+          "opacity" : 1,
           "position" : {
-            "scale" : 1,
+            "scale" : 0.9,
             "translation-in-points" : [
               0,
-              -48
+              0
             ]
           }
         }
       ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
+      "opacity" : 1,
+      "position" : {
+        "scale" : 0.9,
+        "translation-in-points" : [
+          0,
+          0
+        ]
       },
-      "specular" : false,
-      "translucency" : {
-        "enabled" : false,
-        "value" : 0.5
-      }
-    },
-    {
-      "blur-material" : null,
-      "layers" : [
-        {
-          "fill" : "automatic",
-          "glass" : true,
-          "hidden" : true,
-          "image-name" : "icon_1024x1024.png",
-          "name" : "icon_1024x1024",
-          "position" : {
-            "scale" : 1.1,
-            "translation-in-points" : [
-              2.2737367544323206e-13,
-              -0.5499999999999545
-            ]
-          }
-        }
-      ],
-      "lighting" : "combined",
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 1
       },
-      "specular" : false,
+      "specular" : true,
       "translucency" : {
-        "enabled" : false,
-        "value" : 0.5
+        "enabled" : true,
+        "value" : 0.53
+      }
+    },
+    {
+      "blur-material" : 1,
+      "layers" : [
+        {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : "multiply"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "image-name" : "Horizontal.svg",
+          "name" : "Horizontal",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 0.9,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "opacity" : 1,
+      "position" : {
+        "scale" : 0.9,
+        "translation-in-points" : [
+          0,
+          0
+        ]
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 1
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.32
       }
     }
   ],

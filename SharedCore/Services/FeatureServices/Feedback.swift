@@ -11,6 +11,8 @@ import AppKit
 enum FeedbackType {
     case taskCompleted
     case taskCreated
+    case timerStart
+    case timerStop
     case success
     case warning
     case error
@@ -84,6 +86,10 @@ class Feedback {
             return "task_complete"
         case .taskCreated:
             return "task_created"
+        case .timerStart:
+            return "timer_start"
+        case .timerStop:
+            return "timer_stop"
         case .success:
             return "success"
         case .warning:
@@ -134,9 +140,12 @@ class Feedback {
     private func playHaptic(for type: FeedbackType) {
         #if os(iOS)
         switch type {
-        case .taskCompleted, .success, .taskCreated:
+        case .taskCompleted, .success, .taskCreated, .timerStop:
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
+        case .timerStart:
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
         case .warning:
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.warning)
@@ -150,7 +159,7 @@ class Feedback {
         #elseif os(macOS)
         let manager = NSHapticFeedbackManager.defaultPerformer
         switch type {
-        case .taskCompleted, .success, .selection, .taskCreated:
+        case .taskCompleted, .success, .selection, .taskCreated, .timerStart, .timerStop:
             manager.perform(.generic, performanceTime: .now)
         case .warning, .error:
             manager.perform(.levelChange, performanceTime: .now)
@@ -195,6 +204,16 @@ extension Feedback {
     /// Play task creation feedback (sound + haptic)
     func taskCreated() {
         play(.taskCreated)
+    }
+    
+    /// Play timer start feedback (sound + haptic)
+    func timerStart() {
+        play(.timerStart)
+    }
+    
+    /// Play timer stop feedback (sound + haptic)
+    func timerStop() {
+        play(.timerStop)
     }
     
     /// Play success feedback (sound + haptic)

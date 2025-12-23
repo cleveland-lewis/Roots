@@ -543,9 +543,17 @@ struct AssignmentsPageView: View {
 
     private func toggleCompletion(for assignment: Assignment) {
         guard let idx = assignments.firstIndex(where: { $0.id == assignment.id }) else { return }
-        assignments[idx].status = assignments[idx].status == .completed ? .notStarted : .completed
+        let wasCompleted = assignments[idx].status == .completed
+        assignments[idx].status = wasCompleted ? .notStarted : .completed
         if selectedAssignment?.id == assignment.id {
             selectedAssignment = assignments[idx]
+        }
+        
+        // Play feedback when marking as completed (not when uncompleting)
+        if !wasCompleted {
+            Task { @MainActor in
+                Feedback.shared.play(.taskCompleted)
+            }
         }
     }
 
@@ -1130,9 +1138,17 @@ struct AssignmentDetailPanel: View {
             HStack {
                 Button("Mark as completed") {
                     var updated = assignment
+                    let wasCompleted = updated.status == .completed
                     updated.status = .completed
                     onUpdate(updated)
                     self.assignment = updated
+                    
+                    // Play feedback when newly completing
+                    if !wasCompleted {
+                        Task { @MainActor in
+                            Feedback.shared.play(.taskCompleted)
+                        }
+                    }
                 }
 
                 Button("Archive") {

@@ -51,6 +51,7 @@ struct SettingsRootView: View {
                 NavigationLink(value: pane) {
                     Label(pane.label, systemImage: pane.systemImageName)
                 }
+                .tag(pane)
             }
             .navigationTitle("Settings")
             .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 250)

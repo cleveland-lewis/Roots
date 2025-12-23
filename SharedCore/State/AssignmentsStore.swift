@@ -26,6 +26,11 @@ final class AssignmentsStore: ObservableObject {
         _Concurrency.Task { await CalendarManager.shared.syncPlannerTaskToCalendar(task) }
         refreshGPA()
         
+        // Play task creation feedback
+        Task { @MainActor in
+            Feedback.shared.taskCreated()
+        }
+        
         // Schedule notification for new task
         scheduleNotificationIfNeeded(for: task)
         

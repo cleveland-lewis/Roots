@@ -162,16 +162,16 @@ private struct NotesTextView: UIViewRepresentable {
     private final class RichTextView: UITextView {
         override var keyCommands: [UIKeyCommand]? {
             [
-                UIKeyCommand(input: "b", modifierFlags: .command, action: #selector(toggleBoldface)),
-                UIKeyCommand(input: "i", modifierFlags: .command, action: #selector(toggleItalics))
+                UIKeyCommand(input: "b", modifierFlags: .command, action: #selector(handleToggleBoldface)),
+                UIKeyCommand(input: "i", modifierFlags: .command, action: #selector(handleToggleItalics))
             ]
         }
 
-        @objc private func toggleBoldface() {
+        @objc private func handleToggleBoldface() {
             toggleTrait(.traitBold)
         }
 
-        @objc private func toggleItalics() {
+        @objc private func handleToggleItalics() {
             toggleTrait(.traitItalic)
         }
 
@@ -196,3 +196,4 @@ private struct NotesTextView: UIViewRepresentable {
     }
 }
 #endif
+

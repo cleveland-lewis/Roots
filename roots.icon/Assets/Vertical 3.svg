@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="438px" height="875px" viewBox="0 0 438 875" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Vertical</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Vertical" transform="translate(0.52, 0)" fill="#4A60B2">
+            <path d="M76,0 C117.973641,-1.42108547e-14 152,34.026359 152,76 L152,799 C152,840.973641 117.973641,875 76,875 C34.026359,875 0,840.973641 0,799 L0,76 C0,34.026359 34.026359,0 76,0 Z" id="Rectangle"></path>
+            <path d="M361,0 C402.973641,-1.42108547e-14 437,34.026359 437,76 L437,799 C437,840.973641 402.973641,875 361,875 C319.026359,875 285,840.973641 285,799 L285,76 C285,34.026359 319.026359,0 361,0 Z" id="Rectangle-Copy"></path>
+        </g>
+    </g>
+</svg>

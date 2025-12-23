@@ -14,6 +14,12 @@ final class TimerManager: ObservableObject {
         guard !isRunning else { return }
         LOG_TIMER(.info, "TimerStart", "Timer starting with \(secondsRemaining)s")
         isRunning = true
+        
+        // Play timer start feedback
+        Task { @MainActor in
+            Feedback.shared.timerStart()
+        }
+        
         // Throttled to 1s
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let strongSelf = self else { return }
@@ -31,6 +37,11 @@ final class TimerManager: ObservableObject {
         isRunning = false
         timer?.invalidate()
         timer = nil
+        
+        // Play timer stop feedback
+        Task { @MainActor in
+            Feedback.shared.timerStop()
+        }
     }
 
     private func tick() {

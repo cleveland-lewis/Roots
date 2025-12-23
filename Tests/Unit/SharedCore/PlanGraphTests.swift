@@ -610,4 +610,407 @@ final class PlanGraphTests: XCTestCase {
         unblocked = graph.getUnblockedNodes()
         XCTAssertEqual(unblocked.count, 3)  // study + quiz + practice
     }
+    
+    // MARK: - Scheduling Determinism Tests
+    
+    func testSchedulingDeterminism_SameInputsSameOutput() throws {
+        // Given identical graph structures, topological sort should produce identical results
+        func createTestGraph() throws -> PlanGraph {
+            var graph = PlanGraph()
+            let node1 = PlanNode(title: "Task A", sortIndex: 1)
+            let node2 = PlanNode(title: "Task B", sortIndex: 2)
+            let node3 = PlanNode(title: "Task C", sortIndex: 3)
+            let node4 = PlanNode(title: "Task D", sortIndex: 4)
+            
+            try graph.addNode(node1)
+            try graph.addNode(node2)
+            try graph.addNode(node3)
+            try graph.addNode(node4)
+            
+            // Diamond structure: 1 → {2, 3} → 4
+            try graph.addEdge(from: node1.id, to: node2.id)
+            try graph.addEdge(from: node1.id, to: node3.id)
+            try graph.addEdge(from: node2.id, to: node4.id)
+            try graph.addEdge(from: node3.id, to: node4.id)
+            
+            return graph
+        }
+        
+        // Create multiple graphs and sort them
+        let results = try (0..<10).map { _ in
+            let graph = try createTestGraph()
+            return graph.topologicalSort()
+        }
+        
+        // All results should be identical
+        let firstResult = results[0]
+        for result in results.dropFirst() {
+            XCTAssertEqual(result?.map { $0.title }, firstResult?.map { $0.title },
+                          "Topological sort should be deterministic for same input")
+        }
+    }
+    
+    func testSchedulingDeterminism_ParallelTasksUseSortIndex() throws {
+        // When multiple tasks can run in parallel, sortIndex determines order
+        var graph = PlanGraph()
+        
+        // Create parallel tasks with specific sortIndex values
+        let tasks = [
+            PlanNode(title: "Task 5", sortIndex: 5),
+            PlanNode(title: "Task 1", sortIndex: 1),
+            PlanNode(title: "Task 3", sortIndex: 3),
+            PlanNode(title: "Task 2", sortIndex: 2),
+            PlanNode(title: "Task 4", sortIndex: 4)
+        ]
+        
+        // Add in random order
+        for task in tasks.shuffled() {
+            try graph.addNode(task)
+        }
+        
+        // No dependencies - all parallel
+        let sorted = graph.topologicalSort()
+        XCTAssertNotNil(sorted)
+        
+        // Should be sorted by sortIndex despite random insertion
+        if let sorted = sorted {
+            XCTAssertEqual(sorted[0].title, "Task 1")
+            XCTAssertEqual(sorted[1].title, "Task 2")
+            XCTAssertEqual(sorted[2].title, "Task 3")
+            XCTAssertEqual(sorted[3].title, "Task 4")
+            XCTAssertEqual(sorted[4].title, "Task 5")
+        }
+    }
+    
+    func testSchedulingDeterminism_MultipleLevels() throws {
+        // Test determinism with multiple dependency levels
+        var graph = PlanGraph()
+        
+        // Level 0 (roots)
+        let a = PlanNode(title: "A", sortIndex: 10)
+        let b = PlanNode(title: "B", sortIndex: 5)
+        
+        // Level 1
+        let c = PlanNode(title: "C", sortIndex: 20)
+        let d = PlanNode(title: "D", sortIndex: 15)
+        
+        // Level 2
+        let e = PlanNode(title: "E", sortIndex: 25)
+        
+        try graph.addNode(a)
+        try graph.addNode(b)
+        try graph.addNode(c)
+        try graph.addNode(d)
+        try graph.addNode(e)
+        
+        // Dependencies: {A, B} → {C, D} → E
+        try graph.addEdge(from: a.id, to: c.id)
+        try graph.addEdge(from: b.id, to: d.id)
+        try graph.addEdge(from: c.id, to: e.id)
+        try graph.addEdge(from: d.id, to: e.id)
+        
+        let sorted = graph.topologicalSort()
+        XCTAssertNotNil(sorted)
+        
+        if let sorted = sorted {
+            // Within each level, should be sorted by sortIndex
+            // Level 0: B (5) before A (10)
+            let bIndex = sorted.firstIndex(where: { $0.id == b.id })!
+            let aIndex = sorted.firstIndex(where: { $0.id == a.id })!
+            XCTAssertLessThan(bIndex, aIndex)
+            
+            // Level 1: D (15) before C (20)
+            let dIndex = sorted.firstIndex(where: { $0.id == d.id })!
+            let cIndex = sorted.firstIndex(where: { $0.id == c.id })!
+            XCTAssertLessThan(dIndex, cIndex)
+            
+            // E must be last
+            XCTAssertEqual(sorted.last?.id, e.id)
+        }
+    }
+    
+    // MARK: - Blocked Node Scheduling Tests
+    
+    func testBlockedNodesNotScheduled() throws {
+        var graph = PlanGraph()
+        
+        let read = PlanNode(title: "Read Chapter", sortIndex: 0)
+        let quiz = PlanNode(title: "Take Quiz", sortIndex: 1)
+        let practice = PlanNode(title: "Practice Problems", sortIndex: 2)
+        
+        try graph.addNode(read)
+        try graph.addNode(quiz)
+        try graph.addNode(practice)
+        
+        // Dependencies: read → quiz → practice
+        try graph.addEdge(from: read.id, to: quiz.id)
+        try graph.addEdge(from: quiz.id, to: practice.id)
+        
+        // Initially, only 'read' should be unblocked
+        let unblocked = graph.getUnblockedNodes()
+        XCTAssertEqual(unblocked.count, 1)
+        XCTAssertEqual(unblocked.first?.id, read.id)
+        
+        // Quiz and practice should be blocked
+        XCTAssertTrue(graph.isNodeBlocked(quiz.id))
+        XCTAssertTrue(graph.isNodeBlocked(practice.id))
+        XCTAssertFalse(graph.isNodeBlocked(read.id))
+    }
+    
+    func testBlockedNodesWithMultiplePrerequisites() throws {
+        var graph = PlanGraph()
+        
+        let study1 = PlanNode(title: "Study Part 1", sortIndex: 0)
+        let study2 = PlanNode(title: "Study Part 2", sortIndex: 1)
+        let study3 = PlanNode(title: "Study Part 3", sortIndex: 2)
+        let exam = PlanNode(title: "Final Exam", sortIndex: 3)
+        
+        try graph.addNode(study1)
+        try graph.addNode(study2)
+        try graph.addNode(study3)
+        try graph.addNode(exam)
+        
+        // All three study tasks must complete before exam
+        try graph.addEdge(from: study1.id, to: exam.id)
+        try graph.addEdge(from: study2.id, to: exam.id)
+        try graph.addEdge(from: study3.id, to: exam.id)
+        
+        // Exam should be blocked initially
+        XCTAssertTrue(graph.isNodeBlocked(exam.id))
+        
+        // Complete two prerequisites
+        graph.markNodeCompleted(study1.id)
+        graph.markNodeCompleted(study2.id)
+        
+        // Still blocked (one prerequisite remaining)
+        XCTAssertTrue(graph.isNodeBlocked(exam.id))
+        
+        // Complete final prerequisite
+        graph.markNodeCompleted(study3.id)
+        
+        // Now unblocked
+        XCTAssertFalse(graph.isNodeBlocked(exam.id))
+    }
+    
+    func testPartialCompletionDoesNotUnblockDependent() throws {
+        var graph = PlanGraph()
+        
+        let task1 = PlanNode(title: "Task 1", sortIndex: 0)
+        let task2 = PlanNode(title: "Task 2", sortIndex: 1)
+        let task3 = PlanNode(title: "Task 3", sortIndex: 2)
+        let final = PlanNode(title: "Final Task", sortIndex: 3)
+        
+        try graph.addNode(task1)
+        try graph.addNode(task2)
+        try graph.addNode(task3)
+        try graph.addNode(final)
+        
+        // Multiple prerequisites: {1, 2, 3} → final
+        try graph.addEdge(from: task1.id, to: final.id)
+        try graph.addEdge(from: task2.id, to: final.id)
+        try graph.addEdge(from: task3.id, to: final.id)
+        
+        // Complete only some prerequisites
+        graph.markNodeCompleted(task1.id)
+        graph.markNodeCompleted(task2.id)
+        
+        // Final should still be blocked
+        XCTAssertTrue(graph.isNodeBlocked(final.id))
+        
+        // Verify unblocked nodes doesn't include final
+        let unblocked = graph.getUnblockedNodes()
+        XCTAssertFalse(unblocked.contains(where: { $0.id == final.id }))
+    }
+    
+    // MARK: - Prerequisite Completion Unblocking Tests
+    
+    func testCompletingPrerequisiteUnblocksDependent() throws {
+        var graph = PlanGraph()
+        
+        let prereq = PlanNode(title: "Prerequisite", sortIndex: 0)
+        let dependent = PlanNode(title: "Dependent Task", sortIndex: 1)
+        
+        try graph.addNode(prereq)
+        try graph.addNode(dependent)
+        try graph.addEdge(from: prereq.id, to: dependent.id)
+        
+        // Initially blocked
+        XCTAssertTrue(graph.isNodeBlocked(dependent.id))
+        
+        // Complete prerequisite
+        graph.markNodeCompleted(prereq.id)
+        
+        // Now unblocked
+        XCTAssertFalse(graph.isNodeBlocked(dependent.id))
+        
+        // Should appear in unblocked list
+        let unblocked = graph.getUnblockedNodes()
+        XCTAssertTrue(unblocked.contains(where: { $0.id == dependent.id }))
+    }
+    
+    func testCompletingOnePrerequisiteUnblocksMultipleDependents() throws {
+        var graph = PlanGraph()
+        
+        let prereq = PlanNode(title: "Prerequisite", sortIndex: 0)
+        let dep1 = PlanNode(title: "Dependent 1", sortIndex: 1)
+        let dep2 = PlanNode(title: "Dependent 2", sortIndex: 2)
+        let dep3 = PlanNode(title: "Dependent 3", sortIndex: 3)
+        
+        try graph.addNode(prereq)
+        try graph.addNode(dep1)
+        try graph.addNode(dep2)
+        try graph.addNode(dep3)
+        
+        // One prerequisite, multiple dependents: prereq → {1, 2, 3}
+        try graph.addEdge(from: prereq.id, to: dep1.id)
+        try graph.addEdge(from: prereq.id, to: dep2.id)
+        try graph.addEdge(from: prereq.id, to: dep3.id)
+        
+        // All dependents blocked initially
+        XCTAssertTrue(graph.isNodeBlocked(dep1.id))
+        XCTAssertTrue(graph.isNodeBlocked(dep2.id))
+        XCTAssertTrue(graph.isNodeBlocked(dep3.id))
+        
+        // Complete prerequisite
+        graph.markNodeCompleted(prereq.id)
+        
+        // All dependents should be unblocked
+        XCTAssertFalse(graph.isNodeBlocked(dep1.id))
+        XCTAssertFalse(graph.isNodeBlocked(dep2.id))
+        XCTAssertFalse(graph.isNodeBlocked(dep3.id))
+        
+        // All should appear in unblocked list
+        let unblocked = graph.getUnblockedNodes()
+        XCTAssertTrue(unblocked.contains(where: { $0.id == dep1.id }))
+        XCTAssertTrue(unblocked.contains(where: { $0.id == dep2.id }))
+        XCTAssertTrue(unblocked.contains(where: { $0.id == dep3.id }))
+    }
+    
+    func testChainedUnblocking() throws {
+        // Test cascade unblocking: completing A unblocks B, completing B unblocks C
+        var graph = PlanGraph()
+        
+        let taskA = PlanNode(title: "Task A", sortIndex: 0)
+        let taskB = PlanNode(title: "Task B", sortIndex: 1)
+        let taskC = PlanNode(title: "Task C", sortIndex: 2)
+        
+        try graph.addNode(taskA)
+        try graph.addNode(taskB)
+        try graph.addNode(taskC)
+        
+        // Chain: A → B → C
+        try graph.addEdge(from: taskA.id, to: taskB.id)
+        try graph.addEdge(from: taskB.id, to: taskC.id)
+        
+        // Initial state: only A unblocked
+        XCTAssertFalse(graph.isNodeBlocked(taskA.id))
+        XCTAssertTrue(graph.isNodeBlocked(taskB.id))
+        XCTAssertTrue(graph.isNodeBlocked(taskC.id))
+        
+        var unblocked = graph.getUnblockedNodes()
+        XCTAssertEqual(unblocked.filter { !$0.isCompleted }.count, 1)
+        
+        // Complete A → B unblocks
+        graph.markNodeCompleted(taskA.id)
+        XCTAssertFalse(graph.isNodeBlocked(taskB.id))
+        XCTAssertTrue(graph.isNodeBlocked(taskC.id))
+        
+        unblocked = graph.getUnblockedNodes()
+        XCTAssertTrue(unblocked.contains(where: { $0.id == taskB.id && !$0.isCompleted }))
+        
+        // Complete B → C unblocks
+        graph.markNodeCompleted(taskB.id)
+        XCTAssertFalse(graph.isNodeBlocked(taskC.id))
+        
+        unblocked = graph.getUnblockedNodes()
+        XCTAssertTrue(unblocked.contains(where: { $0.id == taskC.id && !$0.isCompleted }))
+    }
+    
+    func testDiamondUnblocking() throws {
+        // Diamond pattern: A → {B, C} → D
+        // D should only unblock when both B and C are complete
+        var graph = PlanGraph()
+        
+        let a = PlanNode(title: "A", sortIndex: 0)
+        let b = PlanNode(title: "B", sortIndex: 1)
+        let c = PlanNode(title: "C", sortIndex: 2)
+        let d = PlanNode(title: "D", sortIndex: 3)
+        
+        try graph.addNode(a)
+        try graph.addNode(b)
+        try graph.addNode(c)
+        try graph.addNode(d)
+        
+        try graph.addEdge(from: a.id, to: b.id)
+        try graph.addEdge(from: a.id, to: c.id)
+        try graph.addEdge(from: b.id, to: d.id)
+        try graph.addEdge(from: c.id, to: d.id)
+        
+        // Initially: only A unblocked
+        XCTAssertFalse(graph.isNodeBlocked(a.id))
+        XCTAssertTrue(graph.isNodeBlocked(b.id))
+        XCTAssertTrue(graph.isNodeBlocked(c.id))
+        XCTAssertTrue(graph.isNodeBlocked(d.id))
+        
+        // Complete A → B and C unblock
+        graph.markNodeCompleted(a.id)
+        XCTAssertFalse(graph.isNodeBlocked(b.id))
+        XCTAssertFalse(graph.isNodeBlocked(c.id))
+        XCTAssertTrue(graph.isNodeBlocked(d.id))
+        
+        // Complete B → D still blocked (C incomplete)
+        graph.markNodeCompleted(b.id)
+        XCTAssertTrue(graph.isNodeBlocked(d.id))
+        
+        // Complete C → D finally unblocks
+        graph.markNodeCompleted(c.id)
+        XCTAssertFalse(graph.isNodeBlocked(d.id))
+    }
+    
+    func testUnblockingPreservesCompletionOrder() throws {
+        // Test that completing prerequisites in different orders produces consistent unblocking
+        var graph1 = PlanGraph()
+        var graph2 = PlanGraph()
+        
+        func setupGraph(_ graph: inout PlanGraph) throws -> (UUID, UUID, UUID, UUID) {
+            let a = PlanNode(title: "A", sortIndex: 0)
+            let b = PlanNode(title: "B", sortIndex: 1)
+            let c = PlanNode(title: "C", sortIndex: 2)
+            let d = PlanNode(title: "D", sortIndex: 3)
+            
+            try graph.addNode(a)
+            try graph.addNode(b)
+            try graph.addNode(c)
+            try graph.addNode(d)
+            
+            // {A, B, C} → D
+            try graph.addEdge(from: a.id, to: d.id)
+            try graph.addEdge(from: b.id, to: d.id)
+            try graph.addEdge(from: c.id, to: d.id)
+            
+            return (a.id, b.id, c.id, d.id)
+        }
+        
+        let (a1, b1, c1, d1) = try setupGraph(&graph1)
+        let (a2, b2, c2, d2) = try setupGraph(&graph2)
+        
+        // Complete in order: A, B, C
+        graph1.markNodeCompleted(a1)
+        XCTAssertTrue(graph1.isNodeBlocked(d1))
+        graph1.markNodeCompleted(b1)
+        XCTAssertTrue(graph1.isNodeBlocked(d1))
+        graph1.markNodeCompleted(c1)
+        XCTAssertFalse(graph1.isNodeBlocked(d1))
+        
+        // Complete in different order: C, A, B
+        graph2.markNodeCompleted(c2)
+        XCTAssertTrue(graph2.isNodeBlocked(d2))
+        graph2.markNodeCompleted(a2)
+        XCTAssertTrue(graph2.isNodeBlocked(d2))
+        graph2.markNodeCompleted(b2)
+        XCTAssertFalse(graph2.isNodeBlocked(d2))
+        
+        // Final result should be the same: D is unblocked
+        XCTAssertEqual(graph1.isNodeBlocked(d1), graph2.isNodeBlocked(d2))
+    }
 }

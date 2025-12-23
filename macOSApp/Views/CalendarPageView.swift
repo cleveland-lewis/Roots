@@ -149,93 +149,7 @@ struct CalendarPageView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            // Header: Add button, Title, View selector, Navigation
-            HStack(alignment: .center, spacing: 12) {
-                Button {
-                    showingNewEventSheet = true
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.subheadline.weight(.semibold))
-                        .frame(width: 36, height: 36)
-                        .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
-                }
-                .buttonStyle(.plain)
-                .rootsStandardInteraction()
-
-                VStack(alignment: .leading, spacing: 2) {
-                    // Large title driven by current view mode
-                    Group {
-                        switch currentViewMode {
-                        case .day:
-                            Text(focusedDate.formatted(.dateTime.weekday().month().day()))
-                        case .week:
-                            Text(weekTitle(for: focusedDate))
-                        case .month:
-                            Text(monthTitle(for: focusedDate))
-                        case .year:
-                            Text(String(Calendar.current.component(.year, from: focusedDate)))
-                        }
-                    }
-                    .font(.largeTitle.weight(.semibold))
-                    .lineLimit(1)
-
-                    // Subtitle / small metadata
-                    Text(currentViewMode == .week ? weekSubtitle(for: focusedDate) : "")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Picker("View", selection: $currentViewMode) {
-                    ForEach(CalendarViewMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .frame(width: 280)
-                .tint(.accentColor)
-
-                HStack(spacing: 6) {
-                    Button { shift(by: -1) } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundStyle(chevronLeftHover ? .accentColor : .primary)
-                            .scaleEffect(chevronLeftHover ? 1.06 : 1.0)
-                    }
-                    .buttonStyle(.plain)
-                    .rootsStandardInteraction()
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { chevronLeftHover = hovering }
-                    }
-
-                    Button { jumpToToday() } label: {
-                        Text(String(localized: "calendar.today"))
-                            .font(.subheadline.weight(.semibold))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(RoundedRectangle(cornerRadius: 8).fill(.accentColor).opacity(todayHover ? 0.18 : 0.12))
-                    }
-                    .buttonStyle(.plain)
-                    .rootsStandardInteraction()
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { todayHover = hovering }
-                    }
-
-                    Button { shift(by: 1) } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(chevronRightHover ? .accentColor : .primary)
-                            .scaleEffect(chevronRightHover ? 1.06 : 1.0)
-                    }
-                    .buttonStyle(.plain)
-                    .rootsStandardInteraction()
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { chevronRightHover = hovering }
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-            .padding(.horizontal, DesignSystem.Layout.padding.window)
-            .padding(.vertical, 4)
+            headerView
 
             if isHydratingInitial || isHydratingFull {
                 HStack(spacing: 8) {
@@ -321,6 +235,106 @@ struct CalendarPageView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         })
     }
+
+    private var headerView: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Button {
+                showingNewEventSheet = true
+            } label: {
+                Image(systemName: "plus")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(width: 36, height: 36)
+                    .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
+            }
+            .buttonStyle(.plain)
+            .rootsStandardInteraction()
+
+            titleView
+
+            Spacer()
+
+            Picker("View", selection: $currentViewMode) {
+                ForEach(CalendarViewMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 280)
+            .tint(.accentColor)
+
+            navigationControls
+        }
+        .padding(.horizontal, DesignSystem.Layout.padding.window)
+        .padding(.vertical, 4)
+    }
+
+    private var titleView: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(headerTitle)
+                .font(.largeTitle.weight(.semibold))
+                .lineLimit(1)
+            Text(headerSubtitle)
+                .font(DesignSystem.Typography.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var navigationControls: some View {
+        HStack(spacing: 6) {
+            Button { shift(by: -1) } label: {
+                Image(systemName: "chevron.left")
+                    .foregroundStyle(chevronLeftHover ? Color.accentColor : .primary)
+                    .scaleEffect(chevronLeftHover ? 1.06 : 1.0)
+            }
+            .buttonStyle(.plain)
+            .rootsStandardInteraction()
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { chevronLeftHover = hovering }
+            }
+
+            Button { jumpToToday() } label: {
+                Text(String(localized: "calendar.today"))
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor).opacity(todayHover ? 0.18 : 0.12))
+            }
+            .buttonStyle(.plain)
+            .rootsStandardInteraction()
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { todayHover = hovering }
+            }
+
+            Button { shift(by: 1) } label: {
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(chevronRightHover ? Color.accentColor : .primary)
+                    .scaleEffect(chevronRightHover ? 1.06 : 1.0)
+            }
+            .buttonStyle(.plain)
+            .rootsStandardInteraction()
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: DesignSystem.Motion.instant)) { chevronRightHover = hovering }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
+    }
+
+    private var headerTitle: String {
+        switch currentViewMode {
+        case .day:
+            return focusedDate.formatted(.dateTime.weekday().month().day())
+        case .week:
+            return weekTitle(for: focusedDate)
+        case .month:
+            return monthTitle(for: focusedDate)
+        case .year:
+            return String(Calendar.current.component(.year, from: focusedDate))
+        }
+    }
+
+    private var headerSubtitle: String {
+        currentViewMode == .week ? weekSubtitle(for: focusedDate) : ""
+    }
     
     // MARK: - Event Sidebar
     
@@ -395,7 +409,7 @@ struct CalendarPageView: View {
                     if calendar.isDateInToday(event.startDate) && event.startDate.timeIntervalSinceNow < 0 && event.endDate.timeIntervalSinceNow > 0 {
                         Text(String(localized: "calendar.now"))
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(.accentColor)
+                            .foregroundStyle(Color.accentColor)
                     } else if isAllDay(event: event) {
                         Text(String(localized: "calendar.all_day"))
                             .font(.caption.weight(.medium))
@@ -411,7 +425,7 @@ struct CalendarPageView: View {
                 // Category color indicator (outline SF Symbol)
                 Image(systemName: categoryIcon(for: event.category))
                     .font(.system(size: 16))
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
                     .frame(width: 20)
                 
                 // Event details
@@ -1229,7 +1243,7 @@ private struct WeekCalendarView: View {
                 ForEach(placeholders) { block in
                     let yOffset = CGFloat(block.startHour - 6) * hourHeight
                     RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous)
-                        .fill(.accentColor.opacity(0.2))
+                        .fill(Color.accentColor.opacity(0.2))
                         .overlay(
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(block.title).font(.caption.weight(.semibold))
@@ -2489,7 +2503,7 @@ private struct CalendarStats {
 
     static let empty = CalendarStats(averagePerDay: 0, totalItems: 0, busiestDayName: "—", busiestDayCount: 0)
 
-    static func calculate(from events: [EKEvent], for date: Date) -> CalendarStats {
+    nonisolated static func calculate(from events: [EKEvent], for date: Date) -> CalendarStats {
         let calendar = Calendar.current
         let range = calendar.range(of: .day, in: .month, for: date) ?? 0..<0
         let numDaysInMonth = range.count

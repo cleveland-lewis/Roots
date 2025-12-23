@@ -828,12 +828,25 @@ private extension PlannerPageView {
     func markCompleted(_ item: PlannerTask) {
         // mark completed in unscheduledTasks or plannedBlocks
         if let idx = unscheduledTasks.firstIndex(where: { $0.id == item.id }) {
+            guard !unscheduledTasks[idx].isCompleted else { return }
             unscheduledTasks[idx].isCompleted = true
             unscheduledTasks.remove(at: idx)
+            
+            // Play completion feedback
+            Task { @MainActor in
+                Feedback.shared.play(.taskCompleted)
+            }
             return
         }
         if let idx = plannedBlocks.firstIndex(where: { $0.id == item.id }) {
+            let wasCompleted = plannedBlocks[idx].status == .completed
             plannedBlocks[idx].status = .completed
+            
+            if !wasCompleted {
+                Task { @MainActor in
+                    Feedback.shared.play(.taskCompleted)
+                }
+            }
         }
     }
 

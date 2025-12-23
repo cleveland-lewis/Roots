@@ -138,6 +138,12 @@ final class TimerPageViewModel: ObservableObject {
         sessionRemaining = planned ?? 0
 
         LOG_UI(.info, "Timer", "Started session \(session.id) for activity=\(String(describing: session.activityID)) mode=\(currentMode.rawValue)")
+        
+        // Play timer start feedback
+        Task { @MainActor in
+            Feedback.shared.timerStart()
+        }
+        
         scheduleCompletionNotification()
         persistState()
     }
@@ -172,6 +178,15 @@ final class TimerPageViewModel: ObservableObject {
         sessionRemaining = 0
         if s.mode == .pomodoro && completed {
             isOnBreak.toggle()
+        }
+        
+        // Play feedback based on completion state
+        Task { @MainActor in
+            if completed {
+                Feedback.shared.timerStop()  // Success haptic
+            } else {
+                Feedback.shared.timerStop()  // Also stop feedback for cancelled
+            }
         }
         LOG_UI(.info, "Timer", "Ended session \(s.id) completed=\(completed)")
         cancelCompletionNotification()

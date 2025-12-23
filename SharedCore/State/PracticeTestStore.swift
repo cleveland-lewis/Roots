@@ -155,6 +155,16 @@ class PracticeTestStore {
     }
     
     // MARK: - Test Management
+
+    func updateTest(_ test: PracticeTest) {
+        guard let index = tests.firstIndex(where: { $0.id == test.id }) else { return }
+        tests[index] = test
+        if currentTest?.id == test.id {
+            currentTest = test
+        }
+        saveTests()
+        updateSummary()
+    }
     
     func deleteTest(_ testId: UUID) {
         tests.removeAll { $0.id == testId }

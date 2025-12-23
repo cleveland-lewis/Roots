@@ -384,6 +384,10 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
 
         guard DeviceCalendarManager.shared.isAuthorized else { throw CalendarUpdateError.unauthorized }
         guard let item = DeviceCalendarManager.shared.store.event(withIdentifier: identifier) else {
+            // Log once (deduplicated via Diagnostics)
+            LOG_EVENTKIT(.error, "StaleEvent", "Event not found by UUID (likely deleted externally): \(identifier)")
+            // Trigger reconciliation for the relevant date window
+            await DeviceCalendarManager.shared.refreshEventsForVisibleRange(reason: "staleEventEviction")
             throw CalendarUpdateError.eventNotFound
         }
         guard item.calendar.allowsContentModifications else { throw CalendarUpdateError.readOnlyCalendar }
@@ -433,6 +437,11 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
             try DeviceCalendarManager.shared.store.remove(reminder, commit: true)
         } else if let event = DeviceCalendarManager.shared.store.calendarItem(withIdentifier: identifier) as? EKEvent {
             try DeviceCalendarManager.shared.store.remove(event, span: .thisEvent, commit: true)
+        } else {
+            // Item not found - may have been deleted externally
+            LOG_EVENTKIT(.warn, "StaleItem", "Calendar item not found by UUID (already deleted): \(identifier)")
+            // Trigger reconciliation to update UI
+            await DeviceCalendarManager.shared.refreshEventsForVisibleRange(reason: "staleItemEviction")
         }
         await refreshAll()
     }
