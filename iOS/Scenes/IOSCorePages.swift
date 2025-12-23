@@ -258,17 +258,12 @@ struct IOSPlannerView: View {
     }
 
     private func timeRange(start: Date, end: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
+        let formatter = LocaleFormatters.shortTime
         return "\(formatter.string(from: start))-\(formatter.string(from: end))"
     }
 
     private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        LocaleFormatters.mediumDate.string(from: date)
     }
 
     private func sectionHeader(title: String, subtitle: String) -> some View {
@@ -563,9 +558,7 @@ struct IOSCalendarView: View {
     }
 
     private func timeRange(for event: EKEvent) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
+        let formatter = LocaleFormatters.dateAndTime
         return "\(formatter.string(from: event.startDate)) • \(formatter.string(from: event.endDate))"
     }
 }
@@ -1115,9 +1108,7 @@ private struct IOSPlannerBlockRow: View {
     }
 
     private func timeRange(start: Date, end: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
+        let formatter = LocaleFormatters.shortTime
         return "\(formatter.string(from: start))-\(formatter.string(from: end))"
     }
 }

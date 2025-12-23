@@ -795,9 +795,7 @@ struct LoadTimelineCard: View {
     }
 
     private var shortDayFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E"
-        return formatter
+        LocaleFormatters.shortDayName
     }
 }
 
@@ -969,9 +967,7 @@ struct AssignmentsPageRow: View {
     }
 
     private var dueFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E, MMM d"
-        return formatter
+        LocaleFormatters.shortDayAndDate
     }
 }
 
@@ -1213,9 +1209,7 @@ struct AssignmentDetailPanel: View {
     }
 
     private var fullDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMM d · h:mm a"
-        return formatter
+        LocaleFormatters.dayNameAndDateTime
     }
 }
 

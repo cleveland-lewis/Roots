@@ -250,10 +250,7 @@ struct IOSDashboardView: View {
     }
 
     private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .full
-        formatter.timeStyle = .none
-        return formatter.string(from: Date())
+        LocaleFormatters.fullDate.string(from: Date())
     }
 
     private var todayEventCount: Int {
@@ -300,21 +297,15 @@ struct IOSDashboardView: View {
     }
 
     private func weekdaySymbol(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter.string(from: date).uppercased()
+        LocaleFormatters.shortDayName.string(from: date).uppercased()
     }
 
     private func dayNumber(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter.string(from: date)
+        LocaleFormatters.dayOfMonth.string(from: date)
     }
 
     private func eventTimeRange(_ event: EKEvent) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
+        let formatter = LocaleFormatters.shortTime
         return "\(formatter.string(from: event.startDate))-\(formatter.string(from: event.endDate))"
     }
 

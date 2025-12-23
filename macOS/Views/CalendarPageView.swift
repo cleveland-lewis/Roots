@@ -533,23 +533,18 @@ struct CalendarPageView: View {
     }
 
     private func monthTitle(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
-        return formatter.string(from: date)
+        LocaleFormatters.monthYear.string(from: date)
     }
 
     private func weekTitle(for date: Date) -> String {
         let start = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)) ?? date
         let end = Calendar.current.date(byAdding: .day, value: 6, to: start) ?? date
-        let f = DateFormatter()
-        f.dateFormat = "d MMM"
-        return "\(f.string(from: start)) – \(f.string(from: end))"
+        let formatter = LocaleFormatters.monthDay
+        return "\(formatter.string(from: start)) – \(formatter.string(from: end))"
     }
 
     private func weekSubtitle(for date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "LLLL yyyy"
-        return f.string(from: date)
+        LocaleFormatters.monthYear.string(from: date)
     }
 
     private func jumpToToday() {
@@ -646,9 +641,8 @@ struct CalendarPageView: View {
 
     private func formattedTimeRange(start: Date, end: Date) -> String {
         let use24 = AppSettingsModel.shared.use24HourTime
-        let f = DateFormatter()
-        f.dateFormat = use24 ? "HH:mm" : "h:mm a"
-        return "\(f.string(from: start)) - \(f.string(from: end))"
+        let formatter = LocaleFormatters.timeFormatter(use24Hour: use24)
+        return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
     }
 
     private func events(on day: Date) -> [CalendarEvent] {
@@ -670,9 +664,7 @@ struct CalendarPageView: View {
     }
     
     private func dateKey(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: date)
+        LocaleFormatters.isoDate.string(from: date)
     }
     
     private func invalidateEventsCache() {
@@ -994,9 +986,7 @@ private struct MonthCalendarView: View {
     }
 
     private var monthHeader: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
-        return formatter.string(from: focusedDate)
+        LocaleFormatters.monthYear.string(from: focusedDate)
     }
 
     private var weekdayHeader: some View {
@@ -1124,8 +1114,7 @@ private struct WeekCalendarView: View {
     }
 
     private var weekTitle: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM"
+        let formatter = LocaleFormatters.monthDay
         guard let start = weekDays.first,
               let end = calendar.date(byAdding: .day, value: 6, to: start) else {
             return formatter.string(from: focusedDate)
@@ -1200,8 +1189,7 @@ private struct WeekCalendarView: View {
 
     private func formatHour(_ hour: Double) -> String {
         let base = calendar.date(bySettingHour: Int(hour), minute: Int((hour.truncatingRemainder(dividingBy: 1)) * 60), second: 0, of: focusedDate) ?? focusedDate
-        let formatter = DateFormatter()
-        formatter.dateFormat = AppSettingsModel.shared.use24HourTime ? "HH:mm" : "h a"
+        let formatter = LocaleFormatters.timeFormatter(use24Hour: AppSettingsModel.shared.use24HourTime)
         return formatter.string(from: base)
     }
 }
@@ -1315,8 +1303,7 @@ private struct EventRow: View {
     }
 
     private var timeRange: String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
+        let formatter = LocaleFormatters.shortTime
         return "\(formatter.string(from: event.startDate)) – \(formatter.string(from: event.endDate))"
     }
 }
@@ -1531,15 +1518,12 @@ private struct EventDetailView: View {
     }
 
     private var dateRange: String {
-        let f = DateFormatter()
-        f.dateFormat = "EEEE, MMMM d, yyyy"
-        return f.string(from: item.startDate)
+        LocaleFormatters.fullDate.string(from: item.startDate)
     }
-
+    
     private var timeRange: String {
-        let f = DateFormatter()
-        f.timeStyle = .short
-        return "\(f.string(from: item.startDate)) – \(f.string(from: item.endDate))"
+        let formatter = LocaleFormatters.shortTime
+        return "\(formatter.string(from: item.startDate)) – \(formatter.string(from: item.endDate))"
     }
 }
 
@@ -1792,8 +1776,7 @@ private extension CalendarPageView {
 
 private extension CalendarEvent {
     func formattedTimeRange(use24HourTime: Bool = false) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = use24HourTime ? "HH:mm" : "h:mm a"
+        let formatter = LocaleFormatters.timeFormatter(use24Hour: use24HourTime)
         return "\(formatter.string(from: startDate)) – \(formatter.string(from: endDate))"
     }
 }
@@ -1859,12 +1842,9 @@ private struct WeekHeaderView: View {
 // MARK: - Modern Calendar Entry
 
 struct CalendarView: View {
-    private static let debugDateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateStyle = .short
-        f.timeStyle = .medium
-        return f
-    }()
+    private static var debugDateFormatter: DateFormatter {
+        LocaleFormatters.dateAndTime
+    }
     @EnvironmentObject private var calendarManager: CalendarManager
     @EnvironmentObject private var deviceCalendar: DeviceCalendarManager
     @EnvironmentObject private var settings: AppSettingsModel
@@ -2360,12 +2340,10 @@ private struct CalendarStats {
             var dayComponents = components
             dayComponents.day = maxEntry.key
             if let busyDate = calendar.date(from: dayComponents) {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "MMM d"
                 return CalendarStats(
                     averagePerDay: average,
                     totalItems: total,
-                    busiestDayName: formatter.string(from: busyDate),
+                    busiestDayName: LocaleFormatters.monthDay.string(from: busyDate),
                     busiestDayCount: maxEntry.value.count
                 )
             }

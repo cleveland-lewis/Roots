@@ -889,17 +889,13 @@ private extension PlannerPageView {
 // MARK: - Formatters
 
 private extension PlannerPageView {
-    static let dayFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, MMM d"
-        return formatter
-    }()
+    static var dayFormatter: DateFormatter {
+        LocaleFormatters.dayNameAndDate
+    }
 
-    static let hourFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h a"
-        return formatter
-    }()
+    static var hourFormatter: DateFormatter {
+        LocaleFormatters.hour
+    }
 
     static func samplePlannedBlocks(for date: Date) -> [PlannedBlock] {
         []
@@ -1036,9 +1032,7 @@ struct PlannerTaskRow: View {
     }
 
     private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E, MMM d"
-        return formatter
+        LocaleFormatters.shortDayAndDate
     }()
 }
 

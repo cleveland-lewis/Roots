@@ -120,10 +120,7 @@ struct AssignmentPlanCard: View {
     }
     
     private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        LocaleFormatters.mediumDate.string(from: date)
     }
 }
 
@@ -219,10 +216,7 @@ struct PlanStepRow: View {
     }
     
     private func shortDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        LocaleFormatters.shortDate.string(from: date)
     }
 }
 
@@ -398,6 +392,7 @@ struct IOSAssignmentPlansView: View {
     
     private func timeAgo(_ date: Date) -> String {
         let formatter = RelativeDateTimeFormatter()
+        formatter.locale = .autoupdatingCurrent
         formatter.unitsStyle = .abbreviated
         return formatter.localizedString(for: date, relativeTo: Date())
     }

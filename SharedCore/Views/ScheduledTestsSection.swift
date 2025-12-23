@@ -292,20 +292,14 @@ struct ScheduledTestsSection: View {
     // MARK: - Helpers
     
     private func dayLabel(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE"
-        return formatter.string(from: date)
+        LocaleFormatters.dayName.string(from: date)
     }
     
     private func dateLabel(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d"
-        return formatter.string(from: date)
+        LocaleFormatters.monthDay.string(from: date)
     }
     
     private func timeLabel(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        LocaleFormatters.shortTime.string(from: date)
     }
 }

@@ -964,17 +964,13 @@ struct TimerPageView: View {
 
     // MARK: Static formatters
 
-    static let timeFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "HH:mm:ss"
-        return df
-    }()
+    static var timeFormatter: DateFormatter {
+        LocaleFormatters.timeFormatter(use24Hour: true, includeSeconds: true)
+    }
 
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        return df
-    }()
+    static var dateFormatter: DateFormatter {
+        LocaleFormatters.mediumDate
+    }
 }
 
 // MARK: - Activity Row

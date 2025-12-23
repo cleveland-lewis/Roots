@@ -40,9 +40,7 @@ struct TimerGraphsView: View {
                 data: historyDataPoints,
                 minutesPerDot: 5,
                 xLabelFormatter: { date in
-                    let f = DateFormatter()
-                    f.dateFormat = "E"
-                    return f.string(from: date)
+                    LocaleFormatters.shortDayName.string(from: date)
                 }
             )
             .frame(height: 220)
@@ -106,9 +104,7 @@ private struct HistoryPoint: Identifiable {
     let minutes: Double
 
     var label: String {
-        let f = DateFormatter()
-        f.dateFormat = "E"
-        return f.string(from: date)
+        LocaleFormatters.shortDayName.string(from: date)
     }
 }
 #endif
