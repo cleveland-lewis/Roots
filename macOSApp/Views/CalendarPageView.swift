@@ -148,51 +148,68 @@ struct CalendarPageView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            headerView
+        GeometryReader { proxy in
+            let verticalPadding = DesignSystem.Layout.padding.window
+            let topToolbarHeight = DesignSystem.Layout.rowHeight.large + 12
+            let topSectionSpacing: CGFloat = 16
+            let loadingHeight: CGFloat = (isHydratingInitial || isHydratingFull) ? 24 : 0
+            let perfHeight: CGFloat = settings.devModePerformance ? 40 : 0
+            let topSectionsHeight = topToolbarHeight
+                + (loadingHeight > 0 ? loadingHeight + topSectionSpacing : 0)
+                + (perfHeight > 0 ? perfHeight + topSectionSpacing : 0)
+            let panelHeight = max(0, proxy.size.height - verticalPadding * 2 - topSectionsHeight - topSectionSpacing)
 
-            if isHydratingInitial || isHydratingFull {
-                HStack(spacing: 8) {
-                    ProgressView()
-                    Text(isHydratingFull ? "Loading calendar…" : "Preparing events…")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    Spacer()
+            VStack(spacing: topSectionSpacing) {
+                headerView
+
+                if isHydratingInitial || isHydratingFull {
+                    HStack(spacing: 8) {
+                        ProgressView()
+                        Text(isHydratingFull ? "Loading calendar…" : "Preparing events…")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 4)
                 }
-                .padding(.horizontal, 4)
-            }
 
-            if settings.devModePerformance {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Calendar Performance")
-                        .font(.caption.weight(.semibold))
-                    Text("First frame: \(formattedMillis(firstFrameElapsed))  |  Data ready: \(formattedMillis(dataReadyElapsed))  |  Full ready: \(formattedMillis(fullDataReadyElapsed))  |  Events: \(loadedEventCount)")
-                        .font(.caption2.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                if settings.devModePerformance {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Calendar Performance")
+                            .font(.caption.weight(.semibold))
+                        Text("First frame: \(formattedMillis(firstFrameElapsed))  |  Data ready: \(formattedMillis(dataReadyElapsed))  |  Full ready: \(formattedMillis(fullDataReadyElapsed))  |  Events: \(loadedEventCount)")
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 4)
                 }
-                .padding(.horizontal, 4)
-            }
 
-            // Main content: sidebar + calendar grid (equal height cards)
-            HStack(alignment: .top, spacing: 16) {
-                // Left sidebar showing events for selected date
-                eventSidebarView
-                    .frame(width: 280)
+                // Main content: sidebar + calendar grid (equal height cards)
+                HStack(alignment: .top, spacing: 16) {
+                    // Left sidebar showing events for selected date
+                    eventSidebarView
+                        .frame(width: 280)
+                        .frame(height: panelHeight, alignment: .top)
 
-                // Main calendar grid
-                VStack(spacing: 12) {
-                    gridContent
+                    // Main calendar grid
+                    VStack(spacing: 12) {
+                        gridContent
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .padding()
+                    .background(DesignSystem.Materials.card)
+                    .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous)
+                            .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                    )
+                    .frame(height: panelHeight, alignment: .top)
                 }
-                .frame(maxWidth: .infinity, alignment: .top)
-                .padding()
-                .background(DesignSystem.Materials.card)
-                .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(verticalPadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .sheet(isPresented: $showingNewEventSheet) {
             AddEventPopup().environmentObject(calendarManager)
         }
@@ -363,6 +380,10 @@ struct CalendarPageView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .background(DesignSystem.Materials.card)
         .clipShape(RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: DesignSystem.Layout.cornerRadiusStandard, style: .continuous)
+                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+        )
     }
     
     @ViewBuilder

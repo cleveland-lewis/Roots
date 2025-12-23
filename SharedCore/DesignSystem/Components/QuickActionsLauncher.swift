@@ -73,6 +73,7 @@ struct QuickActionsLauncher: View {
         .buttonStyle(.plain)
         .focusable(true)
         .focused($focusedAction, equals: .launcher)
+        .focusEffectDisabled(true)
         .accessibilityLabel(isExpanded ? "Collapse quick actions" : "Expand quick actions")
         .animation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.82), value: isExpanded)
     }
@@ -99,6 +100,7 @@ struct QuickActionsLauncher: View {
         .buttonStyle(.plain)
         .focusable(true)
         .focused($focusedAction, equals: .action(action))
+        .focusEffectDisabled(true)
         .accessibilityLabel(action.title)
     }
 

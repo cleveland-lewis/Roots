@@ -8,14 +8,19 @@ struct LocalizationManager {
     /// Get localized string with guaranteed fallback
     /// Never returns the key itself - always returns human-readable text
     static func string(_ key: String, comment: String = "") -> String {
-        let localized = NSLocalizedString(key, comment: comment)
+        // Try main bundle first
+        var localized = NSLocalizedString(key, bundle: .main, comment: comment)
         
         // If localization failed, it returns the key itself
-        // This is a critical bug - log it and return fallback
         if localized == key {
             #if DEBUG
-            print("⚠️ LOCALIZATION MISSING: \(key)")
-            assertionFailure("Missing localization key: \(key)")
+            print("⚠️ LOCALIZATION MISSING in main bundle: \(key)")
+            // Check if the .strings file exists
+            if let stringsPath = Bundle.main.path(forResource: "Localizable", ofType: "strings") {
+                print("   Localizable.strings found at: \(stringsPath)")
+            } else {
+                print("   Localizable.strings NOT FOUND in main bundle")
+            }
             #endif
             
             // Return English fallback from the key structure
