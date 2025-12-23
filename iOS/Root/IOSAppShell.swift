@@ -39,24 +39,16 @@ struct IOSAppShell<Content: View>: View {
     }
     
     var body: some View {
-        ZStack(alignment: isPad ? .bottom : .top) {
+        ZStack(alignment: .bottom) {
             // Base content layer - scrolls under buttons
             content
             
-            // Floating overlay buttons
+            // Floating overlay buttons - always at bottom above tab bar
             if shouldShowButtons {
-                if isPad {
-                    VStack(spacing: 0) {
-                        Spacer()
-                        floatingButtons
-                            .padding(.bottom, 8)
-                    }
-                } else {
-                    VStack(spacing: 0) {
-                        floatingButtons
-                            .padding(.top, 10)
-                        Spacer()
-                    }
+                VStack(spacing: 0) {
+                    Spacer()
+                    floatingButtons
+                        .padding(.bottom, isPad ? 8 : 60) // Closer to tab bar on iPhone
                 }
             }
         }
@@ -93,13 +85,13 @@ struct IOSAppShell<Content: View>: View {
                 }
             } label: {
                 Image(systemName: "line.3.horizontal")
-                    .font(.system(size: 20, weight: .medium))
+                    .font(.system(size: 24, weight: .medium))
                     .foregroundColor(.primary)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 60, height: 60)
                     .background(
                         Circle()
                             .fill(.thinMaterial)
-                            .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                            .shadow(color: .black.opacity(0.15), radius: 6, y: 3)
                     )
             }
             .accessibilityLabel(NSLocalizedString("ios.menu.hamburger", comment: "Open menu"))
@@ -127,13 +119,13 @@ struct IOSAppShell<Content: View>: View {
                 }
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundColor(.primary)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 60, height: 60)
                     .background(
                         Circle()
                             .fill(.thinMaterial)
-                            .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                            .shadow(color: .black.opacity(0.15), radius: 6, y: 3)
                     )
             }
             .accessibilityLabel(NSLocalizedString("ios.menu.quick_add", comment: "Quick add"))

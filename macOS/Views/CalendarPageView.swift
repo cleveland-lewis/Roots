@@ -482,13 +482,6 @@ struct CalendarPageView: View {
                         .font(DesignSystem.Typography.body)
                         .lineLimit(2)
                     
-                    if let location = event.location, !location.isEmpty {
-                        HStack(spacing: 4) {
-                            Image(systemName: "mappin")
-                                .font(.caption2)
-                            Text(location)
-                                .font(.caption)
-                        }
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     }
@@ -648,7 +641,7 @@ struct CalendarPageView: View {
         let predicate = eventStore.predicateForEvents(withStart: window.start, end: window.end, calendars: targetCalendars)
         let ekEvents = eventStore.events(matching: predicate)
         let mapped = ekEvents.map { ek in
-            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: ek.location, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false)
+            CalendarEvent(title: ek.title, startDate: ek.startDate, endDate: ek.endDate, location: nil, notes: ek.notes, url: ek.url, alarms: ek.alarms, travelTime: nil, ekIdentifier: ek.eventIdentifier, isReminder: false)
         }
         syncedEvents = mapped
         updateMetrics()
@@ -668,7 +661,7 @@ struct CalendarPageView: View {
             guard let reminders else { return }
             let mappedReminders = reminders.compactMap { reminder -> CalendarEvent? in
                 guard let dueDate = reminder.dueDateComponents?.date else { return nil }
-                return CalendarEvent(title: reminder.title, startDate: dueDate, endDate: dueDate, location: reminder.location, notes: reminder.notes, url: nil, alarms: nil, travelTime: nil, ekIdentifier: reminder.calendarItemIdentifier, isReminder: true)
+                return CalendarEvent(title: reminder.title, startDate: dueDate, endDate: dueDate, location: nil, notes: reminder.notes, url: nil, alarms: nil, travelTime: nil, ekIdentifier: reminder.calendarItemIdentifier, isReminder: true)
             }
             DispatchQueue.main.async {
                 self.syncedEvents.append(contentsOf: mappedReminders)
@@ -1438,11 +1431,6 @@ private struct CalendarDayDetailPanel: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                if let location = event.location, !location.isEmpty {
-                    HStack(spacing: 6) {
-                        Image(systemName: "mappin")
-                        Text(location)
-                    }
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 }
@@ -1579,10 +1567,6 @@ private struct MonthCalendarSplitView: View {
                         .font(DesignSystem.Typography.subHeader)
                     Text(timeFormatter(event.startDate, event.endDate))
                         .font(DesignSystem.Typography.body)
-                    if let location = event.location, !location.isEmpty {
-                        Text(String(format: "calendar.location_label".localized, location))
-                            .font(DesignSystem.Typography.body)
-                    }
                     if let notes = event.notes, !notes.isEmpty {
                         Text(AttributedString(NotesRichTextStorage.attributedString(from: notes)))
                             .font(DesignSystem.Typography.body)
@@ -2022,13 +2006,6 @@ private struct EventRow: View {
                     .font(DesignSystem.Typography.caption)
                     .foregroundStyle(.secondary)
 
-                if let location = event.location, !location.isEmpty {
-                    HStack(spacing: 4) {
-                        Image(systemName: "mappin")
-                            .font(.caption2)
-                        Text(location)
-                            .font(DesignSystem.Typography.caption)
-                    }
                     .foregroundStyle(.tertiary)
                 }
             }

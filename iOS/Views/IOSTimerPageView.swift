@@ -14,6 +14,8 @@ struct IOSTimerPageView: View {
     @State private var activitySearchText = ""
     @State private var selectedCollectionID: UUID? = nil
     @AppStorage("timer.display.style") private var timerDisplayStyleRaw: String = TimerDisplayStyle.digital.rawValue
+    @State private var timerCardWidth: CGFloat = 0
+    @State private var showingFocusPage = false
 
     private var sessionState: FocusSession.State {
         viewModel.currentSession?.state ?? .idle
@@ -49,10 +51,7 @@ struct IOSTimerPageView: View {
 
     private var contentStack: some View {
         VStack(alignment: .leading, spacing: 20) {
-            modePicker
             timerStatusCard
-            durationControls
-            settingsControls
             activityPicker
             activityCollections
             activitySearch
@@ -66,35 +65,56 @@ struct IOSTimerPageView: View {
         .padding(20)
     }
 
-    private var modePicker: some View {
-        Picker(NSLocalizedString("ios.timer.mode", comment: "Mode"), selection: $viewModel.currentMode) {
-            ForEach(TimerMode.allCases) { mode in
-                Label(mode.displayName, systemImage: mode.systemImage)
-                    .tag(mode)
-            }
-        }
-        .pickerStyle(.segmented)
-    }
-
     private var timerStatusCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(statusTitle)
-                .font(.headline)
-                .accessibilityIdentifier("Timer.Status")
+            HStack(alignment: .center, spacing: 8) {
+                if sessionState == .idle {
+                    Button {
+                        showingFocusPage = true
+                    } label: {
+                        Image(systemName: "arrow.up.left.and.arrow.down.right")
+                            .font(.headline)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(NSLocalizedString("timer.focus.window_title", comment: "Focus"))
+                } else {
+                    Text(statusTitle)
+                        .font(.headline)
+                        .accessibilityIdentifier("Timer.Status")
+                }
+                Spacer()
+                Menu {
+                    ForEach(TimerMode.allCases) { mode in
+                        Button {
+                            viewModel.currentMode = mode
+                        } label: {
+                            Label(mode.displayName, systemImage: mode.systemImage)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.headline)
+                }
+                .accessibilityLabel(NSLocalizedString("ios.timer.mode", comment: "Mode"))
+            }
             if displayStyle == .analog {
                 RootsAnalogClock(
                     style: .stopwatch,
-                    diameter: 180,
+                    diameter: max(180, timerDialDiameter),
                     showSecondHand: true,
                     accentColor: .accentColor,
                     timerSeconds: timerDialSeconds
                 )
                 .accessibilityIdentifier("Timer.Clock")
+                .frame(maxWidth: .infinity)
             } else {
                 Text(timeString(for: viewModel.sessionRemaining, elapsed: viewModel.sessionElapsed))
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .font(.system(size: timerTextSize, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .accessibilityIdentifier("Timer.Time")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
             }
             if viewModel.currentMode == .pomodoro {
                 Text(viewModel.isOnBreak ? NSLocalizedString("ios.timer.break", comment: "Break") : NSLocalizedString("ios.timer.focus", comment: "Focus"))
@@ -108,6 +128,19 @@ struct IOSTimerPageView: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color(uiColor: .secondarySystemBackground))
         )
+        .background(
+            GeometryReader { proxy in
+                Color.clear.preference(key: TimerCardWidthKey.self, value: proxy.size.width)
+            }
+        )
+        .onPreferenceChange(TimerCardWidthKey.self) { width in
+            if width > 0 && abs(width - timerCardWidth) > 0.5 {
+                timerCardWidth = width
+            }
+        }
+        .sheet(isPresented: $showingFocusPage) {
+            focusPage
+        }
     }
 
     private var controlRow: some View {
@@ -137,37 +170,6 @@ struct IOSTimerPageView: View {
                     .disabled(!isRunning)
                     .accessibilityIdentifier("Timer.Skip")
             }
-        }
-    }
-
-    private var durationControls: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("ios.timer.label.durations", comment: "Durations"))
-                .font(.headline)
-            switch viewModel.currentMode {
-            case .pomodoro:
-                stepperRow(label: NSLocalizedString("ios.timer.label.focus", comment: "Focus"), value: $viewModel.focusDuration, range: 5 * 60...90 * 60, step: 5 * 60)
-                stepperRow(label: NSLocalizedString("ios.timer.label.break", comment: "Break"), value: $viewModel.breakDuration, range: 1 * 60...30 * 60, step: 1 * 60)
-                stepperRow(label: NSLocalizedString("ios.timer.label.long_break", comment: "Long Break"), value: longBreakDurationBinding, range: 5 * 60...60 * 60, step: 5 * 60)
-                iterationsRow
-            case .timer:
-                stepperRow(label: NSLocalizedString("ios.timer.label.timer", comment: "Timer"), value: $viewModel.timerDuration, range: 1 * 60...180 * 60, step: 1 * 60)
-            case .stopwatch:
-                Text(NSLocalizedString("ios.timer.mode.stopwatch_description", comment: "Stopwatch description"))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-
-    private func stepperRow(label: String, value: Binding<TimeInterval>, range: ClosedRange<TimeInterval>, step: TimeInterval) -> some View {
-        HStack {
-            Text(label)
-            Spacer()
-            Text(minutesString(value.wrappedValue))
-                .monospacedDigit()
-            Stepper("", value: value, in: range, step: step)
-                .labelsHidden()
         }
     }
 
@@ -242,16 +244,6 @@ struct IOSTimerPageView: View {
         }
     }
 
-    private var settingsControls: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("timer.label.alerts", comment: "Alerts"))
-                .font(.headline)
-            Toggle("Timer Alerts", isOn: $settings.timerAlertsEnabled)
-            Toggle("Pomodoro Alerts", isOn: $settings.pomodoroAlertsEnabled)
-            Toggle("AlarmKit Loud Alarm (iOS)", isOn: $settings.alarmKitTimersEnabled)
-        }
-    }
-
     private var activityManager: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(NSLocalizedString("timer.label.manage_activities", comment: "Manage"))
@@ -321,6 +313,58 @@ struct IOSTimerPageView: View {
         }
     }
 
+    private var focusPage: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                if displayStyle == .analog {
+                    RootsAnalogClock(
+                        style: .stopwatch,
+                        diameter: min(max(220, timerDialDiameter), 520),
+                        showSecondHand: true,
+                        accentColor: .accentColor,
+                        timerSeconds: timerDialSeconds
+                    )
+                } else {
+                    Text(timeString(for: viewModel.sessionRemaining, elapsed: viewModel.sessionElapsed))
+                        .font(.system(size: 84, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.4)
+                        .lineLimit(1)
+                }
+                if viewModel.currentMode == .pomodoro {
+                    Text(viewModel.isOnBreak ? NSLocalizedString("ios.timer.break", comment: "Break") : NSLocalizedString("ios.timer.focus", comment: "Focus"))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                controlRow
+            }
+            .padding(24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(uiColor: .systemBackground))
+            .navigationTitle(NSLocalizedString("timer.focus.window_title", comment: "Focus"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingFocusPage = false
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                }
+            }
+        }
+    }
+
+    private var timerDialDiameter: CGFloat {
+        let available = max(0, timerCardWidth - 32)
+        return min(available, 520)
+    }
+
+    private var timerTextSize: CGFloat {
+        guard timerCardWidth > 0 else { return 48 }
+        return min(max(timerCardWidth / 6, 48), 96)
+    }
+
     private func durationString(_ seconds: TimeInterval) -> String {
         let total = max(Int(seconds.rounded()), 0)
         let hours = total / 3600
@@ -330,18 +374,6 @@ struct IOSTimerPageView: View {
             return String(format: "%d:%02d:%02d", hours, minutes, secs)
         }
         return String(format: "%02d:%02d", minutes, secs)
-    }
-
-    private func minutesString(_ seconds: TimeInterval) -> String {
-        let minutes = Int(seconds.rounded()) / 60
-        return "\(minutes) min"
-    }
-
-    private var longBreakDurationBinding: Binding<TimeInterval> {
-        Binding(
-            get: { TimeInterval(settings.pomodoroLongBreakMinutes * 60) },
-            set: { settings.pomodoroLongBreakMinutes = max(Int($0 / 60), 1) }
-        )
     }
 
     private var selectedActivity: TimerActivity? {
@@ -359,17 +391,6 @@ struct IOSTimerPageView: View {
                 viewModel.updateActivity(updated)
             }
         )
-    }
-
-    private var iterationsRow: some View {
-        HStack {
-            Text(NSLocalizedString("timer.pomodoro.iterations", comment: "Iterations"))
-            Spacer()
-            Text("\(settings.pomodoroIterations)")
-                .monospacedDigit()
-            Stepper("", value: $settings.pomodoroIterations, in: 1...12)
-                .labelsHidden()
-        }
     }
 
     private func addActivity() {
@@ -424,6 +445,7 @@ struct IOSTimerPageView: View {
     private func syncSettingsFromApp() {
         viewModel.focusDuration = TimeInterval(settings.pomodoroFocusMinutes * 60)
         viewModel.breakDuration = TimeInterval(settings.pomodoroShortBreakMinutes * 60)
+        viewModel.timerDuration = TimeInterval(settings.timerDurationMinutes * 60)
     }
 
     private var filteredActivities: [TimerActivity] {
@@ -480,6 +502,16 @@ struct IOSTimerPageView: View {
 #endif
 }
 
+private struct TimerCardWidthKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        let next = nextValue()
+        if next > 0 {
+            value = next
+        }
+    }
+}
+
 private struct TimerSyncModifiers: ViewModifier {
     @ObservedObject var viewModel: TimerPageViewModel
     @ObservedObject var settings: AppSettingsModel
@@ -518,6 +550,7 @@ private struct TimerSettingsSync: ViewModifier {
             .onChange(of: settings.pomodoroFocusMinutes) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.pomodoroShortBreakMinutes) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.pomodoroLongBreakMinutes) { _, _ in syncSettingsFromApp() }
+            .onChange(of: settings.timerDurationMinutes) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.timerAlertsEnabled) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.pomodoroAlertsEnabled) { _, _ in syncSettingsFromApp() }
             .onChange(of: settings.alarmKitTimersEnabled) { _, newValue in
@@ -547,12 +580,42 @@ private struct TimerDurationSync: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onChange(of: viewModel.focusDuration) { _, newValue in
-                settings.pomodoroFocusMinutes = max(Int(newValue / 60), 1)
-            }
-            .onChange(of: viewModel.breakDuration) { _, newValue in
-                settings.pomodoroShortBreakMinutes = max(Int(newValue / 60), 1)
-            }
+            .modifier(FocusDurationSync(viewModel: viewModel, settings: settings))
+            .modifier(BreakDurationSync(viewModel: viewModel, settings: settings))
+            .modifier(TimerValueSync(viewModel: viewModel, settings: settings))
+    }
+}
+
+private struct FocusDurationSync: ViewModifier {
+    @ObservedObject var viewModel: TimerPageViewModel
+    @ObservedObject var settings: AppSettingsModel
+    
+    func body(content: Content) -> some View {
+        content.onChange(of: viewModel.focusDuration) { _, newValue in
+            settings.pomodoroFocusMinutes = max(Int(newValue / 60), 1)
+        }
+    }
+}
+
+private struct BreakDurationSync: ViewModifier {
+    @ObservedObject var viewModel: TimerPageViewModel
+    @ObservedObject var settings: AppSettingsModel
+    
+    func body(content: Content) -> some View {
+        content.onChange(of: viewModel.breakDuration) { _, newValue in
+            settings.pomodoroShortBreakMinutes = max(Int(newValue / 60), 1)
+        }
+    }
+}
+
+private struct TimerValueSync: ViewModifier {
+    @ObservedObject var viewModel: TimerPageViewModel
+    @ObservedObject var settings: AppSettingsModel
+    
+    func body(content: Content) -> some View {
+        content.onChange(of: viewModel.timerDuration) { _, newValue in
+            settings.timerDurationMinutes = max(Int(newValue / 60), 1)
+        }
     }
 }
 #endif

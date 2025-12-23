@@ -619,7 +619,7 @@ struct IOSCalendarView: View {
                             title: event.title,
                             subtitle: timeRange(for: event),
                             systemImage: "calendar",
-                            detail: event.location ?? "No location"
+                            detail: event.calendar?.title ?? "Calendar"
                         )
                     }
                 }

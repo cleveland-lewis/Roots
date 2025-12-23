@@ -50,8 +50,8 @@ public struct TabRegistry {
         TabDefinition(id: .courses, icon: "book.closed", title: "Courses", defaultEnabled: false),
         TabDefinition(id: .grades, icon: "number.circle", title: "Grades", defaultEnabled: false),
         TabDefinition(id: .calendar, icon: "calendar", title: "Calendar", defaultEnabled: false),
+        TabDefinition(id: .flashcards, icon: "rectangle.stack", title: "Flashcards", defaultEnabled: false),
         TabDefinition(id: .practice, icon: "list.clipboard", title: "Practice", defaultEnabled: false),
-        TabDefinition(id: .decks, icon: "rectangle.stack", title: "Decks", defaultEnabled: false),
         // CRITICAL: Settings must always be last and system-required
         TabDefinition(id: .settings, icon: "gearshape", title: "Settings", defaultEnabled: true, isSystemRequired: true)
     ]

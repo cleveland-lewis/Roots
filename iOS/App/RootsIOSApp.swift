@@ -67,7 +67,7 @@ struct RootsIOSApp: App {
                 .onAppear {
                     preferences.highContrast = appSettings.highContrastMode
                     preferences.reduceTransparency = appSettings.increaseTransparency
-                    if let g = appSettings.glassIntensity { preferences.glassIntensity = g }
+                    preferences.glassIntensity = appSettings.glassIntensity
                 }
         }
     }

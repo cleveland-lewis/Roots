@@ -75,15 +75,6 @@ struct DayDetailSidebar: View {
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                         
-                                        if let location = event.location, !location.isEmpty {
-                                            HStack(spacing: 4) {
-                                                Image(systemName: "mappin.circle.fill")
-                                                    .font(.caption2)
-                                                    .foregroundStyle(.tertiary)
-                                                Text(location)
-                                                    .font(.caption2)
-                                                    .foregroundStyle(.tertiary)
-                                            }
                                             .lineLimit(1)
                                         }
                                     }

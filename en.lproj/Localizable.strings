@@ -936,6 +936,7 @@
 "settings.timer.long_break" = "Long Break";
 "settings.timer.iterations" = "Pomodoro Cycles";
 "settings.timer.pomodoro.header" = "Pomodoro Settings";
+"settings.timer.timer_duration" = "Timer Duration";
 "settings.timer.alerts" = "Timer Alerts";
 "settings.timer.alerts.detail" = "Show notification when timer completes";
 "settings.timer.pomodoro_alerts" = "Pomodoro Alerts";
@@ -1047,3 +1048,7 @@
 /* Toast Messages for Settings */
 "ios.planner.toast.block_updated" = "Block updated";
 "ios.planner.toast.time_conflict" = "Time conflict";
+
+/* Flashcards */
+"ios.flashcards.title" = "Flashcards";
+"ios.flashcards.coming_soon" = "Flashcard decks and study sessions coming soon";

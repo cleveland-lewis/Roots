@@ -103,11 +103,6 @@ private struct DayEventRow: View {
                     .font(DesignSystem.Typography.caption)
                     .foregroundStyle(.secondary)
 
-                if let location = event.location, !location.isEmpty {
-                    Text(location)
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
             }
             Spacer()
         }

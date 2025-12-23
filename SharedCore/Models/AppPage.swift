@@ -8,7 +8,7 @@ enum AppPage: String, CaseIterable, Identifiable {
     case courses
     case grades
     case timer
-    case decks
+    case flashcards
     case practice
 
     var id: String { rawValue }
@@ -22,7 +22,7 @@ enum AppPage: String, CaseIterable, Identifiable {
         case .courses:    return "Courses"
         case .grades:     return "Grades"
         case .timer:      return "Timer"
-        case .decks:      return "Decks"
+        case .flashcards: return "Flashcards"
         case .practice:   return "Practice"
         }
     }
@@ -36,7 +36,7 @@ enum AppPage: String, CaseIterable, Identifiable {
         case .courses:     return "book.closed"
         case .grades:      return "chart.bar.doc.horizontal"
         case .timer:       return "timer"
-        case .decks:       return "rectangle.stack"
+        case .flashcards:  return "rectangle.stack"
         case .practice:    return "list.clipboard"
         }
     }

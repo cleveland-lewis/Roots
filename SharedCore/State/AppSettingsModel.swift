@@ -240,6 +240,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         case pomodoroShortBreakStorage
         case pomodoroLongBreakStorage
         case pomodoroIterationsStorage
+        case timerDurationStorage
         case longBreakCadenceStorage
         case notificationsEnabledStorage
         case assignmentRemindersEnabledStorage
@@ -364,90 +365,118 @@ final class AppSettingsModel: ObservableObject, Codable {
     var enableICloudSyncStorage: Bool = false
 
     // New UserDefaults-backed properties
-    var use24HourTimeStorage: Bool = false
-    var workdayStartHourStorage: Int = 8
-    var workdayStartMinuteStorage: Int = 0
-    var workdayEndHourStorage: Int = 22
-    var workdayEndMinuteStorage: Int = 0
-    var showEnergyPanelStorage: Bool = true
-    var highContrastModeStorage: Bool = false
-    var enableAIPlannerStorage: Bool = false
-    var plannerHorizonStorage: String = "2w"
-    var enableFlashcardsStorage: Bool = true
-    var assignmentSwipeLeadingRaw: String = AssignmentSwipeAction.complete.rawValue
-    var assignmentSwipeTrailingRaw: String = AssignmentSwipeAction.delete.rawValue
+    @AppStorage(Keys.use24HourTime) var use24HourTimeStorage: Bool = false
+    @AppStorage(Keys.workdayStartHour) var workdayStartHourStorage: Int = 8
+    @AppStorage(Keys.workdayStartMinute) var workdayStartMinuteStorage: Int = 0
+    @AppStorage(Keys.workdayEndHour) var workdayEndHourStorage: Int = 22
+    @AppStorage(Keys.workdayEndMinute) var workdayEndMinuteStorage: Int = 0
+    @AppStorage(Keys.showEnergyPanel) var showEnergyPanelStorage: Bool = true
+    @AppStorage(Keys.highContrastMode) var highContrastModeStorage: Bool = false
+    @AppStorage(Keys.enableAIPlanner) var enableAIPlannerStorage: Bool = false
+    @AppStorage(Keys.plannerHorizon) var plannerHorizonStorage: String = "2w"
+    @AppStorage("roots.settings.enableFlashcards") var enableFlashcardsStorage: Bool = true
+    @AppStorage("roots.settings.assignmentSwipeLeading") var assignmentSwipeLeadingRaw: String = AssignmentSwipeAction.complete.rawValue
+    @AppStorage("roots.settings.assignmentSwipeTrailing") var assignmentSwipeTrailingRaw: String = AssignmentSwipeAction.delete.rawValue
 
     // General Settings
-    var userNameStorage: String? = nil
-    var startOfWeekStorage: String? = "Sunday"
-    var defaultViewStorage: String? = "Dashboard"
+    @AppStorage("roots.settings.userName") var userNameStorage: String = ""
+    @AppStorage("roots.settings.startOfWeek") var startOfWeekStorage: String = "Sunday"
+    @AppStorage("roots.settings.defaultView") var defaultViewStorage: String = "Dashboard"
 
     // Interface Settings
-    var reduceMotionStorage: Bool = false
-    var increaseTransparencyStorage: Bool = false
-    var glassIntensityStorage: Double? = 0.5
-    var accentColorNameStorage: String? = "Blue"
-    var showSidebarByDefaultStorage: Bool = true
-    var compactModeStorage: Bool = false
-    var showAnimationsStorage: Bool = true
-    var enableHapticsStorage: Bool = true
-    var showTooltipsStorage: Bool = true
+    @AppStorage("roots.settings.reduceMotion") var reduceMotionStorage: Bool = false
+    @AppStorage("roots.settings.increaseTransparency") var increaseTransparencyStorage: Bool = false
+    @AppStorage("roots.settings.glassIntensity") var glassIntensityStorage: Double = 0.5
+    @AppStorage("roots.settings.accentColorName") var accentColorNameStorage: String = "Blue"
+    @AppStorage("roots.settings.showSidebarByDefault") var showSidebarByDefaultStorage: Bool = true
+    @AppStorage("roots.settings.compactMode") var compactModeStorage: Bool = false
+    @AppStorage("roots.settings.showAnimations") var showAnimationsStorage: Bool = true
+    @AppStorage("roots.settings.enableHaptics") var enableHapticsStorage: Bool = true
+    @AppStorage("roots.settings.showTooltips") var showTooltipsStorage: Bool = true
 
     // Profile/Study Coach Settings
-    var defaultFocusDurationStorage: Int? = 25
-    var defaultBreakDurationStorage: Int? = 5
-    var defaultEnergyLevelStorage: String? = "Medium"
-    var enableStudyCoachStorage: Bool = true
-    var smartNotificationsStorage: Bool = true
-    var autoScheduleBreaksStorage: Bool = true
-    var trackStudyHoursStorage: Bool = true
-    var showProductivityInsightsStorage: Bool = true
-    var weeklySummaryNotificationsStorage: Bool = false
-    var preferMorningSessionsStorage: Bool = false
-    var preferEveningSessionsStorage: Bool = false
-    var enableDeepWorkModeStorage: Bool = false
+    @AppStorage("roots.settings.defaultFocusDuration") var defaultFocusDurationStorage: Int = 25
+    @AppStorage("roots.settings.defaultBreakDuration") var defaultBreakDurationStorage: Int = 5
+    @AppStorage("roots.settings.defaultEnergyLevel") var defaultEnergyLevelStorage: String = "Medium"
+    @AppStorage("roots.settings.enableStudyCoach") var enableStudyCoachStorage: Bool = true
+    @AppStorage("roots.settings.smartNotifications") var smartNotificationsStorage: Bool = true
+    @AppStorage("roots.settings.autoScheduleBreaks") var autoScheduleBreaksStorage: Bool = true
+    @AppStorage("roots.settings.trackStudyHours") var trackStudyHoursStorage: Bool = true
+    @AppStorage("roots.settings.showProductivityInsights") var showProductivityInsightsStorage: Bool = true
+    @AppStorage("roots.settings.weeklySummaryNotifications") var weeklySummaryNotificationsStorage: Bool = false
+    @AppStorage("roots.settings.preferMorningSessions") var preferMorningSessionsStorage: Bool = false
+    @AppStorage("roots.settings.preferEveningSessions") var preferEveningSessionsStorage: Bool = false
+    @AppStorage("roots.settings.enableDeepWorkMode") var enableDeepWorkModeStorage: Bool = false
 
     // Pomodoro defaults (migrated here)
-    var pomodoroFocusStorage: Int = 25
-    var pomodoroShortBreakStorage: Int = 5
-    var pomodoroLongBreakStorage: Int = 15
-    var pomodoroIterationsStorage: Int = 4
-    var longBreakCadenceStorage: Int = 4
+    @AppStorage("roots.settings.pomodoroFocus") var pomodoroFocusStorage: Int = 25
+    @AppStorage("roots.settings.pomodoroShortBreak") var pomodoroShortBreakStorage: Int = 5
+    @AppStorage("roots.settings.pomodoroLongBreak") var pomodoroLongBreakStorage: Int = 15
+    @AppStorage("roots.settings.pomodoroIterations") var pomodoroIterationsStorage: Int = 4
+    @AppStorage("roots.settings.timerDurationMinutes") var timerDurationStorage: Int = 30
+    @AppStorage("roots.settings.longBreakCadence") var longBreakCadenceStorage: Int = 4
     
     // Notification settings
-    var notificationsEnabledStorage: Bool = false
-    var assignmentRemindersEnabledStorage: Bool = true
-    var dailyOverviewEnabledStorage: Bool = false
-    var affirmationsEnabledStorage: Bool = false
-    var timerAlertsEnabledStorage: Bool = true
-    var pomodoroAlertsEnabledStorage: Bool = true
-    var alarmKitTimersEnabledStorage: Bool = true
-    var assignmentLeadTimeStorage: Double = 3600 // 1 hour in seconds
-    var dailyOverviewTimeStorage: Date = {
-        var components = DateComponents()
-        components.hour = 8
-        components.minute = 0
-        return Calendar.current.date(from: components) ?? Date()
-    }()
+    @AppStorage("roots.settings.notificationsEnabled") var notificationsEnabledStorage: Bool = false
+    @AppStorage("roots.settings.assignmentRemindersEnabled") var assignmentRemindersEnabledStorage: Bool = true
+    @AppStorage("roots.settings.dailyOverviewEnabled") var dailyOverviewEnabledStorage: Bool = false
+    @AppStorage("roots.settings.affirmationsEnabled") var affirmationsEnabledStorage: Bool = false
+    @AppStorage("roots.settings.timerAlertsEnabled") var timerAlertsEnabledStorage: Bool = true
+    @AppStorage("roots.settings.pomodoroAlertsEnabled") var pomodoroAlertsEnabledStorage: Bool = true
+    @AppStorage("roots.settings.alarmKitTimersEnabled") var alarmKitTimersEnabledStorage: Bool = true
+    @AppStorage("roots.settings.assignmentLeadTime") var assignmentLeadTimeStorage: Double = 3600 // 1 hour in seconds
     
     // Daily overview content toggles
-    var dailyOverviewIncludeTasksStorage: Bool = true
-    var dailyOverviewIncludeEventsStorage: Bool = true
-    var dailyOverviewIncludeYesterdayCompletedStorage: Bool = true
-    var dailyOverviewIncludeYesterdayStudyTimeStorage: Bool = true
-    var dailyOverviewIncludeMotivationStorage: Bool = true
+    @AppStorage("roots.settings.dailyOverviewIncludeTasks") var dailyOverviewIncludeTasksStorage: Bool = true
+    @AppStorage("roots.settings.dailyOverviewIncludeEvents") var dailyOverviewIncludeEventsStorage: Bool = true
+    @AppStorage("roots.settings.dailyOverviewIncludeYesterdayCompleted") var dailyOverviewIncludeYesterdayCompletedStorage: Bool = true
+    @AppStorage("roots.settings.dailyOverviewIncludeYesterdayStudyTime") var dailyOverviewIncludeYesterdayStudyTimeStorage: Bool = true
+    @AppStorage("roots.settings.dailyOverviewIncludeMotivation") var dailyOverviewIncludeMotivationStorage: Bool = true
 
     // Calendar UI filter setting
-    var showOnlySchoolCalendarStorage: Bool = false
+    @AppStorage("roots.settings.showOnlySchoolCalendar") var showOnlySchoolCalendarStorage: Bool = false
     
     // Calendar picker admin-lock setting
-    var lockCalendarPickerToSchoolStorage: Bool = false
+    @AppStorage("roots.settings.lockCalendarPickerToSchool") var lockCalendarPickerToSchoolStorage: Bool = false
     
     // Selected school calendar identifier
-    var selectedSchoolCalendarID: String? = nil
+    @AppStorage("roots.settings.selectedSchoolCalendarID") var selectedSchoolCalendarID: String = ""
     
-    // Starred tabs for iOS (max 5)
-    var starredTabsRaw: [String] = ["dashboard", "calendar", "timer", "assignments", "settings"]
+    // Calendar access granted
+    @AppStorage("roots.settings.calendarAccessGranted") var calendarAccessGranted: Bool = true
+    
+    // Starred tabs for iOS (max 5) - stored as comma-separated string
+    @AppStorage("roots.settings.starredTabsString") private var starredTabsString: String = "dashboard,calendar,timer,assignments,settings"
+    
+    var starredTabsRaw: [String] {
+        get {
+            starredTabsString.split(separator: ",").map(String.init)
+        }
+        set {
+            starredTabsString = newValue.joined(separator: ",")
+        }
+    }
+    
+    // Daily overview time (stored as seconds since midnight)
+    @AppStorage("roots.settings.dailyOverviewTimeSeconds") private var dailyOverviewTimeSecondsStorage: Int = 28800 // 8:00 AM
+    
+    var dailyOverviewTimeStorage: Date {
+        get {
+            let seconds = dailyOverviewTimeSecondsStorage
+            let hour = seconds / 3600
+            let minute = (seconds % 3600) / 60
+            var components = DateComponents()
+            components.hour = hour
+            components.minute = minute
+            return Calendar.current.date(from: components) ?? Date()
+        }
+        set {
+            let components = Calendar.current.dateComponents([.hour, .minute], from: newValue)
+            let hour = components.hour ?? 8
+            let minute = components.minute ?? 0
+            dailyOverviewTimeSecondsStorage = hour * 3600 + minute * 60
+        }
+    }
     
     // AI Settings
     var aiModeRaw: String = "auto"
@@ -560,9 +589,9 @@ final class AppSettingsModel: ObservableObject, Codable {
     var effectiveVisibleTabs: [RootTab] {
         var tabs = visibleTabs
         if enableFlashcards {
-            if !tabs.contains(.decks) { tabs.append(.decks) }
+            if !tabs.contains(.flashcards) { tabs.append(.flashcards) }
         } else {
-            tabs.removeAll { $0 == .decks }
+            tabs.removeAll { $0 == .flashcards }
         }
         return tabs
     }
@@ -571,9 +600,9 @@ final class AppSettingsModel: ObservableObject, Codable {
         get {
             var order = tabOrderRaw.split(separator: ",").compactMap { RootTab(rawValue: String($0)) }
             if enableFlashcards {
-                if !order.contains(.decks) { order.append(.decks) }
+                if !order.contains(.flashcards) { order.append(.flashcards) }
             } else {
-                order.removeAll { $0 == .decks }
+                order.removeAll { $0 == .flashcards }
             }
             return order
         }
@@ -681,6 +710,11 @@ final class AppSettingsModel: ObservableObject, Codable {
             objectWillChange.send()
             pomodoroIterationsStorage = newValue
         }
+    }
+
+    var timerDurationMinutes: Int {
+        get { timerDurationStorage }
+        set { timerDurationStorage = newValue }
     }
     
     var longBreakCadence: Int {
@@ -824,17 +858,17 @@ final class AppSettingsModel: ObservableObject, Codable {
     }
 
     // General Settings
-    var userName: String? {
+    var userName: String {
         get { userNameStorage }
         set { userNameStorage = newValue }
     }
 
-    var startOfWeek: String? {
+    var startOfWeek: String {
         get { startOfWeekStorage }
         set { startOfWeekStorage = newValue }
     }
 
-    var defaultView: String? {
+    var defaultView: String {
         get { defaultViewStorage }
         set { defaultViewStorage = newValue }
     }
@@ -850,12 +884,12 @@ final class AppSettingsModel: ObservableObject, Codable {
         set { increaseTransparencyStorage = newValue }
     }
 
-    var glassIntensity: Double? {
+    var glassIntensity: Double {
         get { glassIntensityStorage }
         set { glassIntensityStorage = newValue }
     }
 
-    var accentColorName: String? {
+    var accentColorName: String {
         get { accentColorNameStorage }
         set { accentColorNameStorage = newValue }
     }
@@ -886,17 +920,17 @@ final class AppSettingsModel: ObservableObject, Codable {
     }
 
     // Profile/Study Coach Settings
-    var defaultFocusDuration: Int? {
+    var defaultFocusDuration: Int {
         get { defaultFocusDurationStorage }
         set { defaultFocusDurationStorage = newValue }
     }
 
-    var defaultBreakDuration: Int? {
+    var defaultBreakDuration: Int {
         get { defaultBreakDurationStorage }
         set { defaultBreakDurationStorage = newValue }
     }
 
-    var defaultEnergyLevel: String? {
+    var defaultEnergyLevel: String {
         get { defaultEnergyLevelStorage }
         set { defaultEnergyLevelStorage = newValue }
     }
@@ -1105,6 +1139,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         try container.encode(pomodoroShortBreakStorage, forKey: .pomodoroShortBreakStorage)
         try container.encode(pomodoroLongBreakStorage, forKey: .pomodoroLongBreakStorage)
         try container.encode(pomodoroIterationsStorage, forKey: .pomodoroIterationsStorage)
+        try container.encode(timerDurationStorage, forKey: .timerDurationStorage)
         try container.encode(longBreakCadenceStorage, forKey: .longBreakCadenceStorage)
         try container.encode(notificationsEnabledStorage, forKey: .notificationsEnabledStorage)
         try container.encode(assignmentRemindersEnabledStorage, forKey: .assignmentRemindersEnabledStorage)
@@ -1160,6 +1195,7 @@ final class AppSettingsModel: ObservableObject, Codable {
         pomodoroShortBreakStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroShortBreakStorage) ?? 5
         pomodoroLongBreakStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroLongBreakStorage) ?? 15
         pomodoroIterationsStorage = try container.decodeIfPresent(Int.self, forKey: .pomodoroIterationsStorage) ?? 4
+        timerDurationStorage = try container.decodeIfPresent(Int.self, forKey: .timerDurationStorage) ?? 30
         longBreakCadenceStorage = try container.decodeIfPresent(Int.self, forKey: .longBreakCadenceStorage) ?? 4
         notificationsEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .notificationsEnabledStorage) ?? false
         assignmentRemindersEnabledStorage = try container.decodeIfPresent(Bool.self, forKey: .assignmentRemindersEnabledStorage) ?? true
@@ -1182,8 +1218,9 @@ final class AppSettingsModel: ObservableObject, Codable {
         dailyOverviewIncludeMotivationStorage = try container.decodeIfPresent(Bool.self, forKey: .dailyOverviewIncludeMotivationStorage) ?? true
         showOnlySchoolCalendarStorage = try container.decodeIfPresent(Bool.self, forKey: .showOnlySchoolCalendarStorage) ?? false
         lockCalendarPickerToSchoolStorage = try container.decodeIfPresent(Bool.self, forKey: .lockCalendarPickerToSchoolStorage) ?? false
-        selectedSchoolCalendarID = try container.decodeIfPresent(String.self, forKey: .selectedSchoolCalendarID)
-        starredTabsRaw = try container.decodeIfPresent([String].self, forKey: .starredTabsRaw) ?? ["dashboard", "calendar", "timer", "assignments", "settings"]
+        selectedSchoolCalendarID = try container.decodeIfPresent(String.self, forKey: .selectedSchoolCalendarID) ?? ""
+        let decodedTabs = try container.decodeIfPresent([String].self, forKey: .starredTabsRaw) ?? ["dashboard", "calendar", "timer", "assignments", "settings"]
+        starredTabsString = decodedTabs.joined(separator: ",")
     }
 
     func resetUserDefaults() {

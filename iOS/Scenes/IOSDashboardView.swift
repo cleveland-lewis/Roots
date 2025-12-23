@@ -144,11 +144,6 @@ struct IOSDashboardView: View {
                                 Text(eventTimeRange(event))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
-                                if let location = event.location, !location.isEmpty {
-                                    Text(location)
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                }
                             }
                             Spacer()
                         }
@@ -299,7 +294,8 @@ struct IOSDashboardView: View {
     }
 
     private var filteredCalendarEvents: [EKEvent] {
-        guard let selectedID = settings.selectedSchoolCalendarID, !selectedID.isEmpty else {
+        let selectedID = settings.selectedSchoolCalendarID
+        guard !selectedID.isEmpty else {
             return deviceCalendar.events
         }
         return deviceCalendar.events.filter { $0.calendar.calendarIdentifier == selectedID }

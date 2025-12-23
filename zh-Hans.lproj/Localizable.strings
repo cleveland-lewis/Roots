@@ -384,6 +384,7 @@
 "settings.general.show_energy" = "显示能量面板";
 "settings.general.high_contrast" = "高对比度模式";
 "settings.timer.display" = "显示";
+"settings.timer.timer_duration" = "计时器时长";
 "settings.calendar.school" = "学校日历";
 "settings.calendar.all" = "所有日历";
 "settings.calendar.selected_hint" = "仅会显示所选日历中的事件。";

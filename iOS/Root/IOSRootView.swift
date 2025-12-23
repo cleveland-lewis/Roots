@@ -11,6 +11,7 @@ struct IOSRootView: View {
     @EnvironmentObject private var plannerCoordinator: PlannerCoordinator
     @StateObject private var navigation = IOSNavigationCoordinator()
     @StateObject private var tabBarPrefs: TabBarPreferencesStore
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @State private var selectedTab: RootTab = .dashboard
     
@@ -20,8 +21,15 @@ struct IOSRootView: View {
 
     private var starredTabs: [RootTab] {
         let starred = settings.starredTabs
+        var tabs = starred.isEmpty ? [.dashboard] : starred
+        
+        // Remove Practice tab on iPhone (compact width)
+        if horizontalSizeClass == .compact {
+            tabs.removeAll { $0 == .practice }
+        }
+        
         // Ensure at least Dashboard is present
-        return starred.isEmpty ? [.dashboard] : starred
+        return tabs.isEmpty ? [.dashboard] : tabs
     }
 
     var body: some View {
@@ -163,6 +171,8 @@ struct IOSRootView: View {
             IOSCoursesView()
         case .timer:
             IOSTimerPageView()
+        case .flashcards:
+            IOSFlashcardsView()
         case .practice:
             IOSPracticeView()
         case .settings:
@@ -187,6 +197,8 @@ struct IOSRootView: View {
             IOSCoursesView()
         case .timer:
             IOSTimerPageView()
+        case .flashcards:
+            IOSFlashcardsView()
         case .practice:
             IOSPracticeView()
         default:

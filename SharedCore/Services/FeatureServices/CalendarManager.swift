@@ -341,7 +341,7 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
             newEvent.startDate = startDate
             newEvent.endDate = endDate
             newEvent.isAllDay = isAllDay
-            newEvent.location = location
+            // Don't set location to avoid triggering location authorization check
             newEvent.notes = encodeNotesWithCategory(userNotes: notes, category: category)
             if let url = url { newEvent.url = url }
             if let rule = recurrenceRule { newEvent.recurrenceRules = [rule] }
@@ -396,7 +396,7 @@ final class CalendarManager: ObservableObject, LoadableViewModel {
         item.startDate = startDate
         item.endDate = endDate
         item.isAllDay = isAllDay
-        item.location = location
+        // Don't set location to avoid triggering location authorization check
         item.notes = encodeNotesWithCategory(userNotes: notes ?? "", category: category)
         
         // Handle URL

@@ -390,6 +390,7 @@
 "settings.general.show_energy" = "顯示能量面板";
 "settings.general.high_contrast" = "高對比度模式";
 "settings.timer.display" = "顯示";
+"settings.timer.timer_duration" = "計時器時長";
 "settings.calendar.school" = "學校行事曆";
 "settings.calendar.all" = "所有行事曆";
 "settings.calendar.selected_hint" = "只會顯示所選行事曆中的事件。";

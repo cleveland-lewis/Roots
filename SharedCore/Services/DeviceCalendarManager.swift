@@ -35,7 +35,8 @@ final class DeviceCalendarManager: ObservableObject {
 
         // Filter by selected school calendar if one is set
         let calendarsToFetch: [EKCalendar]?
-        if let calendarID = AppSettingsModel.shared.selectedSchoolCalendarID,
+        let calendarID = AppSettingsModel.shared.selectedSchoolCalendarID
+        if !calendarID.isEmpty,
            let selectedCalendar = store.calendar(withIdentifier: calendarID) {
             calendarsToFetch = [selectedCalendar]
         } else {
@@ -55,7 +56,8 @@ final class DeviceCalendarManager: ObservableObject {
     func refreshEvents(from start: Date, to end: Date, reason: String) async {
         // Filter by selected school calendar if one is set
         let calendarsToFetch: [EKCalendar]?
-        if let calendarID = AppSettingsModel.shared.selectedSchoolCalendarID,
+        let calendarID = AppSettingsModel.shared.selectedSchoolCalendarID
+        if !calendarID.isEmpty,
            let selectedCalendar = store.calendar(withIdentifier: calendarID) {
             calendarsToFetch = [selectedCalendar]
         } else {
@@ -106,7 +108,8 @@ final class DeviceCalendarManager: ObservableObject {
 
         // Filter by selected school calendar if one is set
         let calendarsToFetch: [EKCalendar]?
-        if let calendarID = AppSettingsModel.shared.selectedSchoolCalendarID,
+        let calendarID = AppSettingsModel.shared.selectedSchoolCalendarID
+        if !calendarID.isEmpty,
            let selectedCalendar = store.calendar(withIdentifier: calendarID) {
             calendarsToFetch = [selectedCalendar]
         } else {
@@ -153,6 +156,6 @@ final class DeviceCalendarManager: ObservableObject {
         }
         
         // Clear selected calendar
-        AppSettingsModel.shared.selectedSchoolCalendarID = nil
+        AppSettingsModel.shared.selectedSchoolCalendarID = ""
     }
 }

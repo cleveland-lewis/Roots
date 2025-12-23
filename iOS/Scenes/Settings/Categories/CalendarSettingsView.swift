@@ -5,7 +5,6 @@ import EventKit
 struct CalendarSettingsView: View {
     @EnvironmentObject var settings: AppSettingsModel
     @StateObject private var deviceCalendar = DeviceCalendarManager.shared
-    @AppStorage("selectedCalendarID") private var selectedCalendarID: String?
     @State private var showRevokeConfirmation = false
     
     var body: some View {
@@ -42,7 +41,11 @@ struct CalendarSettingsView: View {
                 Section {
                     ForEach(deviceCalendar.getAvailableCalendars(), id: \.calendarIdentifier) { calendar in
                         Button {
-                            selectedCalendarID = calendar.calendarIdentifier
+                            settings.selectedSchoolCalendarID = calendar.calendarIdentifier
+                            settings.save()
+                            Task {
+                                await deviceCalendar.refreshEventsForVisibleRange(reason: "calendarChanged")
+                            }
                         } label: {
                             HStack {
                                 Circle()
@@ -62,7 +65,7 @@ struct CalendarSettingsView: View {
                                 
                                 Spacer()
                                 
-                                if selectedCalendarID == calendar.calendarIdentifier {
+                                if settings.selectedSchoolCalendarID == calendar.calendarIdentifier {
                                     Image(systemName: "checkmark")
                                         .foregroundColor(.accentColor)
                                 }

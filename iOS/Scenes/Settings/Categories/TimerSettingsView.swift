@@ -3,6 +3,7 @@ import SwiftUI
 
 struct TimerSettingsView: View {
     @EnvironmentObject var settings: AppSettingsModel
+    @AppStorage("timer.display.style") private var timerDisplayStyleRaw: String = TimerDisplayStyle.digital.rawValue
     
     var body: some View {
         List {
@@ -51,8 +52,35 @@ struct TimerSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                
             } header: {
                 Text(NSLocalizedString("settings.timer.pomodoro.header", comment: "Pomodoro Settings"))
+            }
+
+            Section {
+                HStack {
+                    Text(NSLocalizedString("settings.timer.timer_duration", comment: "Timer Duration"))
+                    Spacer()
+                    Text("\(settings.timerDurationMinutes) " + NSLocalizedString("time.minutes", comment: "min"))
+                        .foregroundColor(.secondary)
+                }
+                
+                Slider(value: Binding(
+                    get: { Double(settings.timerDurationMinutes) },
+                    set: { settings.timerDurationMinutes = Int($0) }
+                ), in: 1...180, step: 1)
+            } header: {
+                Text(NSLocalizedString("settings.timer.timer_duration", comment: "Timer Duration"))
+            }
+
+            Section {
+                Picker(NSLocalizedString("settings.timer.display", comment: "Timer display"), selection: timerDisplayStyleBinding) {
+                    ForEach(TimerDisplayStyle.allCases) { style in
+                        Text(style.label).tag(style)
+                    }
+                }
+            } header: {
+                Text(NSLocalizedString("settings.timer.display", comment: "Timer display"))
             }
             
             Section {
@@ -91,6 +119,13 @@ struct TimerSettingsView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(NSLocalizedString("settings.category.timer", comment: "Timer"))
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var timerDisplayStyleBinding: Binding<TimerDisplayStyle> {
+        Binding(
+            get: { TimerDisplayStyle(rawValue: timerDisplayStyleRaw) ?? .digital },
+            set: { timerDisplayStyleRaw = $0.rawValue }
+        )
     }
 }
 

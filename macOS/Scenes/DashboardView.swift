@@ -372,7 +372,7 @@ struct DashboardView: View {
             DashboardEvent(
                 title: event.title,
                 time: "\(event.startDate.formatted(date: .omitted, time: .shortened)) – \(event.endDate.formatted(date: .omitted, time: .shortened))",
-                location: event.location,
+                location: nil,
                 date: event.startDate
             )
         }
