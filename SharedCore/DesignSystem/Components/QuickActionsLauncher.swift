@@ -6,7 +6,8 @@ struct QuickActionsLauncher: View {
     let onSelect: (QuickAction) -> Void
     var expansionDirection: QuickActionsExpansionDirection = .trailing
 
-    private let buttonSize: CGFloat = 44
+    static let launcherDiameter: CGFloat = 44
+    private let buttonSize: CGFloat = Self.launcherDiameter
     private let buttonSpacing: CGFloat = 10
     private let maxVisible: Int = 6
 
@@ -51,29 +52,18 @@ struct QuickActionsLauncher: View {
     }
 
     private var plusButton: some View {
-        Button {
-            toggleExpanded()
-        } label: {
-            Image(systemName: "plus")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(Color.accentColor)
-                .frame(width: buttonSize, height: buttonSize)
-                .background(DesignSystem.Materials.hud, in: Circle())
-                .overlay(
-                    Circle()
-                        .strokeBorder(Color.accentColor.opacity(0.25), lineWidth: 1)
-                )
-                .overlay(
-                    Circle()
-                        .strokeBorder(Color.accentColor, lineWidth: 2)
-                        .opacity(focusedAction == .launcher ? 0.7 : 0)
-                )
-                .rotationEffect(.degrees(isExpanded && !reduceMotion ? 90 : 0))
-        }
-        .buttonStyle(.plain)
+        CircleIconButton(
+            icon: "plus",
+            iconColor: Color.secondary,
+            size: buttonSize,
+            backgroundMaterial: DesignSystem.Materials.hud,
+            backgroundOpacity: 1,
+            showsBorder: false,
+            iconRotation: .degrees(isExpanded && !reduceMotion ? 90 : 0),
+            action: toggleExpanded
+        )
         .focusable(true)
         .focused($focusedAction, equals: .launcher)
-        .focusEffectDisabled(true)
         .accessibilityLabel(isExpanded ? "Collapse quick actions" : "Expand quick actions")
         .animation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.82), value: isExpanded)
     }

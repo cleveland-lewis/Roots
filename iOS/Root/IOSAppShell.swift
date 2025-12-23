@@ -34,206 +34,128 @@ struct IOSAppShell<Content: View>: View {
     }
     
     private var topBar: some View {
-        HStack(spacing: 16) {
-            // Hamburger menu button
-            Button {
-                showingHamburgerMenu.toggle()
-            } label: {
-                Image(systemName: "line.3.horizontal")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.blue)
-                    .frame(width: 44, height: 44)
+        ZStack(alignment: .top) {
+            // Top bar with buttons
+            HStack(spacing: 16) {
+                // Hamburger menu button
+                Button {
+                    showingHamburgerMenu.toggle()
+                } label: {
+                    Image(systemName: "line.3.horizontal")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(.primary)
+                        .frame(width: 44, height: 44)
+                }
+                .accessibilityLabel("Open menu")
+                
+                Spacer()
+                
+                // Quick add (+) button
+                Button {
+                    showingQuickAddMenu.toggle()
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.primary)
+                        .frame(width: 44, height: 44)
+                }
+                .accessibilityLabel("Quick add")
             }
-            .accessibilityLabel("Open menu")
-            .popover(isPresented: $showingHamburgerMenu) {
-                hamburgerMenuContent
-                    .presentationBackground(.ultraThinMaterial)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(.ultraThinMaterial)
+            
+            // Hamburger menu overlay
+            if showingHamburgerMenu {
+                HStack {
+                    FloatingMenuPanel(isPresented: $showingHamburgerMenu, width: 280, maxHeight: 500) {
+                        hamburgerMenuContent
+                    }
+                    .offset(x: 16, y: 60)
+                    .transition(.opacity.combined(with: .scale(scale: 0.95, anchor: .topLeading)))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingHamburgerMenu)
+                    Spacer()
+                }
             }
             
-            Spacer()
-            
-            // Quick add (+) button
-            Button {
-                showingQuickAddMenu.toggle()
-            } label: {
-                Image(systemName: "plus")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(.blue)
-                    .frame(width: 44, height: 44)
-            }
-            .accessibilityLabel("Quick add")
-            .popover(isPresented: $showingQuickAddMenu) {
-                quickAddMenu
-                    .presentationBackground(.ultraThinMaterial)
+            // Quick add menu overlay
+            if showingQuickAddMenu {
+                HStack {
+                    Spacer()
+                    FloatingMenuPanel(isPresented: $showingQuickAddMenu, width: 280) {
+                        quickAddMenu
+                    }
+                    .offset(x: -16, y: 60)
+                    .transition(.opacity.combined(with: .scale(scale: 0.95, anchor: .topTrailing)))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.8), value: showingQuickAddMenu)
+                }
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(.ultraThinMaterial)
     }
     
     private var hamburgerMenuContent: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Text("Menu")
-                    .font(.title2.weight(.bold))
-                Spacer()
-                Button {
-                    showingHamburgerMenu = false
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title3)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .padding()
-
-            Divider()
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(allMenuPages, id: \.self) { page in
-                        Button {
-                            if tabBarPrefs != nil {
-                                let starred = settings.starredTabs
-                                navigation.open(page: page, starredTabs: starred)
-                            }
-                            showingHamburgerMenu = false
-                        } label: {
-                            HStack(spacing: 16) {
-                                Image(systemName: page.systemImage)
-                                    .font(.system(size: 20))
-                                    .foregroundColor(.blue)
-                                    .frame(width: 28)
-                                Text(menuTitle(for: page))
-                                    .foregroundColor(.primary)
-                                Spacer()
-                            }
-                            .padding()
-                            .contentShape(Rectangle())
+        ScrollView {
+            VStack(spacing: 0) {
+                // Navigation pages
+                ForEach(Array(allMenuPages.enumerated()), id: \.element) { index, page in
+                    FloatingMenuRow(
+                        title: menuTitle(for: page),
+                        icon: page.systemImage,
+                        showSeparator: index < allMenuPages.count - 1
+                    ) {
+                        if tabBarPrefs != nil {
+                            let starred = settings.starredTabs
+                            navigation.open(page: page, starredTabs: starred)
                         }
-                        .buttonStyle(.plain)
-
-                        Divider()
-                            .padding(.leading, 60)
-                    }
-
-                    Button {
-                        navigation.openSettings()
                         showingHamburgerMenu = false
-                    } label: {
-                        HStack(spacing: 16) {
-                            Image(systemName: "gearshape")
-                                .font(.system(size: 20))
-                                .foregroundColor(.blue)
-                                .frame(width: 28)
-                            Text("Settings")
-                                .foregroundColor(.primary)
-                            Spacer()
-                        }
-                        .padding()
-                        .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
+                }
+                
+                // Section divider
+                FloatingMenuSectionDivider()
+                
+                // Settings
+                FloatingMenuRow(
+                    title: "Settings",
+                    icon: "gearshape",
+                    showSeparator: false
+                ) {
+                    navigation.openSettings()
+                    showingHamburgerMenu = false
                 }
             }
+            .padding(.vertical, 8)
         }
-        .frame(width: 280, height: 460, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(uiColor: .systemBackground).opacity(0.9))
-        )
-        .padding(8)
     }
     
     private var quickAddMenu: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // Header
-            HStack {
-                Text("Quick Add")
-                    .font(.title2.weight(.bold))
-                Spacer()
-                Button {
-                    showingQuickAddMenu = false
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title3)
-                        .foregroundColor(.secondary)
-                }
+        VStack(spacing: 0) {
+            FloatingMenuRow(
+                title: "Add Assignment",
+                icon: "plus.square.on.square"
+            ) {
+                handleQuickAction(.add_assignment)
+                showingQuickAddMenu = false
             }
-            .padding()
             
-            Divider()
+            FloatingMenuRow(
+                title: "Add Grade",
+                icon: "number.circle"
+            ) {
+                handleQuickAction(.add_grade)
+                showingQuickAddMenu = false
+            }
             
-            // Quick action buttons
-            VStack(alignment: .leading, spacing: 0) {
-                Button {
-                    handleQuickAction(.add_assignment)
-                    showingQuickAddMenu = false
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(systemName: "plus.square.on.square")
-                            .font(.system(size: 20))
-                            .foregroundColor(.blue)
-                            .frame(width: 28)
-                        Text("Add Assignment")
-                            .foregroundColor(.primary)
-                        Spacer()
-                    }
-                    .padding()
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                
-                Divider()
-                    .padding(.leading, 60)
-                
-                Button {
-                    handleQuickAction(.add_grade)
-                    showingQuickAddMenu = false
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(systemName: "number.circle")
-                            .font(.system(size: 20))
-                            .foregroundColor(.blue)
-                            .frame(width: 28)
-                        Text("Add Grade")
-                            .foregroundColor(.primary)
-                        Spacer()
-                    }
-                    .padding()
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                
-                Divider()
-                    .padding(.leading, 60)
-                
-                Button {
-                    handleQuickAction(.auto_schedule)
-                    showingQuickAddMenu = false
-                } label: {
-                    HStack(spacing: 16) {
-                        Image(systemName: "calendar.badge.clock")
-                            .font(.system(size: 20))
-                            .foregroundColor(.blue)
-                            .frame(width: 28)
-                        Text("Auto Schedule")
-                            .foregroundColor(.primary)
-                        Spacer()
-                    }
-                    .padding()
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+            FloatingMenuRow(
+                title: "Auto Schedule",
+                icon: "calendar.badge.clock",
+                showSeparator: false
+            ) {
+                handleQuickAction(.auto_schedule)
+                showingQuickAddMenu = false
             }
         }
-        .frame(width: 280, height: 280, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(uiColor: .systemBackground).opacity(0.9))
-        )
-        .padding(8)
+        .padding(.vertical, 8)
     }
     
     private var allMenuPages: [AppPage] {

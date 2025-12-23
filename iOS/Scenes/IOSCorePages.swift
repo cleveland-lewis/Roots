@@ -606,6 +606,7 @@ struct IOSSettingsView: View {
 
     var body: some View {
         List {
+            // GENERAL SECTION
             settingsSection(
                 title: NSLocalizedString("settings.section.general", comment: "General section"),
                 rows: [
@@ -623,38 +624,6 @@ struct IOSSettingsView: View {
                         isOn: $settings.showEnergyPanel,
                         a11y: NSLocalizedString("settings.a11y.show_energy", comment: "Energy panel")
                     ),
-                    .toggle(
-                        title: NSLocalizedString("settings.general.high_contrast", comment: "High contrast"),
-                        icon: "circle.lefthalf.filled",
-                        color: .gray,
-                        isOn: $settings.highContrastMode,
-                        a11y: NSLocalizedString("settings.a11y.high_contrast", comment: "High contrast")
-                    )
-                ]
-            )
-
-            settingsSection(
-                title: NSLocalizedString("settings.section.timer", comment: "Timer section"),
-                rows: [
-                    .navigationValue(
-                        title: NSLocalizedString("settings.timer.display", comment: "Timer display"),
-                        icon: "timer",
-                        color: .red,
-                        value: timerDisplayStyle.wrappedValue.label,
-                        destination: AnyView(
-                            SelectionListView(
-                                title: NSLocalizedString("settings.timer.display", comment: "Timer display"),
-                                selection: timerDisplayStyle,
-                                options: TimerDisplayStyle.allCases
-                            )
-                        )
-                    )
-                ]
-            )
-
-            settingsSection(
-                title: NSLocalizedString("settings.section.workday", comment: "Workday section"),
-                rows: [
                     .datePicker(
                         title: NSLocalizedString("settings.workday.start_time", comment: "Start time"),
                         icon: "sunrise",
@@ -678,6 +647,28 @@ struct IOSSettingsView: View {
                 ]
             )
 
+            // INTERFACE SECTION
+            settingsSection(
+                title: NSLocalizedString("settings.section.interface", comment: "Interface section"),
+                rows: [
+                    .toggle(
+                        title: NSLocalizedString("settings.general.high_contrast", comment: "High contrast"),
+                        icon: "circle.lefthalf.filled",
+                        color: .gray,
+                        isOn: $settings.highContrastMode,
+                        a11y: NSLocalizedString("settings.a11y.high_contrast", comment: "High contrast")
+                    )
+                ]
+            )
+
+            starredTabsSection
+
+            settingsSection(
+                title: NSLocalizedString("settings.section.tab_bar_pages", comment: "Tab bar section"),
+                rows: tabBarRows
+            )
+
+            // CALENDAR SECTION
             settingsSection(
                 title: NSLocalizedString("settings.section.calendar", comment: "Calendar section"),
                 rows: [
@@ -708,13 +699,27 @@ struct IOSSettingsView: View {
                     : nil
             )
 
-            starredTabsSection
-
+            // TIMER SECTION
             settingsSection(
-                title: NSLocalizedString("settings.section.tab_bar_pages", comment: "Tab bar section"),
-                rows: tabBarRows
+                title: NSLocalizedString("settings.section.timer", comment: "Timer section"),
+                rows: [
+                    .navigationValue(
+                        title: NSLocalizedString("settings.timer.display", comment: "Timer display"),
+                        icon: "timer",
+                        color: .red,
+                        value: timerDisplayStyle.wrappedValue.label,
+                        destination: AnyView(
+                            SelectionListView(
+                                title: NSLocalizedString("settings.timer.display", comment: "Timer display"),
+                                selection: timerDisplayStyle,
+                                options: TimerDisplayStyle.allCases
+                            )
+                        )
+                    )
+                ]
             )
 
+            // ABOUT SECTION
             settingsSection(
                 title: NSLocalizedString("settings.section.about", comment: "About section"),
                 rows: [

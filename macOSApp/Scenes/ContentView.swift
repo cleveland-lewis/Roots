@@ -130,21 +130,19 @@ struct ContentView: View {
 
             Spacer()
 
-            Button(action: {
+            CircleIconButton(
+                icon: "gearshape",
+                iconColor: Color.secondary,
+                size: QuickActionsLauncher.launcherDiameter,
+                backgroundMaterial: DesignSystem.Materials.hud,
+                backgroundOpacity: 0.75,
+                iconRotation: .degrees(settingsRotation)
+            ) {
                 withAnimation(.easeInOut(duration: DesignSystem.Motion.deliberate)) {
                     settingsRotation += 360
                 }
                 settingsCoordinator.show()
-            }) {
-                Image(systemName: "gearshape")
-                    .font(DesignSystem.Typography.body)
-                    .rotationEffect(.degrees(settingsRotation))
-                    .foregroundStyle(.primary)
-                    .frame(width: 36, height: 36)
-                    .background(DesignSystem.Materials.hud.opacity(0.75), in: Circle())
             }
-            .buttonStyle(.plain)
-            .rootsStandardInteraction()
             .accessibilityIdentifier("Header.Settings")
         }
         .contentTransition(.opacity)
