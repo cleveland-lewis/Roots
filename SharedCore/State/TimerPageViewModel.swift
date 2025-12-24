@@ -242,6 +242,18 @@ final class TimerPageViewModel: ObservableObject {
     func sessions(for activityID: UUID?) -> [FocusSession] {
         pastSessions.filter { $0.activityID == activityID }
     }
+    
+    func addManualSession(_ session: FocusSession) {
+        pastSessions.append(session)
+        LOG_UI(.info, "Timer", "Manually added session \(session.id) for activity=\(String(describing: session.activityID))")
+        persistState()
+    }
+    
+    func deleteSessions(ids: [UUID]) {
+        pastSessions.removeAll { ids.contains($0.id) }
+        LOG_UI(.info, "Timer", "Deleted \(ids.count) session(s)")
+        persistState()
+    }
 
     // MARK: - Internals
     private func tickSession() {

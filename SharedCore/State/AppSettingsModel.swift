@@ -396,8 +396,6 @@ final class AppSettingsModel: ObservableObject, Codable {
     @AppStorage("roots.settings.increaseTransparency") var increaseTransparencyStorage: Bool = false
     @AppStorage("roots.settings.glassIntensity") var glassIntensityStorage: Double = 0.5
     @AppStorage("roots.settings.accentColorName") var accentColorNameStorage: String = "Blue"
-    @AppStorage("roots.settings.showSidebarByDefault") var showSidebarByDefaultStorage: Bool = true
-    @AppStorage("roots.settings.compactMode") var compactModeStorage: Bool = false
     @AppStorage("roots.settings.showAnimations") var showAnimationsStorage: Bool = true
     @AppStorage("roots.settings.enableHaptics") var enableHapticsStorage: Bool = true
     @AppStorage("roots.settings.showTooltips") var showTooltipsStorage: Bool = true
@@ -868,16 +866,6 @@ final class AppSettingsModel: ObservableObject, Codable {
         get { lockCalendarPickerToSchoolStorage }
         set { lockCalendarPickerToSchoolStorage = newValue }
     }
-    
-    // Starred tabs for iOS tab bar (max 5)
-    var starredTabs: [RootTab] {
-        get {
-            starredTabsRaw.compactMap { RootTab(rawValue: $0) }
-        }
-        set {
-            starredTabsRaw = newValue.map { $0.rawValue }
-        }
-    }
 
     var defaultWorkdayStart: DateComponents {
         get { DateComponents(hour: workdayStartHourStorage, minute: workdayStartMinuteStorage) }
@@ -940,16 +928,6 @@ final class AppSettingsModel: ObservableObject, Codable {
     var accentColorName: String {
         get { accentColorNameStorage }
         set { accentColorNameStorage = newValue }
-    }
-
-    var showSidebarByDefault: Bool {
-        get { showSidebarByDefaultStorage }
-        set { showSidebarByDefaultStorage = newValue }
-    }
-
-    var compactMode: Bool {
-        get { compactModeStorage }
-        set { compactModeStorage = newValue }
     }
 
     var showAnimations: Bool {

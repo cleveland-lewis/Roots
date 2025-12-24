@@ -10,12 +10,13 @@ struct IOSTimerPageView: View {
     @EnvironmentObject private var settings: AppSettingsModel
     @StateObject private var viewModel = TimerPageViewModel()
     @StateObject private var liveActivityManager = IOSTimerLiveActivityManager()
-    @State private var newActivityName = ""
     @State private var activitySearchText = ""
     @State private var selectedCollectionID: UUID? = nil
     @AppStorage("timer.display.style") private var timerDisplayStyleRaw: String = TimerDisplayStyle.digital.rawValue
     @State private var timerCardWidth: CGFloat = 0
     @State private var showingFocusPage = false
+    @State private var showingRecentSessions = false
+    @State private var showingAddSession = false
 
     private var sessionState: FocusSession.State {
         viewModel.currentSession?.state ?? .idle
@@ -56,8 +57,7 @@ struct IOSTimerPageView: View {
             activityCollections
             activitySearch
             activityNotes
-            activityManager
-            sessionHistory
+            sessionButtons
 #if DEBUG
             debugSection
 #endif
@@ -244,53 +244,45 @@ struct IOSTimerPageView: View {
         }
     }
 
-    private var activityManager: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("timer.label.manage_activities", comment: "Manage"))
-                .font(.headline)
-            HStack {
-                TextField("New activity name", text: $newActivityName)
-                    .textFieldStyle(.roundedBorder)
-                Button("Add") { addActivity() }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(newActivityName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            }
-            if !pinnedActivities.isEmpty {
-                Text(NSLocalizedString("timer.label.pinned", comment: "Pinned"))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                ForEach(pinnedActivities) { activity in
-                    activityRow(activity)
+    private var sessionButtons: some View {
+        HStack(spacing: 12) {
+            Button {
+                showingRecentSessions = true
+            } label: {
+                HStack {
+                    Image(systemName: "clock.arrow.circlepath")
+                    Text("Recent Sessions")
                 }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(uiColor: .secondarySystemBackground))
+                )
             }
-
-            Text(NSLocalizedString("timer.label.all_activities", comment: "All"))
-                .font(.caption)
-                .foregroundColor(.secondary)
-            ForEach(filteredActivities) { activity in
-                activityRow(activity)
+            .buttonStyle(.plain)
+            
+            Button {
+                showingAddSession = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus.circle")
+                    Text("Add Session")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(uiColor: .secondarySystemBackground))
+                )
             }
+            .buttonStyle(.plain)
         }
-    }
-
-    private var sessionHistory: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("timer.stats.recent_sessions", comment: "Recent"))
-                .font(.headline)
-            if viewModel.pastSessions.isEmpty {
-                Text(NSLocalizedString("timer.stats.no_sessions", comment: "No sessions"))
-                    .foregroundColor(.secondary)
-            } else {
-                ForEach(viewModel.pastSessions.prefix(5)) { session in
-                    HStack {
-                        Text(session.mode.displayName)
-                        Spacer()
-                        Text(durationString(session.actualDuration ?? 0))
-                            .monospacedDigit()
-                    }
-                    .font(.subheadline)
-                }
-            }
+        .sheet(isPresented: $showingRecentSessions) {
+            recentSessionsView
+        }
+        .sheet(isPresented: $showingAddSession) {
+            addSessionView
         }
     }
 
@@ -364,6 +356,116 @@ struct IOSTimerPageView: View {
         guard timerCardWidth > 0 else { return 48 }
         return min(max(timerCardWidth / 6, 48), 96)
     }
+    
+    // MARK: - Recent Sessions View
+    
+    private var recentSessionsView: some View {
+        NavigationStack {
+            List {
+                ForEach(groupedSessions.keys.sorted(by: >), id: \.self) { date in
+                    Section(header: Text(sectionTitle(for: date))) {
+                        ForEach(groupedSessions[date] ?? []) { session in
+                            sessionRow(session)
+                        }
+                        .onDelete { indexSet in
+                            deleteSessions(at: indexSet, in: date)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Recent Sessions")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingRecentSessions = false
+                    } label: {
+                        Text("Done")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func sessionRow(_ session: FocusSession) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Image(systemName: session.mode.systemImage)
+                    .foregroundColor(.accentColor)
+                Text(session.mode.displayName)
+                    .font(.headline)
+                Spacer()
+                Text(durationString(session.actualDuration ?? 0))
+                    .font(.subheadline.monospacedDigit())
+                    .foregroundColor(.secondary)
+            }
+            
+            if let activityID = session.activityID,
+               let activity = viewModel.activities.first(where: { $0.id == activityID }) {
+                Text(activity.name)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            } else {
+                Text("No Activity")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            if let startedAt = session.startedAt {
+                Text(timeFormatter.string(from: startedAt))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+    
+    private var groupedSessions: [Date: [FocusSession]] {
+        let calendar = Calendar.current
+        return Dictionary(grouping: viewModel.pastSessions) { session in
+            guard let date = session.startedAt else { return Date() }
+            return calendar.startOfDay(for: date)
+        }
+    }
+    
+    private func sectionTitle(for date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) {
+            return "Today"
+        } else if calendar.isDateInYesterday(date) {
+            return "Yesterday"
+        } else {
+            return dateFormatter.string(from: date)
+        }
+    }
+    
+    private func deleteSessions(at indexSet: IndexSet, in date: Date) {
+        guard let sessions = groupedSessions[date] else { return }
+        let idsToDelete = indexSet.map { sessions[$0].id }
+        viewModel.deleteSessions(ids: idsToDelete)
+    }
+    
+    private var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }
+    
+    private var timeFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter
+    }
+    
+    // MARK: - Add Session View
+    
+    private var addSessionView: some View {
+        IOSAddSessionView(viewModel: viewModel) {
+            showingAddSession = false
+        }
+    }
 
     private func durationString(_ seconds: TimeInterval) -> String {
         let total = max(Int(seconds.rounded()), 0)
@@ -393,45 +495,6 @@ struct IOSTimerPageView: View {
         )
     }
 
-    private func addActivity() {
-        let trimmed = newActivityName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-        viewModel.addActivity(TimerActivity(name: trimmed))
-        newActivityName = ""
-    }
-
-    private func activityRow(_ activity: TimerActivity) -> some View {
-        HStack {
-            Button(activity.name) {
-                viewModel.selectActivity(activity.id)
-            }
-            .buttonStyle(.plain)
-            Spacer()
-            Button {
-                togglePinned(activity)
-            } label: {
-                Image(systemName: activity.isPinned ? "pin.fill" : "pin")
-            }
-            .buttonStyle(.plain)
-            Button(role: .destructive) {
-                viewModel.deleteActivity(id: activity.id)
-            } label: {
-                Image(systemName: "trash")
-            }
-        }
-        .padding(8)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(uiColor: .tertiarySystemBackground))
-        )
-    }
-
-    private func togglePinned(_ activity: TimerActivity) {
-        var updated = activity
-        updated.isPinned.toggle()
-        viewModel.updateActivity(updated)
-    }
-
     private func syncLiveActivity() {
         liveActivityManager.sync(
             currentMode: viewModel.currentMode,
@@ -446,32 +509,6 @@ struct IOSTimerPageView: View {
         viewModel.focusDuration = TimeInterval(settings.pomodoroFocusMinutes * 60)
         viewModel.breakDuration = TimeInterval(settings.pomodoroShortBreakMinutes * 60)
         viewModel.timerDuration = TimeInterval(settings.timerDurationMinutes * 60)
-    }
-
-    private var filteredActivities: [TimerActivity] {
-        viewModel.activities
-            .filter { activity in
-                guard selectedCollectionID == nil || activity.collectionID == selectedCollectionID else { return false }
-                guard !activity.isPinned else { return false }
-                if activitySearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    return true
-                }
-                let query = activitySearchText.lowercased()
-                return activity.name.lowercased().contains(query)
-            }
-    }
-
-    private var pinnedActivities: [TimerActivity] {
-        viewModel.activities
-            .filter { $0.isPinned }
-            .filter { activity in
-                guard selectedCollectionID == nil || activity.collectionID == selectedCollectionID else { return false }
-                if activitySearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    return true
-                }
-                let query = activitySearchText.lowercased()
-                return activity.name.lowercased().contains(query)
-            }
     }
 
 #if DEBUG

@@ -51,16 +51,7 @@ struct DesignSystem {
             #elseif os(watchOS)
             return Color.black
             #else
-            return Color(
-                uiColor: UIColor { traits in
-                    switch traits.userInterfaceStyle {
-                    case .dark:
-                        return UIColor(red: 0.12, green: 0.12, blue: 0.13, alpha: 1)
-                    default:
-                        return UIColor(red: 0.94, green: 0.94, blue: 0.95, alpha: 1)
-                    }
-                }
-            )
+            return Color(uiColor: .systemBackground)
             #endif
         }
 
