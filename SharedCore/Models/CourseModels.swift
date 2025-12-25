@@ -204,6 +204,37 @@ struct Course: Identifiable, Codable, Hashable {
         notes = try container.decodeIfPresent(String.self, forKey: .notes)
         attachments = try container.decodeIfPresent([Attachment].self, forKey: .attachments) ?? []
     }
+    
+    /// Get display name based on user's preference
+    func displayName(mode: CourseDisplayMode? = nil) -> String {
+        let displayMode = mode ?? CourseDisplayMode.from(userDefaults: .standard)
+        
+        switch displayMode {
+        case .name:
+            return title
+        case .code:
+            return code.isEmpty ? title : code
+        case .both:
+            if code.isEmpty {
+                return title
+            } else {
+                return "\(code) - \(title)"
+            }
+        }
+    }
+}
+
+// MARK: - Course Display Mode
+
+public enum CourseDisplayMode: String, Codable {
+    case name
+    case code
+    case both
+    
+    public static func from(userDefaults: UserDefaults) -> CourseDisplayMode {
+        let rawValue = userDefaults.string(forKey: "courseDisplayMode") ?? "both"
+        return CourseDisplayMode(rawValue: rawValue) ?? .both
+    }
 }
 
 protocol CourseLinkable {

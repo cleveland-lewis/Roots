@@ -96,21 +96,16 @@ struct CoursesPlannerSettingsView: View {
     }
     
     private var courseDisplayMode: CourseDisplayMode {
-        let rawValue = UserDefaults.standard.string(forKey: "courseDisplayMode") ?? "both"
-        return CourseDisplayMode(rawValue: rawValue) ?? .both
+        CourseDisplayMode.from(userDefaults: .standard)
     }
 }
+
+// MARK: - Planner Horizon
 
 enum PlannerHorizon: String {
     case oneWeek = "1w"
     case twoWeeks = "2w"
     case oneMonth = "1m"
-}
-
-enum CourseDisplayMode: String {
-    case name
-    case code
-    case both
 }
 
 #Preview {
