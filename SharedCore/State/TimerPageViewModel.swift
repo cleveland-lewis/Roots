@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import CoreData
 import UserNotifications
 import _Concurrency
 
@@ -32,11 +33,13 @@ final class TimerPageViewModel: ObservableObject {
     private var hasRequestedNotificationPermission = false
     var alarmScheduler: TimerAlarmScheduling?
     private let persistenceQueue = DispatchQueue(label: "timer.persistence.queue", qos: .utility)
+    private let persistence = PersistenceController.shared
 
     // Mode binding - assume a shared selector writes to this or inject externally
     var modeCancellable: AnyCancellable?
 
     init() {
+        loadPersistedSessions()
         loadPersistedState()
         if activities.isEmpty && collections.isEmpty && pastSessions.isEmpty {
             loadPlaceholderData()
@@ -187,7 +190,8 @@ final class TimerPageViewModel: ObservableObject {
         s.state = completed ? .completed : .cancelled
         s.endedAt = Date()
         s.actualDuration = sessionElapsed
-        pastSessions.append(s)
+        insertPastSession(s)
+        upsertSessionInStore(s)
         currentSession = nil
         sessionElapsed = 0
         sessionRemaining = 0
@@ -244,7 +248,8 @@ final class TimerPageViewModel: ObservableObject {
     }
     
     func addManualSession(_ session: FocusSession) {
-        pastSessions.append(session)
+        insertPastSession(session)
+        upsertSessionInStore(session)
         LOG_UI(.info, "Timer", "Manually added session \(session.id) for activity=\(String(describing: session.activityID))")
         persistState()
     }
@@ -252,7 +257,16 @@ final class TimerPageViewModel: ObservableObject {
     func deleteSessions(ids: [UUID]) {
         pastSessions.removeAll { ids.contains($0.id) }
         LOG_UI(.info, "Timer", "Deleted \(ids.count) session(s)")
+        deleteSessionsFromStore(ids: ids)
         persistState()
+    }
+
+    func updateSession(_ session: FocusSession) {
+        if let index = pastSessions.firstIndex(where: { $0.id == session.id }) {
+            pastSessions[index] = session
+            sortPastSessions()
+        }
+        upsertSessionInStore(session)
     }
 
     // MARK: - Internals
@@ -329,7 +343,7 @@ final class TimerPageViewModel: ObservableObject {
     private struct TimerPersistedState: Codable {
         var activities: [TimerActivity]
         var collections: [ActivityCollection]
-        var pastSessions: [FocusSession]
+        var pastSessions: [FocusSession]?
         var selectedCollectionID: UUID?
         var currentActivityID: UUID?
         var currentMode: TimerMode
@@ -349,10 +363,10 @@ final class TimerPageViewModel: ObservableObject {
         persistenceQueue.async {
             guard let data = try? Data(contentsOf: url) else { return }
             guard let decoded = try? JSONDecoder().decode(TimerPersistedState.self, from: data) else { return }
+            let sessionsToMigrate = decoded.pastSessions ?? []
             DispatchQueue.main.async {
                 self.activities = decoded.activities
                 self.collections = decoded.collections
-                self.pastSessions = decoded.pastSessions
                 self.selectedCollectionID = decoded.selectedCollectionID
                 self.currentActivityID = decoded.currentActivityID
                 self.currentMode = decoded.currentMode
@@ -360,6 +374,9 @@ final class TimerPageViewModel: ObservableObject {
                 self.focusDuration = decoded.focusDuration
                 self.breakDuration = decoded.breakDuration
                 self.timerDuration = decoded.timerDuration
+                if !sessionsToMigrate.isEmpty {
+                    self.migrateSessions(sessionsToMigrate)
+                }
             }
         }
     }
@@ -368,7 +385,7 @@ final class TimerPageViewModel: ObservableObject {
         let snapshot = TimerPersistedState(
             activities: activities,
             collections: collections,
-            pastSessions: pastSessions,
+            pastSessions: nil,
             selectedCollectionID: selectedCollectionID,
             currentActivityID: currentActivityID,
             currentMode: currentMode,
@@ -385,6 +402,89 @@ final class TimerPageViewModel: ObservableObject {
             } catch {
                 LOG_UI(.error, "Timer", "Failed to persist timer state: \(error.localizedDescription)")
             }
+        }
+    }
+
+    private func migrateSessions(_ sessions: [FocusSession]) {
+        sessions.forEach { upsertSessionInStore($0) }
+        loadPersistedSessions()
+    }
+
+    private func loadPersistedSessions() {
+        let request = NSFetchRequest<NSManagedObject>(entityName: "TimerSession")
+        request.sortDescriptors = [NSSortDescriptor(key: "startedAt", ascending: false)]
+        do {
+            let results = try persistence.viewContext.fetch(request)
+            pastSessions = results.compactMap(mapSessionFromStore)
+        } catch {
+            LOG_DATA(.error, "Timer", "Failed to load timer sessions: \(error.localizedDescription)")
+        }
+    }
+
+    private func mapSessionFromStore(_ object: NSManagedObject) -> FocusSession? {
+        guard let id = object.value(forKey: "id") as? UUID else { return nil }
+        let modeRaw = object.value(forKey: "mode") as? String ?? TimerMode.timer.rawValue
+        let mode = TimerMode(rawValue: modeRaw) ?? .timer
+        let startedAt = object.value(forKey: "startedAt") as? Date
+        let endedAt = object.value(forKey: "endedAt") as? Date
+        let durationSeconds = object.value(forKey: "durationSeconds") as? Double ?? 0
+        let activityID = object.value(forKey: "activityID") as? UUID
+        let plannedDuration: TimeInterval? = mode == .stopwatch ? nil : durationSeconds
+        let actualDuration: TimeInterval? = durationSeconds > 0 ? durationSeconds : nil
+        let state: FocusSession.State = endedAt == nil ? .cancelled : .completed
+        return FocusSession(
+            id: id,
+            activityID: activityID,
+            mode: mode,
+            plannedDuration: plannedDuration,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            state: state,
+            actualDuration: actualDuration
+        )
+    }
+
+    private func upsertSessionInStore(_ session: FocusSession) {
+        let request = NSFetchRequest<NSManagedObject>(entityName: "TimerSession")
+        request.predicate = NSPredicate(format: "id == %@", session.id as CVarArg)
+        do {
+            let existing = try persistence.viewContext.fetch(request).first
+            let object = existing ?? NSManagedObject(entity: NSEntityDescription.entity(forEntityName: "TimerSession", in: persistence.viewContext)!, insertInto: persistence.viewContext)
+            object.setValue(session.id, forKey: "id")
+            object.setValue(session.startedAt ?? Date(), forKey: "startedAt")
+            object.setValue(session.endedAt, forKey: "endedAt")
+            object.setValue(session.mode.rawValue, forKey: "mode")
+            object.setValue(session.activityID, forKey: "activityID")
+            let duration = session.actualDuration
+                ?? session.plannedDuration
+                ?? (session.endedAt.flatMap { end in session.startedAt.map { end.timeIntervalSince($0) } } ?? 0)
+            object.setValue(duration, forKey: "durationSeconds")
+            persistence.save(context: persistence.viewContext)
+        } catch {
+            LOG_DATA(.error, "Timer", "Failed to save timer session: \(error.localizedDescription)")
+        }
+    }
+
+    private func deleteSessionsFromStore(ids: [UUID]) {
+        let request = NSFetchRequest<NSManagedObject>(entityName: "TimerSession")
+        request.predicate = NSPredicate(format: "id IN %@", ids)
+        do {
+            let results = try persistence.viewContext.fetch(request)
+            results.forEach { persistence.viewContext.delete($0) }
+            persistence.save(context: persistence.viewContext)
+        } catch {
+            LOG_DATA(.error, "Timer", "Failed to delete timer sessions: \(error.localizedDescription)")
+        }
+    }
+
+    private func insertPastSession(_ session: FocusSession) {
+        pastSessions.append(session)
+        sortPastSessions()
+    }
+
+    private func sortPastSessions() {
+        pastSessions.sort { (lhs, rhs) in
+            (lhs.startedAt ?? .distantPast) > (rhs.startedAt ?? .distantPast)
         }
     }
 
@@ -406,5 +506,6 @@ final class TimerPageViewModel: ObservableObject {
             FocusSession(activityID: activities.first?.id, mode: .pomodoro, plannedDuration: focusDuration, startedAt: Date().addingTimeInterval(-3600), endedAt: Date().addingTimeInterval(-3300), state: .completed, actualDuration: 3000),
             FocusSession(activityID: activities[1].id, mode: .timer, plannedDuration: 1800, startedAt: Date().addingTimeInterval(-7200), endedAt: Date().addingTimeInterval(-7000), state: .completed, actualDuration: 2000)
         ]
+        pastSessions.forEach { upsertSessionInStore($0) }
     }
 }

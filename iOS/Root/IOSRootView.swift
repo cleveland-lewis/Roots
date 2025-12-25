@@ -163,13 +163,16 @@ struct IOSRootView: View {
     
     @ViewBuilder
     private var sidebarContent: some View {
-        List(selection: $selectedTab) {
+        List {
             ForEach(starredTabs, id: \.self) { tab in
-                NavigationLink(value: tab) {
+                Button {
+                    selectedTab = tab
+                } label: {
                     if let def = TabRegistry.definition(for: tab) {
                         Label(def.title, systemImage: def.icon)
                     }
                 }
+                .listRowBackground(selectedTab == tab ? Color.accentColor.opacity(0.2) : Color.clear)
             }
             
             Section("Other Pages") {

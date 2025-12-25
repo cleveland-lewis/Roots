@@ -29,6 +29,7 @@
         <relationship name="timerSessions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TimerSession" inverseName="task" inverseEntity="TimerSession"/>
     </entity>
     <entity name="TimerSession" representedClassName="TimerSessionEntity" syncable="YES">
+        <attribute name="activityID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="durationSeconds" optional="NO" attributeType="Double" usesScalarValueType="NO" defaultValueString="0"/>
         <attribute name="endedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

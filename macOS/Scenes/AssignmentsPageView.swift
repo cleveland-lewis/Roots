@@ -3,56 +3,7 @@ import SwiftUI
 import Combine
 
 // MARK: - Models
-
-enum AssignmentStatus: String, CaseIterable, Identifiable, Codable {
-    case notStarted, inProgress, completed, archived
-    var id: String { rawValue }
-
-    var label: String {
-        switch self {
-        case .notStarted: return "Not Started"
-        case .inProgress: return "In Progress"
-        case .completed: return "Completed"
-        case .archived: return "Archived"
-        }
-    }
-}
-
-enum AssignmentUrgency: String, CaseIterable, Identifiable, Codable {
-    case low, medium, high, critical
-    var id: String { rawValue }
-
-    var color: Color {
-        switch self {
-        case .low: return .green
-        case .medium: return .yellow
-        case .high: return .orange
-        case .critical: return .red
-        }
-    }
-}
-
-enum AssignmentCategory: String, CaseIterable, Codable, Identifiable {
-    case project
-    case exam
-    case quiz
-    case practiceHomework
-    case reading
-    case review
-
-    var id: String { rawValue }
-
-    var displayName: String {
-        switch self {
-        case .project:           return "Project"
-        case .exam:              return "Exam"
-        case .quiz:              return "Quiz"
-        case .practiceHomework:  return "Homework"
-        case .reading:           return "Reading"
-        case .review:            return "Review"
-        }
-    }
-}
+// Note: AssignmentStatus, AssignmentUrgency, and AssignmentCategory are now defined in SharedCore/Models/SharedPlanningModels.swift
 
 enum EffortBias: String, Codable {
     case shortBursts

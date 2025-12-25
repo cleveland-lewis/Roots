@@ -1007,10 +1007,10 @@ struct IOSTaskEditorView: View {
                 locked: false,
                 attachments: [],
                 isCompleted: existing?.isCompleted ?? false,
-                category: type,
                 gradeWeightPercent: existing?.gradeWeightPercent,
                 gradePossiblePoints: existing?.gradePossiblePoints,
-                gradeEarnedPoints: existing?.gradeEarnedPoints
+                gradeEarnedPoints: existing?.gradeEarnedPoints,
+                category: type
             )
         }
     }
@@ -1104,7 +1104,7 @@ struct IOSTaskEditorView: View {
     
     private var isValid: Bool {
         let titleValid = !draft.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let dateValid = !draft.hasDueDate || draft.dueDate != nil
+        let dateValid = !draft.hasDueDate || true  // dueDate always has value
         return titleValid && dateValid
     }
     
@@ -1126,7 +1126,7 @@ private struct PrioritySelectionView: View {
     
     var body: some View {
         List {
-            ForEach(IOSTaskEditorView.Priority.allCases) { priority in
+            ForEach(Array(IOSTaskEditorView.Priority.allCases), id: \.self) { priority in
                 Button {
                     selectedPriority = priority
                     dismiss()

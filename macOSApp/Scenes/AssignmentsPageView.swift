@@ -7,9 +7,6 @@ import Combine
 
 
 
-
-
-
 enum EffortBias: String, Codable {
     case shortBursts
     case mediumBlocks

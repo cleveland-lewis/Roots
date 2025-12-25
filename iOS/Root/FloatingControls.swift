@@ -24,7 +24,7 @@ struct FloatingControls: View {
             quickAddButton
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, max(safeInsets.bottom, 8))
+        .padding(.bottom, safeInsets.bottom + 12)
     }
 
     private var menuButton: some View {

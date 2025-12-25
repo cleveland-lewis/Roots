@@ -279,10 +279,10 @@ struct IOSTimerPageView: View {
             .buttonStyle(.plain)
         }
         .sheet(isPresented: $showingRecentSessions) {
-            recentSessionsView
+            RecentSessionsView(viewModel: viewModel)
         }
         .sheet(isPresented: $showingAddSession) {
-            addSessionView
+            AddSessionSheet(viewModel: viewModel)
         }
     }
 
@@ -357,116 +357,6 @@ struct IOSTimerPageView: View {
         return min(max(timerCardWidth / 6, 48), 96)
     }
     
-    // MARK: - Recent Sessions View
-    
-    private var recentSessionsView: some View {
-        NavigationStack {
-            List {
-                ForEach(groupedSessions.keys.sorted(by: >), id: \.self) { date in
-                    Section(header: Text(sectionTitle(for: date))) {
-                        ForEach(groupedSessions[date] ?? []) { session in
-                            sessionRow(session)
-                        }
-                        .onDelete { indexSet in
-                            deleteSessions(at: indexSet, in: date)
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Recent Sessions")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingRecentSessions = false
-                    } label: {
-                        Text("Done")
-                    }
-                }
-            }
-        }
-    }
-    
-    private func sessionRow(_ session: FocusSession) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Image(systemName: session.mode.systemImage)
-                    .foregroundColor(.accentColor)
-                Text(session.mode.displayName)
-                    .font(.headline)
-                Spacer()
-                Text(durationString(session.actualDuration ?? 0))
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundColor(.secondary)
-            }
-            
-            if let activityID = session.activityID,
-               let activity = viewModel.activities.first(where: { $0.id == activityID }) {
-                Text(activity.name)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            } else {
-                Text("No Activity")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            
-            if let startedAt = session.startedAt {
-                Text(timeFormatter.string(from: startedAt))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(.vertical, 4)
-    }
-    
-    private var groupedSessions: [Date: [FocusSession]] {
-        let calendar = Calendar.current
-        return Dictionary(grouping: viewModel.pastSessions) { session in
-            guard let date = session.startedAt else { return Date() }
-            return calendar.startOfDay(for: date)
-        }
-    }
-    
-    private func sectionTitle(for date: Date) -> String {
-        let calendar = Calendar.current
-        if calendar.isDateInToday(date) {
-            return "Today"
-        } else if calendar.isDateInYesterday(date) {
-            return "Yesterday"
-        } else {
-            return dateFormatter.string(from: date)
-        }
-    }
-    
-    private func deleteSessions(at indexSet: IndexSet, in date: Date) {
-        guard let sessions = groupedSessions[date] else { return }
-        let idsToDelete = indexSet.map { sessions[$0].id }
-        viewModel.deleteSessions(ids: idsToDelete)
-    }
-    
-    private var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }
-    
-    private var timeFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        return formatter
-    }
-    
-    // MARK: - Add Session View
-    
-    private var addSessionView: some View {
-        IOSAddSessionView(viewModel: viewModel) {
-            showingAddSession = false
-        }
-    }
-
     private func durationString(_ seconds: TimeInterval) -> String {
         let total = max(Int(seconds.rounded()), 0)
         let hours = total / 3600
