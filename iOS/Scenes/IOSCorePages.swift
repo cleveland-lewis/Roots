@@ -1126,7 +1126,7 @@ private struct PrioritySelectionView: View {
     
     var body: some View {
         List {
-            ForEach(Array(IOSTaskEditorView.Priority.allCases), id: \.self) { priority in
+            ForEach(IOSTaskEditorView.Priority.allCases, id: \.rawValue) { (priority: IOSTaskEditorView.Priority) in
                 Button {
                     selectedPriority = priority
                     dismiss()
@@ -1137,7 +1137,7 @@ private struct PrioritySelectionView: View {
                         Spacer()
                         if selectedPriority == priority {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(.accentColor)
+                                .foregroundStyle(Color.accentColor)
                         }
                     }
                 }
