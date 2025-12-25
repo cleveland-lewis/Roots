@@ -39,14 +39,22 @@ struct CalendarSettingsView: View {
                 }
             } else {
                 Section {
-                    ForEach(deviceCalendar.getAvailableCalendars(), id: \.calendarIdentifier) { calendar in
-                        Button {
-                            settings.selectedSchoolCalendarID = calendar.calendarIdentifier
+                    Picker(selection: Binding(
+                        get: { 
+                            settings.selectedSchoolCalendarID.isEmpty ? nil : settings.selectedSchoolCalendarID 
+                        },
+                        set: { newValue in
+                            settings.selectedSchoolCalendarID = newValue ?? ""
                             settings.save()
                             Task {
                                 await deviceCalendar.refreshEventsForVisibleRange(reason: "calendarChanged")
                             }
-                        } label: {
+                        }
+                    )) {
+                        Text(NSLocalizedString("settings.calendar.select_calendar", comment: "Select a Calendar"))
+                            .tag(String?.none)
+                        
+                        ForEach(deviceCalendar.getAvailableCalendars(), id: \.calendarIdentifier) { calendar in
                             HStack {
                                 Circle()
                                     .fill(Color(cgColor: calendar.cgColor))
@@ -54,7 +62,6 @@ struct CalendarSettingsView: View {
                                 
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(calendar.title)
-                                        .foregroundColor(.primary)
                                     
                                     if let source = calendar.source?.title {
                                         Text(source)
@@ -62,15 +69,11 @@ struct CalendarSettingsView: View {
                                             .foregroundColor(.secondary)
                                     }
                                 }
-                                
-                                Spacer()
-                                
-                                if settings.selectedSchoolCalendarID == calendar.calendarIdentifier {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                }
                             }
+                            .tag(Optional(calendar.calendarIdentifier))
                         }
+                    } label: {
+                        Text(NSLocalizedString("settings.calendar.school_calendar.label", comment: "School Calendar"))
                     }
                 } header: {
                     Text(NSLocalizedString("settings.calendar.school_calendar.header", comment: "School Calendar"))

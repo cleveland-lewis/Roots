@@ -221,6 +221,17 @@ final class TimerPageViewModel: ObservableObject {
             isOnBreak.toggle()
         }
         
+        // Track study hours if completed and setting enabled (Phase D)
+        if completed, let actualDuration = s.actualDuration {
+            let durationMinutes = Int(actualDuration / 60)
+            Task { @MainActor in
+                StudyHoursTracker.shared.recordCompletedSession(
+                    sessionId: s.id,
+                    durationMinutes: durationMinutes
+                )
+            }
+        }
+        
         // Play end feedback (audio + haptic)
         Task { @MainActor in
             AudioFeedbackService.shared.playTimerEnd()

@@ -446,4 +446,210 @@ enum PlannerEngine {
 
         return (scheduled, overflow)
     }
+    
+    // MARK: - AI Scheduler Integration (Phase B)
+    
+    /// Main entry point for scheduling with AI support
+    /// - Parameters:
+    ///   - sessions: Sessions to schedule
+    ///   - settings: Study plan settings
+    ///   - energyProfile: Energy levels by hour
+    ///   - useAI: Override for testing; if nil, reads from AppSettingsModel
+    /// - Returns: Tuple of scheduled sessions and overflow
+    static func scheduleSessionsWithStrategy(
+        _ sessions: [PlannerSession],
+        settings: StudyPlanSettings,
+        energyProfile: [Int: Double],
+        useAI: Bool? = nil
+    ) -> (scheduled: [ScheduledSession], overflow: [PlannerSession]) {
+        let shouldUseAI = useAI ?? AppSettingsModel.shared.enableAIPlanner
+        
+        var result: (scheduled: [ScheduledSession], overflow: [PlannerSession])
+        
+        if shouldUseAI {
+            // Attempt AI scheduling
+            result = scheduleWithAI(sessions, settings: settings, energyProfile: energyProfile)
+            
+            // Fallback to deterministic if AI returns empty/invalid
+            if result.scheduled.isEmpty && !sessions.isEmpty {
+                LOG_UI(.warning, "PlannerEngine", "AI scheduling returned empty, falling back to deterministic")
+                result = scheduleSessions(sessions, settings: settings, energyProfile: energyProfile)
+            }
+        } else {
+            // Use deterministic scheduling
+            result = scheduleSessions(sessions, settings: settings, energyProfile: energyProfile)
+        }
+        
+        // Apply break insertion if enabled (Phase C)
+        if AppSettingsModel.shared.autoScheduleBreaks {
+            result = insertBreaks(into: result, energyProfile: energyProfile)
+        }
+        
+        return result
+    }
+    
+    /// Schedule sessions using AI scheduler
+    private static func scheduleWithAI(
+        _ sessions: [PlannerSession],
+        settings: StudyPlanSettings,
+        energyProfile: [Int: Double]
+    ) -> (scheduled: [ScheduledSession], overflow: [PlannerSession]) {
+        // Convert PlannerSession to AIScheduler.Task
+        let tasks = sessions.map { session -> AppTask in
+            AppTask(
+                id: session.id,
+                title: session.title,
+                courseId: nil,
+                due: session.dueDate,
+                estimatedMinutes: session.estimatedMinutes,
+                minBlockMinutes: 15,
+                maxBlockMinutes: session.estimatedMinutes,
+                difficulty: urgencyToDouble(session.difficulty),
+                importance: urgencyToDouble(session.importance),
+                type: categoryToTaskType(session.category),
+                locked: session.isLockedToDueDate,
+                attachments: [],
+                isCompleted: false
+            )
+        }
+        
+        // Build constraints
+        let now = Date()
+        let calendar = Calendar.current
+        let horizonEnd = calendar.date(byAdding: .day, value: 14, to: now) ?? now
+        
+        let constraints = Constraints(
+            horizonStart: now,
+            horizonEnd: horizonEnd,
+            dayStartHour: 9,
+            dayEndHour: 21,
+            maxStudyMinutesPerDay: 480,
+            maxStudyMinutesPerBlock: 120,
+            minGapBetweenBlocksMinutes: 5,
+            doNotScheduleWindows: [],
+            energyProfile: energyProfile
+        )
+        
+        // Call AI scheduler
+        let aiResult = AIScheduler.generateSchedule(
+            tasks: tasks,
+            fixedEvents: [],
+            constraints: constraints
+        )
+        
+        // Convert back to ScheduledSession
+        var scheduled: [ScheduledSession] = []
+        var sessionMap = Dictionary(uniqueKeysWithValues: sessions.map { ($0.id, $0) })
+        
+        for block in aiResult.blocks {
+            guard let session = sessionMap[block.taskId] else { continue }
+            scheduled.append(ScheduledSession(
+                id: block.id,
+                session: session,
+                start: block.start,
+                end: block.end
+            ))
+            sessionMap.removeValue(forKey: block.taskId)
+        }
+        
+        let overflow = Array(sessionMap.values)
+        
+        return (scheduled, overflow)
+    }
+    
+    // MARK: - Break Insertion (Phase C)
+    
+    private static let shortBreakMinutes = 10
+    private static let longBreakMinutes = 20
+    private static let longBreakInterval = 4  // Every 4 study sessions
+    
+    /// Insert breaks between study sessions
+    private static func insertBreaks(
+        into result: (scheduled: [ScheduledSession], overflow: [PlannerSession]),
+        energyProfile: [Int: Double]
+    ) -> (scheduled: [ScheduledSession], overflow: [PlannerSession]) {
+        let calendar = Calendar.current
+        var scheduledWithBreaks: [ScheduledSession] = []
+        let sortedSessions = result.scheduled.sorted { $0.start < $1.start }
+        
+        var studySessionCount = 0
+        
+        for (index, session) in sortedSessions.enumerated() {
+            // Add the study session
+            scheduledWithBreaks.append(session)
+            
+            // Only count study sessions (not existing breaks)
+            if !session.session.isBreak {
+                studySessionCount += 1
+            }
+            
+            // Check if we should add a break
+            guard index < sortedSessions.count - 1 else { continue }  // Don't add break after last session
+            
+            let nextSession = sortedSessions[index + 1]
+            let gapMinutes = Int(nextSession.start.timeIntervalSince(session.end) / 60)
+            
+            // Determine break type
+            let isLongBreak = (studySessionCount % longBreakInterval == 0)
+            let breakMinutes = isLongBreak ? longBreakMinutes : shortBreakMinutes
+            
+            // Check if we have enough space for the break
+            guard gapMinutes >= breakMinutes else { continue }
+            
+            // Don't add break if next session is on a different day
+            let sessionDay = calendar.startOfDay(for: session.end)
+            let nextSessionDay = calendar.startOfDay(for: nextSession.start)
+            guard sessionDay == nextSessionDay else { continue }
+            
+            // Don't add break if we're near end of day (after 8 PM)
+            let endHour = calendar.component(.hour, from: session.end)
+            guard endHour < 20 else { continue }
+            
+            // Create break session
+            let breakKind: PlannerSessionKind = isLongBreak ? .longBreak : .shortBreak
+            let breakSession = PlannerSession.breakSession(
+                kind: breakKind,
+                estimatedMinutes: breakMinutes,
+                dueDate: session.end  // Use session end as reference
+            )
+            
+            let breakStart = session.end
+            let breakEnd = breakStart.addingTimeInterval(Double(breakMinutes) * 60)
+            
+            // Only add if it doesn't overlap with next session
+            guard breakEnd <= nextSession.start else { continue }
+            
+            scheduledWithBreaks.append(ScheduledSession(
+                id: UUID(),
+                session: breakSession,
+                start: breakStart,
+                end: breakEnd
+            ))
+        }
+        
+        return (scheduledWithBreaks, result.overflow)
+    }
+    
+    // MARK: - Helper Converters
+    
+    private static func urgencyToDouble(_ urgency: AssignmentUrgency) -> Double {
+        switch urgency {
+        case .low: return 0.3
+        case .medium: return 0.6
+        case .high: return 0.9
+        case .critical: return 1.0
+        }
+    }
+    
+    private static func categoryToTaskType(_ category: AssignmentCategory) -> TaskType {
+        switch category {
+        case .exam: return .exam
+        case .quiz: return .quiz
+        case .practiceHomework: return .practiceHomework
+        case .reading: return .reading
+        case .review: return .review
+        case .project: return .project
+        @unknown default: return .practiceHomework
+        }
+    }
 }

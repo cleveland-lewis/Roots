@@ -24,6 +24,12 @@ struct IOSDashboardView: View {
             VStack(spacing: 18) {
                 heroHeader
                 quickStatsRow
+                
+                // Study hours card (Phase D)
+                if settings.trackStudyHours {
+                    studyHoursCard
+                }
+                
                 weekStrip
                 upcomingEventsCard
                 dueTasksCard
