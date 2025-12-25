@@ -21,7 +21,7 @@ struct SidebarView: View {
                 SidebarItemRow(tab: .assignments, title: "Assignments", systemImage: "slider.horizontal.3", selectedTab: $selectedTab)
                 SidebarItemRow(tab: .courses, title: "Courses", systemImage: "book.closed", selectedTab: $selectedTab)
                 SidebarItemRow(tab: .grades, title: "Grades", systemImage: "doc.text.magnifyingglass", selectedTab: $selectedTab)
-                SidebarItemRow(tab: .decks, title: "Decks", systemImage: "rectangle.stack", selectedTab: $selectedTab)
+                SidebarItemRow(tab: .flashcards, title: "Flashcards", systemImage: "rectangle.stack", selectedTab: $selectedTab)
             }
 
         }

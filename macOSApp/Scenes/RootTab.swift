@@ -9,7 +9,7 @@ public enum RootTab: String, CaseIterable, Identifiable {
     case courses
     case grades
     case timer
-    case decks
+    case flashcards
     case practice
     case settings
 

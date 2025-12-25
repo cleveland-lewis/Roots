@@ -188,24 +188,22 @@ struct ProfilesSettingsView: View {
 
     private func loadCurrentValues() {
         // Focus Duration
-        if let duration = settings.defaultFocusDuration {
-            switch duration {
-            case 15: focusDuration = .fifteen
-            case 25: focusDuration = .twentyFive
-            case 45: focusDuration = .fortyFive
-            case 60: focusDuration = .sixty
-            default: focusDuration = .twentyFive
-            }
+        let focusDurationValue = settings.defaultFocusDuration
+        switch focusDurationValue {
+        case 15: focusDuration = .fifteen
+        case 25: focusDuration = .twentyFive
+        case 45: focusDuration = .fortyFive
+        case 60: focusDuration = .sixty
+        default: focusDuration = .twentyFive
         }
 
         // Break Duration
-        if let duration = settings.defaultBreakDuration {
-            switch duration {
-            case 5: breakDuration = .five
-            case 10: breakDuration = .ten
-            case 15: breakDuration = .fifteen
-            default: breakDuration = .five
-            }
+        let breakDurationValue = settings.defaultBreakDuration
+        switch breakDurationValue {
+        case 5: breakDuration = .five
+        case 10: breakDuration = .ten
+        case 15: breakDuration = .fifteen
+        default: breakDuration = .five
         }
 
         // Energy Level

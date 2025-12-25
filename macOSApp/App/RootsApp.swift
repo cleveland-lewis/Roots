@@ -141,7 +141,7 @@ struct RootsApp: App {
                         LOG_LIFECYCLE(.info, "ViewLifecycle", "Main window appeared")
                         preferences.highContrast = appSettings.highContrastMode
                         preferences.reduceTransparency = appSettings.increaseTransparency
-                        if let g = appSettings.glassIntensity { preferences.glassIntensity = g }
+                        preferences.glassIntensity = appSettings.glassIntensity
 
                         resetCancellable = AppModel.shared.resetPublisher
                             .receive(on: DispatchQueue.main)
@@ -165,7 +165,7 @@ struct RootsApp: App {
                     .onReceive(appSettings.objectWillChange) { _ in
                         preferences.highContrast = appSettings.highContrastMode
                         preferences.reduceTransparency = appSettings.increaseTransparency
-                        if let g = appSettings.glassIntensity { preferences.glassIntensity = g }
+                        preferences.glassIntensity = appSettings.glassIntensity
                     }
                     .accentColor(appAccentColor)
                     .buttonStyle(.glassBlueProminent)

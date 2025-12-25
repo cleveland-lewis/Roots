@@ -200,7 +200,7 @@ struct ContentView: View {
             GradesPageView()
         case .timer:
             TimerPageView()
-        case .decks:
+        case .flashcards:
             if settings.enableFlashcards {
                 FlashcardDashboard()
             } else {

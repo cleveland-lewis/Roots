@@ -98,7 +98,7 @@ struct RootsApp: App {
                     // Sync stored AppSettingsModel -> AppPreferences on launch
                     preferences.highContrast = appSettings.highContrastMode
                     preferences.reduceTransparency = appSettings.increaseTransparency
-                    if let g = appSettings.glassIntensity { preferences.glassIntensity = g }
+                    preferences.glassIntensity = appSettings.glassIntensity
 
                     // Subscribe to app reset requests from AppModel
                     resetCancellable = AppModel.shared.resetPublisher
@@ -125,7 +125,7 @@ struct RootsApp: App {
                 .onReceive(appSettings.objectWillChange) { _ in
                     preferences.highContrast = appSettings.highContrastMode
                     preferences.reduceTransparency = appSettings.increaseTransparency
-                    if let g = appSettings.glassIntensity { preferences.glassIntensity = g }
+                    preferences.glassIntensity = appSettings.glassIntensity
                 }
                 .accentColor(preferences.currentAccentColor)
                 .buttonStyle(.glassBlueProminent)
