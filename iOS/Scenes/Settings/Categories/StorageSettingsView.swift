@@ -9,10 +9,8 @@ struct StorageSettingsView: View {
     @State private var storageLocation: String = ""
     @State private var showingClearCacheConfirmation = false
     @State private var showingExportSheet = false
-    @State private var showingShareSheet = false
-    @State private var exportURL: URL?
-    @State private var exportError: String?
     @State private var isExporting = false
+    @State private var exportError: String?
     
     var body: some View {
         List {
@@ -88,17 +86,6 @@ struct StorageSettingsView: View {
         }
         .sheet(isPresented: $showingExportSheet) {
             exportView
-        }
-        .sheet(isPresented: $showingShareSheet) {
-            if let exportURL = exportURL {
-                ShareSheet(activityItems: [exportURL]) {
-                    showingShareSheet = false
-                    try? FileManager.default.removeItem(at: exportURL)
-                    self.exportURL = nil
-                }
-            } else {
-                EmptyView()
-            }
         }
         .alert(NSLocalizedString("settings.storage.export.error.title", comment: "Export Failed"), isPresented: Binding(
             get: { exportError != nil },
@@ -220,9 +207,8 @@ struct StorageSettingsView: View {
                 .appendingPathComponent("roots-data-export-\(Int(Date().timeIntervalSince1970)).json")
             try data.write(to: targetURL, options: .atomic)
             exportError = nil
-            exportURL = targetURL
             showingExportSheet = false
-            showingShareSheet = true
+            await presentShareSheet(with: targetURL)
         } catch {
             exportError = error.localizedDescription
         }
@@ -239,19 +225,33 @@ private struct StorageDataExport: Codable {
     let settings: AppSettingsModel
 }
 
-private struct ShareSheet: UIViewControllerRepresentable {
-    let activityItems: [Any]
-    let completion: (() -> Void)?
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        controller.completionWithItemsHandler = { _, _, _, _ in
-            completion?()
-        }
-        return controller
+@MainActor
+private func presentShareSheet(with url: URL) {
+    guard let viewController = UIApplication.shared.topViewController() else { return }
+    let activityController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+    activityController.completionWithItemsHandler = { _, _, _, _ in
+        try? FileManager.default.removeItem(at: url)
     }
+    viewController.present(activityController, animated: true)
+}
 
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+private extension UIApplication {
+    func topViewController(base: UIViewController? = UIApplication.shared.connectedScenes
+        .compactMap { $0 as? UIWindowScene }
+        .flatMap { $0.windows }
+        .first { $0.isKeyWindow }?
+        .rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            return topViewController(base: tab.selectedViewController)
+        }
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        return base
+    }
 }
 
 extension FileManager {
