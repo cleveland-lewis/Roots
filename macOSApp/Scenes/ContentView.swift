@@ -227,7 +227,7 @@ struct ContentView: View {
         guard !assignments.isEmpty else { return }
         let settings = StudyPlanSettings()
         let sessions = assignments.flatMap { PlannerEngine.generateSessions(for: $0, settings: settings) }
-        let result = PlannerEngine.scheduleSessions(sessions, settings: settings, energyProfile: defaultEnergyProfile())
+        let result = PlannerEngine.scheduleSessionsWithStrategy(sessions, settings: settings, energyProfile: defaultEnergyProfile())
         plannerStore.persist(scheduled: result.scheduled, overflow: result.overflow)
     }
 

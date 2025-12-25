@@ -459,7 +459,7 @@ private extension PlannerPageView {
 
         let sessions = assignments.flatMap { PlannerEngine.generateSessions(for: $0, settings: studySettings) }
         let energy = SchedulerPreferencesStore.shared.preferences.learnedEnergyProfile
-        let scheduledResult = PlannerEngine.scheduleSessions(sessions, settings: studySettings, energyProfile: energy)
+        let scheduledResult = PlannerEngine.scheduleSessionsWithStrategy(sessions, settings: studySettings, energyProfile: energy)
         plannerStore.persist(scheduled: scheduledResult.scheduled, overflow: scheduledResult.overflow)
 
         let dayBlocks: [PlannedBlock] = scheduledResult.scheduled.compactMap { scheduled -> PlannedBlock? in
