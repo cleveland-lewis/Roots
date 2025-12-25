@@ -15,6 +15,9 @@ struct AccessibilitySettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: settings.reduceMotionStorage) { _, _ in
+                    settings.save()
+                }
                 
                 Toggle(isOn: $settings.increaseTransparencyStorage) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -24,6 +27,9 @@ struct AccessibilitySettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: settings.increaseTransparencyStorage) { _, _ in
+                    settings.save()
+                }
                 
                 Toggle(isOn: $settings.highContrastModeStorage) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -32,6 +38,9 @@ struct AccessibilitySettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                }
+                .onChange(of: settings.highContrastModeStorage) { _, _ in
+                    settings.save()
                 }
             } header: {
                 Text(NSLocalizedString("settings.accessibility.visual.header", comment: "Visual"))
@@ -46,6 +55,9 @@ struct AccessibilitySettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: settings.enableHapticsStorage) { _, _ in
+                    settings.save()
+                }
             } header: {
                 Text(NSLocalizedString("settings.accessibility.interaction.header", comment: "Interaction"))
             }
@@ -58,6 +70,9 @@ struct AccessibilitySettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                }
+                .onChange(of: settings.showTooltipsStorage) { _, _ in
+                    settings.save()
                 }
             } header: {
                 Text(NSLocalizedString("settings.accessibility.guidance.header", comment: "Guidance"))

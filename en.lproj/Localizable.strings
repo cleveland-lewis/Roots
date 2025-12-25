@@ -996,6 +996,8 @@
 "settings.storage.export.title" = "Export Data";
 "settings.storage.export.message" = "Your data will be exported as a JSON file that you can save or share.";
 "settings.storage.export.button" = "Export Now";
+"settings.storage.export.error.title" = "Export Failed";
+"settings.storage.export.error.message" = "Unable to create the export file right now.";
 
 /* Courses & Planner Settings */
 "settings.planner.horizon" = "Planning Horizon";

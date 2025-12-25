@@ -1,5 +1,6 @@
 #if os(macOS)
 import SwiftUI
+import AppKit
 
 struct PrivacySettingsView: View {
     @EnvironmentObject var settings: AppSettingsModel
@@ -103,6 +104,40 @@ struct PrivacySettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            
+            Section("Diagnostics") {
+                Button(role: .destructive) {
+                    clearDebugLogs()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Clear Debug Logs")
+                    }
+                }
+                
+                Text("Clear all debug logs and analytics data stored on your device.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Section("System Permissions") {
+                Button {
+                    openSystemPrivacySettings()
+                } label: {
+                    HStack {
+                        Image(systemName: "hand.raised")
+                        Text("Manage Permissions")
+                        Spacer()
+                        Image(systemName: "arrow.up.forward")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                
+                Text("Open System Settings to manage calendar, notifications, and other permissions.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .formStyle(.grouped)
         .navigationTitle("Privacy")
@@ -116,6 +151,18 @@ struct PrivacySettingsView: View {
             }
         } message: {
             Text("This will disable all LLM-powered features including Apple Intelligence, local models, and custom providers. Parsing and planning will use deterministic algorithms only.\n\nYou can re-enable LLM assistance at any time.")
+        }
+    }
+    
+    private func clearDebugLogs() {
+        // Clear any debug logs or analytics data
+        UserDefaults.standard.removeObject(forKey: "debug.logs")
+        UserDefaults.standard.removeObject(forKey: "analytics.events")
+    }
+    
+    private func openSystemPrivacySettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy") {
+            NSWorkspace.shared.open(url)
         }
     }
 }

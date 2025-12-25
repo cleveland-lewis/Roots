@@ -1,11 +1,18 @@
 import SwiftUI
 #if os(iOS)
 
+import UIKit
+
 struct StorageSettingsView: View {
     @EnvironmentObject var settings: AppSettingsModel
     @State private var storageSize: String = "Calculating..."
+    @State private var storageLocation: String = ""
     @State private var showingClearCacheConfirmation = false
     @State private var showingExportSheet = false
+    @State private var showingShareSheet = false
+    @State private var exportURL: URL?
+    @State private var exportError: String?
+    @State private var isExporting = false
     
     var body: some View {
         List {
@@ -20,8 +27,12 @@ struct StorageSettingsView: View {
                 HStack {
                     Text(NSLocalizedString("settings.storage.location", comment: "Location"))
                     Spacer()
-                    Text(NSLocalizedString("settings.storage.location.local", comment: "Local"))
+                    Text(storageLocation.isEmpty
+                         ? NSLocalizedString("settings.storage.location.local", comment: "Local")
+                         : storageLocation)
                         .foregroundColor(.secondary)
+                        .multilineTextAlignment(.trailing)
+                        .lineLimit(1)
                 }
             } header: {
                 Text(NSLocalizedString("settings.storage.info.header", comment: "Storage"))
@@ -73,9 +84,29 @@ struct StorageSettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             calculateStorageSize()
+            updateStorageLocation()
         }
         .sheet(isPresented: $showingExportSheet) {
             exportView
+        }
+        .sheet(isPresented: $showingShareSheet) {
+            if let exportURL = exportURL {
+                ShareSheet(activityItems: [exportURL]) {
+                    showingShareSheet = false
+                    try? FileManager.default.removeItem(at: exportURL)
+                    self.exportURL = nil
+                }
+            } else {
+                EmptyView()
+            }
+        }
+        .alert(NSLocalizedString("settings.storage.export.error.title", comment: "Export Failed"), isPresented: Binding(
+            get: { exportError != nil },
+            set: { if !$0 { exportError = nil } }
+        )) {
+            Button("OK", role: .cancel) { exportError = nil }
+        } message: {
+            Text(exportError ?? NSLocalizedString("settings.storage.export.error.message", comment: "Unable to create the export file right now."))
         }
     }
     
@@ -95,13 +126,21 @@ struct StorageSettingsView: View {
                     .padding(.horizontal)
                 
                 Button {
-                    performExport()
+                    Task {
+                        await performExport()
+                    }
                 } label: {
-                    Text(NSLocalizedString("settings.storage.export.button", comment: "Export Now"))
-                        .frame(maxWidth: .infinity)
+                    if isExporting {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                    } else {
+                        Text(NSLocalizedString("settings.storage.export.button", comment: "Export Now"))
+                            .frame(maxWidth: .infinity)
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal)
+                .disabled(isExporting)
             }
             .padding()
             .toolbar {
@@ -132,6 +171,12 @@ struct StorageSettingsView: View {
             }
         }
     }
+
+    private func updateStorageLocation() {
+        if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            storageLocation = documentsPath.path
+        }
+    }
     
     private func clearCache() {
         // Clear URLCache
@@ -143,14 +188,70 @@ struct StorageSettingsView: View {
             try? FileManager.default.removeItem(at: url)
         }
         
-        // Recalculate storage
+        // Recalculate storage and refresh location
         calculateStorageSize()
+        updateStorageLocation()
     }
     
-    private func performExport() {
-        // TODO: Implement actual data export
-        showingExportSheet = false
+    @MainActor private func performExport() async {
+        guard !isExporting else { return }
+        isExporting = true
+        defer { isExporting = false }
+
+        let assignments = AssignmentsStore.shared.tasks
+        guard let coursesStore = CoursesStore.shared else {
+            exportError = "Unable to gather course data for export."
+            return
+        }
+
+        let payload = StorageDataExport(
+            exportedAt: Date(),
+            tasks: assignments,
+            semesters: coursesStore.semesters,
+            courses: coursesStore.courses,
+            scheduledSessions: PlannerStore.shared.scheduled,
+            overflowSessions: PlannerStore.shared.overflow,
+            settings: AppSettingsModel.shared
+        )
+
+        do {
+            let data = try JSONEncoder().encode(payload)
+            let targetURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("roots-data-export-\(Int(Date().timeIntervalSince1970)).json")
+            try data.write(to: targetURL, options: .atomic)
+            exportError = nil
+            exportURL = targetURL
+            showingExportSheet = false
+            showingShareSheet = true
+        } catch {
+            exportError = error.localizedDescription
+        }
     }
+}
+
+private struct StorageDataExport: Codable {
+    let exportedAt: Date
+    let tasks: [AppTask]
+    let semesters: [Semester]
+    let courses: [Course]
+    let scheduledSessions: [StoredScheduledSession]
+    let overflowSessions: [StoredOverflowSession]
+    let settings: AppSettingsModel
+}
+
+private struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+    let completion: (() -> Void)?
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        controller.completionWithItemsHandler = { _, _, _, _ in
+            completion?()
+        }
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 extension FileManager {

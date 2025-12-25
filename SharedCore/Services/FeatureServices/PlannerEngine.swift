@@ -22,9 +22,16 @@ struct StudyPlanSettings {
 
 // MARK: - Planner Session Model
 
+/// Describes the kind of planner session for proper rendering and behavior
+enum PlannerSessionKind: String, Codable, Hashable {
+    case study       // Regular study/work session
+    case shortBreak  // 5-10 minute break
+    case longBreak   // 15-30 minute break
+}
+
 struct PlannerSession: Identifiable, Hashable {
     let id: UUID
-    let assignmentId: UUID
+    let assignmentId: UUID  // For breaks, this is a sentinel UUID
     let sessionIndex: Int
     let sessionCount: Int
     let title: String
@@ -35,6 +42,141 @@ struct PlannerSession: Identifiable, Hashable {
     let estimatedMinutes: Int
     let isLockedToDueDate: Bool
     var scheduleIndex: Double = 0
+    
+    /// The kind of session (study vs break)
+    let kind: PlannerSessionKind
+    
+    // MARK: - UI Helpers
+    
+    /// System icon name for consistent rendering across platforms
+    var iconName: String {
+        switch kind {
+        case .study:
+            return "book.fill"
+        case .shortBreak:
+            return "cup.and.saucer.fill"
+        case .longBreak:
+            return "moon.fill"
+        }
+    }
+    
+    /// Color key for theming (platform-specific colors should map from this)
+    var accentColorKey: String {
+        switch kind {
+        case .study:
+            return "primary"
+        case .shortBreak:
+            return "break"
+        case .longBreak:
+            return "breakLong"
+        }
+    }
+    
+    /// User-facing display title with context
+    var displayTitle: String {
+        switch kind {
+        case .study:
+            return title
+        case .shortBreak:
+            return NSLocalizedString("planner.break.short", value: "Short Break", comment: "Short break session title")
+        case .longBreak:
+            return NSLocalizedString("planner.break.long", value: "Long Break", comment: "Long break session title")
+        }
+    }
+    
+    /// Whether this session is a break (convenience)
+    var isBreak: Bool {
+        kind == .shortBreak || kind == .longBreak
+    }
+    
+    // MARK: - Initializers
+    
+    /// Create a study session (standard initialization)
+    init(id: UUID = UUID(), 
+         assignmentId: UUID, 
+         sessionIndex: Int, 
+         sessionCount: Int, 
+         title: String, 
+         dueDate: Date, 
+         category: AssignmentCategory, 
+         importance: AssignmentUrgency, 
+         difficulty: AssignmentUrgency, 
+         estimatedMinutes: Int, 
+         isLockedToDueDate: Bool, 
+         scheduleIndex: Double = 0) {
+        self.id = id
+        self.assignmentId = assignmentId
+        self.sessionIndex = sessionIndex
+        self.sessionCount = sessionCount
+        self.title = title
+        self.dueDate = dueDate
+        self.category = category
+        self.importance = importance
+        self.difficulty = difficulty
+        self.estimatedMinutes = estimatedMinutes
+        self.isLockedToDueDate = isLockedToDueDate
+        self.scheduleIndex = scheduleIndex
+        self.kind = .study
+    }
+    
+    /// Create a break session
+    static func breakSession(
+        id: UUID = UUID(),
+        kind: PlannerSessionKind,
+        estimatedMinutes: Int,
+        dueDate: Date
+    ) -> PlannerSession {
+        assert(kind == .shortBreak || kind == .longBreak, "Only break kinds allowed")
+        
+        // Use a sentinel UUID for breaks (not associated with any assignment)
+        let breakSentinel = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+        
+        return PlannerSession(
+            id: id,
+            assignmentId: breakSentinel,
+            sessionIndex: 0,
+            sessionCount: 0,
+            title: kind == .shortBreak ? "Short Break" : "Long Break",
+            dueDate: dueDate,
+            category: .review,  // Neutral category for breaks
+            importance: .low,
+            difficulty: .low,
+            estimatedMinutes: estimatedMinutes,
+            isLockedToDueDate: false,
+            scheduleIndex: 0,
+            kind: kind
+        )
+    }
+    
+    // MARK: - Private Init for Factory Methods
+    
+    private init(id: UUID,
+                 assignmentId: UUID,
+                 sessionIndex: Int,
+                 sessionCount: Int,
+                 title: String,
+                 dueDate: Date,
+                 category: AssignmentCategory,
+                 importance: AssignmentUrgency,
+                 difficulty: AssignmentUrgency,
+                 estimatedMinutes: Int,
+                 isLockedToDueDate: Bool,
+                 scheduleIndex: Double,
+                 kind: PlannerSessionKind) {
+        self.id = id
+        self.assignmentId = assignmentId
+        self.sessionIndex = sessionIndex
+        self.sessionCount = sessionCount
+        self.title = title
+        self.dueDate = dueDate
+        self.category = category
+        self.importance = importance
+        self.difficulty = difficulty
+        self.estimatedMinutes = estimatedMinutes
+        self.isLockedToDueDate = isLockedToDueDate
+        self.scheduleIndex = scheduleIndex
+        self.kind = kind
+    }
 }
 
 struct ScheduledSession: Identifiable, Hashable {

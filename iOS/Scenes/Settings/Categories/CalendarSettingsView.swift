@@ -89,6 +89,10 @@ struct CalendarSettingsView: View {
                             case 3: UserDefaults.standard.set(60, forKey: "calendarRefreshRangeDays")
                             default: break
                             }
+                            // Refresh calendar with new range
+                            Task {
+                                await deviceCalendar.refreshEventsForVisibleRange(reason: "rangeChanged")
+                            }
                         }
                     )) {
                         Text(NSLocalizedString("settings.calendar.range.1_week", comment: "1 Week")).tag(0)
@@ -102,6 +106,45 @@ struct CalendarSettingsView: View {
                     Text(NSLocalizedString("settings.calendar.scheduling.header", comment: "Scheduling"))
                 } footer: {
                     Text(NSLocalizedString("settings.calendar.scheduling.footer", comment: "How far ahead to scan for events when refreshing"))
+                }
+                
+                Section {
+                    Toggle(isOn: $settings.showOnlySchoolCalendar) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(NSLocalizedString("settings.calendar.show_only_school", comment: "Show Only School Calendar"))
+                            Text(settings.showOnlySchoolCalendar 
+                                ? NSLocalizedString("settings.calendar.show_only_school.enabled", comment: "Calendar UI will only show events from your school calendar")
+                                : NSLocalizedString("settings.calendar.show_only_school.disabled", comment: "Calendar UI will show events from all calendars"))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .onChange(of: settings.showOnlySchoolCalendar) { _, _ in
+                        settings.save()
+                        Task {
+                            await deviceCalendar.refreshEventsForVisibleRange(reason: "filterChanged")
+                        }
+                    }
+                } header: {
+                    Text(NSLocalizedString("settings.calendar.view_filter.header", comment: "Calendar View"))
+                }
+                
+                Section {
+                    Toggle(isOn: $settings.lockCalendarPickerToSchool) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(NSLocalizedString("settings.calendar.lock_picker", comment: "Lock Calendar Picker to School"))
+                            Text(settings.lockCalendarPickerToSchool
+                                ? NSLocalizedString("settings.calendar.lock_picker.enabled", comment: "New events will always be saved to the school calendar")
+                                : NSLocalizedString("settings.calendar.lock_picker.disabled", comment: "Users can choose which calendar to save new events to"))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .onChange(of: settings.lockCalendarPickerToSchool) { _, _ in
+                        settings.save()
+                    }
+                } header: {
+                    Text(NSLocalizedString("settings.calendar.picker_lock.header", comment: "Event Creation"))
                 }
                 
                 Section {

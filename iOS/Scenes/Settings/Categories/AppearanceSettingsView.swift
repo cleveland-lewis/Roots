@@ -62,6 +62,9 @@ struct AppearanceSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: settings.showAnimationsStorage) { _, _ in
+                    settings.save()
+                }
             } header: {
                 Text(NSLocalizedString("settings.appearance.effects.header", comment: "Effects"))
             }

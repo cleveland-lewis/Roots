@@ -16,6 +16,9 @@ struct PrivacySettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: settings.enableICloudSync) { _, _ in
+                    settings.save()
+                }
                 
                 if !settings.enableICloudSync {
                     HStack {

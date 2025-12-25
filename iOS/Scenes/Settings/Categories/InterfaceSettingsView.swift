@@ -71,6 +71,9 @@ struct InterfaceSettingsView: View {
                                 .foregroundColor(.secondary)
                         }
                     }
+                    .onChange(of: settings.showSidebarByDefaultStorage) { _, _ in
+                        settings.save()
+                    }
                     .listRowInsets(EdgeInsets(
                         top: layoutMetrics.listRowVerticalPadding,
                         leading: 16,
@@ -87,6 +90,9 @@ struct InterfaceSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: settings.compactModeStorage) { _, _ in
+                    settings.save()
+                }
                 .listRowInsets(EdgeInsets(
                     top: layoutMetrics.listRowVerticalPadding,
                     leading: 16,
@@ -101,6 +107,9 @@ struct InterfaceSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                }
+                .onChange(of: settings.largeTapTargetsStorage) { _, _ in
+                    settings.save()
                 }
                 .listRowInsets(EdgeInsets(
                     top: layoutMetrics.listRowVerticalPadding,
